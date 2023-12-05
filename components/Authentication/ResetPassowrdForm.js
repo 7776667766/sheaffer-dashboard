@@ -8,25 +8,30 @@ import Button from "@mui/material/Button";
 import styles from "@/components/Authentication/Authentication.module.css";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { emailValidation, requiredValidation } from "@/utils/validation";
+import {
+  confirmPasswordValidation,
+  emailValidation,
+  passwordValidation,
+  requiredValidation,
+} from "@/utils/validation";
 import Image from "next/image";
 import { useRouter } from "next/router";
 
-const SignInForm = () => {
+const ResetPasswordForm = () => {
   const router = useRouter();
 
   const formik = useFormik({
     initialValues: {
-      email: "",
       password: "",
+      confirmPassword: "",
     },
     validationSchema: Yup.object({
-      email: emailValidation(),
-      password: requiredValidation(),
+      password: passwordValidation(),
+      confirmPassword: confirmPasswordValidation("Confirm Password"),
     }),
     onSubmit: (values) => {
       console.log("Handle Submit", values);
-      router.push("/authentication/verify-otp");
+      router.push("/");
       // alert(JSON.stringify(values, null, 2));
     },
   });
@@ -46,7 +51,7 @@ const SignInForm = () => {
           <Grid item xs={12} md={12} lg={12} xl={12}>
             <Box>
               <Typography as="h1" fontSize="28px" fontWeight="700" mb="5px">
-                Sign In{" "}
+                Reset Password{" "}
                 <Image
                   width={30}
                   height={30}
@@ -57,7 +62,8 @@ const SignInForm = () => {
               </Typography>
 
               <Typography fontSize="15px" mb="30px">
-                Enter your email and password to sign in
+                Enter your new password and confirm password to reset your
+                password
                 {/* Already have an account?{" "} */}
                 {/* <Link
                   href="/authentication/sign-up"
@@ -116,43 +122,6 @@ const SignInForm = () => {
                           display: "block",
                         }}
                       >
-                        Email
-                      </Typography>
-
-                      <TextField
-                        required
-                        fullWidth
-                        id="email"
-                        label="Email Address"
-                        name="email"
-                        autoComplete="email"
-                        {...formik.getFieldProps("email")}
-                        error={
-                          formik.touched.email && formik.errors.email
-                            ? true
-                            : false
-                        }
-                        helperText={
-                          formik.touched.email && formik.errors.email
-                            ? formik.errors.email
-                            : ""
-                        }
-                        InputProps={{
-                          style: { borderRadius: 8 },
-                        }}
-                      />
-                    </Grid>
-
-                    <Grid item xs={12}>
-                      <Typography
-                        component="label"
-                        sx={{
-                          fontWeight: "500",
-                          fontSize: "14px",
-                          mb: "10px",
-                          display: "block",
-                        }}
-                      >
                         Password
                       </Typography>
 
@@ -180,33 +149,48 @@ const SignInForm = () => {
                         }}
                       />
                     </Grid>
+
+                    <Grid item xs={12}>
+                      <Typography
+                        component="label"
+                        sx={{
+                          fontWeight: "500",
+                          fontSize: "14px",
+                          mb: "10px",
+                          display: "block",
+                        }}
+                      >
+                        Confirm Password
+                      </Typography>
+
+                      <TextField
+                        required
+                        fullWidth
+                        name="confirmPassword"
+                        label="Confirm Password"
+                        type="password"
+                        id="confirmPassword"
+                        {...formik.getFieldProps("confirmPassword")}
+                        error={
+                          formik.touched.confirmPassword &&
+                          formik.errors.confirmPassword
+                            ? true
+                            : false
+                        }
+                        helperText={
+                          formik.touched.confirmPassword &&
+                          formik.errors.confirmPassword
+                            ? formik.errors.confirmPassword
+                            : ""
+                        }
+                        autoComplete="new-confirm-password"
+                        InputProps={{
+                          style: { borderRadius: 8 },
+                        }}
+                      />
+                    </Grid>
                   </Grid>
                 </Box>
-
-                <Grid container alignItems="center" spacing={2}>
-                  {/* <Grid item xs={6} sm={6}>
-                    <FormControlLabel
-                      control={
-                        <Checkbox value="allowExtraEmails" color="primary" />
-                      }
-                      label="Remember me."
-                    />
-                  </Grid> */}
-
-                  <Grid
-                    item
-                    xs={12}
-                    // xs={6} sm={6}
-                    textAlign="end"
-                  >
-                    <Link
-                      href="/authentication/forgot-password"
-                      className="primaryColor text-decoration-none"
-                    >
-                      Forgot your password?
-                    </Link>
-                  </Grid>
-                </Grid>
 
                 <Button
                   type="submit"
@@ -222,7 +206,7 @@ const SignInForm = () => {
                     color: "#fff !important",
                   }}
                 >
-                  Sign In
+                  Reset Password
                 </Button>
               </Box>
             </Box>
@@ -233,4 +217,4 @@ const SignInForm = () => {
   );
 };
 
-export default SignInForm;
+export default ResetPasswordForm;

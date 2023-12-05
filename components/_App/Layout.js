@@ -32,6 +32,8 @@ const Layout = ({ children }) => {
           router.pathname === "/authentication/forgot-password" ||
           router.pathname === "/authentication/lock-screen" ||
           router.pathname === "/authentication/confirm-mail" ||
+          router.pathname === "/authentication/verify-otp" ||
+          router.pathname === "/authentication/reset-password" ||
           router.pathname === "/authentication/logout"
         ) && (
           <>
@@ -50,24 +52,26 @@ const Layout = ({ children }) => {
             router.pathname === "/authentication/forgot-password" ||
             router.pathname === "/authentication/lock-screen" ||
             router.pathname === "/authentication/confirm-mail" ||
+            router.pathname === "/authentication/verify-otp" ||
+            router.pathname === "/authentication/reset-password" ||
             router.pathname === "/authentication/logout"
           ) && <Footer />}
         </div>
       </div>
-            
+
       {/* ScrollToTop */}
       <ScrollToTop />
-      
+
       {!(
         router.pathname === "/authentication/sign-in" ||
         router.pathname === "/authentication/sign-up" ||
         router.pathname === "/authentication/forgot-password" ||
         router.pathname === "/authentication/lock-screen" ||
         router.pathname === "/authentication/confirm-mail" ||
+        router.pathname === "/authentication/verify-otp" ||
+        router.pathname === "/authentication/reset-password" ||
         router.pathname === "/authentication/logout"
-      ) &&
-        <ControlPanelModal />
-      }
+      ) && <ControlPanelModal />}
     </>
   );
 };

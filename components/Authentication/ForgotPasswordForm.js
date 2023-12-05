@@ -6,16 +6,28 @@ import { Box } from "@mui/system";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import styles from "@/components/Authentication/Authentication.module.css";
+import * as Yup from "yup";
+import { useFormik } from "formik";
+import { emailValidation } from "@/utils/validation";
+import { useRouter } from "next/router";
+import Image from "next/image";
 
 const ForgotPasswordForm = () => {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-  };
+  const router = useRouter();
+
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+    },
+    validationSchema: Yup.object({
+      email: emailValidation(),
+    }),
+    onSubmit: (values) => {
+      console.log("Handle Submit", values);
+      router.push("/authentication/verify-otp");
+      // alert(JSON.stringify(values, null, 2));
+    },
+  });
 
   return (
     <>
@@ -33,7 +45,9 @@ const ForgotPasswordForm = () => {
             <Box>
               <Typography as="h1" fontSize="28px" fontWeight="700" mb="5px">
                 Forgot Password?{" "}
-                <img
+                <Image
+                  width={30}
+                  height={30}
                   src="/images/favicon.png"
                   alt="favicon"
                   className={styles.favicon}
@@ -45,7 +59,7 @@ const ForgotPasswordForm = () => {
                 password
               </Typography>
 
-              <Box component="form" noValidate onSubmit={handleSubmit}>
+              <Box component="form" noValidate onSubmit={formik.handleSubmit}>
                 <Box
                   sx={{
                     background: "#fff",
@@ -76,6 +90,17 @@ const ForgotPasswordForm = () => {
                         label="Email Address"
                         name="email"
                         autoComplete="email"
+                        {...formik.getFieldProps("email")}
+                        error={
+                          formik.touched.email && formik.errors.email
+                            ? true
+                            : false
+                        }
+                        helperText={
+                          formik.touched.email && formik.errors.email
+                            ? formik.errors.email
+                            : ""
+                        }
                         InputProps={{
                           style: { borderRadius: 8 },
                         }}
@@ -95,7 +120,7 @@ const ForgotPasswordForm = () => {
                     fontWeight: "500",
                     fontSize: "16px",
                     padding: "12px 10px",
-                    color: "#fff !important"
+                    color: "#fff !important",
                   }}
                 >
                   Send Reset Link

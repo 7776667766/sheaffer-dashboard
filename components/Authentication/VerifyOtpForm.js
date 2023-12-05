@@ -1,0 +1,144 @@
+import React, { useState } from "react";
+import Link from "next/link";
+import Grid from "@mui/material/Grid";
+import { Typography } from "@mui/material";
+import { Box } from "@mui/system";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import styles from "@/components/Authentication/Authentication.module.css";
+import PinInput from "react-pin-input";
+import { useCallback } from "react";
+import Countdown from "react-countdown";
+import { useRouter } from "next/router";
+import Image from "next/image";
+
+const VerifyOtpForm = () => {
+  const router = useRouter();
+  const [startTimer, setStartTimer] = useState(false);
+  const handleSubmit = (value) => {
+    if (value.length === 6) {
+      console.log("Otp Value", value);
+      router.push("/");
+    }
+  };
+
+  const resendOtp = () => {
+    setStartTimer(true);
+    console.log("Resend Otp");
+  };
+
+  const addLeadingZero = (number) => {
+    return number < 10 ? `0${number}` : `${number}`;
+  };
+
+  return (
+    <>
+      <div className="authenticationBox">
+        <Box
+          component="main"
+          sx={{
+            maxWidth: "510px",
+            ml: "auto",
+            mr: "auto",
+            padding: "50px 0 100px",
+          }}
+        >
+          <Grid item xs={12} md={12} lg={12} xl={12}>
+            <Box>
+              <Typography as="h1" fontSize="28px" fontWeight="700" mb="5px">
+                Verify Otp{" "}
+                <Image
+                  width={30}
+                  height={30}
+                  src="/images/favicon.png"
+                  alt="favicon"
+                  className={styles.favicon}
+                />
+              </Typography>
+
+              <Typography fontSize="15px" mb="30px">
+                Enter your 6 digit code here
+              </Typography>
+
+              <Box component="form" noValidate>
+                <Box
+                  sx={{
+                    background: "#fff",
+                    padding: "30px 20px",
+                    borderRadius: "10px",
+                    mb: "20px",
+                  }}
+                  className="bg-black"
+                >
+                  <Grid container alignItems="center" spacing={2}>
+                    <Grid item xs={12}>
+                      <PinInput
+                        length={6}
+                        initialValue={""}
+                        secret={false}
+                        onChange={(value, index) => {}}
+                        type="numeric"
+                        inputMode="number"
+                        style={{
+                          padding: "10px",
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                        inputStyle={{ borderColor: "#5B5B98" }}
+                        inputFocusStyle={{ borderColor: "blue" }}
+                        onComplete={(value, index) => handleSubmit(value)}
+                        autoSelect={true}
+                        regexCriteria={/^[ A-Za-z0-9_@./#&+-]*$/}
+                      />
+                    </Grid>
+                  </Grid>
+                </Box>
+              </Box>
+              <Box
+                as="div"
+                sx={{ display: "flex" }}
+                alignItems="center"
+                justifyContent="center"
+                gap={2}
+                textAlign="center"
+                mt="20px"
+              >
+                <Typography fontSize="15px">{`Don't get a code`}</Typography>
+                <Button
+                  className="primaryColor text-decoration-none"
+                  disabled={startTimer}
+                  onClick={resendOtp}
+                >
+                  {startTimer ? (
+                    <Countdown
+                      onComplete={() => {
+                        setStartTimer(false);
+                      }}
+                      renderer={({ hours, minutes, seconds, completed }) => {
+                        if (completed) {
+                          return "Resend Otp";
+                        } else {
+                          return (
+                            <span>
+                              {addLeadingZero(minutes)}:
+                              {addLeadingZero(seconds)}
+                            </span>
+                          );
+                        }
+                      }}
+                      date={Date.now() + 60000}
+                    />
+                  ) : (
+                    "Resend Otp"
+                  )}
+                </Button>
+              </Box>
+            </Box>
+          </Grid>
+        </Box>
+      </div>
+    </>
+  );
+};
+
+export default VerifyOtpForm;
