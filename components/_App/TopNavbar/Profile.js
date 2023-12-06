@@ -18,12 +18,13 @@ import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import Logout from "@mui/icons-material/Logout";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logoutFunApi } from "store/auth/services";
 
 const Profile = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const dispatch = useDispatch();
+  const { user, role } = useSelector((state) => state.auth);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -32,7 +33,6 @@ const Profile = () => {
     setAnchorEl(null);
   };
   const handleLogout = () => {
-    console.log("logout");
     dispatch(logoutFunApi());
   };
   return (
@@ -48,8 +48,8 @@ const Profile = () => {
           className="ml-2"
         >
           <Avatar
-            src="/images/user1.png"
-            alt="Adison Jeck"
+            src={user?.image}
+            alt={user?.name}
             sx={{ width: 40, height: 40 }}
           />
         </IconButton>
@@ -94,19 +94,26 @@ const Profile = () => {
         className="for-dark-top-navList"
       >
         <MenuItem>
-          <Avatar src="/images/user1.png" className="mr-1" />
+          <Avatar src={user?.image} alt={user?.name} className="mr-1" />
           <Box>
-            <Typography sx={{ fontSize: "11px", color: "#757FEF" }}>
-              Admin
+            <Typography
+              sx={{
+                fontSize: "11px",
+                color: "#757FEF",
+                textTransform: "capitalize",
+              }}
+            >
+              {role}
             </Typography>
             <Typography
               sx={{
                 fontSize: "13px",
                 color: "#260944",
                 fontWeight: "500",
+                textTransform: "capitalize",
               }}
             >
-              Adison Jeck
+              {user?.name}
             </Typography>
           </Box>
         </MenuItem>

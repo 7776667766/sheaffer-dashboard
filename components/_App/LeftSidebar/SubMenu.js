@@ -3,6 +3,8 @@ import { styled } from "@mui/material/styles";
 import Link from "next/link";
 import styles from "@/components/_App/LeftSidebar/SubMenu.module.css";
 import { useRouter } from "next/router";
+import { useDispatch } from "react-redux";
+import { logoutFunApi } from "store/auth/services";
 
 const SidebarLabel = styled("span")(({ theme }) => ({
   position: "relative",
@@ -14,11 +16,16 @@ const SubMenu = ({ item }) => {
   const showSubnav = () => setSubnav(!subnav);
   const [currentPath, setCurrentPath] = useState("");
   const router = useRouter();
+  const dispatch = useDispatch();
   // console.log(router.asPath)
 
   useEffect(() => {
     setCurrentPath(router.asPath);
   }, [router]);
+
+  const handleLogout = () => {
+    dispatch(logoutFunApi());
+  };
 
   return (
     <>
@@ -45,7 +52,8 @@ const SubMenu = ({ item }) => {
         item.subNav.map((item, index) => {
           return (
             <Link
-              href={item.path}
+              href={item.title !== "Logout" ? item.path : ""}
+              onClick={item.title === "Logout" ? handleLogout : null}
               key={index}
               className={`${styles.sidebarLink2} ${
                 currentPath == item.path && "sidebarLinkActive2"

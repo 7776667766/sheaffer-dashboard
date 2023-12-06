@@ -36,7 +36,6 @@ const authSlice = createSlice({
         state.error = null;
       })
       .addCase(loginFunApi.fulfilled, (state, action) => {
-        console.log("action.payload in loginFun => ", action.payload);
         state.isLoading = false;
         state.isAuthenticated = true;
         state.user = action.payload.user;
@@ -59,7 +58,6 @@ const authSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(verifyOtpFunApi.fulfilled, (state, action) => {
-        console.log("action.payload in verifyOtpApi => ", action.payload);
         state.isLoading = false;
         state.isAuthenticated = true;
         state.user = action.payload.user;
