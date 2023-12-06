@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import LeftSidebar from "@/components/_App/LeftSidebar";
@@ -6,16 +6,41 @@ import TopNavbar from "@/components/_App/TopNavbar";
 import Footer from "@/components/_App/Footer";
 import ScrollToTop from "./ScrollToTop";
 import ControlPanelModal from "./ControlPanelModal";
+import { useSelector } from "react-redux";
+import { Box } from "@mui/material";
 
 const Layout = ({ children }) => {
   const router = useRouter();
-
+  const [loading, setLoading] = useState(true);
   const [active, setActive] = useState(false);
 
   const toogleActive = () => {
     setActive(!active);
   };
+  const { isAuthenticated } = useSelector((state) => state.auth);
 
+  useEffect(() => {
+    if (!router.pathname.includes("/authentication")) {
+      if (!isAuthenticated) {
+        router.push("/authentication/sign-in");
+      }
+    }
+  }, [isAuthenticated, router]);
+  useEffect(() => {
+    setLoading(false);
+  }, [loading]);
+
+  if (loading)
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        sx={{ height: "100vh" }}
+      >
+        Loading...
+      </Box>
+    );
   return (
     <>
       <Head>

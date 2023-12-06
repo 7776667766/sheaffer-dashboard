@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Grid from "@mui/material/Grid";
 import { Typography } from "@mui/material";
@@ -7,20 +7,43 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import styles from "@/components/Authentication/Authentication.module.css";
 import PinInput from "react-pin-input";
-import { useCallback } from "react";
 import Countdown from "react-countdown";
 import { useRouter } from "next/router";
 import Image from "next/image";
+import { verifyOtpFunApi } from "store/auth/services";
+import { useDispatch, useSelector } from "react-redux";
 
 const VerifyOtpForm = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
+  const { user, isAuthenticated, otpVerified, isLoading } = useSelector(
+    (state) => state.auth
+  );
   const [startTimer, setStartTimer] = useState(false);
+
   const handleSubmit = (value) => {
     if (value.length === 6) {
       console.log("Otp Value", value);
-      router.push("/");
+      // router.push("/");
+      console.log("user ", user);
+      dispatch(
+        verifyOtpFunApi({
+          phone: user?.phone,
+          otp: value,
+        })
+      );
     }
   };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      if (otpVerified) {
+        router.push("/");
+      }
+    } else {
+      router.push("/authentication/sign-in");
+    }
+  }, [isAuthenticated, otpVerified, router]);
 
   const resendOtp = () => {
     setStartTimer(true);
@@ -76,6 +99,7 @@ const VerifyOtpForm = () => {
                         length={6}
                         initialValue={""}
                         secret={false}
+                        disabled={isLoading}
                         onChange={(value, index) => {}}
                         type="numeric"
                         inputMode="number"

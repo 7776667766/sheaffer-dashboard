@@ -1,6 +1,6 @@
 import VerifyOtpForm from "@/components/Authentication/VerifyOtpForm";
 
-export default function SignUp() {
+export default function VerifyOtp() {
   return (
     <>
       <VerifyOtpForm />

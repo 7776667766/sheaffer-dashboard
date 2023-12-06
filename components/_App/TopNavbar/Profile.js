@@ -10,6 +10,7 @@ import {
   Link,
   ListItemIcon,
   Divider,
+  Button,
 } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import Settings from "@mui/icons-material/Settings";
@@ -17,15 +18,22 @@ import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import Logout from "@mui/icons-material/Logout";
+import { useDispatch } from "react-redux";
+import { logoutFunApi } from "store/auth/services";
 
 const Profile = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const dispatch = useDispatch();
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+  const handleLogout = () => {
+    console.log("logout");
+    dispatch(logoutFunApi());
   };
   return (
     <>
@@ -183,10 +191,12 @@ const Profile = () => {
           </ListItemIcon>
 
           <Link
-            href="/authentication/logout/"
+            // href="/authentication/logout/"
             fontSize="13px"
             color="inherit"
             underline="none"
+            variant="button"
+            onClick={handleLogout}
           >
             Logout
           </Link>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import Grid from "@mui/material/Grid";
 import { Typography } from "@mui/material";
@@ -11,25 +11,42 @@ import * as Yup from "yup";
 import { emailValidation, requiredValidation } from "@/utils/validation";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { useDispatch, useSelector } from "react-redux";
+import { loginFunApi } from "store/auth/services";
 
 const SignInForm = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
+  const { isAuthenticated, isLoading, otpVerified } = useSelector(
+    (state) => state.auth
+  );
 
   const formik = useFormik({
     initialValues: {
-      email: "",
+      phone: "",
       password: "",
     },
     validationSchema: Yup.object({
-      email: emailValidation(),
+      phone: emailValidation(),
       password: requiredValidation(),
     }),
     onSubmit: (values) => {
       console.log("Handle Submit", values);
-      router.push("/authentication/verify-otp");
+      dispatch(loginFunApi(values));
+      // router.push("/authentication/verify-otp");
       // alert(JSON.stringify(values, null, 2));
     },
   });
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      if (otpVerified) {
+        router.push("/");
+      } else {
+        router.push("/authentication/verify-otp");
+      }
+    }
+  }, [isAuthenticated, otpVerified, router]);
 
   return (
     <>
@@ -122,11 +139,12 @@ const SignInForm = () => {
                       <TextField
                         required
                         fullWidth
-                        id="email"
+                        id="phone"
                         label="Email Address"
-                        name="email"
-                        autoComplete="email"
-                        {...formik.getFieldProps("email")}
+                        name="phone"
+                        type="email"
+                        autoComplete="phone"
+                        {...formik.getFieldProps("phone")}
                         error={
                           formik.touched.email && formik.errors.email
                             ? true
@@ -221,8 +239,9 @@ const SignInForm = () => {
                     padding: "12px 10px",
                     color: "#fff !important",
                   }}
+                  disabled={isLoading}
                 >
-                  Sign In
+                  {isLoading ? "Loading..." : "Sign In"}
                 </Button>
               </Box>
             </Box>
