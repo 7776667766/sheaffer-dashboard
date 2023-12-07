@@ -1,5 +1,4 @@
 import React from "react";
-import Link from "next/link";
 import Grid from "@mui/material/Grid";
 import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
@@ -10,15 +9,19 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import {
   confirmPasswordValidation,
-  emailValidation,
   passwordValidation,
-  requiredValidation,
 } from "@/utils/validation";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { useDispatch, useSelector } from "react-redux";
+import { resetPasswordFunApi } from "store/auth/services";
+import toast from "react-hot-toast";
+import { LoadingButtonComponent } from "../UIElements/Buttons/LoadingButton";
 
 const ResetPasswordForm = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
+  const { isLoading } = useSelector((state) => state.auth);
 
   const formik = useFormik({
     initialValues: {
@@ -30,9 +33,21 @@ const ResetPasswordForm = () => {
       confirmPassword: confirmPasswordValidation("Confirm Password"),
     }),
     onSubmit: (values) => {
-      console.log("Handle Submit", values);
-      router.push("/");
-      // alert(JSON.stringify(values, null, 2));
+      if (router.query.data === undefined) {
+        toast.error("Invalid Reset Password Link");
+        router.push("/authentication/sign-in");
+      }
+      dispatch(
+        resetPasswordFunApi({
+          data: {
+            ...values,
+            phone: atob(router.query.data),
+          },
+          onSuccess: () => {
+            router.push("/authentication/sign-in");
+          },
+        })
+      );
     },
   });
 
@@ -64,44 +79,9 @@ const ResetPasswordForm = () => {
               <Typography fontSize="15px" mb="30px">
                 Enter your new password and confirm password to reset your
                 password
-                {/* Already have an account?{" "} */}
-                {/* <Link
-                  href="/authentication/sign-up"
-                  className="primaryColor text-decoration-none"
-                >
-                  Sign up
-                </Link> */}
               </Typography>
 
-              {/* <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  mb: "30px",
-                }}
-              >
-                <Link href="#" className={styles.googleBtn}>
-                  <img src="/images/google-icon.png" />
-                  Sign in with Google
-                </Link>
-
-                <Link href="#" className={styles.fbBtn}>
-                  <img src="/images/fb-icon.png" />
-                  Sign in with Facebook
-                </Link>
-              </Box>
-
-              <div className={styles.or}>
-                <span>or</span>
-              </div> */}
-
-              <Box
-                component="form"
-                noValidate
-                // onSubmit={handleSubmit}
-                onSubmit={formik.handleSubmit}
-              >
+              <Box component="form" noValidate onSubmit={formik.handleSubmit}>
                 <Box
                   sx={{
                     background: "#fff",
@@ -192,22 +172,12 @@ const ResetPasswordForm = () => {
                   </Grid>
                 </Box>
 
-                <Button
+                <LoadingButtonComponent
                   type="submit"
-                  fullWidth
-                  variant="contained"
-                  sx={{
-                    mt: 2,
-                    textTransform: "capitalize",
-                    borderRadius: "8px",
-                    fontWeight: "500",
-                    fontSize: "16px",
-                    padding: "12px 10px",
-                    color: "#fff !important",
-                  }}
-                >
-                  Reset Password
-                </Button>
+                  disabled={isLoading}
+                  isLoading={isLoading}
+                  value="Reset Password"
+                />
               </Box>
             </Box>
           </Grid>

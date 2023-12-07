@@ -11,7 +11,7 @@ export const requestHandler = {
 };
 
 const axios = API.create({
-  //   baseURL: process.env.API_URL,
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
   headers: requestHandler.Headers,
 });
 

@@ -6,13 +6,15 @@ import TopNavbar from "@/components/_App/TopNavbar";
 import Footer from "@/components/_App/Footer";
 import ScrollToTop from "./ScrollToTop";
 import ControlPanelModal from "./ControlPanelModal";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Box } from "@mui/material";
+import { login } from "store/auth/authSlice";
 
 const Layout = ({ children }) => {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [active, setActive] = useState(false);
+  const dispatch = useDispatch();
 
   const toogleActive = () => {
     setActive(!active);
@@ -20,12 +22,18 @@ const Layout = ({ children }) => {
   const { isAuthenticated } = useSelector((state) => state.auth);
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    const user = localStorage.getItem("user");
+
+    if (token && user && !isAuthenticated) {
+      dispatch(login());
+    }
     if (!router.pathname.includes("/authentication")) {
       if (!isAuthenticated) {
         router.push("/authentication/sign-in");
       }
     }
-  }, [isAuthenticated, router]);
+  }, [dispatch, isAuthenticated, router]);
   useEffect(() => {
     setLoading(false);
   }, [loading]);

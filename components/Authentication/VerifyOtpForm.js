@@ -1,53 +1,84 @@
 import React, { useEffect, useState } from "react";
-import Link from "next/link";
 import Grid from "@mui/material/Grid";
 import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import styles from "@/components/Authentication/Authentication.module.css";
 import PinInput from "react-pin-input";
 import Countdown from "react-countdown";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import { verifyOtpFunApi } from "store/auth/services";
+import { forgetPasswordFunApi, verifyOtpFunApi } from "store/auth/services";
 import { useDispatch, useSelector } from "react-redux";
+import toast from "react-hot-toast";
 
 const VerifyOtpForm = () => {
   const router = useRouter();
   const dispatch = useDispatch();
+  const [myPhone, setMyPhone] = useState("");
   const { user, isAuthenticated, otpVerified, isLoading } = useSelector(
     (state) => state.auth
   );
   const [startTimer, setStartTimer] = useState(false);
 
+  useEffect(() => {
+    if (router.query.data != undefined) {
+      setMyPhone(atob(router.query.data));
+    } else if (router.query.verify != undefined) {
+      setMyPhone(atob(router.query.verify));
+    }
+  }, [router.query.data, router.query.verify]);
+
   const handleSubmit = (value) => {
     if (value.length === 6) {
       console.log("Otp Value", value);
-      // router.push("/");
       console.log("user ", user);
       dispatch(
         verifyOtpFunApi({
-          phone: user?.phone,
-          otp: value,
+          data: {
+            phone: myPhone,
+            otp: value,
+            forLogin: router.query.verify !== undefined,
+          },
+          onSuccess: () => {
+            if (router.query.data != undefined) {
+              router.push(
+                `/authentication/reset-password?data=${router.query.data}`
+              );
+            } else {
+              router.push("/");
+            }
+          },
         })
       );
     }
   };
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      if (otpVerified) {
-        router.push("/");
-      }
-    } else {
-      router.push("/authentication/sign-in");
-    }
-  }, [isAuthenticated, otpVerified, router]);
+  // useEffect(() => {
+  //   if (router.pathname === "/authentication/verify-otp") {
+  //     if (isAuthenticated) {
+  //       if (otpVerified) {
+  //         router.push("/");
+  //       }
+  //     } else {
+  //       router.push("/authentication/sign-in");
+  //     }
+  //   } else {
+  //   }
+  // }, [isAuthenticated, otpVerified, router]);
 
   const resendOtp = () => {
     setStartTimer(true);
-    console.log("Resend Otp");
+    dispatch(
+      forgetPasswordFunApi({
+        data: {
+          phone: myPhone,
+        },
+        onSuccess: () => {
+          toast.success("Otp Sent Successfully");
+        },
+      })
+    );
   };
 
   const addLeadingZero = (number) => {

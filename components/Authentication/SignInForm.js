@@ -13,11 +13,12 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { loginFunApi } from "store/auth/services";
+import { LoadingButtonComponent } from "../UIElements/Buttons/LoadingButton";
 
 const SignInForm = () => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const { isAuthenticated, isLoading, otpVerified } = useSelector(
+  const { isAuthenticated, isLoading, otpVerified, user } = useSelector(
     (state) => state.auth
   );
 
@@ -27,7 +28,7 @@ const SignInForm = () => {
       password: "",
     },
     validationSchema: Yup.object({
-      phone: emailValidation(),
+      phone: requiredValidation("Email or phone"),
       password: requiredValidation(),
     }),
     onSubmit: (values) => {
@@ -43,10 +44,11 @@ const SignInForm = () => {
       if (otpVerified) {
         router.push("/");
       } else {
-        router.push("/authentication/verify-otp");
+        const myPhone = btoa(user?.phone);
+        router.push(`/authentication/verify-otp/?verify=${myPhone}`);
       }
     }
-  }, [isAuthenticated, otpVerified, router]);
+  }, [isAuthenticated, otpVerified, router, user?.phone]);
 
   return (
     <>
@@ -133,26 +135,25 @@ const SignInForm = () => {
                           display: "block",
                         }}
                       >
-                        Email
+                        Email or phone
                       </Typography>
 
                       <TextField
                         required
                         fullWidth
                         id="phone"
-                        label="Email Address"
+                        label="Email or phone"
                         name="phone"
-                        type="email"
                         autoComplete="phone"
                         {...formik.getFieldProps("phone")}
                         error={
-                          formik.touched.email && formik.errors.email
+                          formik.touched.phone && formik.errors.phone
                             ? true
                             : false
                         }
                         helperText={
-                          formik.touched.email && formik.errors.email
-                            ? formik.errors.email
+                          formik.touched.phone && formik.errors.phone
+                            ? formik.errors.phone
                             : ""
                         }
                         InputProps={{
@@ -226,7 +227,14 @@ const SignInForm = () => {
                   </Grid>
                 </Grid>
 
-                <Button
+                <LoadingButtonComponent
+                  type="submit"
+                  value="Sign In"
+                  isLoading={isLoading}
+                  disabled={isLoading}
+                />
+
+                {/* <Button
                   type="submit"
                   fullWidth
                   variant="contained"
@@ -242,7 +250,7 @@ const SignInForm = () => {
                   disabled={isLoading}
                 >
                   {isLoading ? "Loading..." : "Sign In"}
-                </Button>
+                </Button> */}
               </Box>
             </Box>
           </Grid>

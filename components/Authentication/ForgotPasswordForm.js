@@ -8,24 +8,36 @@ import Button from "@mui/material/Button";
 import styles from "@/components/Authentication/Authentication.module.css";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { emailValidation } from "@/utils/validation";
+import { phoneValidation } from "@/utils/validation";
 import { useRouter } from "next/router";
 import Image from "next/image";
+import { useDispatch, useSelector } from "react-redux";
+import { forgetPasswordFunApi } from "store/auth/services";
+import { LoadingButtonComponent } from "../UIElements/Buttons/LoadingButton";
 
 const ForgotPasswordForm = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
+  const { isLoading } = useSelector((state) => state.auth);
 
   const formik = useFormik({
     initialValues: {
-      email: "",
+      phone: "",
     },
     validationSchema: Yup.object({
-      email: emailValidation(),
+      phone: phoneValidation(),
     }),
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       console.log("Handle Submit", values);
-      router.push("/authentication/verify-otp");
-      // alert(JSON.stringify(values, null, 2));
+      dispatch(
+        forgetPasswordFunApi({
+          data: values,
+          onSuccess: () => {
+            const myPhone = btoa(values.phone);
+            router.push(`/authentication/verify-otp?data=${myPhone}`);
+          },
+        })
+      );
     },
   });
 
@@ -55,8 +67,8 @@ const ForgotPasswordForm = () => {
               </Typography>
 
               <Typography fontSize="15px" mb="30px">
-                Enter your email and we′ll send you instructions to reset your
-                password
+                Enter your phone number and we′ll send you instructions to reset
+                your password
               </Typography>
 
               <Box component="form" noValidate onSubmit={formik.handleSubmit}>
@@ -80,25 +92,25 @@ const ForgotPasswordForm = () => {
                           display: "block",
                         }}
                       >
-                        Email
+                        Phone
                       </Typography>
 
                       <TextField
                         required
                         fullWidth
-                        id="email"
-                        label="Email Address"
-                        name="email"
-                        autoComplete="email"
-                        {...formik.getFieldProps("email")}
+                        id="phone"
+                        label="Phone Number"
+                        name="phone"
+                        autoComplete="phone"
+                        {...formik.getFieldProps("phone")}
                         error={
-                          formik.touched.email && formik.errors.email
+                          formik.touched.phone && formik.errors.phone
                             ? true
                             : false
                         }
                         helperText={
-                          formik.touched.email && formik.errors.email
-                            ? formik.errors.email
+                          formik.touched.phone && formik.errors.phone
+                            ? formik.errors.phone
                             : ""
                         }
                         InputProps={{
@@ -109,22 +121,12 @@ const ForgotPasswordForm = () => {
                   </Grid>
                 </Box>
 
-                <Button
+                <LoadingButtonComponent
                   type="submit"
-                  fullWidth
-                  variant="contained"
-                  sx={{
-                    mt: 1,
-                    textTransform: "capitalize",
-                    borderRadius: "8px",
-                    fontWeight: "500",
-                    fontSize: "16px",
-                    padding: "12px 10px",
-                    color: "#fff !important",
-                  }}
-                >
-                  Send Reset Link
-                </Button>
+                  disabled={isLoading}
+                  isLoading={isLoading}
+                  value="Submit"
+                />
               </Box>
 
               <Box as="div" textAlign="center" mt="20px">

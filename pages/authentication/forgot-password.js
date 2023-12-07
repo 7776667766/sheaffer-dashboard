@@ -1,6 +1,6 @@
-import ForgotPasswordForm from '@/components/Authentication/ForgotPasswordForm';
+import ForgotPasswordForm from "@/components/Authentication/ForgotPasswordForm";
 
-export default function SignIn() {
+export default function ForgetPassword() {
   return (
     <>
       <ForgotPasswordForm />

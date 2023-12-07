@@ -17,6 +17,31 @@ export const emailValidation = (name) => {
     );
 };
 
+export const phoneValidation = (name) => {
+  return (
+    Yup.string()
+      .min(10, "Phone number must be 10 digits")
+      .matches(/^\S*$/, "No spaces allowed")
+      .matches(
+        /^\+(?:[0-9] ?){6,14}[0-9]$/,
+        `${
+          name ? name.charAt(0).toUpperCase() + name.slice(1) : "Phone"
+        } is not valid`
+      )
+      // .matches(
+      //   /^([0-9]{10})*$/,
+      //   `${
+      //     name ? name.charAt(0).toUpperCase() + name.slice(1) : "Phone"
+      //   } is not valid`
+      // )
+      .required(
+        `${
+          name ? name.charAt(0).toUpperCase() + name.slice(1) : "Phone"
+        } is Required`
+      )
+  );
+};
+
 export const requiredValidation = (name) => {
   return Yup.string().required(
     `${
