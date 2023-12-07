@@ -233,24 +233,6 @@ const SignInForm = () => {
                   isLoading={isLoading}
                   disabled={isLoading}
                 />
-
-                {/* <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  sx={{
-                    mt: 2,
-                    textTransform: "capitalize",
-                    borderRadius: "8px",
-                    fontWeight: "500",
-                    fontSize: "16px",
-                    padding: "12px 10px",
-                    color: "#fff !important",
-                  }}
-                  disabled={isLoading}
-                >
-                  {isLoading ? "Loading..." : "Sign In"}
-                </Button> */}
               </Box>
             </Box>
           </Grid>

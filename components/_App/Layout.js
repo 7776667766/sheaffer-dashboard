@@ -33,10 +33,10 @@ const Layout = ({ children }) => {
         router.push("/authentication/sign-in");
       }
     }
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
   }, [dispatch, isAuthenticated, router]);
-  useEffect(() => {
-    setLoading(false);
-  }, [loading]);
 
   if (loading)
     return (

@@ -1,6 +1,5 @@
-import { LoadingButton } from "@mui/lab";
-import { Button } from "@mui/material";
 import React from "react";
+import { LoadingButton } from "@mui/lab";
 
 export const LoadingButtonComponent = ({ value, isLoading, ...props }) => {
   return (
