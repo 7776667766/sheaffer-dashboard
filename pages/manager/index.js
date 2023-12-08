@@ -26,8 +26,8 @@ import TextField from "@mui/material/TextField";
 import AddIcon from "@mui/icons-material/Add";
 import ClearIcon from "@mui/icons-material/Clear";
 import Avatar from "@mui/material/Avatar";
-import Checkbox from "@mui/material/Checkbox";
-const label = { inputProps: { "aria-label": "Checkbox demo" } };
+// import Checkbox from "@mui/material/Checkbox";
+// const label = { inputProps: { "aria-label": "Checkbox demo" } };
 import { styled } from "@mui/material/styles";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -145,146 +145,76 @@ ToDoList.propTypes = {
 
 function createData(
   name,
-  url,
-  startDate,
-  endDate,
-  status,
-  badgeClass,
-  completion,
-  priority
+  email,
+  phonenumber,
 ) {
   return {
     name,
-    url,
-    startDate,
-    endDate,
-    status,
-    badgeClass,
-    completion,
-    priority,
+    email,
+    phonenumber,
   };
 }
 
 const rows = [
   createData(
-    "Public Beta Release",
-    "/images/user1.png",
-    "1 Jan 2022",
-    "1 Apr 2022",
-    "Completed",
-    "successBadge",
-    "10/10",
-    "High"
+    "name",
+    "email",
+    "phonenumber",
   ),
   createData(
-    "Fix Platform Errors",
-    "/images/user2.png",
-    "1 Mar 2022",
-    "1 May 2022",
-    "Completed",
-    "successBadge",
-    "10/10",
-    "High"
+    "name",
+    "email",
+    "phonenumber",
   ),
   createData(
-    "Launch our Mobile App",
-    "/images/user3.png",
-    "15 Apr 2022",
-    "15 Jun 2022",
-    "On Going",
-    "primaryBadge",
-    "7/10",
-    "Medium"
+    "name",
+    "email",
+    "phonenumber",
   ),
   createData(
-    "Add the New Pricing Page",
-    "/images/user4.png",
-    "15 May 2022",
-    "15 Jun 2022",
-    "Pending",
-    "dangerBadge",
-    "1/10",
-    "Low"
+    "name",
+    "email",
+    "phonenumber",
   ),
   createData(
-    "Redesign New Online Shop",
-    "/images/user5.png",
-    "15 Jun 2022",
-    "15 Aug 2022",
-    "On Going",
-    "primaryBadge",
-    "0/10",
-    "Low"
+    "name",
+    "email",
+    "phonenumber",
   ),
   createData(
-    "Material Ui Design",
-    "/images/user6.png",
-    "15 Jul 2022",
-    "15 Sep 2022",
-    "On Going",
-    "primaryBadge",
-    "7/10",
-    "Medium"
+    "name",
+    "email",
+    "phonenumber",
   ),
   createData(
-    "Add Progress Track",
-    "/images/user7.png",
-    "15 Mar 2022",
-    "15 May 2022",
-    "Completed",
-    "successBadge",
-    "10/10",
-    "High"
+    "name",
+    "email",
+    "phonenumber",
   ),
   createData(
-    "Web Design",
-    "/images/user8.png",
-    "15 Aug 2022",
-    "15 Dec 2022",
-    "On Going",
-    "primaryBadge",
-    "9/10",
-    "High"
+    "name",
+    "email",
+    "phonenumber",
   ),
   createData(
-    "Web Development",
-    "/images/user9.png",
-    "15 Nov 2022",
-    "15 Jan 2023",
-    "On Going",
-    "primaryBadge",
-    "8/10",
-    "High"
+    "name",
+    "email",
+    "phonenumber",
   ),
   createData(
-    "React App Development",
-    "/images/user10.png",
-    "15 Jan 2022",
-    "15 Mar 2022",
-    "Completed",
-    "successBadge",
-    "10/10",
-    "High"
+    "name",
+    "email",
+    "phonenumber",
   ),
   createData(
-    "eCommerce Development",
-    "/images/user11.png",
-    "15 Mar 2022",
-    "15 May 2022",
-    "On Going",
-    "primaryBadge",
-    "8/10",
-    "Medium"
+    "name",
+    "email",
+    "phonenumber",
   ),
   createData(
-    "App Development",
-    "/images/user12.png",
-    "15 May 2022",
-    "15 Jul 2022",
-    "On Going",
-    "primaryBadge",
-    "5/10",
-    "Medium"
+    "name",
+    "email",
+    "phonenumber",
   ),
 ].sort((a, b) => (a.name < b.name ? -1 : 1));
 
@@ -397,7 +327,7 @@ const Manager = () => {
                     fontSize: "13.5px",
                   }}
                 >
-                  Assigned
+                 Email
                 </TableCell>
 
                 <TableCell
@@ -406,46 +336,7 @@ const Manager = () => {
                     fontSize: "13.5px",
                   }}
                 >
-                  Start Date
-                </TableCell>
-
-                <TableCell
-                  sx={{
-                    borderBottom: "1px solid #F7FAFF",
-                    fontSize: "13.5px",
-                  }}
-                >
-                  End Date
-                </TableCell>
-
-                <TableCell
-                  align="center"
-                  sx={{
-                    borderBottom: "1px solid #F7FAFF",
-                    fontSize: "13.5px",
-                  }}
-                >
-                  Status
-                </TableCell>
-
-                <TableCell
-                  align="center"
-                  sx={{
-                    borderBottom: "1px solid #F7FAFF",
-                    fontSize: "13.5px",
-                  }}
-                >
-                  Completion
-                </TableCell>
-
-                <TableCell
-                  align="center"
-                  sx={{
-                    borderBottom: "1px solid #F7FAFF",
-                    fontSize: "13.5px",
-                  }}
-                >
-                  Priority
+                 Phone Number
                 </TableCell>
 
                 <TableCell
@@ -479,22 +370,18 @@ const Manager = () => {
                       pb: "16px",
                     }}
                   >
-                    <Checkbox {...label} size="small" />
                     {row.name}
                   </TableCell>
-
+                  
                   <TableCell
                     sx={{
                       borderBottom: "1px solid #F7FAFF",
+                      fontSize: "13px",
                       pt: "16px",
                       pb: "16px",
                     }}
                   >
-                    <Avatar
-                      alt="User"
-                      src={row.url}
-                      sx={{ width: 35, height: 35 }}
-                    />
+                    {row.email}
                   </TableCell>
 
                   <TableCell
@@ -505,55 +392,7 @@ const Manager = () => {
                       pb: "16px",
                     }}
                   >
-                    {row.startDate}
-                  </TableCell>
-
-                  <TableCell
-                    sx={{
-                      borderBottom: "1px solid #F7FAFF",
-                      fontSize: "13px",
-                      pt: "16px",
-                      pb: "16px",
-                    }}
-                  >
-                    {row.endDate}
-                  </TableCell>
-
-                  <TableCell
-                    align="center"
-                    sx={{
-                      fontWeight: 500,
-                      borderBottom: "1px solid #F7FAFF",
-                      fontSize: "11px",
-                      pt: "16px",
-                      pb: "16px",
-                    }}
-                  >
-                    <span className={row.badgeClass}>{row.status}</span>
-                  </TableCell>
-
-                  <TableCell
-                    sx={{
-                      borderBottom: "1px solid #F7FAFF",
-                      fontSize: "13px",
-                      pt: "16px",
-                      pb: "16px",
-                    }}
-                    align="center"
-                  >
-                    {row.completion}
-                  </TableCell>
-
-                  <TableCell
-                    sx={{
-                      borderBottom: "1px solid #F7FAFF",
-                      fontSize: "13px",
-                      pt: "16px",
-                      pb: "16px",
-                    }}
-                    align="center"
-                  >
-                    {row.priority}
+                    {row.phonenumber}
                   </TableCell>
 
                   <TableCell
