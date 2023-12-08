@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
 import IconButton from "@mui/material/IconButton";
@@ -32,6 +32,8 @@ import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import CloseIcon from "@mui/icons-material/Close";
 import { useRouter } from "next/router";
+import { useDispatch, useSelector } from "react-redux";
+import { getspecialistApi } from "store/specialist/services";
 
 // Add Task Modal
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -117,6 +119,27 @@ const Specialist = () => {
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
   const [rows, setRows] = React.useState([]);
   const router = useRouter();
+  const dispatch = useDispatch();
+  const { specialist } = useSelector((state) => state.specialist);
+  const { business } = useSelector((state) => state.business);
+
+  useEffect(() => {
+    if (specialist.specialistFetch !== true) {
+      dispatch(
+        getspecialistApi({
+          data: business?.id,
+        })
+      );
+    }
+  }, [
+    dispatch,
+    specialist.specialist,
+    specialist.specialistFetch,
+    business?.id,
+  ]);
+  useEffect(() => {
+    setRows(specialist);
+  }, [specialist]);
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -198,6 +221,14 @@ const Specialist = () => {
           >
             <TableHead sx={{ background: "#F7FAFF" }}>
               <TableRow>
+                <TableCell
+                  sx={{
+                    borderBottom: "1px solid #F7FAFF",
+                    fontSize: "13.5px",
+                  }}
+                >
+                  Sr.
+                </TableCell>
                 <TableCell
                   sx={{
                     borderBottom: "1px solid #F7FAFF",

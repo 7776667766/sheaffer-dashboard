@@ -17,7 +17,7 @@ const VerifyOtpForm = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const [myPhone, setMyPhone] = useState("");
-  const { user, isAuthenticated, otpVerified, isLoading } = useSelector(
+  const { user, role, isAuthenticated, otpVerified, isLoading } = useSelector(
     (state) => state.auth
   );
   const [startTimer, setStartTimer] = useState(false);
@@ -47,7 +47,9 @@ const VerifyOtpForm = () => {
                 `/authentication/reset-password?data=${router.query.data}`
               );
             } else {
-              dispatch(getMyBussinessFunApi());
+              if (role === "owner") {
+                dispatch(getMyBussinessFunApi());
+              }
               router.push("/");
             }
           },

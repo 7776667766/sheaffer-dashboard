@@ -31,7 +31,7 @@ const AddManagerForm = () => {
       phone: "",
       password: "",
       confirmPassword: "",
-      businessId: business.id,
+      businessId: business?.id,
     },
     validationSchema: Yup.object({
       phone: phoneValidation(),

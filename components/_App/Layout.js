@@ -20,7 +20,10 @@ const Layout = ({ children }) => {
   const toogleActive = () => {
     setActive(!active);
   };
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  const { isAuthenticated, role, otpVerified } = useSelector(
+    (state) => state.auth
+  );
+  const { business } = useSelector((state) => state.business);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -28,21 +31,25 @@ const Layout = ({ children }) => {
 
     if (token && user && !isAuthenticated) {
       dispatch(login());
-      const otpVerified = localStorage.getItem("otpVerified");
-      if (otpVerified) {
+      const myOtpVerified = localStorage.getItem("otpVerified");
+      if (myOtpVerified && role === "owner") {
         dispatch(getMyBussinessFunApi());
       }
     }
 
-    // if (!router.pathname.includes("/authentication")) {
-    //   if (!isAuthenticated) {
-    //     router.push("/authentication/sign-in");
-    //   }
-    // }
+    if (!router.pathname.includes("/authentication")) {
+      if (!isAuthenticated) {
+        router.push("/authentication/sign-in");
+      }
+    } else {
+      if (otpVerified && role === "owner" && business === null) {
+        dispatch(getMyBussinessFunApi());
+      }
+    }
     setTimeout(() => {
       setLoading(false);
     }, 1000);
-  }, [dispatch, isAuthenticated, router]);
+  }, [dispatch, isAuthenticated, otpVerified, role, router]);
 
   if (loading)
     return (

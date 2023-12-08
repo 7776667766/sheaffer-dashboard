@@ -8,8 +8,7 @@ import AddIcon from "@mui/icons-material/Add";
 import SendIcon from "@mui/icons-material/Send";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { addspecialistApi } from "../../../store/specialist/Services";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import dynamic from "next/dynamic";
 import {
@@ -20,19 +19,22 @@ import {
   requiredValidation,
 } from "@/utils/validation";
 import { useRouter } from "next/router";
+import { addspecialistApi } from "store/specialist/services";
 const RichTextEditor = dynamic(() => import("@mantine/rte"), {
   ssr: false,
 });
 
 const AddSpecialistForm = () => {
   const dispatch = useDispatch();
+  const { business } = useSelector((state) => state.business);
+
   const router = useRouter();
 
   const formik = useFormik({
     initialValues: {
       name: "",
       email: "",
-      businessId: "656da4aac703af646ae8f124",
+      businessId: business?.id,
     },
     validationSchema: Yup.object({
       name: requiredValidation(),

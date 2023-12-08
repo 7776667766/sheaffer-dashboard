@@ -13,7 +13,7 @@ export default function AddSpecialist() {
           <li>
             <Link href="/">Dashboard</Link>
           </li>
-          <li>Manager</li>
+          <li>Specialist</li>
         </ul>
       </div>
 

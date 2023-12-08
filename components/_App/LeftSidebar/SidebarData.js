@@ -57,6 +57,7 @@ export const SidebarData = [
   {
     title: "Manager",
     path: "/manager/",
+    role: "owner",
     icon: <LayersIcon />,
     iconClosed: <KeyboardArrowRightIcon />,
     iconOpened: <KeyboardArrowDownIcon />,
@@ -74,6 +75,7 @@ export const SidebarData = [
   {
     title: "Specialist",
     path: "/specialist/",
+    role: "owner",
     icon: <LayersIcon />,
     iconClosed: <KeyboardArrowRightIcon />,
     iconOpened: <KeyboardArrowDownIcon />,
