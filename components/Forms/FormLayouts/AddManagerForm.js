@@ -8,7 +8,8 @@ import AddIcon from "@mui/icons-material/Add";
 import SendIcon from "@mui/icons-material/Send";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-
+import { addspecialistApi } from "../../../store/Specialist/Services";
+import { useDispatch } from "react-redux";
 import dynamic from "next/dynamic";
 import {
   confirmPasswordValidation,
@@ -17,9 +18,11 @@ import {
   phoneValidation,
   requiredValidation,
 } from "@/utils/validation";
-import { addManagerFunApi } from "store/manager/services";
+
 
 const AddManagerForm = () => {
+const dispatch=useDispatch();
+
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -38,10 +41,10 @@ const AddManagerForm = () => {
     onSubmit: (values) => {
       console.log("Handle Submit", values);
       dispatch(
-        addManagerFunApi({
+        addspecialistApi({
           data: values,
           onSuccess: () => {
-            console.log("Add Manager Success");
+            console.log("Add Specialist Success");
           },
         })
       );
