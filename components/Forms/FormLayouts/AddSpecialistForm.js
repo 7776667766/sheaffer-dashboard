@@ -17,34 +17,24 @@ import {
   phoneValidation,
   requiredValidation,
 } from "@/utils/validation";
-import { addManagerFunApi } from "store/manager/services";
+const RichTextEditor = dynamic(() => import("@mantine/rte"), {
+  ssr: false,
+});
 
-const AddManagerForm = () => {
+const AddSpecialistForm = () => {
   const formik = useFormik({
     initialValues: {
       name: "",
       email: "",
-      phone: "",
-      password: "",
-      confirmPassword: "",
+      businessId: "123",
     },
     validationSchema: Yup.object({
-      phone: phoneValidation(),
-      password: passwordValidation(),
-      email: emailValidation(),
       name: requiredValidation(),
-      confirmPassword: confirmPasswordValidation(),
+      email: emailValidation(),
     }),
     onSubmit: (values) => {
       console.log("Handle Submit", values);
-      dispatch(
-        addManagerFunApi({
-          data: values,
-          onSuccess: () => {
-            console.log("Add Manager Success");
-          },
-        })
-      );
+      // dispatch(loginFunApi(values));
       // router.push("/authentication/verify-otp");
       // alert(JSON.stringify(values, null, 2));
     },
@@ -71,7 +61,7 @@ const AddManagerForm = () => {
                   mb: "12px",
                 }}
               >
-                Name
+                Specialist Name
               </Typography>
               <TextField
                 autoComplete="name"
@@ -124,108 +114,6 @@ const AddManagerForm = () => {
               />
             </Grid>
 
-            <Grid item xs={12} md={12} lg={6}>
-              <Typography
-                as="h5"
-                sx={{
-                  fontWeight: "500",
-                  fontSize: "14px",
-                  mb: "12px",
-                }}
-              >
-                Phone Number
-              </Typography>
-              <TextField
-                autoComplete="number"
-                name="phonenumber"
-                fullWidth
-                id="phonenumber"
-                label="Phone Number"
-                {...formik.getFieldProps("phone")}
-                error={
-                  formik.touched.phone && formik.errors.phone ? true : false
-                }
-                helperText={
-                  formik.touched.phone && formik.errors.phone
-                    ? formik.errors.phone
-                    : ""
-                }
-                InputProps={{
-                  style: { borderRadius: 8 },
-                }}
-              />
-            </Grid>
-
-            <Grid item xs={12} md={12} lg={6}>
-              <Typography
-                as="h5"
-                sx={{
-                  fontWeight: "500",
-                  fontSize: "14px",
-                  mb: "12px",
-                }}
-              >
-                Password
-              </Typography>
-              <TextField
-                autoComplete="password"
-                name="password"
-                fullWidth
-                id="password"
-                label="Password"
-                {...formik.getFieldProps("password")}
-                error={
-                  formik.touched.password && formik.errors.password
-                    ? true
-                    : false
-                }
-                helperText={
-                  formik.touched.password && formik.errors.password
-                    ? formik.errors.password
-                    : ""
-                }
-                InputProps={{
-                  style: { borderRadius: 8 },
-                }}
-              />
-            </Grid>
-
-            <Grid item xs={12} md={12} lg={6}>
-              <Typography
-                as="h5"
-                sx={{
-                  fontWeight: "500",
-                  fontSize: "14px",
-                  mb: "12px",
-                }}
-              >
-                Confirm Password
-              </Typography>
-              <TextField
-                autoComplete="confirm-password"
-                name="confirmPassword"
-                fullWidth
-                id="confirmPassword"
-                label="Confirm Password"
-                {...formik.getFieldProps("confirmPassword")}
-                error={
-                  formik.touched.confirmPassword &&
-                  formik.errors.confirmPassword
-                    ? true
-                    : false
-                }
-                helperText={
-                  formik.touched.confirmPassword &&
-                  formik.errors.confirmPassword
-                    ? formik.errors.confirmPassword
-                    : ""
-                }
-                InputProps={{
-                  style: { borderRadius: 8 },
-                }}
-              />
-            </Grid>
-
             <Grid item xs={12} textAlign="left">
               <Button
                 type="submit"
@@ -247,7 +135,7 @@ const AddManagerForm = () => {
                   }}
                   className="mr-5px"
                 />{" "}
-                Add Manager
+                Add Specialist
               </Button>
             </Grid>
           </Grid>
@@ -257,4 +145,4 @@ const AddManagerForm = () => {
   );
 };
 
-export default AddManagerForm;
+export default AddSpecialistForm;

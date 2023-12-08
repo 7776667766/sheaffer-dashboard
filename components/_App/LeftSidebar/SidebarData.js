@@ -72,6 +72,23 @@ export const SidebarData = [
     ],
   },
   {
+    title: "Specialist",
+    path: "/specialist/",
+    icon: <LayersIcon />,
+    iconClosed: <KeyboardArrowRightIcon />,
+    iconOpened: <KeyboardArrowDownIcon />,
+    subNav: [
+      {
+        title: "Specialist",
+        path: "/specialist/",
+      },
+      {
+        title: "Add Specialist",
+        path: "/specialist/add-specialist/",
+      },
+    ],
+  },
+  {
     title: "Services",
     path: "/services/",
     icon: <LayersIcon />,
