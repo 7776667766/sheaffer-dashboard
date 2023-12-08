@@ -33,8 +33,13 @@ export const loginFunApi = createAsyncThunk("auth/login", async (data) => {
     }
   } catch (error) {
     console.log("Error in login Api ", error);
-    const err =
-      error.response.data.message || error?.message || "Something went wrong!";
+    let err =
+      error?.response?.data?.message ||
+      error?.message ||
+      "Something went wrong!";
+    if (err === "Network Error") {
+      err = "Please check your internet connection";
+    }
     toast.error(err);
     throw new Error(err);
   }
@@ -85,10 +90,13 @@ export const verifyOtpFunApi = createAsyncThunk(
       }
     } catch (error) {
       console.log("Error in verifyOtpApi => ", error);
-      const err =
-        error.response.data.message ||
+      let err =
+        error?.response?.data?.message ||
         error?.message ||
         "Something went wrong!";
+      if (err === "Network Error") {
+        err = "Please check your internet connection";
+      }
       toast.error(err);
       throw new Error(err);
     }
@@ -104,7 +112,6 @@ export const logoutFunApi = createAsyncThunk("auth/logout", async () => {
       localStorage.removeItem("user");
       localStorage.removeItem("otpVerified");
       toast.success("Account Logout Successfully");
-
       return;
     } else {
       console.log("Error response in logout Api => ", response.data);
@@ -115,9 +122,14 @@ export const logoutFunApi = createAsyncThunk("auth/logout", async () => {
       throw new Error(err);
     }
   } catch (error) {
-    console.log("Error in logout Api ", error);
-    const err =
-      error.response.data.message || error?.message || "Something went wrong!";
+    console.log("Error in logout Api", error);
+    let err =
+      error?.response?.data?.message ||
+      error?.message ||
+      "Something went wrong!";
+    if (err === "Network Error") {
+      err = "Please check your internet connection";
+    }
     toast.error(err);
     throw new Error(err);
   }
@@ -135,10 +147,13 @@ export const forgetPasswordFunApi = createAsyncThunk(
       }
     } catch (error) {
       console.log("Error in forgetPasswordFun Api ", error);
-      const err =
-        error.response.data.message ||
+      let err =
+        error?.response?.data?.message ||
         error?.message ||
         "Something went wrong!";
+      if (err === "Network Error") {
+        err = "Please check your internet connection";
+      }
       toast.error(err);
       throw new Error(err);
     }
@@ -157,10 +172,13 @@ export const resetPasswordFunApi = createAsyncThunk(
       }
     } catch (error) {
       console.log("Error in resetPasswordFun Api ", error);
-      const err =
-        error.response.data.message ||
+      let err =
+        error?.response?.data?.message ||
         error?.message ||
         "Something went wrong!";
+      if (err === "Network Error") {
+        err = "Please check your internet connection";
+      }
       toast.error(err);
       throw new Error(err);
     }

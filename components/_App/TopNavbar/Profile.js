@@ -134,7 +134,7 @@ const Profile = () => {
           </Link>
         </MenuItem>
 
-        <MenuItem>
+        {/* <MenuItem>
           <ListItemIcon sx={{ mr: "-8px", mt: "-3px" }}>
             <MailOutlineIcon fontSize="small" />
           </ListItemIcon>
@@ -188,17 +188,26 @@ const Profile = () => {
           >
             Pricing
           </Link>
-        </MenuItem>
+        </MenuItem> */}
 
         <Divider />
 
-        <MenuItem>
+        <MenuItem onClick={handleLogout}>
           <ListItemIcon sx={{ mr: "-8px", mt: "-3px" }}>
             <Logout fontSize="small" />
           </ListItemIcon>
 
-          <Link
-            // href="/authentication/logout/"
+          <Typography
+            sx={{
+              fontSize: "14px",
+              color: "inherit",
+              textTransform: "uppercase",
+            }}
+          >
+            Logout
+          </Typography>
+          {/* <Link
+            href="/authentication/logout/"
             fontSize="13px"
             color="inherit"
             underline="none"
@@ -206,7 +215,7 @@ const Profile = () => {
             onClick={handleLogout}
           >
             Logout
-          </Link>
+          </Link> */}
         </MenuItem>
       </Menu>
     </>

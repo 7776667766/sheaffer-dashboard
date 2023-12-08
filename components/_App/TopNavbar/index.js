@@ -35,7 +35,7 @@ const TopNavbar = ({ toogleActive }) => {
             </Tooltip>
 
             {/* Search form */}
-            <SearchForm />
+            {/* <SearchForm /> */}
 
             <Typography component="div" sx={{ flexGrow: 1 }}></Typography>
 
@@ -43,8 +43,8 @@ const TopNavbar = ({ toogleActive }) => {
               {/* CurrentDate */}
               <CurrentDate />
 
-              {/* Notification */}
-              <Email />
+              {/* Email */}
+              {/* <Email /> */}
 
               {/* Notification */}
               <Notification />
