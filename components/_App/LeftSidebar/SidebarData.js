@@ -14,6 +14,7 @@ import CopyAllIcon from "@mui/icons-material/CopyAll";
 import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
 import ViewQuiltIcon from "@mui/icons-material/ViewQuilt";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
+import { AccountCircle } from "@mui/icons-material";
 
 export const SidebarData = [
   {
@@ -535,39 +536,50 @@ export const SidebarData = [
   //     },
   //   ],
   // },
-  // {
-  //   title: "Notification",
-  //   path: "/notification/",
-  //   icon: <NotificationsNoneIcon />,
-  // },
-  // {
-  //   title: "Settings",
-  //   path: "/settings/account/",
-  //   icon: <SettingsIcon />,
-  //   iconClosed: <KeyboardArrowRightIcon />,
-  //   iconOpened: <KeyboardArrowDownIcon />,
+  {
+    title: "Users",
+    path: "/users/",
+    role: "admin",
+    icon: <AccountCircle />,
+  },
+  {
+    title: "Notification",
+    path: "/notification/",
+    icon: <NotificationsNoneIcon />,
+  },
+  {
+    title: "Booking",
+    path: "/booking/",
+    icon: <LayersIcon />,
+  },
+  {
+    title: "Settings",
+    path: "/settings/account/",
+    icon: <SettingsIcon />,
+    iconClosed: <KeyboardArrowRightIcon />,
+    iconOpened: <KeyboardArrowDownIcon />,
 
-  //   subNav: [
-  //     {
-  //       title: "Account",
-  //       path: "/settings/account/",
-  //     },
-  //     {
-  //       title: "Security",
-  //       path: "/settings/security/",
-  //     },
-  //     {
-  //       title: "Privacy Policy",
-  //       path: "/settings/privacy-policy/",
-  //     },
-  //     {
-  //       title: "Terms & Conditions",
-  //       path: "/pages/terms-conditions/",
-  //     },
-  //     {
-  //       title: "Logout",
-  //       path: "/authentication/logout/",
-  //     },
-  //   ],
-  // },
+    subNav: [
+      {
+        title: "Account",
+        path: "/settings/account/",
+      },
+      {
+        title: "Security",
+        path: "/settings/security/",
+      },
+      {
+        title: "Privacy Policy",
+        path: "/settings/privacy-policy/",
+      },
+      {
+        title: "Terms & Conditions",
+        path: "/pages/terms-conditions/",
+      },
+      {
+        title: "Logout",
+        path: "/authentication/logout/",
+      },
+    ],
+  },
 ];

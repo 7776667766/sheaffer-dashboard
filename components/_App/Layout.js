@@ -49,7 +49,7 @@ const Layout = ({ children }) => {
     setTimeout(() => {
       setLoading(false);
     }, 1000);
-  }, [dispatch, isAuthenticated, otpVerified, role, router]);
+  }, [business, dispatch, isAuthenticated, otpVerified, role, router]);
 
   if (loading)
     return (

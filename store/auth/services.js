@@ -107,20 +107,32 @@ export const logoutFunApi = createAsyncThunk("auth/logout", async () => {
   try {
     const response = await axios.get(logoutApi);
     console.log("response in logoutFun => ", response.data);
-    if (response.data.status === "success") {
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-      localStorage.removeItem("otpVerified");
-      toast.success("Account Logout Successfully");
-      return;
-    } else {
-      console.log("Error response in logout Api => ", response.data);
-      const err =
-        response?.data?.message || response?.message || "Something went wrong!";
-      console.log("err: ", err);
-      toast.error(err);
-      throw new Error(err);
-    }
+    // if (response.data.status === "success") {
+    //   localStorage.removeItem("token");
+    //   localStorage.removeItem("user");
+    //   localStorage.removeItem("otpVerified");
+    //   toast.success("Account Logout Successfully");
+    //   return;
+    // } else {
+    //   console.log("Error response in logout Api => ", response.data);
+    //   const err =
+    //     response?.data?.message || response?.message || "Something went wrong!";
+    //   console.log("err: ", err);
+    //   if (err === "invalid token") {
+    //     localStorage.removeItem("token");
+    //     localStorage.removeItem("user");
+    //     localStorage.removeItem("otpVerified");
+    //     return;
+    //   } else {
+    //     toast.error(err);
+    //     throw new Error(err);
+    //   }
+    // }
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    localStorage.removeItem("otpVerified");
+    toast.success("Account Logout Successfully");
+    return;
   } catch (error) {
     console.log("Error in logout Api", error);
     let err =
