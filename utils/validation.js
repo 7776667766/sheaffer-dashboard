@@ -45,7 +45,7 @@ export const phoneValidation = (name) => {
 export const requiredValidation = (name) => {
   return Yup.string().required(
     `${
-      name ? name.charAt(0).toUpperCase() + name.slice(1) : "Password"
+      name ? name.charAt(0).toUpperCase() + name.slice(1) : "Name"
     } is Required`
   );
 };
@@ -68,7 +68,7 @@ export const confirmPasswordValidation = (name) => {
   return Yup.string()
     .required(
       `${
-        name ? name.charAt(0).toUpperCase() + name.slice(1) : "Password"
+        name ? name.charAt(0).toUpperCase() + name.slice(1) : "Confrim Password"
       } is Required`
     )
     .oneOf(

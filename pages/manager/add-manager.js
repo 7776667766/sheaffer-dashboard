@@ -1,8 +1,8 @@
 import React from 'react';
 import Grid from "@mui/material/Grid";    
-import BasicForm from '@/components/Forms/FormLayouts/BasicForm';
-import BasicWithIcons from '@/components/Forms/FormLayouts/BasicWithIcons';
-import SignInForm from '@/components/Forms/FormLayouts/SignInForm';
+// import BasicForm from '@/components/Forms/FormLayouts/BasicForm';
+// import BasicWithIcons from '@/components/Forms/FormLayouts/BasicWithIcons';
+// import SignInForm from '@/components/Forms/FormLayouts/SignInForm';
 import SignUpForm from '@/components/Forms/FormLayouts/SignUpForm';
 import CustomStyles from '@/components/Forms/FormLayouts/CustomStyles';
 import Link from 'next/link';
@@ -13,12 +13,12 @@ export default function FormLayouts() {
     <>
       {/* Page title */}
       <div className={styles.pageTitle}>
-        <h1>Form Layouts</h1>
+        <h1>Add Manager</h1>
         <ul>
           <li>
             <Link href="/">Dashboard</Link>
           </li>
-          <li>Form Layouts</li>
+          <li>Manager</li>
         </ul>
       </div>
       
@@ -29,18 +29,18 @@ export default function FormLayouts() {
       >
         <Grid item xs={12} md={12} lg={12} xl={6}>
           {/* BasicForm */}
-          <BasicForm />
+          {/* <BasicForm /> */}
 
           {/* SignIn */}
-          <SignInForm />
+          {/* <SignInForm /> */}
         </Grid>
 
         <Grid item xs={12} md={12} lg={12} xl={6}>
           {/* BasicWithIcons */}
-          <BasicWithIcons />
+          {/* <BasicWithIcons /> */}
 
           {/* SignUpForm */}
-          <SignUpForm />
+          {/* <SignUpForm /> */}
         </Grid>
       </Grid>
 
