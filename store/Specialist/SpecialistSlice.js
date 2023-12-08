@@ -1,4 +1,6 @@
-const { addspecialistApi } = require("../Specialist/Services");
+
+import { createSlice } from "@reduxjs/toolkit";
+import { addspecialistApi } from "../Specialist/Services";
 
 const specialistSlice = createSlice({
   name: "specialist",
@@ -7,6 +9,8 @@ const specialistSlice = createSlice({
     isLoading: false,
     error: null,
   },
+  reducers: {},
+
   extraReducers: (builder) => {
     builder
       .addCase(addspecialistApi.pending, (state, action) => {
@@ -14,8 +18,9 @@ const specialistSlice = createSlice({
         state.error = null;
       })
       .addCase(addspecialistApi.fulfilled, (state, action) => {
+        console.log("Add Specialist  Response", action.payload);
         state.isLoading = false;
-        state.specialist = action.payload.managers;
+        state.specialist.push(action.payload);
       })
       .addCase(addspecialistApi.rejected, (state, action) => {
         state.isLoading = false;
