@@ -1,6 +1,5 @@
-
+import { addspecialistApi , getspecialistApi  } from "./Services";
 import { createSlice } from "@reduxjs/toolkit";
-import { addspecialistApi } from "../Specialist/Services";
 
 const specialistSlice = createSlice({
   name: "specialist",
@@ -8,7 +7,9 @@ const specialistSlice = createSlice({
     specialist: [],
     isLoading: false,
     error: null,
+    specialistFetch: false,
   },
+
   reducers: {},
 
   extraReducers: (builder) => {
@@ -25,6 +26,22 @@ const specialistSlice = createSlice({
       .addCase(addspecialistApi.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
+      });
+      getspecialistApi
+      builder
+      .addCase(getspecialistApi.pending, (state, action) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(getspecialistApi.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.specialistFetch = true;
+        state.specialist = action.payload;
+      })
+      .addCase(getspecialistApi.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+        state.specialistFetch = true;
       });
   },
 });

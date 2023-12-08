@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
 import IconButton from "@mui/material/IconButton";
@@ -32,6 +32,10 @@ import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import CloseIcon from "@mui/icons-material/Close";
 import { useRouter } from "next/router";
+import { useDispatch, useSelector } from "react-redux";
+import { getspecialistApi } from "store/specialist/services";
+
+
 
 // Add Task Modal
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -168,6 +172,23 @@ const Specialist = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
   const router = useRouter();
+  const dispatch = useDispatch();
+  const [rows, setRows] = useState([]);
+  const { specialist } = useSelector((state) => state.specialist);
+
+
+  useEffect(() => {
+    if (specialist.specialistFetch !== true) {
+      dispatch(
+        getspecialistApi({
+          data: "656da4aac703af646ae8f124",
+        })
+      );
+    }
+  }, [dispatch, specialist.specialist]);
+  useEffect(() => {
+    setRows(specialist);
+  }, [specialist]);
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
