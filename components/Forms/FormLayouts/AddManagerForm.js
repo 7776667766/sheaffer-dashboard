@@ -42,7 +42,7 @@ const AddManagerForm = () => {
     onSubmit: (values) => {
       console.log("Handle Submit", values);
       dispatch(
-        addspecialistApi({
+        addManagerFunApi({
           data: values,
           onSuccess: () => {
             console.log("Add Manager Success");

@@ -15,7 +15,6 @@ export const addManagerFunApi = createAsyncThunk(
         if (onSuccess) {
           onSuccess();
         }
-
         return response.data.data;
       } else {
         console.log("Error response in add manager Api => ", response.data);
