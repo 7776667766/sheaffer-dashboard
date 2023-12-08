@@ -8,6 +8,8 @@ import AddIcon from "@mui/icons-material/Add";
 import SendIcon from "@mui/icons-material/Send";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { addspecialistApi } from "../../../store/Specialist/Services";
+import { useDispatch } from "react-redux";
 
 import dynamic from "next/dynamic";
 import {
@@ -17,16 +19,20 @@ import {
   phoneValidation,
   requiredValidation,
 } from "@/utils/validation";
+import { useRouter } from "next/router";
 const RichTextEditor = dynamic(() => import("@mantine/rte"), {
   ssr: false,
 });
 
 const AddSpecialistForm = () => {
+  const dispatch = useDispatch();
+  const router=useRouter()
+
   const formik = useFormik({
     initialValues: {
       name: "",
       email: "",
-      businessId: "123",
+      businessId: "656da4aac703af646ae8f124",
     },
     validationSchema: Yup.object({
       name: requiredValidation(),
@@ -34,9 +40,15 @@ const AddSpecialistForm = () => {
     }),
     onSubmit: (values) => {
       console.log("Handle Submit", values);
-      // dispatch(loginFunApi(values));
-      // router.push("/authentication/verify-otp");
-      // alert(JSON.stringify(values, null, 2));
+      dispatch(
+        addspecialistApi({
+          data: values,
+          onSuccess: () => {
+            console.log("Add Specialist Success");
+            router.push("/specialist/");
+          },
+        })
+      );
     },
   });
 
