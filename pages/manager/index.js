@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
 import IconButton from "@mui/material/IconButton";
@@ -18,14 +18,10 @@ import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
 import Tooltip from "@mui/material/Tooltip";
-import Grid from "@mui/material/Grid";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
 import AddIcon from "@mui/icons-material/Add";
-import ClearIcon from "@mui/icons-material/Clear";
-import Avatar from "@mui/material/Avatar";
 // import Checkbox from "@mui/material/Checkbox";
 // const label = { inputProps: { "aria-label": "Checkbox demo" } };
 import { styled } from "@mui/material/styles";
@@ -33,6 +29,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import CloseIcon from "@mui/icons-material/Close";
 import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
 
 // Add Task Modal
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -143,85 +140,16 @@ ToDoList.propTypes = {
   rowsPerPage: PropTypes.number.isRequired,
 };
 
-function createData(
-  name,
-  email,
-  phonenumber,
-) {
-  return {
-    name,
-    email,
-    phonenumber,
-  };
-}
-
-const rows = [
-  createData(
-    "name",
-    "email",
-    "phonenumber",
-  ),
-  createData(
-    "name",
-    "email",
-    "phonenumber",
-  ),
-  createData(
-    "name",
-    "email",
-    "phonenumber",
-  ),
-  createData(
-    "name",
-    "email",
-    "phonenumber",
-  ),
-  createData(
-    "name",
-    "email",
-    "phonenumber",
-  ),
-  createData(
-    "name",
-    "email",
-    "phonenumber",
-  ),
-  createData(
-    "name",
-    "email",
-    "phonenumber",
-  ),
-  createData(
-    "name",
-    "email",
-    "phonenumber",
-  ),
-  createData(
-    "name",
-    "email",
-    "phonenumber",
-  ),
-  createData(
-    "name",
-    "email",
-    "phonenumber",
-  ),
-  createData(
-    "name",
-    "email",
-    "phonenumber",
-  ),
-  createData(
-    "name",
-    "email",
-    "phonenumber",
-  ),
-].sort((a, b) => (a.name < b.name ? -1 : 1));
-
 const Manager = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
   const router = useRouter();
+  const [rows, setRows] = useState([]);
+  const { managers } = useSelector((state) => state.manager);
+
+  useEffect(() => {
+    setRows(managers);
+  }, [managers]);
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -327,7 +255,7 @@ const Manager = () => {
                     fontSize: "13.5px",
                   }}
                 >
-                 Email
+                  Email
                 </TableCell>
 
                 <TableCell
@@ -336,7 +264,7 @@ const Manager = () => {
                     fontSize: "13.5px",
                   }}
                 >
-                 Phone Number
+                  Phone Number
                 </TableCell>
 
                 <TableCell
@@ -372,7 +300,7 @@ const Manager = () => {
                   >
                     {row.name}
                   </TableCell>
-                  
+
                   <TableCell
                     sx={{
                       borderBottom: "1px solid #F7FAFF",
@@ -392,7 +320,7 @@ const Manager = () => {
                       pb: "16px",
                     }}
                   >
-                    {row.phonenumber}
+                    {row.phone}
                   </TableCell>
 
                   <TableCell

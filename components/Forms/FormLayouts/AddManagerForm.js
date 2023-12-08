@@ -4,12 +4,10 @@ import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import AddIcon from "@mui/icons-material/Add";
 import SendIcon from "@mui/icons-material/Send";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
-import dynamic from "next/dynamic";
 import {
   confirmPasswordValidation,
   emailValidation,
@@ -17,9 +15,15 @@ import {
   phoneValidation,
   requiredValidation,
 } from "@/utils/validation";
+
 import { addManagerFunApi } from "store/manager/services";
+import { useDispatch } from "react-redux";
+import { useRouter } from "next/router";
 
 const AddManagerForm = () => {
+  const dispatch = useDispatch();
+  const router = useRouter();
+
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -27,6 +31,7 @@ const AddManagerForm = () => {
       phone: "",
       password: "",
       confirmPassword: "",
+      businessId: "656da4aac703af646ae8f124",
     },
     validationSchema: Yup.object({
       phone: phoneValidation(),
@@ -42,6 +47,7 @@ const AddManagerForm = () => {
           data: values,
           onSuccess: () => {
             console.log("Add Manager Success");
+            router.push("/manager/");
           },
         })
       );

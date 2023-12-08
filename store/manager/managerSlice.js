@@ -1,4 +1,5 @@
-const { addManagerFunApi } = require("./services");
+import { createSlice } from "@reduxjs/toolkit";
+import { addManagerFunApi } from "./services";
 
 const managerSlice = createSlice({
   name: "manager",
@@ -7,6 +8,7 @@ const managerSlice = createSlice({
     isLoading: false,
     error: null,
   },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(addManagerFunApi.pending, (state, action) => {
@@ -14,10 +16,11 @@ const managerSlice = createSlice({
         state.error = null;
       })
       .addCase(addManagerFunApi.fulfilled, (state, action) => {
+        console.log("Add Manager Response", action.payload);
         state.isLoading = false;
-        state.managers = action.payload.managers;
+        state.managers.push(action.payload);
       })
-      .addCase(loginFunApi.rejected, (state, action) => {
+      .addCase(addManagerFunApi.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
       });
