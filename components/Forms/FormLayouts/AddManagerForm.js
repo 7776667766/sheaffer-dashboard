@@ -7,7 +7,6 @@ import TextField from "@mui/material/TextField";
 import SendIcon from "@mui/icons-material/Send";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-
 import {
   confirmPasswordValidation,
   emailValidation,
@@ -43,7 +42,7 @@ const AddManagerForm = () => {
     onSubmit: (values) => {
       console.log("Handle Submit", values);
       dispatch(
-        addManagerFunApi({
+        addspecialistApi({
           data: values,
           onSuccess: () => {
             console.log("Add Manager Success");
@@ -51,8 +50,6 @@ const AddManagerForm = () => {
           },
         })
       );
-      // router.push("/authentication/verify-otp");
-      // alert(JSON.stringify(values, null, 2));
     },
   });
 
