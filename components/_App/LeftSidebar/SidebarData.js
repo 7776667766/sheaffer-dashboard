@@ -542,15 +542,16 @@ export const SidebarData = [
     role: "admin",
     icon: <AccountCircle />,
   },
-  {
-    title: "Notification",
-    path: "/notification/",
-    icon: <NotificationsNoneIcon />,
-  },
+
   {
     title: "Booking",
     path: "/booking/",
     icon: <LayersIcon />,
+  },
+  {
+    title: "Notification",
+    path: "/notification/",
+    icon: <NotificationsNoneIcon />,
   },
   {
     title: "Settings",
