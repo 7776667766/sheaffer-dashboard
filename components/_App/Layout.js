@@ -22,17 +22,17 @@ const Layout = ({ children }) => {
   const { isAuthenticated } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const user = localStorage.getItem("user");
+    // const token = localStorage.getItem("token");
+    // const user = localStorage.getItem("user");
 
-    if (token && user && !isAuthenticated) {
-      dispatch(login());
-    }
-    if (!router.pathname.includes("/authentication")) {
-      if (!isAuthenticated) {
-        router.push("/authentication/sign-in");
-      }
-    }
+    // if (token && user && !isAuthenticated) {
+    //   dispatch(login());
+    // }
+    // if (!router.pathname.includes("/authentication")) {
+    //   if (!isAuthenticated) {
+    //     router.push("/authentication/sign-in");
+    //   }
+    // }
     setTimeout(() => {
       setLoading(false);
     }, 1000);
