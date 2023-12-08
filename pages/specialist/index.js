@@ -43,36 +43,6 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-function BootstrapDialogTitle(props) {
-  const { children, onClose, ...other } = props;
-
-  return (
-    <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
-      {children}
-      {onClose ? (
-        <IconButton
-          aria-label="close"
-          onClick={onClose}
-          sx={{
-            position: "absolute",
-            right: 8,
-            top: 8,
-            color: (theme) => theme.palette.grey[500],
-          }}
-        >
-          <CloseIcon />
-        </IconButton>
-      ) : null}
-    </DialogTitle>
-  );
-}
-
-BootstrapDialogTitle.propTypes = {
-  children: PropTypes.node,
-  onClose: PropTypes.func.isRequired,
-};
-// End Add Task Modal
-
 function ToDoList(props) {
   const theme = useTheme();
   const { count, page, rowsPerPage, onPageChange } = props;
@@ -142,31 +112,10 @@ ToDoList.propTypes = {
   rowsPerPage: PropTypes.number.isRequired,
 };
 
-function createData(name, email) {
-  return {
-    name,
-    email,
-  };
-}
-
-const rows = [
-  createData("John Doe", "test@gmail.com"),
-  createData("John Doe", "test@gmail.com"),
-  createData("John Doe", "test@gmail.com"),
-  createData("John Doe", "test@gmail.com"),
-  createData("John Doe", "test@gmail.com"),
-  createData("John Doe", "test@gmail.com"),
-  createData("John Doe", "test@gmail.com"),
-  createData("John Doe", "test@gmail.com"),
-  createData("John Doe", "test@gmail.com"),
-  createData("John Doe", "test@gmail.com"),
-  createData("John Doe", "test@gmail.com"),
-  createData("John Doe", "test@gmail.com"),
-].sort((a, b) => (a.name < b.name ? -1 : 1));
-
 const Specialist = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
+  const [rows, setRows] = React.useState([]);
   const router = useRouter();
 
   // Avoid a layout jump when reaching the last page with empty rows.
@@ -286,8 +235,20 @@ const Specialist = () => {
                     page * rowsPerPage + rowsPerPage
                   )
                 : rows
-              ).map((row) => (
-                <TableRow key={row.name}>
+              ).map((row, index) => (
+                <TableRow key={index}>
+                  <TableCell
+                    sx={{
+                      fontWeight: "500",
+                      fontSize: "13px",
+                      borderBottom: "1px solid #F7FAFF",
+                      color: "#260944",
+                      pt: "16px",
+                      pb: "16px",
+                    }}
+                  >
+                    {page * rowsPerPage + index + 1}
+                  </TableCell>
                   <TableCell
                     sx={{
                       fontWeight: "500",
@@ -347,7 +308,19 @@ const Specialist = () => {
                   </TableCell>
                 </TableRow>
               ))}
-
+              {rows.length === 0 && (
+                <TableRow>
+                  <TableCell
+                    colSpan={8}
+                    sx={{
+                      borderBottom: "1px solid #F7FAFF",
+                      textAlign: "center",
+                    }}
+                  >
+                    No Record Found
+                  </TableCell>
+                </TableRow>
+              )}
               {emptyRows > 0 && (
                 <TableRow style={{ height: 53 * emptyRows }}>
                   <TableCell

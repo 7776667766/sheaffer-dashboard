@@ -16,12 +16,13 @@ import {
 } from "@/utils/validation";
 
 import { addManagerFunApi } from "store/manager/services";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 
 const AddManagerForm = () => {
   const dispatch = useDispatch();
   const router = useRouter();
+  const { business } = useSelector((state) => state.business);
 
   const formik = useFormik({
     initialValues: {
@@ -30,7 +31,7 @@ const AddManagerForm = () => {
       phone: "",
       password: "",
       confirmPassword: "",
-      businessId: "656da4aac703af646ae8f124",
+      businessId: business.id,
     },
     validationSchema: Yup.object({
       phone: phoneValidation(),

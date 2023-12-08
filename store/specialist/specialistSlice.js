@@ -1,6 +1,5 @@
-
 import { createSlice } from "@reduxjs/toolkit";
-import { addspecialistApi } from "../Specialist/Services";
+import { addspecialistApi } from "./services";
 
 const specialistSlice = createSlice({
   name: "specialist",

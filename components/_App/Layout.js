@@ -9,6 +9,7 @@ import ControlPanelModal from "./ControlPanelModal";
 import { useDispatch, useSelector } from "react-redux";
 import { Box } from "@mui/material";
 import { login } from "store/auth/authSlice";
+import { getMyBussinessFunApi } from "store/business/services";
 
 const Layout = ({ children }) => {
   const router = useRouter();
@@ -22,12 +23,17 @@ const Layout = ({ children }) => {
   const { isAuthenticated } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    // const token = localStorage.getItem("token");
-    // const user = localStorage.getItem("user");
+    const token = localStorage.getItem("token");
+    const user = localStorage.getItem("user");
 
-    // if (token && user && !isAuthenticated) {
-    //   dispatch(login());
-    // }
+    if (token && user && !isAuthenticated) {
+      dispatch(login());
+      const otpVerified = localStorage.getItem("otpVerified");
+      if (otpVerified) {
+        dispatch(getMyBussinessFunApi());
+      }
+    }
+
     // if (!router.pathname.includes("/authentication")) {
     //   if (!isAuthenticated) {
     //     router.push("/authentication/sign-in");

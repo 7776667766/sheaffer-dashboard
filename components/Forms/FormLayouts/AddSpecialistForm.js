@@ -8,7 +8,7 @@ import AddIcon from "@mui/icons-material/Add";
 import SendIcon from "@mui/icons-material/Send";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { addspecialistApi } from "../../../store/Specialist/Services";
+import { addspecialistApi } from "../../../store/specialist/Services";
 import { useDispatch } from "react-redux";
 
 import dynamic from "next/dynamic";
@@ -26,7 +26,7 @@ const RichTextEditor = dynamic(() => import("@mantine/rte"), {
 
 const AddSpecialistForm = () => {
   const dispatch = useDispatch();
-  const router=useRouter()
+  const router = useRouter();
 
   const formik = useFormik({
     initialValues: {

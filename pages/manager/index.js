@@ -116,16 +116,17 @@ const Manager = () => {
   const dispatch = useDispatch();
   const [rows, setRows] = useState([]);
   const { managers } = useSelector((state) => state.manager);
+  const { business } = useSelector((state) => state.business);
 
   useEffect(() => {
     if (managers.managerFetch !== true) {
       dispatch(
         getManagerFunApi({
-          data: "656da4aac703af646ae8f124",
+          data: business?.id,
         })
       );
     }
-  }, [dispatch, managers.managerFetch]);
+  }, [business?.id, dispatch, managers.managerFetch]);
   useEffect(() => {
     setRows(managers);
   }, [managers]);
@@ -347,6 +348,19 @@ const Manager = () => {
                   </TableCell>
                 </TableRow>
               ))}
+              {rows.length === 0 && (
+                <TableRow>
+                  <TableCell
+                    colSpan={8}
+                    sx={{
+                      borderBottom: "1px solid #F7FAFF",
+                      textAlign: "center",
+                    }}
+                  >
+                    No Record Found
+                  </TableCell>
+                </TableRow>
+              )}
 
               {emptyRows > 0 && (
                 <TableRow style={{ height: 53 * emptyRows }}>

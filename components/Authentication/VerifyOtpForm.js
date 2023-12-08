@@ -11,6 +11,7 @@ import Image from "next/image";
 import { forgetPasswordFunApi, verifyOtpFunApi } from "store/auth/services";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
+import { getMyBussinessFunApi } from "store/business/services";
 
 const VerifyOtpForm = () => {
   const router = useRouter();
@@ -46,6 +47,7 @@ const VerifyOtpForm = () => {
                 `/authentication/reset-password?data=${router.query.data}`
               );
             } else {
+              dispatch(getMyBussinessFunApi());
               router.push("/");
             }
           },
