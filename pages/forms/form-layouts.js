@@ -1,12 +1,12 @@
-import React from 'react';
-import Grid from "@mui/material/Grid";    
-import BasicForm from '@/components/Forms/FormLayouts/BasicForm';
-import BasicWithIcons from '@/components/Forms/FormLayouts/BasicWithIcons';
-import SignInForm from '@/components/Forms/FormLayouts/SignInForm';
-import SignUpForm from '@/components/Forms/FormLayouts/SignUpForm';
-import CustomStyles from '@/components/Forms/FormLayouts/CustomStyles';
-import Link from 'next/link';
-import styles from '@/styles/PageTitle.module.css'
+import React from "react";
+import Grid from "@mui/material/Grid";
+import BasicForm from "@/components/Forms/FormLayouts/BasicForm";
+import BasicWithIcons from "@/components/Forms/FormLayouts/BasicWithIcons";
+import SignInForm from "@/components/Forms/FormLayouts/SignInForm";
+import SignUpForm from "@/components/Forms/FormLayouts/SignUpForm";
+import CustomStyles from "@/components/Forms/FormLayouts/AddManagerForm";
+import Link from "next/link";
+import styles from "@/styles/PageTitle.module.css";
 
 export default function FormLayouts() {
   return (
@@ -21,7 +21,7 @@ export default function FormLayouts() {
           <li>Form Layouts</li>
         </ul>
       </div>
-      
+
       <Grid
         container
         rowSpacing={1}

@@ -71,6 +71,27 @@ export const SidebarData = [
       },
     ],
   },
+  {
+    title: "Services",
+    path: "/services/",
+    icon: <LayersIcon />,
+    iconClosed: <KeyboardArrowRightIcon />,
+    iconOpened: <KeyboardArrowDownIcon />,
+    subNav: [
+      {
+        title: "Services",
+        path: "/services/",
+      },
+      {
+        title: "Service Types",
+        path: "/services/service-type",
+      },
+      {
+        title: "Add Service Type",
+        path: "/services/add-service-type/",
+      },
+    ],
+  },
   // {
   //   title: "Apps",
   //   path: "/apps/file-manager/",
