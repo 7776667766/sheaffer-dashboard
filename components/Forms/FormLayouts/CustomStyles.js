@@ -6,27 +6,42 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import AddIcon from "@mui/icons-material/Add";
 import SendIcon from '@mui/icons-material/Send';
+import { useFormik } from "formik";
+import * as Yup from "yup";
+
 
 import dynamic from 'next/dynamic'
+import { confirmPasswordValidation, emailValidation, passwordValidation, phoneValidation, requiredValidation } from '@/utils/validation';
 const RichTextEditor = dynamic(() => import('@mantine/rte'), {
   ssr: false,
 })
 
 const CustomStyles = () => {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-  };
+  const formik = useFormik({
+    initialValues: {
+      name:"",
+      email:"",
+      phone: "",
+      password: "",
+      confirmpassword:"",
+    },
+    validationSchema: Yup.object({
+      phone: phoneValidation(),
+      password: passwordValidation(),
+      email:emailValidation(),
+      name:requiredValidation(),
+    confirmpassword:confirmPasswordValidation(),
 
-  // Select Priority 
-  const [priority, setPriority] = React.useState('');
-  const handleChange = (event) => {
-    setPriority(event.target.value);
-  };
+    }),
+    onSubmit: (values) => {
+      console.log("Handle Submit", values);
+      dispatch(loginFunApi(values));
+      // router.push("/authentication/verify-otp");
+      // alert(JSON.stringify(values, null, 2));
+    },
+  });
+
+
 
   return (
     <>
@@ -38,7 +53,7 @@ const CustomStyles = () => {
           mb: "15px",
         }}
       >
-        <Typography
+        {/* <Typography
           as="h3"
           sx={{
             fontSize: 18,
@@ -47,9 +62,9 @@ const CustomStyles = () => {
           }}
         >
           Custom Styles
-        </Typography>
+        </Typography> */}
 
-        <Box component="form" noValidate onSubmit={handleSubmit}>
+        <Box component="form" noValidate onSubmit={formik.handleSubmit}>
           <Grid container alignItems="center" spacing={2}>
             <Grid item xs={12} md={12} lg={6}>
               <Typography
@@ -60,15 +75,27 @@ const CustomStyles = () => {
                   mb: "12px",
                 }}
               >
-                First Name
+               Name
               </Typography>
               <TextField
-                autoComplete="first-name"
-                name="firstName"
+                autoComplete="name"
+                name="name"
                 fullWidth
-                id="firstName"
-                label="First Name"
+                id="name"
+                label="Enter Name"
                 autoFocus
+                {...formik.getFieldProps("name")}
+                error={
+                  formik.touched.name && formik.errors.name
+                    ? true
+                    : false
+                }
+                helperText={
+                  formik.touched.name && formik.errors.name
+                    ? formik.errors.name
+                    : ""
+                }
+
                 InputProps={{
                   style: { borderRadius: 8 },
                 }}
@@ -93,13 +120,130 @@ const CustomStyles = () => {
                 id="emailAddress"
                 label="Email Address"
                 autoFocus
+                {...formik.getFieldProps("email")}
+                error={
+                  formik.touched.email && formik.errors.email
+                    ? true
+                    : false
+                }
+                helperText={
+                  formik.touched.email && formik.errors.email
+                    ? formik.errors.email
+                    : ""
+                }
                 InputProps={{
                   style: { borderRadius: 8 },
                 }}
               />
             </Grid>
+
+            <Grid item xs={12} md={12} lg={6}>
+              <Typography
+                as="h5"
+                sx={{
+                  fontWeight: "500",
+                  fontSize: "14px",
+                  mb: "12px",
+                }}
+              >
+                Phone Number
+              </Typography>
+              <TextField
+                autoComplete="number"
+                name="phonenumber"
+                fullWidth
+                id="phonenumber"
+                label="Phone Number"
+                autoFocus 
+                {...formik.getFieldProps("phone")}
+                error={
+                  formik.touched.phone && formik.errors.phone
+                    ? true
+                    : false
+                }
+                helperText={
+                  formik.touched.phone && formik.errors.phone
+                    ? formik.errors.phone
+                    : ""
+                }
+                InputProps={{
+                  style: { borderRadius: 8 },
+                }}
+              />
+            </Grid>
+
+            <Grid item xs={12} md={12} lg={6}>
+              <Typography
+                as="h5"
+                sx={{
+                  fontWeight: "500",
+                  fontSize: "14px",
+                  mb: "12px",
+                }}
+              >
+                Password
+              </Typography>
+              <TextField
+                autoComplete="number"
+                name="password"
+                fullWidth
+                id="password"
+                label="Password"
+                autoFocus 
+                {...formik.getFieldProps("password")}
+                error={
+                  formik.touched.password && formik.errors.password
+                    ? true
+                    : false
+                }
+                helperText={
+                  formik.touched.password && formik.errors.password
+                    ? formik.errors.password
+                    : ""
+                }
+                InputProps={{
+                  style: { borderRadius: 8 },
+                }}
+              />
+            </Grid>
+
+            <Grid item xs={12} md={12} lg={6}>
+              <Typography
+                as="h5"
+                sx={{
+                  fontWeight: "500",
+                  fontSize: "14px",
+                  mb: "12px",
+                }}
+              >
+                Confirm Password
+              </Typography>
+              <TextField
+                autoComplete="number"
+                name="Confirmpassword"
+                fullWidth
+                id="confirmpassword"
+                label="Confirm Password"
+                autoFocus 
+                {...formik.getFieldProps("confirmpassword")}
+                error={
+                  formik.touched.confirmpassword && formik.errors.confirmpassword
+                    ? true
+                    : false
+                }
+                helperText={
+                  formik.touched.confirmpassword && formik.errors.confirmpassword
+                    ? formik.errors.confirmpassword
+                    : ""
+                }
+                InputProps={{
+                  style: { borderRadius: 8 },
+                }}
+              />
+            </Grid>
+
   
-            <Grid item xs={12} md={12} lg={12}>
+            {/* <Grid item xs={12} md={12} lg={12}>
               <Typography
                 as="h5"
                 sx={{
@@ -120,9 +264,9 @@ const CustomStyles = () => {
                   ['alignLeft', 'alignCenter', 'alignRight'],
                 ]}
               />
-            </Grid>
+            </Grid> */}
  
-            <Grid item xs={12} textAlign="end">
+            <Grid item xs={12} textAlign="left">
               <Button
                 type="submit"
                 variant="contained"
@@ -143,7 +287,7 @@ const CustomStyles = () => {
                   }}
                   className='mr-5px'
                 />{" "}
-                Send Message
+                Add Manager
               </Button>
             </Grid>
           </Grid>
