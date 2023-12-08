@@ -22,14 +22,13 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
-// import Checkbox from "@mui/material/Checkbox";
-// const label = { inputProps: { "aria-label": "Checkbox demo" } };
 import { styled } from "@mui/material/styles";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import CloseIcon from "@mui/icons-material/Close";
 import { useRouter } from "next/router";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getManagerFunApi } from "store/manager/services";
 
 // Add Task Modal
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -40,36 +39,6 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     padding: theme.spacing(1),
   },
 }));
-
-function BootstrapDialogTitle(props) {
-  const { children, onClose, ...other } = props;
-
-  return (
-    <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
-      {children}
-      {onClose ? (
-        <IconButton
-          aria-label="close"
-          onClick={onClose}
-          sx={{
-            position: "absolute",
-            right: 8,
-            top: 8,
-            color: (theme) => theme.palette.grey[500],
-          }}
-        >
-          <CloseIcon />
-        </IconButton>
-      ) : null}
-    </DialogTitle>
-  );
-}
-
-BootstrapDialogTitle.propTypes = {
-  children: PropTypes.node,
-  onClose: PropTypes.func.isRequired,
-};
-// End Add Task Modal
 
 function ToDoList(props) {
   const theme = useTheme();
@@ -144,9 +113,19 @@ const Manager = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
   const router = useRouter();
+  const dispatch = useDispatch();
   const [rows, setRows] = useState([]);
   const { managers } = useSelector((state) => state.manager);
 
+  useEffect(() => {
+    if (managers.managerFetch !== true) {
+      dispatch(
+        getManagerFunApi({
+          data: "656da4aac703af646ae8f124",
+        })
+      );
+    }
+  }, [dispatch, managers.managerFetch]);
   useEffect(() => {
     setRows(managers);
   }, [managers]);
@@ -166,15 +145,6 @@ const Manager = () => {
   const handleNavigate = () => {
     router.push("/manager/add-manager");
   };
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-  };
-  // End Add Task Modal
 
   return (
     <>
@@ -246,6 +216,14 @@ const Manager = () => {
                     fontSize: "13.5px",
                   }}
                 >
+                  Sr.
+                </TableCell>
+                <TableCell
+                  sx={{
+                    borderBottom: "1px solid #F7FAFF",
+                    fontSize: "13.5px",
+                  }}
+                >
                   Name
                 </TableCell>
 
@@ -286,8 +264,20 @@ const Manager = () => {
                     page * rowsPerPage + rowsPerPage
                   )
                 : rows
-              ).map((row) => (
-                <TableRow key={row.name}>
+              ).map((row, index) => (
+                <TableRow key={index}>
+                  <TableCell
+                    sx={{
+                      fontWeight: "500",
+                      fontSize: "13px",
+                      borderBottom: "1px solid #F7FAFF",
+                      color: "#260944",
+                      pt: "16px",
+                      pb: "16px",
+                    }}
+                  >
+                    {page * rowsPerPage + index + 1}
+                  </TableCell>
                   <TableCell
                     sx={{
                       fontWeight: "500",

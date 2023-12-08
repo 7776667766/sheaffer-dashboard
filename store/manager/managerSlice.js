@@ -1,10 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { addManagerFunApi } from "./services";
+import { addManagerFunApi, getManagerFunApi } from "./services";
 
 const managerSlice = createSlice({
   name: "manager",
   initialState: {
     managers: [],
+    managerFetch: false,
     isLoading: false,
     error: null,
   },
@@ -23,6 +24,21 @@ const managerSlice = createSlice({
       .addCase(addManagerFunApi.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
+      });
+    builder
+      .addCase(getManagerFunApi.pending, (state, action) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(getManagerFunApi.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.managerFetch = true;
+        state.managers = action.payload;
+      })
+      .addCase(getManagerFunApi.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+        state.managerFetch = true;
       });
   },
 });
