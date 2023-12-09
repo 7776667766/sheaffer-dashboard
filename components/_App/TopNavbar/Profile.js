@@ -13,17 +13,19 @@ import {
   Button,
 } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
-import Settings from "@mui/icons-material/Settings";
-import MailOutlineIcon from "@mui/icons-material/MailOutline";
-import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
-import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+// import Settings from "@mui/icons-material/Settings";
+// import MailOutlineIcon from "@mui/icons-material/MailOutline";
+// import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
+// import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import Logout from "@mui/icons-material/Logout";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutFunApi } from "store/auth/services";
+import { useRouter } from "next/router";
 
 const Profile = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const dispatch = useDispatch();
+  const router = useRouter();
   const { user, role } = useSelector((state) => state.auth);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -120,18 +122,18 @@ const Profile = () => {
 
         <Divider />
 
-        <MenuItem>
+        <MenuItem onClick={() => router.push("/pages/profile/")}>
           <ListItemIcon sx={{ mr: "-8px", mt: "-3px" }}>
             <PersonIcon fontSize="small" />
           </ListItemIcon>
-          <Link
+          {/* <Link
             href="/pages/profile/"
             fontSize="13px"
             color="inherit"
             underline="none"
           >
-            Profile
-          </Link>
+          </Link> */}
+          Profile
         </MenuItem>
 
         {/* <MenuItem>

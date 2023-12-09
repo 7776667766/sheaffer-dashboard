@@ -64,7 +64,7 @@ export const passwordValidation = (name) => {
   // );
 };
 
-export const confirmPasswordValidation = (name) => {
+export const confirmPasswordValidation = (password,name) => {
   return Yup.string()
     .required(
       `${
@@ -72,7 +72,7 @@ export const confirmPasswordValidation = (name) => {
       } is Required`
     )
     .oneOf(
-      [Yup.ref("password"), null],
+      [Yup.ref(password ||"password"), null],
       `${
         name ? name.charAt(0).toUpperCase() + name.slice(1) : "Passwords"
       } must match`

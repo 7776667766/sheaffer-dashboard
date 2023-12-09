@@ -18,7 +18,8 @@ export const LoadingButtonComponent = ({ value, isLoading, ...props }) => {
         fontSize: "16px",
         padding: "12px 10px",
         color: "#fff !important",
-      }}
+      ...props.sx
+      }} 
     >
       {isLoading ? "Loading ..." : value || "Submit"}
     </LoadingButton>

@@ -17,7 +17,7 @@ const NavBar = () => {
           </li>
           <li className={router.pathname == "/settings/security" ? styles.active : ""}>
             <Link href="/settings/security">
-              Security
+             Change Password
             </Link>
           </li>
           <li className={router.pathname == "/settings/privacy-policy" ? styles.active : ""}>

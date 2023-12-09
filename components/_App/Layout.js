@@ -37,20 +37,18 @@ const Layout = ({ children }) => {
       }
     }
 
-    // if (!router.pathname.includes("/authentication")) {
-    //   if (!isAuthenticated) {
-    //     router.push("/authentication/sign-in");
-    //   }
-    // } else {
-    //   if (otpVerified && role === "owner" && business === null) {
-    //     dispatch(getMyBussinessFunApi());
-    //   }
-    // }
-    // setTimeout(() => {
-    //   setLoading(false);
-    // }, 1000);
-
-    setLoading(false);
+    if (!router.pathname.includes("/authentication")) {
+      if (!isAuthenticated) {
+        router.push("/authentication/sign-in");
+      }
+    } else {
+      if (otpVerified && role === "owner" && business === null) {
+        dispatch(getMyBussinessFunApi());
+      }
+    }
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
   }, [business, dispatch, isAuthenticated, otpVerified, role, router]);
 
   if (loading)

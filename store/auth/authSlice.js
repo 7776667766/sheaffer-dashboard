@@ -4,7 +4,9 @@ import {
   loginFunApi,
   logoutFunApi,
   resetPasswordFunApi,
+  changePasswordFunApi,
   verifyOtpFunApi,
+  updateProfileFunApi,
 } from "./services";
 
 const authSlice = createSlice({
@@ -167,8 +169,35 @@ const authSlice = createSlice({
     // builder.addDefaultCase((state, action) => {
     //   state.isLoading = false;
     // });
+
+    builder
+    .addCase(changePasswordFunApi.pending, (state, action) => {
+      state.isLoading = true;
+    })
+    .addCase(changePasswordFunApi.fulfilled, (state, action) => {
+      state.isLoading = false;
+    })
+    .addCase(changePasswordFunApi.rejected, (state, action) => {
+      state.isLoading = false;
+    });
+
+    builder
+    .addCase(updateProfileFunApi.pending, (state, action) => {
+      state.isLoading = true;
+    })
+    .addCase(updateProfileFunApi.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.user = action.payload;
+      state.isVerified = action.payload.verified;
+      state.role = action.payload.role;
+    })
+    .addCase(updateProfileFunApi.rejected, (state, action) => {
+      state.isLoading = false;
+      state.user = null;
+    });
   },
 });
+
 
 export const { login } = authSlice.actions;
 
