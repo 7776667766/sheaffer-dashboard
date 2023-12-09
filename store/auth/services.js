@@ -2,6 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "helper/api";
 import {
   forgotPasswordApi,
+  getAllUsersApi,
   loginApi,
   logoutApi,
   resetPasswordApi,

@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 import Grid from "@mui/material/Grid";
-import Link from 'next/link';
-import styles from '@/styles/PageTitle.module.css'
+import Link from "next/link";
+import styles from "@/styles/PageTitle.module.css";
 import Features from "@/components/Dashboard/eCommerce/Features";
 import Ratings from "@/components/Dashboard/eCommerce/Ratings";
 import AudienceOverview from "@/components/Dashboard/eCommerce/AudienceOverview";
@@ -12,23 +12,23 @@ import RevenuStatus from "@/components/Dashboard/eCommerce/RevenuStatus";
 import SalesByCountries from "@/components/Dashboard/eCommerce/SalesByCountries";
 import NewCustomers from "@/components/Dashboard/eCommerce/NewCustomers";
 import RecentOrders from "@/components/Dashboard/eCommerce/RecentOrders";
-import TeamMembersList from "@/components/Dashboard/eCommerce/TeamMembersList";
 import BestSellingProducts from "@/components/Dashboard/eCommerce/BestSellingProducts";
 import LiveVisitsOnOurSite from "@/components/Dashboard/eCommerce/LiveVisitsOnOurSite";
+import UserList from "./users";
+import { useSelector } from "react-redux";
 
-export default function eCommerce() {
+export default function ECommerce() {
+  const { role } = useSelector((state) => state.auth);
   return (
     <>
       {/* Page title */}
       <div className={styles.pageTitle}>
-        <h1>eCommerce</h1>
+        <h1>MAKELY</h1>
         <ul>
           <li>
             <Link href="/">Dashboard</Link>
           </li>
-          <li>
-            eCommerce
-          </li>
+          <li style={{ textTransform: "capitalize" }}>{role}</li>
         </ul>
       </div>
 
@@ -40,10 +40,7 @@ export default function eCommerce() {
           {/* AudienceOverview */}
           <AudienceOverview />
 
-          <Grid
-            container
-            columnSpacing={{ xs: 1, sm: 2, md: 2 }}
-          >
+          <Grid container columnSpacing={{ xs: 1, sm: 2, md: 2 }}>
             <Grid item xs={12} md={8}>
               {/* VisitsByDay */}
               <VisitsByDay />
@@ -87,10 +84,12 @@ export default function eCommerce() {
         rowSpacing={1}
         columnSpacing={{ xs: 1, sm: 1, md: 1, lg: 1, xl: 2 }}
       >
-        <Grid item xs={12} md={12} lg={12} xl={8}>
-          {/* TeamMembersList */}
-          <TeamMembersList />
-        </Grid>
+        {role === "admin" && (
+          <Grid item xs={12} md={12} lg={12} xl={8}>
+            {/* UsersList */}
+            <UserList />
+          </Grid>
+        )}
 
         <Grid item xs={12} md={12} lg={12} xl={4}>
           {/* BestSellingProducts */}

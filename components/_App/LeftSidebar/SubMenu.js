@@ -17,7 +17,6 @@ const SubMenu = ({ item }) => {
   const [currentPath, setCurrentPath] = useState("");
   const router = useRouter();
   const dispatch = useDispatch();
-  // console.log(router.asPath)
 
   useEffect(() => {
     setCurrentPath(router.asPath);
@@ -49,21 +48,23 @@ const SubMenu = ({ item }) => {
         </div>
       </Link>
       {subnav &&
-        item.subNav.map((item, index) => {
-          return (
-            <Link
-              href={item.title !== "Logout" ? item.path : ""}
-              onClick={item.title === "Logout" ? handleLogout : null}
-              key={index}
-              className={`${styles.sidebarLink2} ${
-                currentPath == item.path && "sidebarLinkActive2"
-              }`}
-            >
-              {item.icon}
-              {item.title}
-            </Link>
-          );
-        })}
+        item.subNav
+          .filter((item) => typeof item === "object")
+          .map((item, index) => {
+            return (
+              <Link
+                href={item.title !== "Logout" ? item.path : ""}
+                onClick={item.title === "Logout" ? handleLogout : null}
+                key={index}
+                className={`${styles.sidebarLink2} ${
+                  currentPath == item.path && "sidebarLinkActive2"
+                }`}
+              >
+                {item.icon}
+                {item.title}
+              </Link>
+            );
+          })}
     </>
   );
 };

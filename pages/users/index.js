@@ -1,7 +1,7 @@
-import React from "react";
-import { Box, Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Box } from "@mui/material";
 import Card from "@mui/material/Card";
-import IconButton from "@mui/material/IconButton";
+import { Typography } from "@mui/material";
 import PropTypes from "prop-types";
 import { useTheme } from "@mui/material/styles";
 import Table from "@mui/material/Table";
@@ -13,68 +13,16 @@ import TableFooter from "@mui/material/TableFooter";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import IconButton from "@mui/material/IconButton";
 import FirstPageIcon from "@mui/icons-material/FirstPage";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
-import Tooltip from "@mui/material/Tooltip";
-import Grid from "@mui/material/Grid";
-import DeleteIcon from "@mui/icons-material/Delete";
-import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import AddIcon from "@mui/icons-material/Add";
-import ClearIcon from "@mui/icons-material/Clear";
-import Avatar from "@mui/material/Avatar";
-import Checkbox from "@mui/material/Checkbox";
-const label = { inputProps: { "aria-label": "Checkbox demo" } };
-import { styled } from "@mui/material/styles";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import CloseIcon from "@mui/icons-material/Close";
-import { useRouter } from "next/router";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllUsersFunApi } from "store/admin/services";
+import Image from "next/image";
 
-// Add Task Modal
-const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-  "& .MuiDialogContent-root": {
-    padding: theme.spacing(2),
-  },
-  "& .MuiDialogActions-root": {
-    padding: theme.spacing(1),
-  },
-}));
-
-function BootstrapDialogTitle(props) {
-  const { children, onClose, ...other } = props;
-
-  return (
-    <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
-      {children}
-      {onClose ? (
-        <IconButton
-          aria-label="close"
-          onClick={onClose}
-          sx={{
-            position: "absolute",
-            right: 8,
-            top: 8,
-            color: (theme) => theme.palette.grey[500],
-          }}
-        >
-          <CloseIcon />
-        </IconButton>
-      ) : null}
-    </DialogTitle>
-  );
-}
-
-BootstrapDialogTitle.propTypes = {
-  children: PropTypes.node,
-  onClose: PropTypes.func.isRequired,
-};
-// End Add Task Modal
-
-function ToDoList(props) {
+function UsersLists(props) {
   const theme = useTheme();
   const { count, page, rowsPerPage, onPageChange } = props;
 
@@ -136,162 +84,29 @@ function ToDoList(props) {
   );
 }
 
-ToDoList.propTypes = {
+UsersLists.propTypes = {
   count: PropTypes.number.isRequired,
   onPageChange: PropTypes.func.isRequired,
   page: PropTypes.number.isRequired,
   rowsPerPage: PropTypes.number.isRequired,
 };
 
-function createData(
-  name,
-  url,
-  startDate,
-  endDate,
-  status,
-  badgeClass,
-  completion,
-  priority
-) {
-  return {
-    name,
-    url,
-    startDate,
-    endDate,
-    status,
-    badgeClass,
-    completion,
-    priority,
-  };
-}
+export default function UserList() {
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const { allUsers } = useSelector((state) => state.admin);
+  const [rows, setRows] = useState([]);
+  const dispatch = useDispatch();
 
-const rows = [
-  createData(
-    "Public Beta Release",
-    "/images/user1.png",
-    "1 Jan 2022",
-    "1 Apr 2022",
-    "Completed",
-    "successBadge",
-    "10/10",
-    "High"
-  ),
-  createData(
-    "Fix Platform Errors",
-    "/images/user2.png",
-    "1 Mar 2022",
-    "1 May 2022",
-    "Completed",
-    "successBadge",
-    "10/10",
-    "High"
-  ),
-  createData(
-    "Launch our Mobile App",
-    "/images/user3.png",
-    "15 Apr 2022",
-    "15 Jun 2022",
-    "On Going",
-    "primaryBadge",
-    "7/10",
-    "Medium"
-  ),
-  createData(
-    "Add the New Pricing Page",
-    "/images/user4.png",
-    "15 May 2022",
-    "15 Jun 2022",
-    "Pending",
-    "dangerBadge",
-    "1/10",
-    "Low"
-  ),
-  createData(
-    "Redesign New Online Shop",
-    "/images/user5.png",
-    "15 Jun 2022",
-    "15 Aug 2022",
-    "On Going",
-    "primaryBadge",
-    "0/10",
-    "Low"
-  ),
-  createData(
-    "Material Ui Design",
-    "/images/user6.png",
-    "15 Jul 2022",
-    "15 Sep 2022",
-    "On Going",
-    "primaryBadge",
-    "7/10",
-    "Medium"
-  ),
-  createData(
-    "Add Progress Track",
-    "/images/user7.png",
-    "15 Mar 2022",
-    "15 May 2022",
-    "Completed",
-    "successBadge",
-    "10/10",
-    "High"
-  ),
-  createData(
-    "Web Design",
-    "/images/user8.png",
-    "15 Aug 2022",
-    "15 Dec 2022",
-    "On Going",
-    "primaryBadge",
-    "9/10",
-    "High"
-  ),
-  createData(
-    "Web Development",
-    "/images/user9.png",
-    "15 Nov 2022",
-    "15 Jan 2023",
-    "On Going",
-    "primaryBadge",
-    "8/10",
-    "High"
-  ),
-  createData(
-    "React App Development",
-    "/images/user10.png",
-    "15 Jan 2022",
-    "15 Mar 2022",
-    "Completed",
-    "successBadge",
-    "10/10",
-    "High"
-  ),
-  createData(
-    "eCommerce Development",
-    "/images/user11.png",
-    "15 Mar 2022",
-    "15 May 2022",
-    "On Going",
-    "primaryBadge",
-    "8/10",
-    "Medium"
-  ),
-  createData(
-    "App Development",
-    "/images/user12.png",
-    "15 May 2022",
-    "15 Jul 2022",
-    "On Going",
-    "primaryBadge",
-    "5/10",
-    "Medium"
-  ),
-].sort((a, b) => (a.name < b.name ? -1 : 1));
+  useEffect(() => {
+    if (!allUsers.dataFatched) {
+      dispatch(getAllUsersFunApi());
+    }
+  }, [allUsers.dataFatched, dispatch]);
 
-const Users = () => {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(8);
-  const router = useRouter();
+  useEffect(() => {
+    setRows(allUsers.data);
+  }, [allUsers.data]);
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -305,18 +120,6 @@ const Users = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-  const handleNavigate = () => {
-    router.push("/services/add-service-type");
-  };
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-  };
-  // End Add Task Modal
 
   return (
     <>
@@ -324,20 +127,16 @@ const Users = () => {
         sx={{
           boxShadow: "none",
           borderRadius: "10px",
-          p: "25px 20px 15px",
+          p: "25px 25px 10px",
           mb: "15px",
         }}
       >
         <Box
           sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
             borderBottom: "1px solid #EEF0F7",
             paddingBottom: "10px",
             mb: "20px",
           }}
-          className="for-dark-bottom-border"
         >
           <Typography
             as="h3"
@@ -346,27 +145,8 @@ const Users = () => {
               fontWeight: 500,
             }}
           >
-          My Users 
+            My Users
           </Typography>
-
-          {/* <Button
-            onClick={handleNavigate}
-            variant="contained"
-            sx={{
-              textTransform: "capitalize",
-              borderRadius: "8px",
-              fontWeight: "500",
-              fontSize: "13px",
-              padding: "12px 20px",
-              color: "#fff !important",
-            }}
-          >
-            <AddIcon
-              sx={{ position: "relative", top: "-1px" }}
-              className="mr-5px"
-            />{" "}
-            Add Service Type
-          </Button> */}
         </Box>
 
         <TableContainer
@@ -376,14 +156,22 @@ const Users = () => {
           }}
         >
           <Table
-            sx={{ minWidth: 930 }}
+            sx={{ minWidth: 600 }}
             aria-label="custom pagination table"
             className="dark-table"
           >
             <TableHead sx={{ background: "#F7FAFF" }}>
               <TableRow>
                 <TableCell
-                  sx={{
+                  style={{
+                    borderBottom: "1px solid #F7FAFF",
+                    fontSize: "13.5px",
+                  }}
+                >
+                  Sr
+                </TableCell>
+                <TableCell
+                  style={{
                     borderBottom: "1px solid #F7FAFF",
                     fontSize: "13.5px",
                   }}
@@ -392,204 +180,190 @@ const Users = () => {
                 </TableCell>
 
                 <TableCell
-                  sx={{
+                  style={{
                     borderBottom: "1px solid #F7FAFF",
                     fontSize: "13.5px",
                   }}
                 >
-                  Assigned
+                  Email
                 </TableCell>
-
                 <TableCell
-                  sx={{
+                  style={{
                     borderBottom: "1px solid #F7FAFF",
                     fontSize: "13.5px",
                   }}
                 >
-                  Start Date
-                </TableCell>
-
-                <TableCell
-                  sx={{
-                    borderBottom: "1px solid #F7FAFF",
-                    fontSize: "13.5px",
-                  }}
-                >
-                  End Date
+                  Phone
                 </TableCell>
 
                 <TableCell
                   align="center"
-                  sx={{
+                  style={{
                     borderBottom: "1px solid #F7FAFF",
                     fontSize: "13.5px",
                   }}
                 >
-                  Status
+                  Role
                 </TableCell>
 
                 <TableCell
                   align="center"
-                  sx={{
+                  style={{
                     borderBottom: "1px solid #F7FAFF",
                     fontSize: "13.5px",
                   }}
                 >
-                  Completion
-                </TableCell>
-
-                <TableCell
-                  align="center"
-                  sx={{
-                    borderBottom: "1px solid #F7FAFF",
-                    fontSize: "13.5px",
-                  }}
-                >
-                  Priority
-                </TableCell>
-
-                <TableCell
-                  align="right"
-                  sx={{
-                    borderBottom: "1px solid #F7FAFF",
-                    fontSize: "13.5px",
-                  }}
-                >
-                  Action
+                  Verified
                 </TableCell>
               </TableRow>
             </TableHead>
 
             <TableBody>
-              {(rowsPerPage > 0
-                ? rows.slice(
-                    page * rowsPerPage,
-                    page * rowsPerPage + rowsPerPage
-                  )
-                : rows
-              ).map((row) => (
-                <TableRow key={row.name}>
+              {allUsers.isLoading ? (
+                <TableRow>
                   <TableCell
-                    sx={{
-                      fontWeight: "500",
-                      fontSize: "13px",
-                      borderBottom: "1px solid #F7FAFF",
-                      color: "#260944",
-                      pt: "16px",
-                      pb: "16px",
-                    }}
-                  >
-                    <Checkbox {...label} size="small" />
-                    {row.name}
-                  </TableCell>
-
-                  <TableCell
+                    colSpan={5}
                     sx={{
                       borderBottom: "1px solid #F7FAFF",
-                      pt: "16px",
-                      pb: "16px",
+                      textAlign: "center",
                     }}
                   >
-                    <Avatar
-                      alt="User"
-                      src={row.url}
-                      sx={{ width: 35, height: 35 }}
-                    />
-                  </TableCell>
-
-                  <TableCell
-                    sx={{
-                      borderBottom: "1px solid #F7FAFF",
-                      fontSize: "13px",
-                      pt: "16px",
-                      pb: "16px",
-                    }}
-                  >
-                    {row.startDate}
-                  </TableCell>
-
-                  <TableCell
-                    sx={{
-                      borderBottom: "1px solid #F7FAFF",
-                      fontSize: "13px",
-                      pt: "16px",
-                      pb: "16px",
-                    }}
-                  >
-                    {row.endDate}
-                  </TableCell>
-
-                  <TableCell
-                    align="center"
-                    sx={{
-                      fontWeight: 500,
-                      borderBottom: "1px solid #F7FAFF",
-                      fontSize: "11px",
-                      pt: "16px",
-                      pb: "16px",
-                    }}
-                  >
-                    <span className={row.badgeClass}>{row.status}</span>
-                  </TableCell>
-
-                  <TableCell
-                    sx={{
-                      borderBottom: "1px solid #F7FAFF",
-                      fontSize: "13px",
-                      pt: "16px",
-                      pb: "16px",
-                    }}
-                    align="center"
-                  >
-                    {row.completion}
-                  </TableCell>
-
-                  <TableCell
-                    sx={{
-                      borderBottom: "1px solid #F7FAFF",
-                      fontSize: "13px",
-                      pt: "16px",
-                      pb: "16px",
-                    }}
-                    align="center"
-                  >
-                    {row.priority}
-                  </TableCell>
-
-                  <TableCell
-                    align="right"
-                    sx={{ borderBottom: "1px solid #F7FAFF" }}
-                  >
-                    <Box
-                      sx={{
-                        display: "inline-block",
-                      }}
-                    >
-                      <Tooltip title="Remove" placement="top">
-                        <IconButton
-                          aria-label="remove"
-                          size="small"
-                          color="danger"
-                          className="danger"
-                        >
-                          <DeleteIcon fontSize="inherit" />
-                        </IconButton>
-                      </Tooltip>
-
-                      <Tooltip title="Rename" placement="top">
-                        <IconButton
-                          aria-label="rename"
-                          size="small"
-                          color="primary"
-                          className="primary"
-                        >
-                          <DriveFileRenameOutlineIcon fontSize="inherit" />
-                        </IconButton>
-                      </Tooltip>
-                    </Box>
+                    Loading...
                   </TableCell>
                 </TableRow>
-              ))}
+              ) : rows.length === 0 ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={5}
+                    sx={{
+                      borderBottom: "1px solid #F7FAFF",
+                      textAlign: "center",
+                    }}
+                  >
+                    No Data Found
+                  </TableCell>
+                </TableRow>
+              ) : (
+                (rowsPerPage > 0
+                  ? rows.slice(
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage
+                    )
+                  : rows
+                ).map((row, index) => (
+                  <TableRow key={index}>
+                    <TableCell
+                      sx={{
+                        fontWeight: "500",
+                        fontSize: "13px",
+                        borderBottom: "1px solid #F7FAFF",
+                        color: "#260944",
+                        pt: "16px",
+                        pb: "16px",
+                      }}
+                    >
+                      {page * rowsPerPage + index + 1}
+                    </TableCell>
+                    <TableCell
+                      style={{ width: 250, borderBottom: "1px solid #F7FAFF" }}
+                    >
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Image
+                          src={row.image}
+                          alt={row.name}
+                          width={40}
+                          height={40}
+                          className="borRadius100 "
+                          style={{
+                            objectFit: "cover",
+                            aspectRatio: "1/1",
+                          }}
+                        />
+
+                        <Box className="ml-10px">
+                          <Typography
+                            sx={{
+                              fontWeight: "500",
+                              fontSize: "14px",
+                            }}
+                            as="h5"
+                          >
+                            {row.name}
+                          </Typography>
+                          <Typography
+                            sx={{
+                              fontSize: "12px",
+                              color: "#A9A9C8",
+                            }}
+                          >
+                            @{row.name.toLowerCase().split(" ").join("")}
+                          </Typography>
+                        </Box>
+                      </Box>
+                    </TableCell>
+
+                    <TableCell
+                      style={{
+                        borderBottom: "1px solid #F7FAFF",
+                        fontSize: "13px",
+                      }}
+                    >
+                      {row.email}
+                    </TableCell>
+                    <TableCell
+                      style={{
+                        borderBottom: "1px solid #F7FAFF",
+                        fontSize: "13px",
+                      }}
+                    >
+                      {row.phone}
+                    </TableCell>
+
+                    <TableCell
+                      align="center"
+                      style={{
+                        borderBottom: "1px solid #F7FAFF",
+                        fontSize: "13px",
+                      }}
+                    >
+                      <i
+                        className={
+                          row.role === "admin"
+                            ? "ri-macbook-line"
+                            : row.role === "owner"
+                            ? "ri-shield-user-fill"
+                            : row.role === "manager"
+                            ? "ri-edit-line"
+                            : "ri-user-3-line"
+                        }
+                      />{" "}
+                      {row.role}
+                    </TableCell>
+
+                    <TableCell
+                      align="center"
+                      style={{
+                        fontWeight: 500,
+                        borderBottom: "1px solid #F7FAFF",
+                        fontSize: "12px",
+                      }}
+                    >
+                      <span
+                        className={
+                          row.verified ? "successBadge" : "dangerBadge"
+                        }
+                      >
+                        {row.verified ? "Verified" : "Not Verified"}
+                      </span>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
 
               {emptyRows > 0 && (
                 <TableRow style={{ height: 53 * emptyRows }}>
@@ -605,7 +379,7 @@ const Users = () => {
               <TableRow>
                 <TablePagination
                   rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
-                  colSpan={8}
+                  colSpan={6}
                   count={rows.length}
                   rowsPerPage={rowsPerPage}
                   page={page}
@@ -617,7 +391,7 @@ const Users = () => {
                   }}
                   onPageChange={handleChangePage}
                   onRowsPerPageChange={handleChangeRowsPerPage}
-                  ActionsComponent={ToDoList}
+                  ActionsComponent={UsersLists}
                   style={{ borderBottom: "none" }}
                 />
               </TableRow>
@@ -627,6 +401,4 @@ const Users = () => {
       </Card>
     </>
   );
-};
-
-export default Users;
+}

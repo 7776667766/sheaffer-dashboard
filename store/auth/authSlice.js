@@ -17,6 +17,11 @@ const authSlice = createSlice({
     otpVerified: false,
     token: null,
     role: null,
+    allUsers: {
+      data: [],
+      isLoading: false,
+      error: null,
+    },
   },
   reducers: {
     login: (state, action) => {

@@ -6,7 +6,6 @@ import SubMenu from "./SubMenu";
 import Link from "next/link";
 import ClearIcon from "@mui/icons-material/Clear";
 import IconButton from "@mui/material/IconButton";
-import { useSelector } from "react-redux";
 
 const SidebarNav = styled("nav")(({ theme }) => ({
   background: "#fff",
@@ -29,7 +28,6 @@ const SidebarWrap = styled("div")(({ theme }) => ({
 }));
 
 const Sidebar = ({ toogleActive }) => {
-  const { role } = useSelector((state) => state.auth);
   return (
     <>
       <div className="leftSidebarDark">
@@ -67,15 +65,11 @@ const Sidebar = ({ toogleActive }) => {
               </IconButton>
             </Box>
 
-            {SidebarData.map((item, index) => {
-              if (item.role !== undefined) {
-                if (item.role == role) {
-                  return <SubMenu item={item} key={index} />;
-                }
-              } else {
-                return <SubMenu item={item} key={index} />;
-              }
-            })}
+            {SidebarData()
+              .filter((item) => typeof item === "object")
+              .map((item, index) => (
+                <SubMenu item={item} key={index} />
+              ))}
           </SidebarWrap>
         </SidebarNav>
       </div>

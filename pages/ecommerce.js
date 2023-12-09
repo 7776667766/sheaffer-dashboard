@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 import Grid from "@mui/material/Grid";
-import Link from 'next/link';
-import styles from '@/styles/PageTitle.module.css'
+import Link from "next/link";
+import styles from "@/styles/PageTitle.module.css";
 import Features from "@/components/Dashboard/eCommerce/Features";
 import Ratings from "@/components/Dashboard/eCommerce/Ratings";
 import AudienceOverview from "@/components/Dashboard/eCommerce/AudienceOverview";
@@ -26,9 +26,7 @@ export default function eCommerce() {
           <li>
             <Link href="/">Dashboard</Link>
           </li>
-          <li>
-            eCommerce
-          </li>
+          <li>eCommerce</li>
         </ul>
       </div>
 
@@ -40,10 +38,7 @@ export default function eCommerce() {
           {/* AudienceOverview */}
           <AudienceOverview />
 
-          <Grid
-            container
-            columnSpacing={{ xs: 1, sm: 2, md: 2 }}
-          >
+          <Grid container columnSpacing={{ xs: 1, sm: 2, md: 2 }}>
             <Grid item xs={12} md={8}>
               {/* VisitsByDay */}
               <VisitsByDay />
