@@ -1,40 +1,60 @@
-import * as React from 'react';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography'; 
+import * as React from "react";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { confirmPasswordValidation, passwordValidation } from "@/utils/validation";
+import { LoadingButtonComponent } from "@/components/UIElements/Buttons/LoadingButton";
+import { useDispatch } from "react-redux";
+import { changePasswordFunApi } from "store/auth/services";
 
 export default function ChangePassword() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
+
+  const dispatch=useDispatch();
+
+  const formik = useFormik({
+    initialValues: {
+      oldPassword: "",
+      newPassword: "",
+      confirmPassword: "",
+    },
+    validationSchema: Yup.object({
+      oldPassword: passwordValidation(),
+      newPassword: passwordValidation(),
+      confirmPassword: confirmPasswordValidation("newPassword"),
+    }),
+    onSubmit: (values) => {
+      console.log("Handle Submit", values);
+      dispatch(changePasswordFunApi(values))
+    },
+  });
 
   return (
     <>
       <Box>
         <Box
           sx={{
-            borderBottom: '1px solid #eee',
-            paddingBottom: '10px'
+            borderBottom: "1px solid #eee",
+            paddingBottom: "10px",
           }}
           className="for-dark-bottom-border"
         >
           <Typography component="h1" fontWeight="500" fontSize="18px">
-            Security
+            Change Password
           </Typography>
 
-          <Typography fontSize="13px">
-            Update your password here.
-          </Typography>
+          <Typography fontSize="13px">Update your password here.</Typography>
         </Box>
 
-        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+        <Box
+          component="form"
+          noValidate
+          onSubmit={formik.handleSubmit}
+          sx={{ mt: 3 }}
+        >
           <Grid container spacing={2}>
             <Grid item xs={12} sm={12}>
               <Typography
@@ -52,13 +72,23 @@ export default function ChangePassword() {
                 autoComplete="old-password*"
                 name="oldPassword*"
                 fullWidth
-                id="oldPassword" 
+                id="oldPassword"
                 type="password"
-                autoFocus
+                {...formik.getFieldProps("oldPassword")}
+                error={
+                  formik.touched.oldPassword && formik.errors.oldPassword
+                    ? true
+                    : false
+                }
+                helperText={
+                  formik.touched.oldPassword && formik.errors.oldPassword
+                    ? formik.errors.oldPassword
+                    : ""
+                }
               />
             </Grid>
 
-            <Grid item xs={12} sm={12}>
+            <Grid item xs={12} sm={6}>
               <Typography
                 component="label"
                 sx={{
@@ -74,13 +104,23 @@ export default function ChangePassword() {
                 autoComplete="new-password*"
                 name="newPassword*"
                 fullWidth
-                id="newPassword" 
+                id="newPassword"
                 type="password"
-                autoFocus
+                {...formik.getFieldProps("newPassword")}
+                error={
+                  formik.touched.newPassword && formik.errors.newPassword
+                    ? true
+                    : false
+                }
+                helperText={
+                  formik.touched.newPassword && formik.errors.newPassword
+                    ? formik.errors.newPassword
+                    : ""
+                }
               />
             </Grid>
 
-            <Grid item xs={12} sm={12}>
+            <Grid item xs={12} sm={6}>
               <Typography
                 component="label"
                 sx={{
@@ -96,52 +136,43 @@ export default function ChangePassword() {
                 autoComplete="confirm-password*"
                 name="confirmPassword*"
                 fullWidth
-                id="confirmPassword" 
+                id="confirmPassword"
                 type="password"
-                autoFocus
-              />
-            </Grid>
-  
-            <Grid item xs={12}>
-              <Typography
-                component="label"
-                sx={{
-                  fontWeight: "500",
-                  fontSize: "14px",
-                  mb: "10px",
-                  display: "block",
-                }}
-              >
-                Email Address
-              </Typography>
-
-              <TextField
-                fullWidth
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
+                {...formik.getFieldProps("confirmPassword")}
+                error={
+                  formik.touched.confirmPassword &&
+                  formik.errors.confirmPassword
+                    ? true
+                    : false
+                }
+                helperText={
+                  formik.touched.confirmPassword &&
+                  formik.errors.confirmPassword
+                    ? formik.errors.confirmPassword
+                    : ""
+                }
               />
             </Grid>
           </Grid>
 
-          <Button
+        
+
+          <LoadingButtonComponent
+          fullWidth={false}
             type="submit"
-            variant="contained"
+            value="Change Password"
             sx={{
               mt: 2,
-              textTransform: "capitalize",
-              borderRadius: "8px",
-              fontWeight: "500",
+            
               fontSize: "14px",
               padding: "12px 30px",
-              color: "#fff !important"
             }}
-          >
-            Change Password
-          </Button>
+            isLoading={false}
+            disabled={false}
+          />
+
         </Box>
-      </Box> 
-    </> 
+      </Box>
+    </>
   );
 }

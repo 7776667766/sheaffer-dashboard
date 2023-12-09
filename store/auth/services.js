@@ -6,6 +6,8 @@ import {
   logoutApi,
   resetPasswordApi,
   verifyOtpApi,
+  changePasswordApi,
+  updateprofileApi,
 } from "./constrants";
 import toast from "react-hot-toast";
 
@@ -178,12 +180,88 @@ export const resetPasswordFunApi = createAsyncThunk(
     try {
       const response = await axios.post(resetPasswordApi, data);
       console.log("response in resetPasswordFun => ", response.data);
+      if (response.data.status === "success") {
       toast.success("Password Reset Successfully");
-      if (onSuccess) {
-        onSuccess();
+        
+      } else {
+        console.log("Error response in resetPassword Api => ", response.data);
+        const err =
+          response?.data?.message || response?.message || "Something went wrong!";
+        console.log("err: ", err);
+        toast.error(err);
+        throw new Error(err);
       }
     } catch (error) {
       console.log("Error in resetPasswordFun Api ", error);
+      let err =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Something went wrong!";
+      if (err === "Network Error") {
+        err = "Please check your internet connection";
+      }
+      toast.error(err);
+      throw new Error(err);
+    }
+  }
+);
+
+
+export const changePasswordFunApi = createAsyncThunk(
+  "auth/changePassword",
+  async (data) => {
+    console.log(data);
+    try {
+      const response = await axios.post(changePasswordApi, data);
+      console.log("response in changePasswordFun => ", response.data);
+      if (response.data.status === "success") {
+        toast.success("Password Reset Successfully");
+          
+        } else {
+          console.log("Error response in changePassword Api => ", response.data);
+          const err =
+            response?.data?.message || response?.message || "Something went wrong!";
+          console.log("err: ", err);
+          toast.error(err);
+          throw new Error(err);
+        };
+      
+    } catch (error) {
+      console.log("Error in changePasswordFun Api ", error);
+      let err =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Something went wrong!";
+      if (err === "Network Error") {
+        err = "Please check your internet connection";
+      }
+      toast.error(err);
+      throw new Error(err);
+    }
+  }
+);
+
+export const updateProfileFunApi = createAsyncThunk(
+  "auth/updateprofile",
+  async (data) => {
+    console.log(data);
+    try {
+      const response = await axios.post(updateprofileApi, data);
+      console.log("response in updateprofileFun => ", response.data);
+      if (response.data.status === "success") {
+        toast.success("Update Profile Successfully");
+          return response.data.data.user;
+        } else {
+          console.log("Error response in updateprofile Api => ", response.data);
+          const err =
+            response?.data?.message || response?.message || "Something went wrong!";
+          console.log("err: ", err);
+          toast.error(err);
+          throw new Error(err);
+        };
+      
+    } catch (error) {
+      console.log("Error in updateprofileFun Api ", error);
       let err =
         error?.response?.data?.message ||
         error?.message ||

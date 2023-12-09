@@ -1,27 +1,51 @@
-import * as React from 'react';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
+import * as React from "react";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import {
+  emailValidation,
+  phoneValidation,
+  requiredValidation,
+} from "@/utils/validation";
+import { useDispatch, useSelector } from "react-redux";
+import { updateProfileFunApi } from "store/auth/services";
 
 export default function Profile() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
+  const {user}= useSelector(
+    (state) => state.auth
+  );
+  console.log(user);
+  const dispatch=useDispatch()
+
+  const formik = useFormik({
+    initialValues: {
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      image: user.image,
+    },
+    validationSchema: Yup.object({
+      name: requiredValidation(),
+      email: emailValidation(),
+      phone: phoneValidation(),
+    }),
+    onSubmit: (values) => {
+      console.log("Handle Submit", values);
+      dispatch(updateProfileFunApi(values))
+    },
+  });
 
   return (
     <>
       <Box>
         <Box
           sx={{
-            borderBottom: '1px solid #eee',
-            paddingBottom: '10px'
+            borderBottom: "1px solid #eee",
+            paddingBottom: "10px",
           }}
           className="for-dark-bottom-border"
         >
@@ -34,7 +58,12 @@ export default function Profile() {
           </Typography>
         </Box>
 
-        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+        <Box
+          component="form"
+          noValidate
+          onSubmit={formik.handleSubmit}
+          sx={{ mt: 3 }}
+        >
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <Typography
@@ -46,39 +75,24 @@ export default function Profile() {
                   display: "block",
                 }}
               >
-                First Name
+                Name
               </Typography>
               <TextField
                 autoComplete="given-name"
-                name="firstName"
+                name="name"
                 fullWidth
-                id="firstName" 
-                autoFocus
+                id="name"
+                {...formik.getFieldProps("name")}
+                error={formik.touched.name && formik.errors.name ? true : false}
+                helperText={
+                  formik.touched.name && formik.errors.name
+                    ? formik.errors.name
+                    : ""
+                }
               />
             </Grid>
 
             <Grid item xs={12} sm={6}>
-              <Typography
-                component="label"
-                sx={{
-                  fontWeight: "500",
-                  fontSize: "14px",
-                  mb: "10px",
-                  display: "block",
-                }}
-              >
-                Last Name
-              </Typography>
-
-              <TextField
-                fullWidth
-                id="lastName"
-                name="lastName"
-                autoComplete="family-name"
-              />
-            </Grid>
-
-            <Grid item xs={12}>
               <Typography
                 component="label"
                 sx={{
@@ -95,7 +109,46 @@ export default function Profile() {
                 fullWidth
                 id="email"
                 name="email"
-                autoComplete="email"
+                disabled
+                {...formik.getFieldProps("email")}
+                error={
+                  formik.touched.email && formik.errors.email ? true : false
+                }
+                helperText={
+                  formik.touched.email && formik.errors.email
+                    ? formik.errors.email
+                    : ""
+                }
+              />
+            </Grid>
+
+            <Grid item xs={12}>
+              <Typography
+                component="label"
+                sx={{
+                  fontWeight: "500",
+                  fontSize: "14px",
+                  mb: "10px",
+                  display: "block",
+                }}
+              >
+                Phone Number
+              </Typography>
+
+              <TextField
+                fullWidth
+                id="phone"
+                name="phone"
+                disabled
+                {...formik.getFieldProps("phone")}
+                error={
+                  formik.touched.phone && formik.errors.phone ? true : false
+                }
+                helperText={
+                  formik.touched.phone && formik.errors.phone
+                    ? formik.errors.phone
+                    : ""
+                }
               />
             </Grid>
 
@@ -111,7 +164,7 @@ export default function Profile() {
               >
                 Upload Image
               </Typography>
-              
+
               <TextField
                 required
                 fullWidth
@@ -122,9 +175,9 @@ export default function Profile() {
               />
 
               <Box mt={1}>
-                <img 
-                  src="/images/user1.png" 
-                  alt="profile" 
+                <img
+                  src={user.image}
+                  alt="profile"
                   className="borRadius100"
                   width="50px"
                   height="50px"
@@ -143,13 +196,13 @@ export default function Profile() {
               fontWeight: "500",
               fontSize: "14px",
               padding: "12px 30px",
-              color: "#fff !important"
+              color: "#fff !important",
             }}
           >
             Update
           </Button>
         </Box>
-      </Box> 
-    </> 
+      </Box>
+    </>
   );
 }
