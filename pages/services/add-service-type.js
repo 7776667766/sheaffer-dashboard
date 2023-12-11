@@ -3,7 +3,10 @@ import Link from "next/link";
 import styles from "@/styles/PageTitle.module.css";
 import AddServiceTypeForm from "@/components/Forms/FormLayouts/AddServiceTypeForm";
 
+
 export default function FormLayouts() {
+
+
   return (
     <>
       {/* Page title */}

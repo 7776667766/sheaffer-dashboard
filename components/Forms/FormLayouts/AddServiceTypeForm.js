@@ -17,11 +17,15 @@ import {
   phoneValidation,
   requiredValidation,
 } from "@/utils/validation";
+import { useDispatch } from "react-redux";
+import { addservicesFunApi } from "store/service/services";
 const RichTextEditor = dynamic(() => import("@mantine/rte"), {
   ssr: false,
 });
 
 const AddServiceTypeForm = () => {
+
+  const dispatch=useDispatch();
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -31,7 +35,7 @@ const AddServiceTypeForm = () => {
     }),
     onSubmit: (values) => {
       console.log("Handle Submit", values);
-      // dispatch(loginFunApi(values));
+      dispatch(addservicesFunApi({data:values}));
       // router.push("/authentication/verify-otp");
       // alert(JSON.stringify(values, null, 2));
     },

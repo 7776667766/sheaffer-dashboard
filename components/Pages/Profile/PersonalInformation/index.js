@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 const PersonalInformation = () => {
   const { user } = useSelector((state) => state.auth);
 
-  const personalInfo = [
+  const personalInfo =  [
     {
       title: "Name",
       text: user?.name,
@@ -25,7 +25,7 @@ const PersonalInformation = () => {
     },
     {
       title: "Account verified",
-      text: JSON.stringify(user.verified)
+      text: JSON.stringify(user?.verified)
     },
   ];
   return (
