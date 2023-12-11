@@ -1,11 +1,19 @@
 import React from "react";
-import { Box, Typography } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+} from "@mui/material";
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import SendIcon from "@mui/icons-material/Send";
 import { useFormik } from "formik";
+import { useEffect, useState } from "react";
 import * as Yup from "yup";
 import {
   confirmPasswordValidation,
@@ -18,11 +26,30 @@ import {
 import { addManagerFunApi } from "store/manager/services";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
+import { getspecialistApi } from "store/specialist/services";
 
 const AddServiceForm = () => {
+  const [selectedSpecialist, setSelectedSpecialist] = useState("");
   const dispatch = useDispatch();
   const router = useRouter();
   const { business } = useSelector((state) => state.business);
+  console.log(business);
+  const { specialist } = useSelector((state) => state.specialist);
+  console.log("data", specialist);
+
+  useEffect(() => {
+    if (!specialist.specialistFetch) {
+      dispatch(getspecialistApi({ data: business?.id }));
+    }
+  }, [dispatch, specialist.specialistFetch, business?.id]);
+
+  useEffect(() => {
+    console.log(
+      "AddServiceForm Rendered with Specialist Data:",
+      specialist.data
+    );
+    setSelectedSpecialist(specialist);
+  }, [specialist]);
 
   const formik = useFormik({
     initialValues: {
@@ -94,6 +121,24 @@ const AddServiceForm = () => {
                   style: { borderRadius: 8 },
                 }}
               />
+            </Grid>
+
+            <Grid item xs={12} md={12} lg={6}>
+              <FormControl fullWidth>
+                <InputLabel>Select Specialist</InputLabel>
+                <Select
+                  value={selectedSpecialist}
+                  onChange={(e) => setSelectedSpecialist(e.target.value)}
+                  displayEmpty
+                  inputProps={{ "aria-label": "Select Specialist" }}
+                >
+                  {specialist?.map((s) => (
+                    <MenuItem key={s.id} value={s.id}>
+                      {s.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
             </Grid>
 
             <Grid item xs={12} md={12} lg={6}>
