@@ -18,61 +18,15 @@ import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
 import Tooltip from "@mui/material/Tooltip";
-import Grid from "@mui/material/Grid";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
 import AddIcon from "@mui/icons-material/Add";
-import ClearIcon from "@mui/icons-material/Clear";
 import Avatar from "@mui/material/Avatar";
 import Checkbox from "@mui/material/Checkbox";
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
-import { styled } from "@mui/material/styles";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import CloseIcon from "@mui/icons-material/Close";
-import { useRouter } from "next/router";
-
-// Add Task Modal
-const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-  "& .MuiDialogContent-root": {
-    padding: theme.spacing(2),
-  },
-  "& .MuiDialogActions-root": {
-    padding: theme.spacing(1),
-  },
-}));
-
-function BootstrapDialogTitle(props) {
-  const { children, onClose, ...other } = props;
-
-  return (
-    <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
-      {children}
-      {onClose ? (
-        <IconButton
-          aria-label="close"
-          onClick={onClose}
-          sx={{
-            position: "absolute",
-            right: 8,
-            top: 8,
-            color: (theme) => theme.palette.grey[500],
-          }}
-        >
-          <CloseIcon />
-        </IconButton>
-      ) : null}
-    </DialogTitle>
-  );
-}
-
-BootstrapDialogTitle.propTypes = {
-  children: PropTypes.node,
-  onClose: PropTypes.func.isRequired,
-};
-// End Add Task Modal
+import Link from "next/link";
+import TablePaginationActionList from "@/components/Table/TablePaginationActionList";
 
 function ToDoList(props) {
   const theme = useTheme();
@@ -291,7 +245,6 @@ const rows = [
 const Services = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
-  const router = useRouter();
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -305,9 +258,7 @@ const Services = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-  const handleNavigate = () => {
-    router.push("/services/add-service-type");
-  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -349,24 +300,25 @@ const Services = () => {
             My Services
           </Typography>
 
-          {/* <Button
-            onClick={handleNavigate}
-            variant="contained"
-            sx={{
-              textTransform: "capitalize",
-              borderRadius: "8px",
-              fontWeight: "500",
-              fontSize: "13px",
-              padding: "12px 20px",
-              color: "#fff !important",
-            }}
-          >
-            <AddIcon
-              sx={{ position: "relative", top: "-1px" }}
-              className="mr-5px"
-            />{" "}
-            Add Service Type
-          </Button> */}
+          <Link href="/services/add-service">
+            <Button
+              variant="contained"
+              sx={{
+                textTransform: "capitalize",
+                borderRadius: "8px",
+                fontWeight: "500",
+                fontSize: "13px",
+                padding: "12px 20px",
+                color: "#fff !important",
+              }}
+            >
+              <AddIcon
+                sx={{ position: "relative", top: "-1px" }}
+                className="mr-5px"
+              />{" "}
+              Add Service
+            </Button>
+          </Link>
         </Box>
 
         <TableContainer
@@ -617,7 +569,7 @@ const Services = () => {
                   }}
                   onPageChange={handleChangePage}
                   onRowsPerPageChange={handleChangeRowsPerPage}
-                  ActionsComponent={ToDoList}
+                  ActionsComponent={TablePaginationActionList}
                   style={{ borderBottom: "none" }}
                 />
               </TableRow>

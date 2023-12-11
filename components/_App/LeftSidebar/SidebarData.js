@@ -105,6 +105,10 @@ export const SidebarData = () => {
           title: "Services",
           path: "/services/",
         },
+        (role === "owner" || role === "manager") && {
+          title: "Add Service",
+          path: "/services/add-service/",
+        },
         role === "admin" && {
           title: "Service Types",
           path: "/services/service-type",

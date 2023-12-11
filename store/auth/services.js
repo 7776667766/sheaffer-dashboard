@@ -121,15 +121,15 @@ export const logoutFunApi = createAsyncThunk("auth/logout", async () => {
     //   const err =
     //     response?.data?.message || response?.message || "Something went wrong!";
     //   console.log("err: ", err);
-    //   if (err === "invalid token") {
-    //     localStorage.removeItem("token");
-    //     localStorage.removeItem("user");
-    //     localStorage.removeItem("otpVerified");
-    //     return;
-    //   } else {
-    //     toast.error(err);
-    //     throw new Error(err);
-    //   }
+    // if (err === "invalid token") {
+    //   localStorage.removeItem("token");
+    //   localStorage.removeItem("user");
+    //   localStorage.removeItem("otpVerified");
+    //   return;
+    // } else {
+    //   toast.error(err);
+    //   throw new Error(err);
+    // }
     // }
     localStorage.removeItem("token");
     localStorage.removeItem("user");
@@ -144,6 +144,12 @@ export const logoutFunApi = createAsyncThunk("auth/logout", async () => {
       "Something went wrong!";
     if (err === "Network Error") {
       err = "Please check your internet connection";
+    } else if (err === "Invalid token") {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      localStorage.removeItem("otpVerified");
+      toast.success("Account Logout Successfully");
+      return;
     }
     toast.error(err);
     throw new Error(err);
@@ -182,12 +188,13 @@ export const resetPasswordFunApi = createAsyncThunk(
       const response = await axios.post(resetPasswordApi, data);
       console.log("response in resetPasswordFun => ", response.data);
       if (response.data.status === "success") {
-      toast.success("Password Reset Successfully");
-        
+        toast.success("Password Reset Successfully");
       } else {
         console.log("Error response in resetPassword Api => ", response.data);
         const err =
-          response?.data?.message || response?.message || "Something went wrong!";
+          response?.data?.message ||
+          response?.message ||
+          "Something went wrong!";
         console.log("err: ", err);
         toast.error(err);
         throw new Error(err);
@@ -207,7 +214,6 @@ export const resetPasswordFunApi = createAsyncThunk(
   }
 );
 
-
 export const changePasswordFunApi = createAsyncThunk(
   "auth/changePassword",
   async (data) => {
@@ -217,16 +223,16 @@ export const changePasswordFunApi = createAsyncThunk(
       console.log("response in changePasswordFun => ", response.data);
       if (response.data.status === "success") {
         toast.success("Password Reset Successfully");
-          
-        } else {
-          console.log("Error response in changePassword Api => ", response.data);
-          const err =
-            response?.data?.message || response?.message || "Something went wrong!";
-          console.log("err: ", err);
-          toast.error(err);
-          throw new Error(err);
-        };
-      
+      } else {
+        console.log("Error response in changePassword Api => ", response.data);
+        const err =
+          response?.data?.message ||
+          response?.message ||
+          "Something went wrong!";
+        console.log("err: ", err);
+        toast.error(err);
+        throw new Error(err);
+      }
     } catch (error) {
       console.log("Error in changePasswordFun Api ", error);
       let err =
@@ -251,16 +257,17 @@ export const updateProfileFunApi = createAsyncThunk(
       console.log("response in updateprofileFun => ", response.data);
       if (response.data.status === "success") {
         toast.success("Update Profile Successfully");
-          return response.data.data.user;
-        } else {
-          console.log("Error response in updateprofile Api => ", response.data);
-          const err =
-            response?.data?.message || response?.message || "Something went wrong!";
-          console.log("err: ", err);
-          toast.error(err);
-          throw new Error(err);
-        };
-      
+        return response.data.data.user;
+      } else {
+        console.log("Error response in updateprofile Api => ", response.data);
+        const err =
+          response?.data?.message ||
+          response?.message ||
+          "Something went wrong!";
+        console.log("err: ", err);
+        toast.error(err);
+        throw new Error(err);
+      }
     } catch (error) {
       console.log("Error in updateprofileFun Api ", error);
       let err =
