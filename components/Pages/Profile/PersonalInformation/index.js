@@ -1,31 +1,33 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
-
-const personalInfo = [
-  {
-    title: 'Full Name :',
-    text: 'Andrew Burns',
-  },
-  {
-    title: 'Mobile :',
-    text: '(123) 123 1234',
-  },
-  {
-    title: 'Email :',
-    text: 'andrewburns@gmail.com',
-  },
-  {
-    title: 'Location : ',
-    text: 'USA',
-  },
-  {
-    title: 'Experience : ',
-    text: 'Back end Developer',
-  },
-]
+import { useSelector } from "react-redux";
 
 const PersonalInformation = () => {
+  const { user } = useSelector((state) => state.auth);
+
+  const personalInfo = [
+    {
+      title: "Name",
+      text: user?.name,
+    },
+    {
+      title: "Phone",
+      text: user?.phone,
+    },
+    {
+      title: "Email",
+      text: user?.email,
+    },
+    {
+      title: "Role",
+      text: user?.role,
+    },
+    {
+      title: "Account verified",
+      text: JSON.stringify(user.verified)
+    },
+  ];
   return (
     <>
       <Card
@@ -54,39 +56,39 @@ const PersonalInformation = () => {
             Personal Information
           </Typography>
         </Box>
-        
+
         <Box>
-          <Typography 
-            as='h4' 
-            fontWeight='500' 
-            fontSize='15px' 
-            mb={1}
-          >
+          <Typography as="h4" fontWeight="500" fontSize="15px" mb={1}>
             About Me:
           </Typography>
 
-          <Typography mb={1}>Hi I'm Andrew Burns,has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type.</Typography>
-          
-          {personalInfo.map((info) => (
+          <Typography mb={1}>
+            Hi I'm Andrew Burns,has been the industry's standard dummy text ever
+            since the 1500s, when an unknown printer took a galley of type.
+          </Typography>
+
+          {personalInfo.map((ever) => (
             <Box
               sx={{
-                display: 'flex',
-                borderBottom: '1px solid #F7FAFF',
-                p: '10px 0',
+                display: "flex",
+                borderBottom: "1px solid #F7FAFF",
+                p: "10px 0",
               }}
-              key={info.title}
+              key={ever.title}
               className="for-dark-bottom-border"
             >
-              <Typography 
-                as='h4' 
-                fontWeight='500' 
-                fontSize='14px' 
-                width='100px'
+              <Typography
+                as="h4"
+                fontWeight="500"
+                fontSize="14px"
+                width="150px"
               >
-                {info.title}
+                {ever.title}
               </Typography>
 
-              <Typography>{info.text}</Typography>
+              <Typography>
+               {ever.text}
+              </Typography>
             </Box>
           ))}
         </Box>

@@ -7,7 +7,7 @@ const ProfileContent = () => {
     <>
       <div className={styles.welcomeBox}>
         <div className={styles.welcomeContent}>
-          <h1>Welcome to admash Dashboard!</h1>
+          <h1>Welcome to Dashboard!</h1>
           <p>
             You have done 68% 😎 more sales today. Check your new badge in
             your profile.
