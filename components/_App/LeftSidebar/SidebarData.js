@@ -109,7 +109,7 @@ export const SidebarData = () => {
           title: "Add Service",
           path: "/services/add-service/",
         },
-        role === "admin" && {
+        {
           title: "Service Types",
           path: "/services/service-type",
         },
@@ -119,7 +119,6 @@ export const SidebarData = () => {
         },
       ],
     },
-
 
     // {
     //   title: "Apps",
