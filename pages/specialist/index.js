@@ -121,6 +121,7 @@ const Specialist = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const { specialist } = useSelector((state) => state.specialist);
+  console.log(specialist)
   const { business } = useSelector((state) => state.business);
 
   useEffect(() => {
