@@ -34,24 +34,24 @@ export default function Profile() {
           <ProfileContent />
 
           {/* ImpressionGoalConversions */}
-          <ImpressionGoalConversions />
+          {/* <ImpressionGoalConversions /> */}
 
           {/* Personal Information */}
           <PersonalInformation />
 
           {/* ActivityTimeline */}
-          <ActivityTimeline />
+          {/* <ActivityTimeline /> */}
         </Grid>
 
         <Grid item xs={12} md={12} lg={12} xl={8}>
           {/* Features */}
-          <Features />
+          {/* <Features /> */}
 
           {/* Overview */}
-          <Overview />
+          {/* <Overview /> */}
 
           {/* MyTasks */}
-          <MyTasks />
+          {/* <MyTasks /> */}
         </Grid>
       </Grid>
     </>

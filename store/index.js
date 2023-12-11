@@ -4,6 +4,7 @@ import { managerReducer } from "./manager/managerSlice";
 import { specialistReducer } from "./specialist/specialistSlice";
 import { businessReducer } from "./business/businessSlice";
 import { adminReducer } from "./admin/adminSlice";
+import { serviceReducer } from './service/serviceSlice';
 
 const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
     specialist: specialistReducer,
     business: businessReducer,
     admin: adminReducer,
+    service: serviceReducer,
   },
 });
 
