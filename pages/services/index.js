@@ -15,43 +15,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllServiceFunApi } from "store/service/services";
 
 
-// function createData(
-//   name,
-//   url,
-//   startDate,
-//   endDate,
-//   status,
-//   badgeClass,
-//   completion,
-//   priority
-// ) {
-//   return {
-//     name,
-//     url,
-//     startDate,
-//     endDate,
-//     status,
-//     badgeClass,
-//     completion,
-//     priority,
-//   };
-// }
-
-// const rows = [
-//   createData(
-//     "Public Beta Release",
-//     "/images/user1.png",
-//     "1 Jan 2022",
-//     "1 Apr 2022",
-//     "Completed",
-//     "successBadge",
-//     "10/10",
-//     "High"
-//   ),
-
-// ]
-
-
 const Services = () => {
 
 const dispatch=useDispatch();
@@ -233,7 +196,7 @@ const { service,  } = useSelector((state) => state.service);
                   pb: "16px",
                 }}
               >
-                {data.image}
+                {data.description}
               </TableCell>
 
               <TableCell
@@ -246,7 +209,7 @@ const { service,  } = useSelector((state) => state.service);
             
                 <Avatar
                   alt="User"
-                  src={data.description}
+                  src={data.image}
                   sx={{ width: 35, height: 35 }}
                 />
               </TableCell>
