@@ -1,10 +1,16 @@
-import {  addservicesFunApi, getServicesTypeFunApi} from './services';
+import {  addservicesFunApi, getAllServiceFunApi, getServicesTypeFunApi} from './services';
 import { createSlice } from "@reduxjs/toolkit";
 
 const serviceSlice = createSlice({
   name: "service",
   initialState: {
     serviceType: {
+        data: [],
+        isLoading: false,
+        error: null,
+        dataFatched: false,
+      },
+      service: {
         data: [],
         isLoading: false,
         error: null,
@@ -35,14 +41,29 @@ const serviceSlice = createSlice({
        state.serviceType.error = null;
       })
       .addCase(getServicesTypeFunApi.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.serviceType.dataFetch = true;
+        state.serviceType.isLoading = false;
+        state.serviceType.dataFatched = true;
         state.serviceType.data = action.payload;
       })
       .addCase(getServicesTypeFunApi.rejected, (state, action) => {
         state.serviceType.isLoading = false;
         state.serviceType.error = action.payload;
-        state.serviceType.dataFetch = true;
+        state.serviceType.dataFatched = true;
+      });
+      builder
+      .addCase(getAllServiceFunApi.pending, (state, action) => {
+       state.service.isLoading = true;
+       state.service.error = null;
+      })
+      .addCase(getAllServiceFunApi.fulfilled, (state, action) => {
+        state.service.isLoading = false;
+        state.service.dataFatched = true;
+        state.service.data = action.payload;
+      })
+      .addCase(getAllServiceFunApi.rejected, (state, action) => {
+        state.service.isLoading = false;
+        state.service.error = action.payload;
+        state.service.dataFatched = true;
       });
   },
 });

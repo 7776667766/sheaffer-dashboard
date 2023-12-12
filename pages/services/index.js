@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
 import IconButton from "@mui/material/IconButton";
@@ -9,157 +9,36 @@ import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutli
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import Avatar from "@mui/material/Avatar";
-import Checkbox from "@mui/material/Checkbox";
-const label = { inputProps: { "aria-label": "Checkbox demo" } };
 import Link from "next/link";
 import { CustomPaginationTable } from "@/components/Table/CustomPaginationTable";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllServiceFunApi } from "store/service/services";
 
-function createData(
-  name,
-  url,
-  startDate,
-  endDate,
-  status,
-  badgeClass,
-  completion,
-  priority
-) {
-  return {
-    name,
-    url,
-    startDate,
-    endDate,
-    status,
-    badgeClass,
-    completion,
-    priority,
-  };
-}
-
-const rows = [
-  createData(
-    "Public Beta Release",
-    "/images/user1.png",
-    "1 Jan 2022",
-    "1 Apr 2022",
-    "Completed",
-    "successBadge",
-    "10/10",
-    "High"
-  ),
-  createData(
-    "Fix Platform Errors",
-    "/images/user2.png",
-    "1 Mar 2022",
-    "1 May 2022",
-    "Completed",
-    "successBadge",
-    "10/10",
-    "High"
-  ),
-  createData(
-    "Launch our Mobile App",
-    "/images/user3.png",
-    "15 Apr 2022",
-    "15 Jun 2022",
-    "On Going",
-    "primaryBadge",
-    "7/10",
-    "Medium"
-  ),
-  createData(
-    "Add the New Pricing Page",
-    "/images/user4.png",
-    "15 May 2022",
-    "15 Jun 2022",
-    "Pending",
-    "dangerBadge",
-    "1/10",
-    "Low"
-  ),
-  createData(
-    "Redesign New Online Shop",
-    "/images/user5.png",
-    "15 Jun 2022",
-    "15 Aug 2022",
-    "On Going",
-    "primaryBadge",
-    "0/10",
-    "Low"
-  ),
-  createData(
-    "Material Ui Design",
-    "/images/user6.png",
-    "15 Jul 2022",
-    "15 Sep 2022",
-    "On Going",
-    "primaryBadge",
-    "7/10",
-    "Medium"
-  ),
-  createData(
-    "Add Progress Track",
-    "/images/user7.png",
-    "15 Mar 2022",
-    "15 May 2022",
-    "Completed",
-    "successBadge",
-    "10/10",
-    "High"
-  ),
-  createData(
-    "Web Design",
-    "/images/user8.png",
-    "15 Aug 2022",
-    "15 Dec 2022",
-    "On Going",
-    "primaryBadge",
-    "9/10",
-    "High"
-  ),
-  createData(
-    "Web Development",
-    "/images/user9.png",
-    "15 Nov 2022",
-    "15 Jan 2023",
-    "On Going",
-    "primaryBadge",
-    "8/10",
-    "High"
-  ),
-  createData(
-    "React App Development",
-    "/images/user10.png",
-    "15 Jan 2022",
-    "15 Mar 2022",
-    "Completed",
-    "successBadge",
-    "10/10",
-    "High"
-  ),
-  createData(
-    "eCommerce Development",
-    "/images/user11.png",
-    "15 Mar 2022",
-    "15 May 2022",
-    "On Going",
-    "primaryBadge",
-    "8/10",
-    "Medium"
-  ),
-  createData(
-    "App Development",
-    "/images/user12.png",
-    "15 May 2022",
-    "15 Jul 2022",
-    "On Going",
-    "primaryBadge",
-    "5/10",
-    "Medium"
-  ),
-].sort((a, b) => (a.name < b.name ? -1 : 1));
 
 const Services = () => {
+
+const dispatch=useDispatch();
+const { service,  } = useSelector((state) => state.service);
+  const { business } = useSelector((state) => state.business);
+
+
+
+
+  useEffect(() => {
+    if (service.dataFatched !== true) {
+      dispatch(
+        getAllServiceFunApi({
+          businessId: business?.id,
+        })
+      );
+    }
+  }, [
+    dispatch,
+    service.data,
+    service.dataFatched,
+    business?.id,
+  ]);
+
   return (
     <>
       <Card
@@ -213,8 +92,8 @@ const Services = () => {
         </Box>
 
         <CustomPaginationTable
-          tableData={rows}
-          isLoading={false}
+          tableData={service.data}
+          isLoading={service.isLoading}
           tableHeaderData={
             <>
               <TableCell
@@ -232,7 +111,7 @@ const Services = () => {
                   fontSize: "13.5px",
                 }}
               >
-                Assigned
+                Description
               </TableCell>
 
               <TableCell
@@ -241,7 +120,7 @@ const Services = () => {
                   fontSize: "13.5px",
                 }}
               >
-                Start Date
+                Image
               </TableCell>
 
               <TableCell
@@ -250,17 +129,7 @@ const Services = () => {
                   fontSize: "13.5px",
                 }}
               >
-                End Date
-              </TableCell>
-
-              <TableCell
-                align="center"
-                sx={{
-                  borderBottom: "1px solid #F7FAFF",
-                  fontSize: "13.5px",
-                }}
-              >
-                Status
+                Price
               </TableCell>
 
               <TableCell
@@ -270,7 +139,7 @@ const Services = () => {
                   fontSize: "13.5px",
                 }}
               >
-                Completion
+                Date
               </TableCell>
 
               <TableCell
@@ -280,7 +149,17 @@ const Services = () => {
                   fontSize: "13.5px",
                 }}
               >
-                Priority
+                Type
+              </TableCell>
+
+              <TableCell
+                align="center"
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13.5px",
+                }}
+              >
+                Specialist
               </TableCell>
 
               <TableCell
@@ -294,7 +173,7 @@ const Services = () => {
               </TableCell>
             </>
           }
-          tableBodyData={(data) => (
+          tableBodyData={(data , index) => (
             <>
               <TableCell
                 sx={{
@@ -306,8 +185,18 @@ const Services = () => {
                   pb: "16px",
                 }}
               >
-                <Checkbox {...label} size="small" />
                 {data.name}
+              </TableCell>
+
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13px",
+                  pt: "16px",
+                  pb: "16px",
+                }}
+              >
+                {data.description}
               </TableCell>
 
               <TableCell
@@ -317,9 +206,10 @@ const Services = () => {
                   pb: "16px",
                 }}
               >
+            
                 <Avatar
                   alt="User"
-                  src={data.url}
+                  src={data.image}
                   sx={{ width: 35, height: 35 }}
                 />
               </TableCell>
@@ -332,18 +222,7 @@ const Services = () => {
                   pb: "16px",
                 }}
               >
-                {data.startDate}
-              </TableCell>
-
-              <TableCell
-                sx={{
-                  borderBottom: "1px solid #F7FAFF",
-                  fontSize: "13px",
-                  pt: "16px",
-                  pb: "16px",
-                }}
-              >
-                {data.endDate}
+                {data.price}
               </TableCell>
 
               <TableCell
@@ -356,7 +235,7 @@ const Services = () => {
                   pb: "16px",
                 }}
               >
-                <span className={data.badgeClass}>{data.status}</span>
+                {data.date}
               </TableCell>
 
               <TableCell
@@ -368,7 +247,7 @@ const Services = () => {
                 }}
                 align="center"
               >
-                {data.completion}
+                {data.type.name}
               </TableCell>
 
               <TableCell
@@ -380,7 +259,7 @@ const Services = () => {
                 }}
                 align="center"
               >
-                {data.priority}
+                {data.specialist.name}
               </TableCell>
 
               <TableCell
