@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  Box,
-  Typography,
-  Select,
-  MenuItem,
-  FormControl,
-} from "@mui/material";
+import { Box, Typography, Select, MenuItem, FormControl } from "@mui/material";
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
@@ -14,16 +8,13 @@ import SendIcon from "@mui/icons-material/Send";
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import * as Yup from "yup";
-import {
-  requiredValidation,
-} from "@/utils/validation";
+import { requiredValidation } from "@/utils/validation";
 
 import { addManagerFunApi } from "store/manager/services";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { getspecialistApi } from "store/specialist/services";
 import { getServicesTypeFunApi } from "store/service/services";
-
 
 const AddServiceForm = () => {
   const [selectedSpecialist, setSelectedSpecialist] = useState("");
@@ -36,8 +27,7 @@ const AddServiceForm = () => {
   const { specialist } = useSelector((state) => state.specialist);
   console.log("specialist data", specialist);
   const { serviceType } = useSelector((state) => state.service);
-  console.log("service data", serviceType)
-
+  console.log("service data", serviceType);
 
   useEffect(() => {
     if (!specialist.specialistFetch) {
@@ -45,17 +35,16 @@ const AddServiceForm = () => {
     }
   }, [dispatch, specialist.specialistFetch, business?.id]);
 
-
   useEffect(() => {
     if (!serviceType.dataFatched) {
-      dispatch(
-        getServicesTypeFunApi({ data: business?.id })
-      );
+      dispatch(getServicesTypeFunApi({ data: business?.id }));
     }
-  }, [dispatch, serviceType.serviceFetch, business?.id]);
+  }, [dispatch, business?.id, serviceType.dataFatched]);
 
-  const servicesArray = serviceType && serviceType[0] && Array.isArray(serviceType[0]) ? serviceType[0] : [];
-
+  const servicesArray =
+    serviceType && serviceType[0] && Array.isArray(serviceType[0])
+      ? serviceType[0]
+      : [];
 
   const formik = useFormik({
     initialValues: {
@@ -67,51 +56,55 @@ const AddServiceForm = () => {
       specialistId: "",
       date: "",
       businessId: "",
-      timeSlots:  [
+      timeSlots: [
         {
-          "day": "Monday",
-          "startTime": "10:00",
-          "endTime": "12:00",
+          day: "Monday",
+          startTime: "10:00",
+          endTime: "12:00",
         },
         {
-          "day": "Tuesday",
-          "startTime": "10:00",
-          "endTime": "12:00",
+          day: "Tuesday",
+          startTime: "10:00",
+          endTime: "12:00",
         },
         {
-          "day": "Wednesday",
-          "startTime": "10:00",
-          "endTime": "12:00",
+          day: "Wednesday",
+          startTime: "10:00",
+          endTime: "12:00",
         },
         {
-          "day": "thursday",
-          "startTime": "10:00",
-          "endTime": "12:00",
+          day: "thursday",
+          startTime: "10:00",
+          endTime: "12:00",
         },
         {
-          "day": "Friday",
-          "startTime": "10:00",
-          "endTime": "12:00",
+          day: "Friday",
+          startTime: "10:00",
+          endTime: "12:00",
         },
         {
-          "day": "Saturday",
-          "startTime": "10:00",
-          "endTime": "12:00",
+          day: "Saturday",
+          startTime: "10:00",
+          endTime: "12:00",
         },
         {
-          "day": "Sunday",
-          "startTime": "10:00",
-          "endTime": "12:00",
+          day: "Sunday",
+          startTime: "10:00",
+          endTime: "12:00",
         },
       ],
     },
     validationSchema: Yup.object().shape({
       name: requiredValidation("Service Name"),
       description: requiredValidation("Service Description"),
-      image: Yup.mixed().required("Image is required").test("fileSize", "File size is too large", (value) => {
-        return value ? value.size <= 5 * 1024 * 1024 : true;
-      }),
-      price: Yup.number().typeError("Price must be a number").required("Price is Required"),
+      image: Yup.mixed()
+        .required("Image is required")
+        .test("fileSize", "File size is too large", (value) => {
+          return value ? value.size <= 5 * 1024 * 1024 : true;
+        }),
+      price: Yup.number()
+        .typeError("Price must be a number")
+        .required("Price is Required"),
       typeId: requiredValidation("Type ID"),
       specialistId: requiredValidation("Specialist ID"),
       date: Yup.date().typeError("Invalid Date").required("Date is Required"),
@@ -241,7 +234,6 @@ const AddServiceForm = () => {
               </FormControl>
             </Grid>
 
-
             <Grid item xs={12} md={12} lg={6}>
               <Typography
                 as="h5"
@@ -297,8 +289,8 @@ const AddServiceForm = () => {
                 id="file"
                 autoComplete="file"
                 sx={{
-                  padding: '16px',
-                  borderRadius: '8px',
+                  padding: "16px",
+                  borderRadius: "8px",
                 }}
               />
             </Grid>
@@ -322,7 +314,9 @@ const AddServiceForm = () => {
                 label="Price"
                 type="number"
                 {...formik.getFieldProps("price")}
-                error={formik.touched.price && formik.errors.price ? true : false}
+                error={
+                  formik.touched.price && formik.errors.price ? true : false
+                }
                 helperText={
                   formik.touched.price && formik.errors.price
                     ? formik.errors.price
@@ -334,7 +328,10 @@ const AddServiceForm = () => {
               />
             </Grid>
             <Grid item xs={12} md={12} lg={6}>
-              <Typography as="h5" sx={{ fontWeight: '500', fontSize: '14px', mb: '12px' }}>
+              <Typography
+                as="h5"
+                sx={{ fontWeight: "500", fontSize: "14px", mb: "12px" }}
+              >
                 Date
               </Typography>
               <TextField
@@ -346,13 +343,13 @@ const AddServiceForm = () => {
                 {...formik.getFieldProps("confirmPassword")}
                 error={
                   formik.touched.confirmPassword &&
-                    formik.errors.confirmPassword
+                  formik.errors.confirmPassword
                     ? true
                     : false
                 }
                 helperText={
                   formik.touched.confirmPassword &&
-                    formik.errors.confirmPassword
+                  formik.errors.confirmPassword
                     ? formik.errors.confirmPassword
                     : ""
                 }
@@ -364,7 +361,10 @@ const AddServiceForm = () => {
 
             <Grid item xs={12}>
               {/* Example for 'timeSlots' array */}
-              <Typography as="h5" sx={{ fontWeight: '500', fontSize: '14px', mb: '12px' }}>
+              <Typography
+                as="h5"
+                sx={{ fontWeight: "500", fontSize: "14px", mb: "12px" }}
+              >
                 Time Slots
               </Typography>
               {formik.values.timeSlots.map((slot, index) => (
@@ -375,7 +375,7 @@ const AddServiceForm = () => {
                       name={`timeSlots[${index}].day`}
                       fullWidth
                       label={`Day ${index + 1}`}
-                      value={formik.values.timeSlots[index]?.day || ''}
+                      value={formik.values.timeSlots[index]?.day || ""}
                       onChange={formik.handleChange}
                       error={
                         formik.touched.timeSlots && formik.errors.timeSlots
@@ -385,7 +385,7 @@ const AddServiceForm = () => {
                       helperText={
                         formik.touched.timeSlots && formik.errors.timeSlots
                           ? formik.errors.timeSlots[index]?.day
-                          : ''
+                          : ""
                       }
                       InputProps={{
                         readOnly: true,
@@ -400,7 +400,6 @@ const AddServiceForm = () => {
                       fullWidth
                       type="time"
                       label={"start time"}
-
                       {...formik.getFieldProps(`timeSlots[${index}].startTime`)}
                       error={
                         formik.touched.timeSlots && formik.errors.timeSlots
@@ -410,7 +409,7 @@ const AddServiceForm = () => {
                       helperText={
                         formik.touched.timeSlots && formik.errors.timeSlots
                           ? formik.errors.timeSlots[index]?.startTime
-                          : ''
+                          : ""
                       }
                       InputProps={{
                         style: { borderRadius: 8 },
@@ -433,7 +432,7 @@ const AddServiceForm = () => {
                       helperText={
                         formik.touched.timeSlots && formik.errors.timeSlots
                           ? formik.errors.timeSlots[index]?.endTime
-                          : ''
+                          : ""
                       }
                       InputProps={{
                         style: { borderRadius: 8 },
