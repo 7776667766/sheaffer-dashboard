@@ -1,18 +1,21 @@
 import React from "react";
-import { Box, Typography, Select, MenuItem, FormControl, InputLabel, } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+} from "@mui/material";
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import SendIcon from "@mui/icons-material/Send";
 import { useFormik } from "formik";
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from "react";
 import * as Yup from "yup";
 import {
-  confirmPasswordValidation,
-  emailValidation,
-  passwordValidation,
-  phoneValidation,
   requiredValidation,
 } from "@/utils/validation";
 
@@ -21,21 +24,29 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { getspecialistApi } from "store/specialist/services";
 
-
 const AddServiceForm = () => {
   const [selectedSpecialist, setSelectedSpecialist] = useState("");
   const dispatch = useDispatch();
   const router = useRouter();
   const { business } = useSelector((state) => state.business);
-  console.log(business)
+  console.log(business);
   const { specialist } = useSelector((state) => state.specialist);
-  console.log("data", specialist)
+  console.log("data", specialist);
 
   useEffect(() => {
     if (!specialist.specialistFetch) {
       dispatch(getspecialistApi({ data: business?.id }));
     }
   }, [dispatch, specialist.specialistFetch, business?.id]);
+
+  
+
+  useEffect(() => {
+    console.log("AddServiceForm Rendered with Specialist Data:", specialist.data);
+    setSelectedSpecialist(specialist);
+  }, [specialist]);
+
+
 
   const formik = useFormik({
     initialValues: {
@@ -47,15 +58,26 @@ const AddServiceForm = () => {
       specialistId: "",
       date: "",
       businessId: "",
-      timeSlots: [
+      "timeSlots": [
         {
-          day: "Monday",
-          startTime: "10:00",
-          endTime: "12:00",
-
+            "day": "Monday",
+            "startTime": "10:00",
+            "endTime": "12:00",
+            "available": true
         },
-
-      ],
+         {
+            "day": "Tuesday",
+            "startTime": "16:00",
+            "endTime": "22:00",
+            "available": true
+        },
+         {
+            "day": "Sunday",
+            "startTime": "12:00",
+            "endTime": "16:00",
+            "available": true
+        }
+    ],
     },
     validationSchema: Yup.object().shape({
       name: requiredValidation("Service Name"),
@@ -132,6 +154,8 @@ const AddServiceForm = () => {
                 }}
               />
             </Grid>
+
+
             <Grid item xs={12} md={12} lg={6}>
               <FormControl fullWidth>
                 <Typography
@@ -149,7 +173,6 @@ const AddServiceForm = () => {
                   onChange={(e) => setSelectedSpecialist(e.target.value)}
                   displayEmpty
                   inputProps={{
-                    "aria-label": "Select Specialist",
                     style: { borderRadius: 8 },
                   }}
                 >
@@ -161,7 +184,6 @@ const AddServiceForm = () => {
                 </Select>
               </FormControl>
             </Grid>
-
 
             <Grid item xs={12} md={12} lg={6}>
               {/* Example for 'description' field */}
@@ -225,8 +247,6 @@ const AddServiceForm = () => {
               />
             </Grid>
 
-
-
             <Grid item xs={12} md={12} lg={6}>
         {/* Updated code for 'price' field */}
         <Typography
@@ -269,10 +289,20 @@ const AddServiceForm = () => {
                 type="date"
                 name="date"
                 fullWidth
-                id="date"
-                {...formik.getFieldProps('date')}
-                error={formik.touched.date && formik.errors.date ? true : false}
-                helperText={formik.touched.date && formik.errors.date ? formik.errors.date : ''}
+                id="confirmPassword"
+                {...formik.getFieldProps("confirmPassword")}
+                error={
+                  formik.touched.confirmPassword &&
+                    formik.errors.confirmPassword
+                    ? true
+                    : false
+                }
+                helperText={
+                  formik.touched.confirmPassword &&
+                    formik.errors.confirmPassword
+                    ? formik.errors.confirmPassword
+                    : ""
+                }
                 InputProps={{
                   style: { borderRadius: 8 },
                 }}
@@ -285,8 +315,8 @@ const AddServiceForm = () => {
                 Time Slots
               </Typography>
               {formik.values.timeSlots.map((slot, index) => (
-                <Grid container spacing={2} key={index}>
-                  <Grid item xs={12} md={4}>
+                <Grid container spacing={6} key={index}>
+                  <Grid item xs={12} md={4} sx={{ mb: 3 }}>
                     {/* Day */}
                     <TextField
                       name={`timeSlots[${index}].day`}
@@ -305,6 +335,7 @@ const AddServiceForm = () => {
                           : ''
                       }
                       InputProps={{
+                        readOnly: true,
                         style: { borderRadius: 8 },
                       }}
                     />
@@ -314,7 +345,7 @@ const AddServiceForm = () => {
                     <TextField
                       name={`timeSlots[${index}].startTime`}
                       fullWidth
-                      label={`Start Time ${index + 1}`}
+                      label={"Start Time"}
                       {...formik.getFieldProps(`timeSlots[${index}].startTime`)}
                       error={
                         formik.touched.timeSlots && formik.errors.timeSlots
@@ -327,6 +358,7 @@ const AddServiceForm = () => {
                           : ''
                       }
                       InputProps={{
+                        readOnly: true,
                         style: { borderRadius: 8 },
                       }}
                     />
@@ -336,7 +368,7 @@ const AddServiceForm = () => {
                     <TextField
                       name={`timeSlots[${index}].endTime`}
                       fullWidth
-                      label={`End Time ${index + 1}`}
+                      label={"End Time"}
                       {...formik.getFieldProps(`timeSlots[${index}].endTime`)}
                       error={
                         formik.touched.timeSlots && formik.errors.timeSlots
@@ -349,6 +381,7 @@ const AddServiceForm = () => {
                           : ''
                       }
                       InputProps={{
+                          readOnly: true,
                         style: { borderRadius: 8 },
                       }}
                     />

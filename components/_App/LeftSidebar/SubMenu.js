@@ -48,6 +48,7 @@ const SubMenu = ({ item }) => {
         </div>
       </Link>
       {subnav &&
+        item.subNav &&
         item.subNav
           .filter((item) => typeof item === "object")
           .map((item, index) => {
