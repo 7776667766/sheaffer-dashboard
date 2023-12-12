@@ -49,21 +49,21 @@ const AddServiceForm = () => {
       businessId: "",
       timeSlots: [
         {
-          day: "",
-          startTime: "",
-          endTime: "",
-          available: false,
+          day: "Monday",
+          startTime: "10:00",
+          endTime: "12:00",
+
         },
+
       ],
     },
     validationSchema: Yup.object().shape({
       name: requiredValidation("Service Name"),
       description: requiredValidation("Service Description"),
       image: Yup.mixed().required("Image is required").test("fileSize", "File size is too large", (value) => {
-        // Assuming you want to set a maximum file size (e.g., 5MB)
         return value ? value.size <= 5 * 1024 * 1024 : true;
       }),
-            price: Yup.number().typeError("Price must be a number").required("Price is Required"),
+      price: Yup.number().typeError("Price must be a number").required("Price is Required"),
       typeId: requiredValidation("Type ID"),
       specialistId: requiredValidation("Specialist ID"),
       date: Yup.date().typeError("Invalid Date").required("Date is Required"),
@@ -90,10 +90,6 @@ const AddServiceForm = () => {
       );
     },
   });
-
-  const handleImageChange = (event) => {
-    formik.setFieldValue("image", event.currentTarget.files[0]);
-  };
 
   return (
     <>
@@ -202,112 +198,188 @@ const AddServiceForm = () => {
               />
             </Grid>
 
-            <Grid item xs={12} md={12} lg={6}>
-          <Typography as="h5" sx={{ fontWeight: '500', fontSize: '14px', mb: '12px' }}>
-            Upload Image
-          </Typography>
-          <input
-            type="file"
-            accept="image/*"
-            id="image"
-            name="image"
-            onChange={(event) => {
-              formik.setFieldValue('image', event.currentTarget.files[0]);
-            }}
-          />
-          {formik.touched.image && formik.errors.image && (
-            <Typography color="error">{formik.errors.image}</Typography>
-          )}
-        </Grid>
-
-            <Grid item xs={12} md={12} lg={6}>
+            <Grid item xs={6}>
               <Typography
-                as="h5"
+                component="label"
                 sx={{
                   fontWeight: "500",
                   fontSize: "14px",
-                  mb: "12px",
+                  mb: "10px",
+                  display: "block",
                 }}
               >
-                Password
+                Upload Image
               </Typography>
+
               <TextField
-                autoComplete="password"
-                name="password"
+                required
                 fullWidth
-                id="password"
-                label="Password"
-                {...formik.getFieldProps("password")}
-                error={
-                  formik.touched.password && formik.errors.password
-                    ? true
-                    : false
-                }
-                helperText={
-                  formik.touched.password && formik.errors.password
-                    ? formik.errors.password
-                    : ""
-                }
-                InputProps={{
-                  style: { borderRadius: 8 },
+                name="file"
+                type="file"
+                id="file"
+                autoComplete="file"
+                sx={{
+                  padding: '16px',
+                  borderRadius: '8px',
                 }}
               />
             </Grid>
 
-          <Grid item xs={12} md={12} lg={6}>
-          <Typography as="h5" sx={{ fontWeight: '500', fontSize: '14px', mb: '12px' }}>
-            Date
-          </Typography>
-          <TextField
-            autoComplete="date"
-            type="date"
-            name="date"
-            fullWidth
-            id="date"
-            {...formik.getFieldProps('date')}
-            error={formik.touched.date && formik.errors.date ? true : false}
-            helperText={formik.touched.date && formik.errors.date ? formik.errors.date : ''}
-            InputProps={{
-              style: { borderRadius: 8 },
-            }}
-          />
-        </Grid>
 
-        <Grid item xs={12}>
-  {/* Example for 'timeSlots' array */}
-  <Typography as="h5" sx={{ fontWeight: '500', fontSize: '14px', mb: '12px' }}>
-    Time Slots
-  </Typography>
-  {formik.values.timeSlots.map((slot, index) => (
-    <Grid container spacing={2} key={index}>
-      <Grid item xs={12} md={4}>
-        {/* Day */}
+
+            <Grid item xs={12} md={12} lg={6}>
+        {/* Updated code for 'price' field */}
+        <Typography
+          as="h5"
+          sx={{
+            fontWeight: "500",
+            fontSize: "14px",
+            mb: "12px",
+          }}
+        >
+          Price
+        </Typography>
         <TextField
-          name={`timeSlots[${index}].day`}
+          autoComplete="price"
+          name="price"
           fullWidth
-          label={`Day ${index + 1}`}
-          value={formik.values.timeSlots[index]?.day || ''}
-          onChange={formik.handleChange}
-          error={
-            formik.touched.timeSlots && formik.errors.timeSlots
-              ? !!formik.errors.timeSlots[index]?.day
-              : false
-          }
+          id="price"
+          label="Price"
+          type="number"
+          {...formik.getFieldProps("price")}
+          error={formik.touched.price && formik.errors.price ? true : false}
           helperText={
-            formik.touched.timeSlots && formik.errors.timeSlots
-              ? formik.errors.timeSlots[index]?.day
-              : ''
+            formik.touched.price && formik.errors.price
+              ? formik.errors.price
+              : ""
           }
           InputProps={{
             style: { borderRadius: 8 },
           }}
         />
       </Grid>
-      {/* ... (similar blocks for 'startTime', 'endTime', etc.) */}
-    </Grid>
-  ))}
-</Grid>
 
+
+            <Grid item xs={12} md={12} lg={6}>
+              <Typography as="h5" sx={{ fontWeight: '500', fontSize: '14px', mb: '12px' }}>
+                Date
+              </Typography>
+              <TextField
+                autoComplete="date"
+                type="date"
+                name="date"
+                fullWidth
+                id="date"
+                {...formik.getFieldProps('date')}
+                error={formik.touched.date && formik.errors.date ? true : false}
+                helperText={formik.touched.date && formik.errors.date ? formik.errors.date : ''}
+                InputProps={{
+                  style: { borderRadius: 8 },
+                }}
+              />
+            </Grid>
+
+            <Grid item xs={12}>
+              {/* Example for 'timeSlots' array */}
+              <Typography as="h5" sx={{ fontWeight: '500', fontSize: '14px', mb: '12px' }}>
+                Time Slots
+              </Typography>
+              {formik.values.timeSlots.map((slot, index) => (
+                <Grid container spacing={2} key={index}>
+                  <Grid item xs={12} md={4}>
+                    {/* Day */}
+                    <TextField
+                      name={`timeSlots[${index}].day`}
+                      fullWidth
+                      label={`Day ${index + 1}`}
+                      value={formik.values.timeSlots[index]?.day || ''}
+                      onChange={formik.handleChange}
+                      error={
+                        formik.touched.timeSlots && formik.errors.timeSlots
+                          ? !!formik.errors.timeSlots[index]?.day
+                          : false
+                      }
+                      helperText={
+                        formik.touched.timeSlots && formik.errors.timeSlots
+                          ? formik.errors.timeSlots[index]?.day
+                          : ''
+                      }
+                      InputProps={{
+                        style: { borderRadius: 8 },
+                      }}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} md={4}>
+                    <TextField
+                      name={`timeSlots[${index}].startTime`}
+                      fullWidth
+                      label={`Start Time ${index + 1}`}
+                      {...formik.getFieldProps(`timeSlots[${index}].startTime`)}
+                      error={
+                        formik.touched.timeSlots && formik.errors.timeSlots
+                          ? !!formik.errors.timeSlots[index]?.startTime
+                          : false
+                      }
+                      helperText={
+                        formik.touched.timeSlots && formik.errors.timeSlots
+                          ? formik.errors.timeSlots[index]?.startTime
+                          : ''
+                      }
+                      InputProps={{
+                        style: { borderRadius: 8 },
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={4}>
+                    {/* End Time */}
+                    <TextField
+                      name={`timeSlots[${index}].endTime`}
+                      fullWidth
+                      label={`End Time ${index + 1}`}
+                      {...formik.getFieldProps(`timeSlots[${index}].endTime`)}
+                      error={
+                        formik.touched.timeSlots && formik.errors.timeSlots
+                          ? !!formik.errors.timeSlots[index]?.endTime
+                          : false
+                      }
+                      helperText={
+                        formik.touched.timeSlots && formik.errors.timeSlots
+                          ? formik.errors.timeSlots[index]?.endTime
+                          : ''
+                      }
+                      InputProps={{
+                        style: { borderRadius: 8 },
+                      }}
+                    />
+                  </Grid>
+                </Grid>
+              ))}
+            </Grid>
+            <Grid item xs={12} textAlign="left">
+              <Button
+                type="submit"
+                variant="contained"
+                sx={{
+                  mt: 1,
+                  textTransform: "capitalize",
+                  borderRadius: "8px",
+                  fontWeight: "500",
+                  fontSize: "13px",
+                  padding: "12px 20px",
+                  color: "#fff !important",
+                }}
+              >
+                <SendIcon
+                  sx={{
+                    position: "relative",
+                    top: "-2px",
+                  }}
+                  className="mr-5px"
+                />{" "}
+                Add Services
+              </Button>
+            </Grid>
           </Grid>
         </Box>
       </Card>
