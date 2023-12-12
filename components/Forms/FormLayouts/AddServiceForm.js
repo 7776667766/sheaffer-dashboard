@@ -23,7 +23,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { getspecialistApi } from "store/specialist/services";
 import { getServicesTypeFunApi } from "store/service/services";
-
+import axios from "axios"
 
 const AddServiceForm = () => {
   const [selectedSpecialist, setSelectedSpecialist] = useState("");
@@ -54,7 +54,6 @@ const AddServiceForm = () => {
     }
   }, [dispatch, serviceType.serviceFetch, business?.id]);
 
-  const servicesArray = serviceType && serviceType[0] && Array.isArray(serviceType[0]) ? serviceType[0] : [];
 
 
   const formik = useFormik({
@@ -108,20 +107,13 @@ const AddServiceForm = () => {
     validationSchema: Yup.object().shape({
       name: requiredValidation("Service Name"),
       description: requiredValidation("Service Description"),
-      image: Yup.mixed().required("Image is required").test("fileSize", "File size is too large", (value) => {
-        return value ? value.size <= 5 * 1024 * 1024 : true;
-      }),
       price: Yup.number().typeError("Price must be a number").required("Price is Required"),
-      typeId: requiredValidation("Type ID"),
-      specialistId: requiredValidation("Specialist ID"),
       date: Yup.date().typeError("Invalid Date").required("Date is Required"),
-      businessId: requiredValidation("Business ID"),
       timeSlots: Yup.array().of(
         Yup.object().shape({
           day: requiredValidation("Day"),
           startTime: requiredValidation("Start Time"),
           endTime: requiredValidation("End Time"),
-          available: Yup.boolean().required("Availability is Required"),
         })
       ),
     }),
@@ -342,18 +334,12 @@ const AddServiceForm = () => {
                 type="date"
                 name="date"
                 fullWidth
-                id="confirmPassword"
-                {...formik.getFieldProps("confirmPassword")}
-                error={
-                  formik.touched.confirmPassword &&
-                    formik.errors.confirmPassword
-                    ? true
-                    : false
-                }
+                id="date"
+                {...formik.getFieldProps("date")}
+                error={formik.touched.price && formik.errors.date ? true : false}
                 helperText={
-                  formik.touched.confirmPassword &&
-                    formik.errors.confirmPassword
-                    ? formik.errors.confirmPassword
+                  formik.touched.date && formik.errors.date
+                    ? formik.errors.date
                     : ""
                 }
                 InputProps={{
@@ -363,14 +349,13 @@ const AddServiceForm = () => {
             </Grid>
 
             <Grid item xs={12}>
-              {/* Example for 'timeSlots' array */}
               <Typography as="h5" sx={{ fontWeight: '500', fontSize: '14px', mb: '12px' }}>
                 Time Slots
               </Typography>
               {formik.values.timeSlots.map((slot, index) => (
                 <Grid container spacing={6} key={index}>
                   <Grid item xs={12} md={4} sx={{ mb: 3 }}>
-                    {/* Day */}
+
                     <TextField
                       name={`timeSlots[${index}].day`}
                       fullWidth
@@ -418,7 +403,7 @@ const AddServiceForm = () => {
                     />
                   </Grid>
                   <Grid item xs={12} md={4}>
-                    {/* End Time */}
+                  
                     <TextField
                       name={`timeSlots[${index}].endTime`}
                       fullWidth
