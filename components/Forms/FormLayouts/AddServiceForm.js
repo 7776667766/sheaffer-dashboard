@@ -5,7 +5,6 @@ import {
   Select,
   MenuItem,
   FormControl,
-  InputLabel,
 } from "@mui/material";
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
@@ -23,15 +22,22 @@ import { addManagerFunApi } from "store/manager/services";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { getspecialistApi } from "store/specialist/services";
+import { getServicesTypeFunApi } from "store/service/services";
+
 
 const AddServiceForm = () => {
   const [selectedSpecialist, setSelectedSpecialist] = useState("");
+  const [selectedServices, setSelectedServices] = useState("");
+
   const dispatch = useDispatch();
   const router = useRouter();
   const { business } = useSelector((state) => state.business);
   console.log(business);
   const { specialist } = useSelector((state) => state.specialist);
-  console.log("data", specialist);
+  console.log("specialist data", specialist);
+  const { serviceType } = useSelector((state) => state.service);
+  console.log("service data", serviceType)
+
 
   useEffect(() => {
     if (!specialist.specialistFetch) {
@@ -39,13 +45,16 @@ const AddServiceForm = () => {
     }
   }, [dispatch, specialist.specialistFetch, business?.id]);
 
-  
 
   useEffect(() => {
-    console.log("AddServiceForm Rendered with Specialist Data:", specialist.data);
-    setSelectedSpecialist(specialist);
-  }, [specialist]);
+    if (!serviceType.dataFatched) {
+      dispatch(
+        getServicesTypeFunApi({ data: business?.id })
+      );
+    }
+  }, [dispatch, serviceType.serviceFetch, business?.id]);
 
+  const servicesArray = serviceType && serviceType[0] && Array.isArray(serviceType[0]) ? serviceType[0] : [];
 
 
   const formik = useFormik({
@@ -58,26 +67,43 @@ const AddServiceForm = () => {
       specialistId: "",
       date: "",
       businessId: "",
-      "timeSlots": [
+      timeSlots:  [
         {
-            "day": "Monday",
-            "startTime": "10:00",
-            "endTime": "12:00",
-            "available": true
+          "day": "Monday",
+          "startTime": "10:00",
+          "endTime": "12:00",
         },
-         {
-            "day": "Tuesday",
-            "startTime": "16:00",
-            "endTime": "22:00",
-            "available": true
+        {
+          "day": "Tuesday",
+          "startTime": "10:00",
+          "endTime": "12:00",
         },
-         {
-            "day": "Sunday",
-            "startTime": "12:00",
-            "endTime": "16:00",
-            "available": true
-        }
-    ],
+        {
+          "day": "Wednesday",
+          "startTime": "10:00",
+          "endTime": "12:00",
+        },
+        {
+          "day": "thursday",
+          "startTime": "10:00",
+          "endTime": "12:00",
+        },
+        {
+          "day": "Friday",
+          "startTime": "10:00",
+          "endTime": "12:00",
+        },
+        {
+          "day": "Saturday",
+          "startTime": "10:00",
+          "endTime": "12:00",
+        },
+        {
+          "day": "Sunday",
+          "startTime": "10:00",
+          "endTime": "12:00",
+        },
+      ],
     },
     validationSchema: Yup.object().shape({
       name: requiredValidation("Service Name"),
@@ -155,7 +181,6 @@ const AddServiceForm = () => {
               />
             </Grid>
 
-
             <Grid item xs={12} md={12} lg={6}>
               <FormControl fullWidth>
                 <Typography
@@ -184,9 +209,40 @@ const AddServiceForm = () => {
                 </Select>
               </FormControl>
             </Grid>
+            <Grid item xs={12} md={12} lg={6}>
+              <FormControl fullWidth>
+                <Typography
+                  as="h5"
+                  sx={{
+                    fontWeight: "500",
+                    fontSize: "14px",
+                    mb: "12px",
+                  }}
+                >
+                  Select Services
+                </Typography>
+                <Select
+                  value={selectedServices}
+                  onChange={(e) => setSelectedServices(e.target.value)}
+                  displayEmpty
+                  inputProps={{
+                    style: { borderRadius: 8 },
+                  }}
+                >
+                  <MenuItem value="" disabled>
+                    Select a service
+                  </MenuItem>
+                  {serviceType.data.map((service) => (
+                    <MenuItem key={service._id} value={service._id}>
+                      {service.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+
 
             <Grid item xs={12} md={12} lg={6}>
-              {/* Example for 'description' field */}
               <Typography
                 as="h5"
                 sx={{
@@ -248,38 +304,35 @@ const AddServiceForm = () => {
             </Grid>
 
             <Grid item xs={12} md={12} lg={6}>
-        {/* Updated code for 'price' field */}
-        <Typography
-          as="h5"
-          sx={{
-            fontWeight: "500",
-            fontSize: "14px",
-            mb: "12px",
-          }}
-        >
-          Price
-        </Typography>
-        <TextField
-          autoComplete="price"
-          name="price"
-          fullWidth
-          id="price"
-          label="Price"
-          type="number"
-          {...formik.getFieldProps("price")}
-          error={formik.touched.price && formik.errors.price ? true : false}
-          helperText={
-            formik.touched.price && formik.errors.price
-              ? formik.errors.price
-              : ""
-          }
-          InputProps={{
-            style: { borderRadius: 8 },
-          }}
-        />
-      </Grid>
-
-
+              <Typography
+                as="h5"
+                sx={{
+                  fontWeight: "500",
+                  fontSize: "14px",
+                  mb: "12px",
+                }}
+              >
+                Price
+              </Typography>
+              <TextField
+                autoComplete="price"
+                name="price"
+                fullWidth
+                id="price"
+                label="Price"
+                type="number"
+                {...formik.getFieldProps("price")}
+                error={formik.touched.price && formik.errors.price ? true : false}
+                helperText={
+                  formik.touched.price && formik.errors.price
+                    ? formik.errors.price
+                    : ""
+                }
+                InputProps={{
+                  style: { borderRadius: 8 },
+                }}
+              />
+            </Grid>
             <Grid item xs={12} md={12} lg={6}>
               <Typography as="h5" sx={{ fontWeight: '500', fontSize: '14px', mb: '12px' }}>
                 Date
@@ -345,7 +398,9 @@ const AddServiceForm = () => {
                     <TextField
                       name={`timeSlots[${index}].startTime`}
                       fullWidth
-                      label={"Start Time"}
+                      type="time"
+                      label={"start time"}
+
                       {...formik.getFieldProps(`timeSlots[${index}].startTime`)}
                       error={
                         formik.touched.timeSlots && formik.errors.timeSlots
@@ -358,7 +413,6 @@ const AddServiceForm = () => {
                           : ''
                       }
                       InputProps={{
-                        readOnly: true,
                         style: { borderRadius: 8 },
                       }}
                     />
@@ -368,7 +422,8 @@ const AddServiceForm = () => {
                     <TextField
                       name={`timeSlots[${index}].endTime`}
                       fullWidth
-                      label={"End Time"}
+                      type="time"
+                      label={"End time"}
                       {...formik.getFieldProps(`timeSlots[${index}].endTime`)}
                       error={
                         formik.touched.timeSlots && formik.errors.timeSlots
@@ -381,7 +436,6 @@ const AddServiceForm = () => {
                           : ''
                       }
                       InputProps={{
-                          readOnly: true,
                         style: { borderRadius: 8 },
                       }}
                     />

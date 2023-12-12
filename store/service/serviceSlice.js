@@ -44,7 +44,6 @@ const serviceSlice = createSlice({
         state.serviceType.error = action.payload;
         state.serviceType.dataFetch = true;
       });
-   
   },
 });
 
