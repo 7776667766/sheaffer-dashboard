@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+
 import { Box, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
 import IconButton from "@mui/material/IconButton";
@@ -8,7 +9,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
-import { useRouter } from "next/router";
+import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from "react-redux";
 import { getManagerFunApi } from "store/manager/services";
 import { CustomPaginationTable } from "@/components/Table/CustomPaginationTable";
@@ -18,6 +19,11 @@ const Manager = () => {
   const dispatch = useDispatch();
   const { managers } = useSelector((state) => state.manager);
   const { business } = useSelector((state) => state.business);
+  const router = useRouter();
+  const nextPage=(managerId)=>{
+   router.push('/edit-manager/');
+  }
+
 
   useEffect(() => {
     if (managers.managerFetch !== true) {
@@ -206,6 +212,7 @@ const Manager = () => {
                       size="small"
                       color="primary"
                       className="primary"
+                      onClick={()=>nextPage(managers.id)}
                     >
                       <DriveFileRenameOutlineIcon fontSize="inherit" />
                     </IconButton>
