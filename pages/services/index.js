@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { Box, Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Box, DialogContent,  Typography } from "@mui/material";
 import Card from "@mui/material/Card";
 import IconButton from "@mui/material/IconButton";
 import TableCell from "@mui/material/TableCell";
@@ -13,16 +13,15 @@ import Link from "next/link";
 import { CustomPaginationTable } from "@/components/Table/CustomPaginationTable";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllServiceFunApi } from "store/service/services";
-
+import TransitionsDialog from "@/components/UIElements/Modal/TransitionsDialog";
 
 const Services = () => {
-
-const dispatch=useDispatch();
-const { service,  } = useSelector((state) => state.service);
+  const dispatch = useDispatch();
+  const { service } = useSelector((state) => state.service);
   const { business } = useSelector((state) => state.business);
-
-
-
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   useEffect(() => {
     if (service.dataFatched !== true) {
@@ -32,12 +31,7 @@ const { service,  } = useSelector((state) => state.service);
         })
       );
     }
-  }, [
-    dispatch,
-    service.data,
-    service.dataFatched,
-    business?.id,
-  ]);
+  }, [dispatch, service.data, service.dataFatched, business?.id]);
 
   return (
     <>
@@ -173,7 +167,7 @@ const { service,  } = useSelector((state) => state.service);
               </TableCell>
             </>
           }
-          tableBodyData={(data , index) => (
+          tableBodyData={(data, index) => (
             <>
               <TableCell
                 sx={{
@@ -206,7 +200,6 @@ const { service,  } = useSelector((state) => state.service);
                   pb: "16px",
                 }}
               >
-            
                 <Avatar
                   alt="User"
                   src={data.image}
@@ -278,7 +271,15 @@ const { service,  } = useSelector((state) => state.service);
                       color="danger"
                       className="danger"
                     >
-                      <DeleteIcon fontSize="inherit" />
+                      <TransitionsDialog
+                        modelButton={<DeleteIcon fontSize="inherit" />}
+                      >
+                        <Typography>
+                          Are you sure want to delete ?
+                        </Typography>
+                       
+                        
+                      </TransitionsDialog>
                     </IconButton>
                   </Tooltip>
 

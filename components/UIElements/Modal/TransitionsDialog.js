@@ -13,7 +13,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function TransitionsDialog() {
+export default function TransitionsDialog({modelButton , children }) {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -25,29 +25,17 @@ export default function TransitionsDialog() {
   };
 
   return (
-    <Card
-      sx={{
-        boxShadow: "none",
-        borderRadius: "10px",
-        p: "25px",
-        mb: "15px",
-      }}
-    >
-      <Typography
-        as="h3"
-        sx={{
-          fontSize: 18,
-          fontWeight: 500,
-          mb: '10px'
-        }}
-      >
-        Transitions Dialog
-      </Typography>
+    < >
+     
 
       <div>
-        <Button variant="outlined" onClick={handleClickOpen}>
+        {modelButton!= null?  <div onClick={handleClickOpen}>
+          {modelButton}
+        </div>: <Button variant="outlined" onClick={handleClickOpen}>
           Slide in alert dialog
-        </Button>
+        </Button> }
+      
+       
         
         <Dialog
           open={open}
@@ -57,13 +45,11 @@ export default function TransitionsDialog() {
           aria-describedby="alert-dialog-slide-description"
         >
           <div className="bg-black">
-            <DialogTitle>{"Use Google's location service?"}</DialogTitle>
+           
+            <DialogTitle>{""}</DialogTitle>
 
             <DialogContent>
-              <DialogContentText id="alert-dialog-slide-description">
-                Let Google help apps determine location. This means sending anonymous
-                location data to Google, even when no apps are running.
-              </DialogContentText>
+              {children}
             </DialogContent>
 
             <DialogActions>
@@ -73,6 +59,6 @@ export default function TransitionsDialog() {
           </div>
         </Dialog>
       </div>
-    </Card>
+    </>
   );
 }
