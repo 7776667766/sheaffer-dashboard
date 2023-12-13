@@ -17,8 +17,8 @@ import { getspecialistApi } from "store/specialist/services";
 import { getServicesTypeFunApi } from "store/service/services";
 
 const AddServiceForm = () => {
-  const [selectedSpecialist, setSelectedSpecialist] = useState("");
-  const [selectedServices, setSelectedServices] = useState("");
+  const [selectedSpecialist, setSelectedSpecialist] = useState(null);
+  const [selectedServices, setSelectedServices] = useState(null);
 
   const dispatch = useDispatch();
   const router = useRouter();
@@ -39,23 +39,24 @@ const AddServiceForm = () => {
     if (!serviceType.dataFatched) {
       dispatch(getServicesTypeFunApi({ data: business?.id }));
     }
-  }, [dispatch, business?.id, serviceType.dataFatched]);
-
-  const servicesArray =
-    serviceType && serviceType[0] && Array.isArray(serviceType[0])
-      ? serviceType[0]
-      : [];
+  }, [
+    dispatch,
+    serviceType.serviceFetch,
+    business?.id,
+    serviceType.dataFatched,
+  ]);
 
   const formik = useFormik({
     initialValues: {
       name: "",
       description: "",
-      image: "",
+      image:
+        "https://www.hotelpetrarca.it/images/eventi/2022/pedicure-hotel-petrarca-terme.webp",
       price: "",
       typeId: "",
       specialistId: "",
       date: "",
-      businessId: "",
+      businessId: business?.id,
       timeSlots: [
         {
           day: "Monday",
@@ -102,33 +103,40 @@ const AddServiceForm = () => {
         .test("fileSize", "File size is too large", (value) => {
           return value ? value.size <= 5 * 1024 * 1024 : true;
         }),
+
+      typeId: requiredValidation("Type ID"),
+      specialistId: requiredValidation("Specialist ID"),
       price: Yup.number()
         .typeError("Price must be a number")
         .required("Price is Required"),
-      typeId: requiredValidation("Type ID"),
-      specialistId: requiredValidation("Specialist ID"),
       date: Yup.date().typeError("Invalid Date").required("Date is Required"),
-      businessId: requiredValidation("Business ID"),
       timeSlots: Yup.array().of(
         Yup.object().shape({
           day: requiredValidation("Day"),
           startTime: requiredValidation("Start Time"),
           endTime: requiredValidation("End Time"),
-          available: Yup.boolean().required("Availability is Required"),
         })
       ),
     }),
-    onSubmit: (values) => {
-      console.log("Handle Submit", values);
-      dispatch(
-        addManagerFunApi({
-          data: values,
-          onSuccess: () => {
-            console.log("Add Manager Success");
-            router.push("/manager/");
-          },
-        })
-      );
+    onSubmit: async (values) => {
+      try {
+        const formData = {
+          ...values,
+          specialistId: selectedSpecialist ? selectedSpecialist.id : "",
+          typeId: selectedServices ? selectedServices.id : "",
+        };
+        await dispatch(
+          addManagerFunApi({
+            data: formData,
+            onSuccess: () => {
+              console.log("Add Manager Success");
+              router.push("/manager/");
+            },
+          })
+        );
+      } catch (error) {
+        console.error("Error adding service:", error);
+      }
     },
   });
 
@@ -187,14 +195,19 @@ const AddServiceForm = () => {
                   Select Specialist
                 </Typography>
                 <Select
-                  value={selectedSpecialist}
-                  onChange={(e) => setSelectedSpecialist(e.target.value)}
+                  value={selectedSpecialist ? selectedSpecialist.id : ""}
+                  onChange={(e) => {
+                    const selected = specialist.find(
+                      (s) => s.id === e.target.value
+                    );
+                    setSelectedSpecialist(selected || null);
+                  }}
                   displayEmpty
                   inputProps={{
                     style: { borderRadius: 8 },
                   }}
                 >
-                  {specialist.map((s) => (
+                  {specialist?.map((s) => (
                     <MenuItem key={s.id} value={s.id}>
                       {s.name}
                     </MenuItem>
@@ -215,8 +228,13 @@ const AddServiceForm = () => {
                   Select Services
                 </Typography>
                 <Select
-                  value={selectedServices}
-                  onChange={(e) => setSelectedServices(e.target.value)}
+                  value={selectedServices ? selectedServices._id : ""}
+                  onChange={(e) => {
+                    const selected = serviceType.data.find(
+                      (service) => service._id === e.target.value
+                    );
+                    setSelectedServices(selected || null);
+                  }}
                   displayEmpty
                   inputProps={{
                     style: { borderRadius: 8 },
@@ -339,18 +357,14 @@ const AddServiceForm = () => {
                 type="date"
                 name="date"
                 fullWidth
-                id="confirmPassword"
-                {...formik.getFieldProps("confirmPassword")}
+                id="date"
+                {...formik.getFieldProps("date")}
                 error={
-                  formik.touched.confirmPassword &&
-                  formik.errors.confirmPassword
-                    ? true
-                    : false
+                  formik.touched.price && formik.errors.date ? true : false
                 }
                 helperText={
-                  formik.touched.confirmPassword &&
-                  formik.errors.confirmPassword
-                    ? formik.errors.confirmPassword
+                  formik.touched.date && formik.errors.date
+                    ? formik.errors.date
                     : ""
                 }
                 InputProps={{
@@ -360,7 +374,6 @@ const AddServiceForm = () => {
             </Grid>
 
             <Grid item xs={12}>
-              {/* Example for 'timeSlots' array */}
               <Typography
                 as="h5"
                 sx={{ fontWeight: "500", fontSize: "14px", mb: "12px" }}
@@ -370,7 +383,6 @@ const AddServiceForm = () => {
               {formik.values.timeSlots.map((slot, index) => (
                 <Grid container spacing={6} key={index}>
                   <Grid item xs={12} md={4} sx={{ mb: 3 }}>
-                    {/* Day */}
                     <TextField
                       name={`timeSlots[${index}].day`}
                       fullWidth
@@ -417,7 +429,6 @@ const AddServiceForm = () => {
                     />
                   </Grid>
                   <Grid item xs={12} md={4}>
-                    {/* End Time */}
                     <TextField
                       name={`timeSlots[${index}].endTime`}
                       fullWidth

@@ -9,7 +9,6 @@ export default function FormLayouts() {
 
   return (
     <>
-      {/* Page title */}
       <div className={styles.pageTitle}>
         <h1>Add Service Type</h1>
         <ul>
