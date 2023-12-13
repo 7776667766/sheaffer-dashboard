@@ -23,11 +23,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { getspecialistApi } from "store/specialist/services";
 import { getServicesTypeFunApi } from "store/service/services";
-import axios from "axios"
 
 const AddServiceForm = () => {
-  const [selectedSpecialist, setSelectedSpecialist] = useState("");
-  const [selectedServices, setSelectedServices] = useState("");
+  const [selectedSpecialist, setSelectedSpecialist] = useState(null);
+  const [selectedServices, setSelectedServices] = useState(null);
 
   const dispatch = useDispatch();
   const router = useRouter();
@@ -37,7 +36,6 @@ const AddServiceForm = () => {
   console.log("specialist data", specialist);
   const { serviceType } = useSelector((state) => state.service);
   console.log("service data", serviceType)
-
 
   useEffect(() => {
     if (!specialist.specialistFetch) {
@@ -54,19 +52,17 @@ const AddServiceForm = () => {
     }
   }, [dispatch, serviceType.serviceFetch, business?.id]);
 
-
-
   const formik = useFormik({
     initialValues: {
       name: "",
       description: "",
-      image: "",
+      image: "https://www.hotelpetrarca.it/images/eventi/2022/pedicure-hotel-petrarca-terme.webp",
       price: "",
       typeId: "",
       specialistId: "",
       date: "",
-      businessId: "",
-      timeSlots:  [
+      businessId: business?.id,
+      timeSlots: [
         {
           "day": "Monday",
           "startTime": "10:00",
@@ -117,17 +113,25 @@ const AddServiceForm = () => {
         })
       ),
     }),
-    onSubmit: (values) => {
-      console.log("Handle Submit", values);
-      dispatch(
-        addManagerFunApi({
-          data: values,
-          onSuccess: () => {
-            console.log("Add Manager Success");
-            router.push("/manager/");
-          },
-        })
-      );
+    onSubmit: async (values) => {
+      try {
+        const formData = {
+          ...values,
+          specialistId: selectedSpecialist ? selectedSpecialist.id : "",
+          typeId: selectedServices ? selectedServices.id : ""
+        };
+        await dispatch(
+          addManagerFunApi({
+            data: formData,
+            onSuccess: () => {
+              console.log("Add Manager Success");
+              router.push("/manager/");
+            },
+          })
+        );
+      } catch (error) {
+        console.error("Error adding service:", error);
+      }
     },
   });
 
@@ -186,14 +190,19 @@ const AddServiceForm = () => {
                   Select Specialist
                 </Typography>
                 <Select
-                  value={selectedSpecialist}
-                  onChange={(e) => setSelectedSpecialist(e.target.value)}
+                  value={selectedSpecialist ? selectedSpecialist.id : ""}
+                  onChange={(e) => {
+                    const selected = specialist.find(
+                      (s) => s.id === e.target.value
+                    );
+                    setSelectedSpecialist(selected || null);
+                  }}
                   displayEmpty
                   inputProps={{
                     style: { borderRadius: 8 },
                   }}
                 >
-                  {specialist.map((s) => (
+                  {specialist?.map((s) => (
                     <MenuItem key={s.id} value={s.id}>
                       {s.name}
                     </MenuItem>
@@ -214,8 +223,13 @@ const AddServiceForm = () => {
                   Select Services
                 </Typography>
                 <Select
-                  value={selectedServices}
-                  onChange={(e) => setSelectedServices(e.target.value)}
+                  value={selectedServices ? selectedServices._id : ""}
+                  onChange={(e) => {
+                    const selected = serviceType.data.find(
+                      (service) => service._id === e.target.value
+                    );
+                    setSelectedServices(selected || null);
+                  }}
                   displayEmpty
                   inputProps={{
                     style: { borderRadius: 8 },
@@ -403,7 +417,7 @@ const AddServiceForm = () => {
                     />
                   </Grid>
                   <Grid item xs={12} md={4}>
-                  
+
                     <TextField
                       name={`timeSlots[${index}].endTime`}
                       fullWidth
