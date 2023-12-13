@@ -8,7 +8,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
-import { useRouter } from "next/router";
+import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from "react-redux";
 import {
   getDeleteManagerFunApi,
@@ -22,6 +22,11 @@ const Manager = () => {
   const dispatch = useDispatch();
   const { managers } = useSelector((state) => state.manager);
   const { business } = useSelector((state) => state.business);
+  const router = useRouter();
+  const nextPage=(managerId)=>{
+   router.push('/edit-manager/');
+  }
+
 
   useEffect(() => {
     if (managers.managerFetch !== true) {
@@ -244,6 +249,7 @@ const Manager = () => {
                       size="small"
                       color="primary"
                       className="primary"
+                      onClick={()=>nextPage(managers.id)}
                     >
                       <DriveFileRenameOutlineIcon fontSize="inherit" />
                     </IconButton>

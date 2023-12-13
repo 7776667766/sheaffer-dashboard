@@ -16,7 +16,6 @@ import { getServicesTypeFunApi } from "store/service/services";
 import { CustomPaginationTable } from "@/components/Table/CustomPaginationTable";
 
 const ServicesType = () => {
-
   const { serviceType } = useSelector((state) => state.service);
   const dispatch = useDispatch();
 
@@ -25,10 +24,6 @@ const ServicesType = () => {
       dispatch(getServicesTypeFunApi());
     }
   }, [dispatch, serviceType.dataFatched, serviceType.serviceFetch]);
-
-
-
- 
 
   return (
     <>
@@ -85,94 +80,100 @@ const ServicesType = () => {
         <CustomPaginationTable
           isLoading={serviceType.isLoading}
           tableData={serviceType.data}
-          tableHeaderData={<><TableCell
-            sx={{
-              fontWeight: "500",
-              fontSize: "13px",
-              borderBottom: "1px solid #F7FAFF",
-              color: "#260944",
-              pt: "16px",
-              pb: "16px",
-            }}
-          >
-            Sr
-          </TableCell>
+          tableHeaderData={
+            <>
+              <TableCell
+                sx={{
+                  fontWeight: "500",
+                  fontSize: "13px",
+                  borderBottom: "1px solid #F7FAFF",
+                  color: "#260944",
+                  pt: "16px",
+                  pb: "16px",
+                }}
+              >
+                Sr
+              </TableCell>
 
-          <TableCell
-            sx={{
-              borderBottom: "1px solid #F7FAFF",
-              fontSize: "13px",
-              pt: "16px",
-              pb: "16px",
-            }}
-          >
-            Name
-          </TableCell>
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13px",
+                  pt: "16px",
+                  pb: "16px",
+                }}
+              >
+                Name
+              </TableCell>
 
-          <TableCell
-            align="right"
-            sx={{ borderBottom: "1px solid #F7FAFF" }}
-          >
-            Action
-          </TableCell></>}
-          tableBodyData={
-            (data, index)=> <><TableCell
-            sx={{
-              fontWeight: "500",
-              fontSize: "13px",
-              borderBottom: "1px solid #F7FAFF",
-              color: "#260944",
-              pt: "16px",
-              pb: "16px",
-            }}
-          >
-            {index}
-          </TableCell>
-
-          <TableCell
-            sx={{
-              borderBottom: "1px solid #F7FAFF",
-              fontSize: "13px",
-              pt: "16px",
-              pb: "16px",
-            }}
-          >
-            {data.name}
-          </TableCell>
-
-          <TableCell
-            align="right"
-            sx={{ borderBottom: "1px solid #F7FAFF" }}
-          >
-            <Box
-              sx={{
-                display: "inline-block",
-              }}
-            >
-              <Tooltip title="Remove" placement="top">
-                <IconButton
-                  aria-label="remove"
-                  size="small"
-                  color="danger"
-                  className="danger"
-                >
-                  <DeleteIcon fontSize="inherit" />
-                </IconButton>
-              </Tooltip>
-
-              <Tooltip title="Rename" placement="top">
-                <IconButton
-                  aria-label="rename"
-                  size="small"
-                  color="primary"
-                  className="primary"
-                >
-                  <DriveFileRenameOutlineIcon fontSize="inherit" />
-                </IconButton>
-              </Tooltip>
-            </Box>
-          </TableCell></>
+              <TableCell
+                align="right"
+                sx={{ borderBottom: "1px solid #F7FAFF" }}
+              >
+                Action
+              </TableCell>
+            </>
           }
+          tableBodyData={(data, index) => (
+            <>
+              <TableCell
+                sx={{
+                  fontWeight: "500",
+                  fontSize: "13px",
+                  borderBottom: "1px solid #F7FAFF",
+                  color: "#260944",
+                  pt: "16px",
+                  pb: "16px",
+                }}
+              >
+                {index}
+              </TableCell>
+
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13px",
+                  pt: "16px",
+                  pb: "16px",
+                }}
+              >
+                {data.name}
+              </TableCell>
+
+              <TableCell
+                align="right"
+                sx={{ borderBottom: "1px solid #F7FAFF" }}
+              >
+                <Box
+                  sx={{
+                    display: "inline-block",
+                  }}
+                >
+                  <Tooltip title="Remove" placement="top">
+                    <IconButton
+                      aria-label="remove"
+                      size="small"
+                      color="danger"
+                      className="danger"
+                    >
+                      <DeleteIcon fontSize="inherit" />
+                    </IconButton>
+                  </Tooltip>
+
+                  <Tooltip title="Rename" placement="top">
+                    <IconButton
+                      aria-label="rename"
+                      size="small"
+                      color="primary"
+                      className="primary"
+                    >
+                      <DriveFileRenameOutlineIcon fontSize="inherit" />
+                    </IconButton>
+                  </Tooltip>
+                </Box>
+              </TableCell>
+            </>
+          )}
         />
       </Card>
     </>

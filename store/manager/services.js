@@ -1,5 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { addManager, getDeleteManager, getManager } from "./constrants";
+import {
+  addManager,
+  getDeleteManager,
+  getManager,
+  editManager,
+} from "./constrants";
 import axios from "helper/api";
 import toast from "react-hot-toast";
 
@@ -42,7 +47,7 @@ export const addManagerFunApi = createAsyncThunk(
 );
 
 export const getManagerFunApi = createAsyncThunk(
-  "manager/getManager",
+  "manager/editManager",
   async ({ data, onSuccess }) => {
     try {
       const response = await axios.get(getManager(data));
@@ -86,10 +91,13 @@ export const getDeleteManagerFunApi = createAsyncThunk(
       const response = await axios.get(getDeleteManager(data));
       console.log("response in get Delete Manager => ", response.data);
       if (response.data.status === "success") {
-       toast.success("manager delete successfully")
+        toast.success("manager delete successfully");
         return data;
       } else {
-        console.log("Error response in get Delete manager Api => ", response.data);
+        console.log(
+          "Error response in get Delete manager Api => ",
+          response.data
+        );
         const err =
           response?.data?.message ||
           response?.message ||
