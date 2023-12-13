@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getServicesTypeFunApi } from "store/service/services";
 import { CustomPaginationTable } from "@/components/Table/CustomPaginationTable";
 
-const Services = () => {
+const ServicesType = () => {
 
   const { serviceType } = useSelector((state) => state.service);
   const dispatch = useDispatch();
@@ -24,7 +24,7 @@ const Services = () => {
     if (serviceType.dataFatched !== true) {
       dispatch(getServicesTypeFunApi());
     }
-  }, [dispatch, serviceType.serviceFetch]);
+  }, [dispatch, serviceType.dataFatched, serviceType.serviceFetch]);
 
 
 
@@ -179,4 +179,4 @@ const Services = () => {
   );
 };
 
-export default Services;
+export default ServicesType;

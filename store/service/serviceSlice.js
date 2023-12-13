@@ -1,28 +1,31 @@
-import {  addServicesTypeFunApi, addservicesFunApi, getAllServiceFunApi, getServicesTypeFunApi} from './services';
+import {
+  addServicesTypeFunApi,
+  addservicesFunApi,
+  getAllServiceFunApi,
+  getServicesTypeFunApi,
+} from "./services";
 import { createSlice } from "@reduxjs/toolkit";
-
 
 const serviceSlice = createSlice({
   name: "service",
   initialState: {
     serviceType: {
-        data: [],
-        isLoading: false,
-        error: null,
-        dataFatched: false,
-      },
-      service: {
-        data: [],
-        isLoading: false,
-        error: null,
-        dataFatched: false,
-      }
+      data: [],
+      isLoading: false,
+      error: null,
+      dataFatched: false,
+    },
+    service: {
+      data: [],
+      isLoading: false,
+      error: null,
+      dataFatched: false,
+    },
   },
 
   reducers: {},
 
   extraReducers: (builder) => {
-   
     builder
       .addCase(addservicesFunApi.pending, (state, action) => {
         state.service.isLoading = true;
@@ -37,10 +40,10 @@ const serviceSlice = createSlice({
         state.service.isLoading = false;
         state.service.error = action.payload;
       });
-      builder
+    builder
       .addCase(getAllServiceFunApi.pending, (state, action) => {
-       state.service.isLoading = true;
-       state.service.error = null;
+        state.service.isLoading = true;
+        state.service.error = null;
       })
       .addCase(getAllServiceFunApi.fulfilled, (state, action) => {
         state.service.isLoading = false;
@@ -52,13 +55,13 @@ const serviceSlice = createSlice({
         state.service.error = action.payload;
         state.service.dataFatched = true;
       });
-      builder
+    builder
       .addCase(addServicesTypeFunApi.pending, (state, action) => {
         state.serviceType.isLoading = true;
         state.serviceType.error = null;
       })
       .addCase(addServicesTypeFunApi.fulfilled, (state, action) => {
-        console.log("Add Services  Response", action.payload);
+        console.log("Add Services Type Response", action.payload);
         state.serviceType.isLoading = false;
         state.serviceType.data.push(action.payload);
       })
@@ -66,10 +69,10 @@ const serviceSlice = createSlice({
         state.serviceType.isLoading = false;
         state.serviceType.error = action.payload;
       });
-      builder
+    builder
       .addCase(getServicesTypeFunApi.pending, (state, action) => {
-       state.serviceType.isLoading = true;
-       state.serviceType.error = null;
+        state.serviceType.isLoading = true;
+        state.serviceType.error = null;
       })
       .addCase(getServicesTypeFunApi.fulfilled, (state, action) => {
         state.serviceType.isLoading = false;
@@ -81,7 +84,6 @@ const serviceSlice = createSlice({
         state.service.error = action.payload;
         state.service.dataFatched = true;
       });
-     
   },
 });
 

@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { Box, Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Box, DialogActions, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
 import IconButton from "@mui/material/IconButton";
 import TableCell from "@mui/material/TableCell";
@@ -10,9 +10,13 @@ import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
-import { getManagerFunApi } from "store/manager/services";
+import {
+  getDeleteManagerFunApi,
+  getManagerFunApi,
+} from "store/manager/services";
 import { CustomPaginationTable } from "@/components/Table/CustomPaginationTable";
 import Link from "next/link";
+import TransitionsDialog from "@/components/UIElements/Modal/TransitionsDialog";
 
 const Manager = () => {
   const dispatch = useDispatch();
@@ -28,6 +32,18 @@ const Manager = () => {
       );
     }
   }, [business?.id, dispatch, managers.managerFetch]);
+
+  const handleDelete = (managerId) => {
+    console.log(managerId, "note");
+    dispatch(getDeleteManagerFunApi(managerId));
+  };
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const handleClickOpen = () => {
+    setIsDialogOpen(false);
+  };
+  const handleClose = () => {
+    setIsDialogOpen(true);
+  };
 
   return (
     <>
@@ -186,18 +202,40 @@ const Manager = () => {
               >
                 <Box
                   sx={{
-                    display: "inline-block",
+                    display: "flex",
+                    justifyContent: "end",
                   }}
                 >
                   <Tooltip title="Remove" placement="top">
-                    <IconButton
-                      aria-label="remove"
-                      size="small"
-                      color="danger"
-                      className="danger"
+                    <TransitionsDialog
+                    
+                      modelButton={
+                        <IconButton
+                          aria-label="remove"
+                          size="small"
+                          color="danger"
+                          className="danger"
+                        >
+                          <DeleteIcon fontSize="inherit" />
+                        </IconButton>
+                      }
+                      submitButton={
+                        <Button onClick={() => handleDelete(data.id)}>
+                          Delete
+                        </Button>
+                      }
                     >
-                      <DeleteIcon fontSize="inherit" />
-                    </IconButton>
+
+                    <div>
+                      <img src="/images/icon/alert.png" width="50px" height="auto" alt="ok"/>
+
+                      <Typography>
+                       <b>Are you sure?</b> 
+                        </Typography>
+
+                      </div>
+
+                    </TransitionsDialog>
                   </Tooltip>
 
                   <Tooltip title="Rename" placement="top">

@@ -1,5 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { addManagerFunApi, getManagerFunApi } from "./services";
+import {
+  addManagerFunApi,
+  getDeleteManagerFunApi,
+  getManagerFunApi,
+} from "./services";
 
 const managerSlice = createSlice({
   name: "manager",
@@ -39,6 +43,21 @@ const managerSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload;
         state.managerFetch = true;
+      });
+    builder
+      .addCase(getDeleteManagerFunApi.pending, (state, action) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(getDeleteManagerFunApi.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.managers = state.managers.filter(
+          (manager) => manager.id !== action.payload
+        );
+      })
+      .addCase(getDeleteManagerFunApi.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
       });
   },
 });
