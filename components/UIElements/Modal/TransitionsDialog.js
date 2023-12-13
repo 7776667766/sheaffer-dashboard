@@ -13,7 +13,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function TransitionsDialog({modelButton , children }) {
+export default function TransitionsDialog({modelButton , submitButton, children }) {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -51,10 +51,10 @@ export default function TransitionsDialog({modelButton , children }) {
             <DialogContent>
               {children}
             </DialogContent>
-
+            
             <DialogActions>
-              <Button onClick={handleClose}>Disagree</Button>
-              <Button onClick={handleClose}>Agree</Button>
+              {submitButton !== null && submitButton}
+              <Button onClick={handleClose}>Cancel</Button>
             </DialogActions>
           </div>
         </Dialog>

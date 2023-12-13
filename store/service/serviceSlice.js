@@ -1,4 +1,4 @@
-import {  addservicesFunApi, getAllServiceFunApi, getServicesTypeFunApi} from './services';
+import {  addServicesTypeFunApi,  getAllServiceFunApi, getServicesTypeFunApi} from './services';
 import { createSlice } from "@reduxjs/toolkit";
 
 const serviceSlice = createSlice({
@@ -22,16 +22,16 @@ const serviceSlice = createSlice({
 
   extraReducers: (builder) => {
     builder
-      .addCase(addservicesFunApi.pending, (state, action) => {
+      .addCase(addServicesTypeFunApi.pending, (state, action) => {
         state.serviceType.isLoading = true;
         state.serviceType.error = null;
       })
-      .addCase(addservicesFunApi.fulfilled, (state, action) => {
+      .addCase(addServicesTypeFunApi.fulfilled, (state, action) => {
         console.log("Add Services  Response", action.payload);
         state.serviceType.isLoading = false;
         state.serviceType.data.push(action.payload);
       })
-      .addCase(addservicesFunApi.rejected, (state, action) => {
+      .addCase(addServicesTypeFunApi.rejected, (state, action) => {
         state.serviceType.isLoading = false;
         state.serviceType.error = action.payload;
       });
