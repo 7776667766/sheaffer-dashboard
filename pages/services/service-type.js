@@ -26,31 +26,9 @@ const Services = () => {
     }
   }, [dispatch, serviceType.serviceFetch]);
 
-<<<<<<< HEAD
-=======
-  // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-  };
-  // End Add Task Modal
->>>>>>> c7b32520302c59f8ae7eb226912eee48c095eb32
+ 
 
   return (
     <>

@@ -4,13 +4,14 @@ import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
+import TextareaAutosize from "@mui/material/TextareaAutosize";
 import SendIcon from "@mui/icons-material/Send";
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import * as Yup from "yup";
 import { requiredValidation } from "@/utils/validation";
 
-import { addManagerFunApi } from "store/manager/services";
+import { addservicesFunApi } from "store/service/services";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { getspecialistApi } from "store/specialist/services";
@@ -23,11 +24,9 @@ const AddServiceForm = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const { business } = useSelector((state) => state.business);
-  console.log(business);
   const { specialist } = useSelector((state) => state.specialist);
-  console.log("specialist data", specialist);
   const { serviceType } = useSelector((state) => state.service);
-  console.log("service data", serviceType);
+  console.log(serviceType)
 
   useEffect(() => {
     if (!specialist.specialistFetch) {
@@ -98,14 +97,6 @@ const AddServiceForm = () => {
     validationSchema: Yup.object().shape({
       name: requiredValidation("Service Name"),
       description: requiredValidation("Service Description"),
-      image: Yup.mixed()
-        .required("Image is required")
-        .test("fileSize", "File size is too large", (value) => {
-          return value ? value.size <= 5 * 1024 * 1024 : true;
-        }),
-
-      typeId: requiredValidation("Type ID"),
-      specialistId: requiredValidation("Specialist ID"),
       price: Yup.number()
         .typeError("Price must be a number")
         .required("Price is Required"),
@@ -123,14 +114,16 @@ const AddServiceForm = () => {
         const formData = {
           ...values,
           specialistId: selectedSpecialist ? selectedSpecialist.id : "",
-          typeId: selectedServices ? selectedServices.id : "",
+          typeId: selectedServices ? selectedServices.id : ""
         };
+
+        console.log(formData)
         await dispatch(
-          addManagerFunApi({
+          addservicesFunApi({
             data: formData,
             onSuccess: () => {
-              console.log("Add Manager Success");
-              router.push("/manager/");
+              console.log("Add Service Success");
+              router.push("/services/");
             },
           })
         );
@@ -228,10 +221,10 @@ const AddServiceForm = () => {
                   Select Services
                 </Typography>
                 <Select
-                  value={selectedServices ? selectedServices._id : ""}
+                  value={selectedServices ? selectedServices.id : ""}
                   onChange={(e) => {
                     const selected = serviceType.data.find(
-                      (service) => service._id === e.target.value
+                      (service) => service.id === e.target.value
                     );
                     setSelectedServices(selected || null);
                   }}
@@ -243,41 +236,38 @@ const AddServiceForm = () => {
                   <MenuItem value="" disabled>
                     Select a service
                   </MenuItem>
-                  {serviceType.data.map((service) => (
-                    <MenuItem key={service._id} value={service._id}>
+                  {serviceType?.data.map((service) => (
+                    <MenuItem key={service.id} value={service.id}>
                       {service.name}
                     </MenuItem>
                   ))}
                 </Select>
+
+
               </FormControl>
             </Grid>
+
 
             <Grid item xs={12} md={12} lg={6}>
               <Typography
                 as="h5"
-                sx={{
-                  fontWeight: "500",
-                  fontSize: "14px",
-                  mb: "12px",
-                }}
+                sx={{ fontWeight: "500", fontSize: "14px", mb: "12px" }}
               >
-                Description
+                Date
               </Typography>
               <TextField
-                autoComplete="description"
-                name="description"
+                autoComplete="date"
+                type="date"
+                name="date"
                 fullWidth
-                id="description"
-                label="Enter Description"
-                {...formik.getFieldProps("description")}
+                id="date"
+                {...formik.getFieldProps("date")}
                 error={
-                  formik.touched.description && formik.errors.description
-                    ? true
-                    : false
+                  formik.touched.price && formik.errors.date ? true : false
                 }
                 helperText={
-                  formik.touched.description && formik.errors.description
-                    ? formik.errors.description
+                  formik.touched.date && formik.errors.date
+                    ? formik.errors.date
                     : ""
                 }
                 InputProps={{
@@ -285,6 +275,7 @@ const AddServiceForm = () => {
                 }}
               />
             </Grid>
+
 
             <Grid item xs={6}>
               <Typography
@@ -345,34 +336,41 @@ const AddServiceForm = () => {
                 }}
               />
             </Grid>
-            <Grid item xs={12} md={12} lg={6}>
+            <Grid item xs={12}>
               <Typography
                 as="h5"
-                sx={{ fontWeight: "500", fontSize: "14px", mb: "12px" }}
+                sx={{
+                  fontWeight: "500",
+                  fontSize: "14px",
+                  mb: "12px",
+                }}
               >
-                Date
+                Description
               </Typography>
-              <TextField
-                autoComplete="date"
-                type="date"
-                name="date"
-                fullWidth
-                id="date"
-                {...formik.getFieldProps("date")}
+              <TextareaAutosize
+                autoComplete="description"
+                name="description"
+                id="description"
+                minRows={5} 
+                placeholder="Enter Description"
+                {...formik.getFieldProps("description")}
                 error={
-                  formik.touched.price && formik.errors.date ? true : false
+                  formik.touched.description && formik.errors.description
+                    ? true
+                    : false
                 }
-                helperText={
-                  formik.touched.date && formik.errors.date
-                    ? formik.errors.date
-                    : ""
-                }
-                InputProps={{
-                  style: { borderRadius: 8 },
+                style={{
+                  width: "100%",
+                  borderRadius: 8,
+                  padding: "8px",
                 }}
               />
+              {formik.touched.description && formik.errors.description && (
+                <Typography color="error" variant="body2">
+                  {formik.errors.description}
+                </Typography>
+              )}
             </Grid>
-
             <Grid item xs={12}>
               <Typography
                 as="h5"
