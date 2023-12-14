@@ -1,11 +1,9 @@
 import React from "react";
-import Grid from "@mui/material/Grid";
 import Link from "next/link";
 import styles from "@/styles/PageTitle.module.css";
-import AddManagerForm from "@/components/Forms/FormLayouts/AddManagerForm";
+import ManagerForm from "@/components/Forms/FormLayouts/ManagerForm";
 
-export default function FormLayouts() {
-  
+export default function AddManagerPage() {
   return (
     <>
       {/* Page title */}
@@ -19,7 +17,7 @@ export default function FormLayouts() {
         </ul>
       </div>
 
-    <AddManagerForm />
+      <ManagerForm />
     </>
   );
 }

@@ -48,7 +48,7 @@ const Layout = ({ children }) => {
     }
     setTimeout(() => {
       setLoading(false);
-    }, 2000);
+    }, 3000);
   }, [business, dispatch, isAuthenticated, otpVerified, role, router]);
 
   if (loading)

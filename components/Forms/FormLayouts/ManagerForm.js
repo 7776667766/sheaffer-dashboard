@@ -16,52 +16,56 @@ import {
   requiredValidation,
 } from "@/utils/validation";
 
-import { addManagerFunApi,editManagerFunApi } from "store/manager/services";
+import { addManagerFunApi, editManagerFunApi } from "store/manager/services";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 
-const AddManagerForm = () => {
+const ManagerForm = ({ formData, isEditMode }) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const { business } = useSelector((state) => state.business);
-  const {managers}=useSelector((state)=>state.manager);
-  const [initialValues, setInitialValue]=useState({
-    name: "",
-    email: "",
-    phone: "",
-    password: "",
-    confirmPassword: "",
-    businessId: business?.id,
-  });
 
-  const isEditMode = !!router.query.id;
+  const initialValues = isEditMode
+    ? {
+        ...formData,
+        businessId: business?.id,
+      }
+    : {
+        name: "",
+        email: "",
+        phone: "",
+        password: "",
+        confirmPassword: "",
+        businessId: business?.id,
+      };
 
-  useEffect(() => {
-  if (isEditMode){
-console.log(managers,"ok");
-const myData= managers.filter((manager)=>manager.id === router.query.id)
-if(myData.lenght ===1){
-  setInitialValue((prev) => ({...myData[0],...prev }))
-}
-console.log(myData , "note")
+  const validation = {
+    phone: phoneValidation(),
+    email: emailValidation(),
+    name: requiredValidation(),
+  };
+
+  if (!isEditMode) {
+    validation.password = passwordValidation();
+    validation.confirmPassword = confirmPasswordValidation();
   }
-  },  []);
 
   const formik = useFormik({
     initialValues: initialValues,
-    validationSchema: Yup.object({
-      phone: phoneValidation(),
-      password: passwordValidation(),
-      email: emailValidation(),
-      name: requiredValidation(),
-      confirmPassword: confirmPasswordValidation(),
-    }),
+    validationSchema: Yup.object(
+      validation
+      //   {
+      //   phone: phoneValidation(),
+      //   email: emailValidation(),
+      //   name: requiredValidation(),
+      //   password: passwordValidation(),
+      //   confirmPassword: confirmPasswordValidation(),
+      // }
+    ),
     onSubmit: (values) => {
-
-      if(isEditMode){
+      if (isEditMode) {
         dispatch(
           editManagerFunApi({
-            id: router.query.id,
             data: values,
             onSuccess: () => {
               console.log("Edit Manager Success");
@@ -69,7 +73,7 @@ console.log(myData , "note")
             },
           })
         );
-      }else{
+      } else {
         console.log("Handle Submit", values);
         dispatch(
           addManagerFunApi({
@@ -81,7 +85,6 @@ console.log(myData , "note")
           })
         );
       }
-    
     },
   });
 
@@ -110,9 +113,7 @@ console.log(myData , "note")
               </Typography>
               <TextField
                 autoComplete="name"
-                name="name"
                 fullWidth
-                id="name"
                 label="Enter Name"
                 {...formik.getFieldProps("name")}
                 error={formik.touched.name && formik.errors.name ? true : false}
@@ -139,11 +140,9 @@ console.log(myData , "note")
                 Email Address
               </Typography>
               <TextField
-                autoComplete="email-address"
-                name="emailAddress"
                 fullWidth
-                id="emailAddress"
                 label="Email Address"
+                autoComplete="email-address"
                 {...formik.getFieldProps("email")}
                 error={
                   formik.touched.email && formik.errors.email ? true : false
@@ -172,9 +171,7 @@ console.log(myData , "note")
               </Typography>
               <TextField
                 autoComplete="number"
-                name="phonenumber"
                 fullWidth
-                id="phonenumber"
                 label="Phone Number"
                 {...formik.getFieldProps("phone")}
                 error={
@@ -190,76 +187,75 @@ console.log(myData , "note")
                 }}
               />
             </Grid>
+            {!isEditMode && (
+              <>
+                <Grid item xs={12} md={12} lg={6}>
+                  <Typography
+                    as="h5"
+                    sx={{
+                      fontWeight: "500",
+                      fontSize: "14px",
+                      mb: "12px",
+                    }}
+                  >
+                    Password
+                  </Typography>
+                  <TextField
+                    autoComplete="password"
+                    fullWidth
+                    label="Password"
+                    {...formik.getFieldProps("password")}
+                    error={
+                      formik.touched.password && formik.errors.password
+                        ? true
+                        : false
+                    }
+                    helperText={
+                      formik.touched.password && formik.errors.password
+                        ? formik.errors.password
+                        : ""
+                    }
+                    InputProps={{
+                      style: { borderRadius: 8 },
+                    }}
+                  />
+                </Grid>
 
-            <Grid item xs={12} md={12} lg={6}>
-              <Typography
-                as="h5"
-                sx={{
-                  fontWeight: "500",
-                  fontSize: "14px",
-                  mb: "12px",
-                }}
-              >
-                Password
-              </Typography>
-              <TextField
-                autoComplete="password"
-                name="password"
-                fullWidth
-                id="password"
-                label="Password"
-                {...formik.getFieldProps("password")}
-                error={
-                  formik.touched.password && formik.errors.password
-                    ? true
-                    : false
-                }
-                helperText={
-                  formik.touched.password && formik.errors.password
-                    ? formik.errors.password
-                    : ""
-                }
-                InputProps={{
-                  style: { borderRadius: 8 },
-                }}
-              />
-            </Grid>
-
-            <Grid item xs={12} md={12} lg={6}>
-              <Typography
-                as="h5"
-                sx={{
-                  fontWeight: "500",
-                  fontSize: "14px",
-                  mb: "12px",
-                }}
-              >
-                Confirm Password
-              </Typography>
-              <TextField
-                autoComplete="confirm-password"
-                name="confirmPassword"
-                fullWidth
-                id="confirmPassword"
-                label="Confirm Password"
-                {...formik.getFieldProps("confirmPassword")}
-                error={
-                  formik.touched.confirmPassword &&
-                  formik.errors.confirmPassword
-                    ? true
-                    : false
-                }
-                helperText={
-                  formik.touched.confirmPassword &&
-                  formik.errors.confirmPassword
-                    ? formik.errors.confirmPassword
-                    : ""
-                }
-                InputProps={{
-                  style: { borderRadius: 8 },
-                }}
-              />
-            </Grid>
+                <Grid item xs={12} md={12} lg={6}>
+                  <Typography
+                    as="h5"
+                    sx={{
+                      fontWeight: "500",
+                      fontSize: "14px",
+                      mb: "12px",
+                    }}
+                  >
+                    Confirm Password
+                  </Typography>
+                  <TextField
+                    autoComplete="confirm-password"
+                    fullWidth
+                    label="Confirm Password"
+                    {...formik.getFieldProps("confirmPassword")}
+                    error={
+                      formik.touched.confirmPassword &&
+                      formik.errors.confirmPassword
+                        ? true
+                        : false
+                    }
+                    helperText={
+                      formik.touched.confirmPassword &&
+                      formik.errors.confirmPassword
+                        ? formik.errors.confirmPassword
+                        : ""
+                    }
+                    InputProps={{
+                      style: { borderRadius: 8 },
+                    }}
+                  />
+                </Grid>
+              </>
+            )}
 
             <Grid item xs={12} textAlign="left">
               <Button
@@ -282,7 +278,7 @@ console.log(myData , "note")
                   }}
                   className="mr-5px"
                 />{" "}
-                Add Manager
+                {isEditMode ? "Edit" : "Add"} Manager
               </Button>
             </Grid>
           </Grid>
@@ -292,4 +288,4 @@ console.log(myData , "note")
   );
 };
 
-export default AddManagerForm;
+export default ManagerForm;

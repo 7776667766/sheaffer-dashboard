@@ -4,7 +4,7 @@ import BasicForm from "@/components/Forms/FormLayouts/BasicForm";
 import BasicWithIcons from "@/components/Forms/FormLayouts/BasicWithIcons";
 import SignInForm from "@/components/Forms/FormLayouts/SignInForm";
 import SignUpForm from "@/components/Forms/FormLayouts/SignUpForm";
-import CustomStyles from "@/components/Forms/FormLayouts/AddManagerForm";
+import CustomStyles from "@/components/Forms/FormLayouts/ManagerForm";
 import Link from "next/link";
 import styles from "@/styles/PageTitle.module.css";
 
