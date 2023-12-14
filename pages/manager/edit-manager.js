@@ -1,6 +1,18 @@
 import { useFormik } from "formik";
+import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
+import Card from "@mui/material/Card";
+import Grid from "@mui/material/Grid";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import { Box, Typography } from "@mui/material"
 import * as Yup from "yup";
+import { addManagerFunApi } from "store/manager/services";
+import {
+  emailValidation,
+  phoneValidation,
+  requiredValidation,
+} from "@/utils/validation";
 
 const EditManger = () => {
 
@@ -13,13 +25,13 @@ const EditManger = () => {
           name: "",
           email: "",
           phone: "",
-          businessId: business?.id,
+          // businessId: business?.id,
         },
         validationSchema: Yup.object({
           phone: phoneValidation(),
           email: emailValidation(),
           name: requiredValidation(),
-          confirmPassword: confirmPasswordValidation(),
+         
         }),
         onSubmit: (values) => {
           console.log("Handle Submit", values);
@@ -90,7 +102,7 @@ const EditManger = () => {
               </Typography>
               <TextField
                 autoComplete="email-address"
-                name="emailAddress"
+                name="email"
                 fullWidth
                 id="emailAddress"
                 label="Email Address"
@@ -122,7 +134,7 @@ const EditManger = () => {
               </Typography>
               <TextField
                 autoComplete="number"
-                name="phonenumber"
+                name="phone"
                 fullWidth
                 id="phonenumber"
                 label="Phone Number"

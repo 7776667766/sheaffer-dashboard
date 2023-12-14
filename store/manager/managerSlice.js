@@ -22,7 +22,6 @@ const managerSlice = createSlice({
         state.error = null;
       })
       .addCase(addManagerFunApi.fulfilled, (state, action) => {
-        console.log("Add Manager Response", action.payload);
         state.isLoading = false;
         state.managers.push(action.payload);
       })
@@ -67,11 +66,9 @@ const managerSlice = createSlice({
       })
       .addCase(editManagerFunApi.fulfilled, (state, action) => {
         state.isLoading = false;
-        // state.managerFetch = true;
         state.managers = state.managers.map((ele) =>
           ele.id === action.payload.id ? action.payload : ele
         );
-        state.managers = action.payload;
       })
       .addCase(editManagerFunApi.rejected, (state, action) => {
         state.isLoading = false;
