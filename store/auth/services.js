@@ -189,6 +189,9 @@ export const resetPasswordFunApi = createAsyncThunk(
       console.log("response in resetPasswordFun => ", response.data);
       if (response.data.status === "success") {
         toast.success("Password Reset Successfully");
+        if (onSuccess) {
+          onSuccess();
+        }
       } else {
         console.log("Error response in resetPassword Api => ", response.data);
         const err =

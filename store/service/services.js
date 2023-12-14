@@ -11,10 +11,10 @@ import toast from "react-hot-toast";
 export const addservicesFunApi = createAsyncThunk(
   "Services/addservices",
   async ({ data, onSuccess }) => {
-    console.log("Add Services Type value", data);
+    console.log("Add Services value", data);
     try {
-      const response = await axios.post(addserviceTypeApi, data);
-      console.log("response in Add Service Type => ", response.data);
+      const response = await axios.post(addservicesApi, data);
+      console.log("response in Add Service => ", response.data);
       if (response.data.status === "success") {
         toast.success(response.data.message);
         if (onSuccess) {
@@ -22,10 +22,7 @@ export const addservicesFunApi = createAsyncThunk(
         }
         return response.data.data;
       } else {
-        console.log(
-          "Error response in add Services Type Api => ",
-          response.data
-        );
+        console.log("Error response in add Services Api => ", response.data);
         const err =
           response?.data?.message ||
           response?.message ||
@@ -35,7 +32,7 @@ export const addservicesFunApi = createAsyncThunk(
         throw new Error(err);
       }
     } catch (error) {
-      console.log("Error in Add Services Type Api ", error);
+      console.log("Error in Add Services Api ", error);
       let err =
         error?.response?.data?.message ||
         error?.message ||

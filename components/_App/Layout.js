@@ -48,7 +48,7 @@ const Layout = ({ children }) => {
     }
     setTimeout(() => {
       setLoading(false);
-    }, 1000);
+    }, 2000);
   }, [business, dispatch, isAuthenticated, otpVerified, role, router]);
 
   if (loading)
@@ -73,14 +73,15 @@ const Layout = ({ children }) => {
 
       <div className={`main-wrapper-content ${active && "active"}`}>
         {!(
-          router.pathname === "/authentication/sign-in" ||
-          router.pathname === "/authentication/sign-up" ||
-          router.pathname === "/authentication/forgot-password" ||
-          router.pathname === "/authentication/lock-screen" ||
-          router.pathname === "/authentication/confirm-mail" ||
-          router.pathname === "/authentication/verify-otp" ||
-          router.pathname === "/authentication/reset-password" ||
-          router.pathname === "/authentication/logout"
+          router.pathname.includes("/authentication/")
+          // router.pathname === "/authentication/sign-in" ||
+          // router.pathname === "/authentication/sign-up" ||
+          // router.pathname === "/authentication/forgot-password" ||
+          // router.pathname === "/authentication/lock-screen" ||
+          // router.pathname === "/authentication/confirm-mail" ||
+          // router.pathname === "/authentication/verify-otp" ||
+          // router.pathname === "/authentication/reset-password" ||
+          // router.pathname === "/authentication/logout"
         ) && (
           <>
             <TopNavbar toogleActive={toogleActive} />
@@ -93,14 +94,16 @@ const Layout = ({ children }) => {
           {children}
 
           {!(
-            router.pathname === "/authentication/sign-in" ||
-            router.pathname === "/authentication/sign-up" ||
-            router.pathname === "/authentication/forgot-password" ||
-            router.pathname === "/authentication/lock-screen" ||
-            router.pathname === "/authentication/confirm-mail" ||
-            router.pathname === "/authentication/verify-otp" ||
-            router.pathname === "/authentication/reset-password" ||
-            router.pathname === "/authentication/logout"
+            router.pathname.includes("/authentication/")
+
+            // router.pathname === "/authentication/sign-in" ||
+            // router.pathname === "/authentication/sign-up" ||
+            // router.pathname === "/authentication/forgot-password" ||
+            // router.pathname === "/authentication/lock-screen" ||
+            // router.pathname === "/authentication/confirm-mail" ||
+            // router.pathname === "/authentication/verify-otp" ||
+            // router.pathname === "/authentication/reset-password" ||
+            // router.pathname === "/authentication/logout"
           ) && <Footer />}
         </div>
       </div>

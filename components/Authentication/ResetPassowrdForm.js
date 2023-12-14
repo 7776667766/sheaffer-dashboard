@@ -22,7 +22,7 @@ const ResetPasswordForm = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const { isLoading } = useSelector((state) => state.auth);
-
+  const { id } = router.query;
   const formik = useFormik({
     initialValues: {
       password: "",
@@ -30,18 +30,17 @@ const ResetPasswordForm = () => {
     },
     validationSchema: Yup.object({
       password: passwordValidation(),
-      confirmPassword: confirmPasswordValidation("Confirm Password"),
+      confirmPassword: confirmPasswordValidation(
+        "password",
+        "Confirm Password"
+      ),
     }),
     onSubmit: (values) => {
-      if (router.query.data === undefined) {
-        toast.error("Invalid Reset Password Link");
-        router.push("/authentication/sign-in");
-      }
       dispatch(
         resetPasswordFunApi({
           data: {
             ...values,
-            phone: atob(router.query.data),
+            phone: atob(id),
           },
           onSuccess: () => {
             router.push("/authentication/sign-in");

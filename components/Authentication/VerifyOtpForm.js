@@ -44,7 +44,7 @@ const VerifyOtpForm = () => {
           onSuccess: () => {
             if (router.query.data != undefined) {
               router.push(
-                `/authentication/reset-password?data=${router.query.data}`
+                `/authentication/reset-password/${router.query.data}`
               );
             } else {
               if (role === "owner") {
