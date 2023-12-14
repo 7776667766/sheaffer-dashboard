@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
@@ -24,16 +24,31 @@ const AddManagerForm = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const { business } = useSelector((state) => state.business);
+  const {managers}=useSelector((state)=>state.manager);
+  const [initialValues, setInitialValue]=useState({
+    name: "",
+    email: "",
+    phone: "",
+    password: "",
+    confirmPassword: "",
+    businessId: business?.id,
+  });
+
   const isEditMode = !!router.query.id;
+
+  useEffect(() => {
+  if (isEditMode){
+console.log(managers,"ok");
+const myData= managers.filter((manager)=>manager.id === router.query.id)
+if(myData.lenght ===1){
+  setInitialValue((prev) => ({...myData[0],...prev }))
+}
+console.log(myData , "note")
+  }
+  },  []);
+
   const formik = useFormik({
-    initialValues: {
-      name: "",
-      email: "",
-      phone: "",
-      password: "",
-      confirmPassword: "",
-      businessId: business?.id,
-    },
+    initialValues: initialValues,
     validationSchema: Yup.object({
       phone: phoneValidation(),
       password: passwordValidation(),

@@ -14,7 +14,10 @@ const managerSlice = createSlice({
     isLoading: false,
     error: null,
   },
-  reducers: {},
+  reducers: {
+
+  
+  },
   extraReducers: (builder) => {
     builder
       .addCase(addManagerFunApi.pending, (state, action) => {

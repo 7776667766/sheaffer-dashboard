@@ -14,17 +14,20 @@ import { deleteManagerFunApi, getManagerFunApi } from "store/manager/services";
 import { CustomPaginationTable } from "@/components/Table/CustomPaginationTable";
 import Link from "next/link";
 import TransitionsDialog from "@/components/UIElements/Modal/TransitionsDialog";
-import Image from 'next/image';
-
+import Image from "next/image";
 
 const Manager = () => {
   const dispatch = useDispatch();
   const { managers } = useSelector((state) => state.manager);
   const { business } = useSelector((state) => state.business);
+
   const router = useRouter();
-  const nextPage = (managerId) => {
-    console.log("bilal");
-    router.push(`/FormLayouts/AddManagerForm?id=${managerId}`);
+
+  const nextPage = (id, event) => {
+    event.preventDefault();
+   
+    router.push(`/manager/edit-manager/${id}`);
+    console.log()
   };
 
   useEffect(() => {
@@ -222,10 +225,8 @@ const Manager = () => {
                           <DeleteIcon fontSize="inherit" />
                         </IconButton>
                       }
-                    
-                      submitButtonText='Delete'
+                      submitButtonText="Delete"
                       handleSubmit={() => handleDelete(data.id)}
-                 
                     >
                       <div style={{ textAlign: "center" }}>
                         <Image
@@ -253,7 +254,7 @@ const Manager = () => {
                       size="small"
                       color="primary"
                       className="primary"
-                      onClick={() => nextPage(managers.id)}
+                      onClick={(event) => nextPage(data.id, event)}
                     >
                       <DriveFileRenameOutlineIcon fontSize="inherit" />
                     </IconButton>
