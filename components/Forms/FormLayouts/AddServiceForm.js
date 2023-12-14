@@ -137,7 +137,7 @@ const AddServiceForm = () => {
             await dispatch(
               addservicesFunApi({
                 data: formData,
-                config,
+                // config,
                 onSuccess: () => {
                   console.log("Add Service Success");
                   router.push("/services/");
@@ -151,8 +151,6 @@ const AddServiceForm = () => {
       }
       );
   
-  
-
   return (
     <>
       <Card
@@ -283,7 +281,7 @@ const AddServiceForm = () => {
                 id="date"
                 {...formik.getFieldProps("date")}
                 error={
-                  formik.touched.price && formik.errors.date ? true : false
+                  formik.touched.date && formik.errors.date ? true : false
                 }
                 helperText={
                   formik.touched.date && formik.errors.date
