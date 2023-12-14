@@ -4,7 +4,8 @@ import Link from "next/link";
 import styles from "@/styles/PageTitle.module.css";
 import AddManagerForm from "@/components/Forms/FormLayouts/AddManagerForm";
 
-export default function FormEdit(){
+export default function FormEdit() {
+  
   return (
     <>
       {/* Page title */}
@@ -18,7 +19,7 @@ export default function FormEdit(){
         </ul>
       </div>
 
-    <AddManagerForm />
+      <AddManagerForm />
     </>
   );
 }

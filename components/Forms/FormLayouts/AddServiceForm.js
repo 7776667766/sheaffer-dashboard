@@ -1,5 +1,12 @@
 import React from "react";
-import { Box, Typography, Select, MenuItem, FormControl } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Select,
+  MenuItem,
+  FormControl,
+  Autocomplete,
+} from "@mui/material";
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
@@ -16,6 +23,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { getspecialistApi } from "store/specialist/services";
 import { getServicesTypeFunApi } from "store/service/services";
+import { top100Films } from "@/components/UIElements/Autocomplete/ComboBox";
 
 const AddServiceForm = () => {
   const [selectedSpecialist, setSelectedSpecialist] = useState(null);
@@ -27,13 +35,13 @@ const AddServiceForm = () => {
     console.log(file);
     setavatar(file);
   };
-
+  const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const router = useRouter();
   const { business } = useSelector((state) => state.business);
   const { specialist } = useSelector((state) => state.specialist);
   const { serviceType } = useSelector((state) => state.service);
-  console.log(serviceType)
+  console.log(serviceType);
 
   useEffect(() => {
     if (!specialist.specialistFetch) {
@@ -56,8 +64,7 @@ const AddServiceForm = () => {
     initialValues: {
       name: "",
       description: "",
-      image:
-        "",
+      image: "",
       price: "",
       typeId: "",
       specialistId: "",
@@ -118,40 +125,37 @@ const AddServiceForm = () => {
     }),
 
     onSubmit: async (values) => {
-          try {
-            const config = {
-              headers: {
-                "Content-type": "multipart/form-data"
-              }
-            };
-    
-            const formData = {
-              ...values,
-              specialistId: selectedSpecialist ? selectedSpecialist.id : "",
-              typeId: selectedServices ? selectedServices.id : "",
-              image: avatar,
-            };
-    
-            console.log(formData);
-    
-            await dispatch(
-              addservicesFunApi({
-                data: formData,
-                config,
-                onSuccess: () => {
-                  console.log("Add Service Success");
-                  router.push("/services/");
-                },
-              })
-            );
-          } catch (error) {
-            console.error("Error adding service:", error);
-          }
-        },
+      try {
+        const config = {
+          headers: {
+            "Content-type": "multipart/form-data",
+          },
+        };
+
+        const formData = {
+          ...values,
+          specialistId: selectedSpecialist ? selectedSpecialist.id : "",
+          typeId: selectedServices ? selectedServices.id : "",
+          image: avatar,
+        };
+
+        console.log(formData);
+
+        await dispatch(
+          addservicesFunApi({
+            data: formData,
+            config,
+            onSuccess: () => {
+              console.log("Add Service Success");
+              router.push("/services/");
+            },
+          })
+        );
+      } catch (error) {
+        console.error("Error adding service:", error);
       }
-      );
-  
-  
+    },
+  });
 
   return (
     <>
@@ -160,7 +164,7 @@ const AddServiceForm = () => {
           boxShadow: "none",
           borderRadius: "10px",
           p: "25px 20px 15px",
-          mb: "15px",
+          // mb: "15px",
         }}
       >
         <Box component="form" noValidate onSubmit={formik.handleSubmit}>
@@ -205,42 +209,32 @@ const AddServiceForm = () => {
                     mb: "12px",
                   }}
                 >
-                  Select Specialist
-                </Typography>
-                <Select
-                  value={selectedSpecialist ? selectedSpecialist.id : ""}
-                  onChange={(e) => {
-                    const selected = specialist.find(
-                      (s) => s.id === e.target.value
-                    );
-                    setSelectedSpecialist(selected || null);
-                  }}
-                  displayEmpty
-                  inputProps={{
-                    style: { borderRadius: 8 },
-                  }}
-                >
-                  {specialist?.map((s) => (
-                    <MenuItem key={s.id} value={s.id}>
-                      {s.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12} md={12} lg={6}>
-              <FormControl fullWidth>
-                <Typography
-                  as="h5"
-                  sx={{
-                    fontWeight: "500",
-                    fontSize: "14px",
-                    mb: "12px",
-                  }}
-                >
                   Select Services
                 </Typography>
-                <Select
+
+                <Autocomplete
+                  value={selectedServices || null}
+                  onChange={(event, newValue) => {
+                    setSelectedServices(newValue);
+                  }}
+                  options={serviceType?.data || []}
+                  getOptionLabel={(option) => option.name}
+                  renderInput={(params) => (
+                    <TextField
+                   
+                      {...params}
+                      label="Select a service"
+                      autoComplete={serviceType}
+                      inputProps={{
+                        ...params.inputProps,
+                        style: { borderRadius: 8 },
+                        
+                      }}
+                    />
+                  )}
+                />
+                {/* <Select
+                
                   value={selectedServices ? selectedServices.id : ""}
                   onChange={(e) => {
                     const selected = serviceType.data.find(
@@ -261,70 +255,61 @@ const AddServiceForm = () => {
                       {service.name}
                     </MenuItem>
                   ))}
-                </Select>
-
-
+                </Select> */}
               </FormControl>
             </Grid>
-
-
             <Grid item xs={12} md={12} lg={6}>
-              <Typography
-                as="h5"
-                sx={{ fontWeight: "500", fontSize: "14px", mb: "12px" }}
-              >
-                Date
-              </Typography>
-              <TextField
-                autoComplete="date"
-                type="date"
-                name="date"
-                fullWidth
-                id="date"
-                {...formik.getFieldProps("date")}
-                error={
-                  formik.touched.price && formik.errors.date ? true : false
-                }
-                helperText={
-                  formik.touched.date && formik.errors.date
-                    ? formik.errors.date
-                    : ""
-                }
-                InputProps={{
-                  style: { borderRadius: 8 },
-                }}
-              />
+              <FormControl fullWidth>
+                <Typography
+                  as="h5"
+                  sx={{
+                    fontWeight: "500",
+                    fontSize: "14px",
+                    mb: "12px",
+                  }}
+                >
+                  Select Specialist
+                </Typography>
+
+                <Autocomplete
+                  value={selectedSpecialist || null}
+                  onChange={(event, newValue) => {
+                    setSelectedSpecialist(newValue);
+                  }}
+                  options={specialist || []}
+                  getOptionLabel={(option) => option.name}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Select a specialist"
+                      inputProps={{
+                        ...params.inputProps,
+                        style: { borderRadius: 8 },
+                      }}
+                    />
+                  )}
+                />
+                {/* <Select
+                  value={selectedSpecialist ? selectedSpecialist.id : ""}
+                  onChange={(e) => {
+                    const selected = specialist.find(
+                      (s) => s.id === e.target.value
+                    );
+                    setSelectedSpecialist(selected || null);
+                  }}
+                  displayEmpty
+                  inputProps={{
+                    style: { borderRadius: 8 },
+                  }}
+                >
+                  {specialist?.map((s) => (
+                    <MenuItem key={s.id} value={s.id}>
+                      {s.name}
+                    </MenuItem>
+                  ))}
+                </Select> */}
+              </FormControl>
             </Grid>
-
-
-            <Grid item xs={6}>
-              <Typography
-                component="label"
-                sx={{
-                  fontWeight: '500',
-                  fontSize: '14px',
-                  mb: '10px',
-                  display: 'block',
-                }}
-              >
-                Upload Image
-              </Typography>
-
-              <input
-                required
-                fullWidth
-                type="file"
-                name="file"
-                onChange={handleFileChange}
-                id="file"
-                autoComplete="file"
-                sx={{
-                  padding: '16px',
-                  borderRadius: '8px',
-                }}
-              />
-            </Grid>
-
 
             <Grid item xs={12} md={12} lg={6}>
               <Typography
@@ -358,6 +343,95 @@ const AddServiceForm = () => {
                 }}
               />
             </Grid>
+
+            <Grid item xs={12} md={12} lg={6}>
+              <Typography
+                component="label"
+                sx={{
+                  fontWeight: "500",
+                  fontSize: "14px",
+                  mb: "10px",
+                  display: "block",
+                }}
+              >
+                Upload Image
+              </Typography>
+
+              <TextField
+                required
+                fullWidth
+                name="file"
+                type="file"
+                id="file"
+                autoComplete="file"
+              />
+            </Grid>
+            <Grid item xs={12} md={12} lg={6}>
+              <Typography
+                as="h5"
+                sx={{ fontWeight: "500", fontSize: "14px", mb: "12px" }}
+              >
+                Date
+              </Typography>
+              <TextField
+                autoComplete="date"
+                type="date"
+                name="date"
+                fullWidth
+                id="date"
+                {...formik.getFieldProps("date")}
+                error={
+                  formik.touched.price && formik.errors.date ? true : false
+                }
+                helperText={
+                  formik.touched.date && formik.errors.date
+                    ? formik.errors.date
+                    : ""
+                }
+                InputProps={{
+                  style: { borderRadius: 8 },
+                }}
+              />
+            </Grid>
+
+            {/* <Box mt={1} ml={2}>
+                <img
+                  src={user.image}
+                  alt="profile"
+                  className="borRadius100"
+                  width="50px"
+                  height="50px"
+                  
+                />
+              </Box> */}
+            {/* <Grid item xs={6}>
+              <Typography
+                component="label"
+                sx={{
+                  fontWeight: '500',
+                  fontSize: '14px',
+                  mb: '10px',
+                  display: 'block',
+                }}
+              >
+                Upload Image
+              </Typography>
+
+              <input
+                required
+                fullWidth
+                type="file"
+                name="file"
+                onChange={handleFileChange}
+                id="file"
+                autoComplete="file"
+                sx={{
+                  padding: '16px',
+                  borderRadius: '8px',
+                }}
+              />
+            </Grid> */}
+
             <Grid item xs={12}>
               <Typography
                 as="h5"
