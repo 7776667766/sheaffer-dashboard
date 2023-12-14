@@ -24,7 +24,7 @@ const Manager = () => {
   const router = useRouter();
   const nextPage = (managerId) => {
     console.log("bilal");
-    router.push("./manager/edit-manager");
+    router.push(`/FormLayouts/AddManagerForm?id=${managerId}`);
   };
 
   useEffect(() => {

@@ -5,6 +5,7 @@ import styles from "@/styles/PageTitle.module.css";
 import AddManagerForm from "@/components/Forms/FormLayouts/AddManagerForm";
 
 export default function FormLayouts() {
+  
   return (
     <>
       {/* Page title */}
@@ -18,7 +19,7 @@ export default function FormLayouts() {
         </ul>
       </div>
 
-      <AddManagerForm />
+    <AddManagerForm />
     </>
   );
 }
