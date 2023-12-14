@@ -8,12 +8,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getDeleteManagerFunApi,
-  getManagerFunApi,
-} from "store/manager/services";
+import { deleteManagerFunApi, getManagerFunApi } from "store/manager/services";
 import { CustomPaginationTable } from "@/components/Table/CustomPaginationTable";
 import Link from "next/link";
 import TransitionsDialog from "@/components/UIElements/Modal/TransitionsDialog";
@@ -23,10 +20,9 @@ const Manager = () => {
   const { managers } = useSelector((state) => state.manager);
   const { business } = useSelector((state) => state.business);
   const router = useRouter();
-  const nextPage=(managerId)=>{
-   router.push('/edit-manager/');
-  }
-
+  const nextPage = (managerId) => {
+    router.push("/edit-manager/");
+  };
 
   useEffect(() => {
     if (managers.managerFetch !== true) {
@@ -40,7 +36,7 @@ const Manager = () => {
 
   const handleDelete = (managerId) => {
     console.log(managerId, "note");
-    dispatch(getDeleteManagerFunApi(managerId));
+    dispatch(deleteManagerFunApi(managerId));
   };
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const handleClickOpen = () => {
@@ -213,7 +209,6 @@ const Manager = () => {
                 >
                   <Tooltip title="Remove" placement="top">
                     <TransitionsDialog
-                    
                       modelButton={
                         <IconButton
                           aria-label="remove"
@@ -230,16 +225,18 @@ const Manager = () => {
                         </Button>
                       }
                     >
+                      <div>
+                        <img
+                          src="/images/icon/alert.png"
+                          width="50px"
+                          height="auto"
+                          alt="ok"
+                        />
 
-                    <div>
-                      <img src="/images/icon/alert.png" width="50px" height="auto" alt="ok"/>
-
-                      <Typography>
-                       <b>Are you sure?</b> 
+                        <Typography>
+                          <b>Are you sure?</b>
                         </Typography>
-
                       </div>
-
                     </TransitionsDialog>
                   </Tooltip>
 
@@ -249,7 +246,7 @@ const Manager = () => {
                       size="small"
                       color="primary"
                       className="primary"
-                      onClick={()=>nextPage(managers.id)}
+                      onClick={() => nextPage(managers.id)}
                     >
                       <DriveFileRenameOutlineIcon fontSize="inherit" />
                     </IconButton>

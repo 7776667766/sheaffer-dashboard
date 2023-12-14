@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
   addManagerFunApi,
-  getDeleteManagerFunApi,
-  // editManagerFunApi,
+  deleteManagerFunApi,
+  editManagerFunApi,
   getManagerFunApi,
 } from "./services";
 
@@ -46,38 +46,38 @@ const managerSlice = createSlice({
         state.managerFetch = true;
       });
     builder
-      .addCase(getDeleteManagerFunApi.pending, (state, action) => {
+      .addCase(deleteManagerFunApi.pending, (state, action) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(getDeleteManagerFunApi.fulfilled, (state, action) => {
+      .addCase(deleteManagerFunApi.fulfilled, (state, action) => {
         state.isLoading = false;
         state.managers = state.managers.filter(
           (manager) => manager.id !== action.payload
         );
       })
-      .addCase(getDeleteManagerFunApi.rejected, (state, action) => {
+      .addCase(deleteManagerFunApi.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
       });
-    // builder
-    // .addCase(editManagerFunApi.pending, (state, action) => {
-    //   state.isLoading = true;
-    //   state.error = null;
-    // })
-    // .addCase(editManagerFunApi.fulfilled, (state, action) => {
-    //   state.isLoading = false;
-    //   // state.managerFetch = true;
-    //   state.managers = state.managers.map((ele) =>
-    //   ele.id === action.payload.id ? action.payload : ele
-    // );
-    //   state.managers = action.payload;
-    // })
-    // .addCase(editManagerFunApi.rejected, (state, action) => {
-    //   state.isLoading = false;
-    //   state.error = action.payload;
-    //   state.managerFetch = true;
-    // });
+    builder
+      .addCase(editManagerFunApi.pending, (state, action) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(editManagerFunApi.fulfilled, (state, action) => {
+        state.isLoading = false;
+        // state.managerFetch = true;
+        state.managers = state.managers.map((ele) =>
+          ele.id === action.payload.id ? action.payload : ele
+        );
+        state.managers = action.payload;
+      })
+      .addCase(editManagerFunApi.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+        state.managerFetch = true;
+      });
   },
 });
 
