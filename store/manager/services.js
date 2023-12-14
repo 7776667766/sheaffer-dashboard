@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { addManager, getManager,editManager } from "./constrants";
+import { addManager, getManager,editManagerApi } from "./constrants";
 import axios from "helper/api";
 import toast from "react-hot-toast";
 
@@ -82,7 +82,7 @@ export const editManagerFunApi = createAsyncThunk(
   async ({ data, onSuccess }) => {
     console.log("Add manager value", data);
     try {
-      const response = await axios.put(editManager, data);
+      const response = await axios.post(editManagerApi(id), data);
       console.log("response in edit Manager => ", response.data);
       if (response.data.status === "success") {
         toast.success(response.data.message);
@@ -91,6 +91,7 @@ export const editManagerFunApi = createAsyncThunk(
         }
         return response.data.data;
       } else {
+        
         console.log("Error response in edit manager Api => ", response.data);
         const err =
           response?.data?.message ||

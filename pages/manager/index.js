@@ -21,7 +21,8 @@ const Manager = () => {
   const { business } = useSelector((state) => state.business);
   const router = useRouter();
   const nextPage=(managerId)=>{
-   router.push('/edit-manager/');
+    console.log('bilal')
+   router.push("./manager/edit-manager");
   }
 
 
