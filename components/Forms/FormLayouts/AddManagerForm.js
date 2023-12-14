@@ -6,6 +6,7 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import SendIcon from "@mui/icons-material/Send";
 import { useFormik } from "formik";
+
 import * as Yup from "yup";
 import {
   confirmPasswordValidation,
@@ -15,7 +16,7 @@ import {
   requiredValidation,
 } from "@/utils/validation";
 
-import { addManagerFunApi } from "store/manager/services";
+import { addManagerFunApi,editManagerFunApi } from "store/manager/services";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 
@@ -23,7 +24,7 @@ const AddManagerForm = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const { business } = useSelector((state) => state.business);
-
+  const isEditMode = !!router.query.id;
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -41,16 +42,31 @@ const AddManagerForm = () => {
       confirmPassword: confirmPasswordValidation(),
     }),
     onSubmit: (values) => {
-      console.log("Handle Submit", values);
-      dispatch(
-        addManagerFunApi({
-          data: values,
-          onSuccess: () => {
-            console.log("Add Manager Success");
-            router.push("/manager/");
-          },
-        })
-      );
+
+      if(isEditMode){
+        dispatch(
+          editManagerFunApi({
+            id: router.query.id,
+            data: values,
+            onSuccess: () => {
+              console.log("Edit Manager Success");
+              router.push("/manager/");
+            },
+          })
+        );
+      }else{
+        console.log("Handle Submit", values);
+        dispatch(
+          addManagerFunApi({
+            data: values,
+            onSuccess: () => {
+              console.log("Add Manager Success");
+              router.push("/manager/");
+            },
+          })
+        );
+      }
+    
     },
   });
 

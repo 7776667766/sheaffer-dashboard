@@ -49,9 +49,10 @@ export const addManagerFunApi = createAsyncThunk(
 export const editManagerFunApi = createAsyncThunk(
   "manager/editManager",
   async ({ data, onSuccess }) => {
+    const { id, ...restOfData } = data;
     console.log("Edit manager value", data);
     try {
-      const response = await axios.post(editManagerApi(), data);
+      const response = await axios.post(editManagerApi(id), restOfData);
       console.log("response in edit Manager => ", response.data);
       if (response.data.status === "success") {
         toast.success(response.data.message);
