@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, DialogActions, Typography } from "@mui/material";
+import { Box, DialogActions, Stack, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
 import IconButton from "@mui/material/IconButton";
 import TableCell from "@mui/material/TableCell";
@@ -14,6 +14,8 @@ import { deleteManagerFunApi, getManagerFunApi } from "store/manager/services";
 import { CustomPaginationTable } from "@/components/Table/CustomPaginationTable";
 import Link from "next/link";
 import TransitionsDialog from "@/components/UIElements/Modal/TransitionsDialog";
+import Image from 'next/image';
+
 
 const Manager = () => {
   const dispatch = useDispatch();
@@ -220,22 +222,26 @@ const Manager = () => {
                           <DeleteIcon fontSize="inherit" />
                         </IconButton>
                       }
-                      submitButton={
-                        <Button onClick={() => handleDelete(data.id)}>
-                          Delete
-                        </Button>
-                      }
+                    
+                      submitButtonText='Delete'
+                      handleSubmit={() => handleDelete(data.id)}
+                 
                     >
-                      <div>
-                        <img
+                      <div style={{ textAlign: "center" }}>
+                        <Image
                           src="/images/icon/alert.png"
-                          width="50px"
-                          height="auto"
+                          width={150}
+                          height={150}
                           alt="ok"
                         />
 
-                        <Typography>
-                          <b>Are you sure?</b>
+                        <Typography sx={{ fontSize: 18 }}>
+                          <b>Are You Sure You Want To Delete ?</b>
+                          <br />
+                          <span style={{ fontSize: 14 }}>
+                            You are deleting this data & this action is
+                            irreversible
+                          </span>
                         </Typography>
                       </div>
                     </TransitionsDialog>
