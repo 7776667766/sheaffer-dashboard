@@ -3,6 +3,7 @@ import API from "axios";
 export const requestHandler = {
   Headers: {
     "Content-Type": "application/json",
+    "Content-type": "multipart/form-data",
     Accept: "application/json",
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "*", // GET, POST, PUT, DELETE, OPTIONS
