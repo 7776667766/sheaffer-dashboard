@@ -20,6 +20,13 @@ import { getServicesTypeFunApi } from "store/service/services";
 const AddServiceForm = () => {
   const [selectedSpecialist, setSelectedSpecialist] = useState(null);
   const [selectedServices, setSelectedServices] = useState(null);
+  const [avatar, setavatar] = useState(null);
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    console.log(file);
+    setavatar(file);
+  };
 
   const dispatch = useDispatch();
   const router = useRouter();
@@ -50,7 +57,7 @@ const AddServiceForm = () => {
       name: "",
       description: "",
       image:
-        "https://www.hotelpetrarca.it/images/eventi/2022/pedicure-hotel-petrarca-terme.webp",
+        "",
       price: "",
       typeId: "",
       specialistId: "",
@@ -109,29 +116,42 @@ const AddServiceForm = () => {
         })
       ),
     }),
-    onSubmit: async (values) => {
-      try {
-        const formData = {
-          ...values,
-          specialistId: selectedSpecialist ? selectedSpecialist.id : "",
-          typeId: selectedServices ? selectedServices.id : ""
-        };
 
-        console.log(formData)
-        await dispatch(
-          addservicesFunApi({
-            data: formData,
-            onSuccess: () => {
-              console.log("Add Service Success");
-              router.push("/services/");
-            },
-          })
-        );
-      } catch (error) {
-        console.error("Error adding service:", error);
+    onSubmit: async (values) => {
+          try {
+            const config = {
+              headers: {
+                "Content-type": "multipart/form-data"
+              }
+            };
+    
+            const formData = {
+              ...values,
+              specialistId: selectedSpecialist ? selectedSpecialist.id : "",
+              typeId: selectedServices ? selectedServices.id : "",
+              image: avatar,
+            };
+    
+            console.log(formData);
+    
+            await dispatch(
+              addservicesFunApi({
+                data: formData,
+                config,
+                onSuccess: () => {
+                  console.log("Add Service Success");
+                  router.push("/services/");
+                },
+              })
+            );
+          } catch (error) {
+            console.error("Error adding service:", error);
+          }
+        },
       }
-    },
-  });
+      );
+  
+  
 
   return (
     <>
@@ -281,28 +301,30 @@ const AddServiceForm = () => {
               <Typography
                 component="label"
                 sx={{
-                  fontWeight: "500",
-                  fontSize: "14px",
-                  mb: "10px",
-                  display: "block",
+                  fontWeight: '500',
+                  fontSize: '14px',
+                  mb: '10px',
+                  display: 'block',
                 }}
               >
                 Upload Image
               </Typography>
 
-              <TextField
+              <input
                 required
                 fullWidth
-                name="file"
                 type="file"
+                name="file"
+                onChange={handleFileChange}
                 id="file"
                 autoComplete="file"
                 sx={{
-                  padding: "16px",
-                  borderRadius: "8px",
+                  padding: '16px',
+                  borderRadius: '8px',
                 }}
               />
             </Grid>
+
 
             <Grid item xs={12} md={12} lg={6}>
               <Typography
@@ -351,7 +373,7 @@ const AddServiceForm = () => {
                 autoComplete="description"
                 name="description"
                 id="description"
-                minRows={5} 
+                minRows={5}
                 placeholder="Enter Description"
                 {...formik.getFieldProps("description")}
                 error={
