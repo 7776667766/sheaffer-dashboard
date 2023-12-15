@@ -31,7 +31,7 @@ export default function Profile() {
       >
         <Grid item xs={12} md={12} lg={12} xl={4}>
           {/* ProfileContent */}
-          <ProfileContent />
+          {/* <ProfileContent /> */}
 
           {/* ImpressionGoalConversions */}
           {/* <ImpressionGoalConversions /> */}
