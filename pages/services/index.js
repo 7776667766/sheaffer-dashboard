@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, DialogContent,  Typography } from "@mui/material";
+import { Box, DialogContent, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
 import IconButton from "@mui/material/IconButton";
 import TableCell from "@mui/material/TableCell";
@@ -19,6 +19,7 @@ const Services = () => {
   const dispatch = useDispatch();
   const { service } = useSelector((state) => state.service);
   const { business } = useSelector((state) => state.business);
+  const { role } = useSelector((state) => state.auth);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -64,25 +65,27 @@ const Services = () => {
             My Services
           </Typography>
 
-          <Link href="/services/add-service">
-            <Button
-              variant="contained"
-              sx={{
-                textTransform: "capitalize",
-                borderRadius: "8px",
-                fontWeight: "500",
-                fontSize: "13px",
-                padding: "12px 20px",
-                color: "#fff !important",
-              }}
-            >
-              <AddIcon
-                sx={{ position: "relative", top: "-1px" }}
-                className="mr-5px"
-              />
-              Add Service
-            </Button>
-          </Link>
+          {(role === "owner" || role === "manager") && (
+            <Link href="/services/add-service">
+              <Button
+                variant="contained"
+                sx={{
+                  textTransform: "capitalize",
+                  borderRadius: "8px",
+                  fontWeight: "500",
+                  fontSize: "13px",
+                  padding: "12px 20px",
+                  color: "#fff !important",
+                }}
+              >
+                <AddIcon
+                  sx={{ position: "relative", top: "-1px" }}
+                  className="mr-5px"
+                />
+                Add Service
+              </Button>
+            </Link>
+          )}
         </Box>
 
         <CustomPaginationTable
@@ -274,11 +277,7 @@ const Services = () => {
                       <TransitionsDialog
                         modelButton={<DeleteIcon fontSize="inherit" />}
                       >
-                        <Typography>
-                          Are you sure want to delete ?
-                        </Typography>
-                       
-                        
+                        <Typography>Are you sure want to delete ?</Typography>
                       </TransitionsDialog>
                     </IconButton>
                   </Tooltip>
