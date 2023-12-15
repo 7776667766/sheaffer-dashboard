@@ -17,13 +17,18 @@ import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import * as Yup from "yup";
 import { requiredValidation } from "@/utils/validation";
-
+import { Checkbox} from "@material-ui/core";
 import { addservicesFunApi } from "store/service/services";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { getspecialistApi } from "store/specialist/services";
 import { getServicesTypeFunApi } from "store/service/services";
 import { top100Films } from "@/components/UIElements/Autocomplete/ComboBox";
+import dynamic from "next/dynamic";
+import { CheckBox } from "@mui/icons-material";
+const RichTextEditor = dynamic(() => import("@mantine/rte"), {
+  ssr: false,
+});
 
 const AddServiceForm = () => {
   const [selectedSpecialist, setSelectedSpecialist] = useState(null);
@@ -208,7 +213,7 @@ const AddServiceForm = () => {
                     mb: "12px",
                   }}
                 >
-                  Select Services
+                  Service Type
                 </Typography>
 
                 <Autocomplete
@@ -265,7 +270,7 @@ const AddServiceForm = () => {
                     mb: "12px",
                   }}
                 >
-                  Select Specialist
+                  Specialist
                 </Typography>
 
                 <Autocomplete
@@ -369,7 +374,7 @@ const AddServiceForm = () => {
                 as="h5"
                 sx={{ fontWeight: "500", fontSize: "14px", mb: "12px" }}
               >
-                Date
+                Time Slot
               </Typography>
               <TextField
                 autoComplete="date"
@@ -441,29 +446,16 @@ const AddServiceForm = () => {
               >
                 Description
               </Typography>
-              <TextareaAutosize
-                autoComplete="description"
-                name="description"
-                id="description"
-                minRows={5}
-                placeholder="Enter Description"
-                {...formik.getFieldProps("description")}
-                error={
-                  formik.touched.description && formik.errors.description
-                    ? true
-                    : false
-                }
-                style={{
-                  width: "100%",
-                  borderRadius: 8,
-                  padding: "8px",
-                }}
+
+              <RichTextEditor
+                id="rte"
+                controls={[
+                  ["bold", "italic", "underline", "link", "image"],
+                  ["unorderedList", "h1", "h2", "h3", "h4", "h5", "h6"],
+                  ["sup", "sub"],
+                  ["alignLeft", "alignCenter", "alignRight"],
+                ]}
               />
-              {formik.touched.description && formik.errors.description && (
-                <Typography color="error" variant="body2">
-                  {formik.errors.description}
-                </Typography>
-              )}
             </Grid>
             <Grid item xs={12}>
               <Typography
@@ -475,7 +467,19 @@ const AddServiceForm = () => {
               {formik.values.timeSlots.map((slot, index) => (
                 <Grid container spacing={6} key={index}>
                   <Grid item xs={12} md={4} sx={{ mb: 3 }}>
-                    <TextField
+                    {slot.days.map((day, dayIndex) => (
+                      <div key={dayIndex}>
+                        <Checkbox
+                          name={`timeSlots[${index}].days[${dayIndex}]`}
+                          checked={
+                            formik.values.timeSlots[index]?.slot.days?.[dayIndex] || false
+                          }
+                          onChange={formik.handleChange}
+                        />
+                        {day}
+                      </div>
+                    ))}
+                    {/* <TextField
                       name={`timeSlots[${index}].day`}
                       fullWidth
                       label={`Day ${index + 1}`}
@@ -495,7 +499,7 @@ const AddServiceForm = () => {
                         readOnly: true,
                         style: { borderRadius: 8 },
                       }}
-                    />
+                    /> */}
                   </Grid>
 
                   <Grid item xs={12} md={4}>
