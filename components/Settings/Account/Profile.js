@@ -1,6 +1,7 @@
 import * as React from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
+import { useState } from "react";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -13,29 +14,65 @@ import {
 } from "@/utils/validation";
 import { useDispatch, useSelector } from "react-redux";
 import { updateProfileFunApi } from "store/auth/services";
-
 export default function Profile() {
+
+  const [avatar, setavatar] = useState(null);
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+
+    if (!file) {
+      setavatar(null);
+      return false;
+    } else {
+      const type = file.type.split("/")[0];
+      if (type !== "image") {
+        toast.error("Please select an image");
+        setavatar(null);
+        console.log("File False", file);
+        event.target.value = null;
+        return false;
+      } else {
+        console.log("file true", file);
+        setavatar(file);
+      }
+    }
+  };
+
   const {user}= useSelector(
     (state) => state.auth
   );
-  console.log(user);
+ 
+
   const dispatch=useDispatch()
 
   const formik = useFormik({
     initialValues: {
-      name: user.name,
-      email: user.email,
-      phone: user.phone,
-      image: user.image,
+      name: "ahmad",
+      image: "",
     },
     validationSchema: Yup.object({
       name: requiredValidation(),
-      email: emailValidation(),
-      phone: phoneValidation(),
     }),
-    onSubmit: (values) => {
-      console.log("Handle Submit", values);
-      dispatch(updateProfileFunApi(values))
+    onSubmit: async (values) => {
+      if (avatar === null) {
+        toast.error("Please select an image");
+        return false;
+      }
+      try {
+        const formData = {
+          ...values,
+          image: avatar,
+        };
+        console.log(formData);
+
+        dispatch(
+          updateProfileFunApi({
+            data: formData,
+          })
+        );
+      } catch (error) {
+        console.error("Error adding service:", error);
+      }
     },
   });
 
@@ -92,67 +129,9 @@ export default function Profile() {
               />
             </Grid>
 
-            <Grid item xs={12} sm={6}>
-              <Typography
-                component="label"
-                sx={{
-                  fontWeight: "500",
-                  fontSize: "14px",
-                  mb: "10px",
-                  display: "block",
-                }}
-              >
-                Email Address
-              </Typography>
+    
 
-              <TextField
-                fullWidth
-                id="email"
-                name="email"
-                disabled
-                {...formik.getFieldProps("email")}
-                error={
-                  formik.touched.email && formik.errors.email ? true : false
-                }
-                helperText={
-                  formik.touched.email && formik.errors.email
-                    ? formik.errors.email
-                    : ""
-                }
-              />
-            </Grid>
-
-            <Grid item xs={12}>
-              <Typography
-                component="label"
-                sx={{
-                  fontWeight: "500",
-                  fontSize: "14px",
-                  mb: "10px",
-                  display: "block",
-                }}
-              >
-                Phone Number
-              </Typography>
-
-              <TextField
-                fullWidth
-                id="phone"
-                name="phone"
-                disabled
-                {...formik.getFieldProps("phone")}
-                error={
-                  formik.touched.phone && formik.errors.phone ? true : false
-                }
-                helperText={
-                  formik.touched.phone && formik.errors.phone
-                    ? formik.errors.phone
-                    : ""
-                }
-              />
-            </Grid>
-
-            <Grid item xs={12}>
+            <Grid item xs={12} md={12} lg={6}>
               <Typography
                 component="label"
                 sx={{
@@ -171,18 +150,9 @@ export default function Profile() {
                 name="file"
                 type="file"
                 id="file"
-                autoComplete="file"
+                accept="image/*"
+                onChange={handleFileChange}
               />
-
-              <Box mt={1}>
-                <img
-                  src={user.image}
-                  alt="profile"
-                  className="borRadius100"
-                  width="50px"
-                  height="50px"
-                />
-              </Box>
             </Grid>
           </Grid>
 
