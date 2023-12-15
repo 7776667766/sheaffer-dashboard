@@ -44,7 +44,7 @@ export default function Profile() {
 
   const formik = useFormik({
     initialValues: {
-      name: "ahmad",
+      name: user?.name || "",
       image: "",
     },
     validationSchema: Yup.object({
