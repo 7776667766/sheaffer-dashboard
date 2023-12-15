@@ -11,6 +11,7 @@ import {
   updateprofileApi,
 } from "./constrants";
 import toast from "react-hot-toast";
+import axiosImage from "helper/api-image";
 
 export const loginFunApi = createAsyncThunk(
   "auth/login",
@@ -264,7 +265,7 @@ export const updateProfileFunApi = createAsyncThunk(
   async (data) => {
     console.log(data);
     try {
-      const response = await axios.post(updateprofileApi, data);
+      const response = await axiosImage.post(updateprofileApi, data);
       console.log("response in updateprofileFun => ", response.data);
       if (response.data.status === "success") {
         toast.success("Update Profile Successfully");

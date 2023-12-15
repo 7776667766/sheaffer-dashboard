@@ -155,12 +155,6 @@ const AddServiceForm = () => {
         return false;
       }
       try {
-        // const config = {
-        //   headers: {
-        //     "Content-type": "multipart/form-data",
-        //   },
-        // };
-
         const formData = {
           ...values,
           specialistId: selectedSpecialist ? selectedSpecialist.id : "",
