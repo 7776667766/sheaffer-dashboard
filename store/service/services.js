@@ -51,6 +51,7 @@ export const getAllServiceFunApi = createAsyncThunk(
   "services/All Service",
   async (data) => {
     try {
+
       const response = await axios.post(getAllServiceApi, data);
       console.log("response in get All Service => ", response.data);
       if (response.data.status === "success") {
