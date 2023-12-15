@@ -18,6 +18,7 @@ import TransitionsDialog from "@/components/UIElements/Modal/TransitionsDialog";
 const Services = () => {
   const dispatch = useDispatch();
   const { service } = useSelector((state) => state.service);
+  console.log(service)
   const { business } = useSelector((state) => state.business);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -32,6 +33,11 @@ const Services = () => {
       );
     }
   }, [dispatch, service.data, service.dataFatched, business?.id]);
+
+
+
+
+
 
   return (
     <>
