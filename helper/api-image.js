@@ -3,6 +3,7 @@ import API from "axios";
 export const requestHandler = {
   Headers: {
     "Content-Type": "application/json",
+    "Content-type": "multipart/form-data",
     Accept: "application/json",
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "*", // GET, POST, PUT, DELETE, OPTIONS
@@ -10,12 +11,12 @@ export const requestHandler = {
   },
 };
 
-const axios = API.create({
+const axiosImage = API.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   headers: requestHandler.Headers,
 });
 
-axios.interceptors.request.use((request) => {
+axiosImage.interceptors.request.use((request) => {
   const token = localStorage.getItem("token");
   if (token) {
     request.headers.Authorization = `Bearer ${token}`;
@@ -23,4 +24,4 @@ axios.interceptors.request.use((request) => {
   return request;
 });
 
-export default axios;
+export default axiosImage;

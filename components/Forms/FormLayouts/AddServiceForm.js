@@ -141,10 +141,9 @@ const AddServiceForm = () => {
 
         console.log(formData);
 
-        await dispatch(
+        dispatch(
           addservicesFunApi({
             data: formData,
-            // config,
             onSuccess: () => {
               console.log("Add Service Success");
               router.push("/services/");
@@ -362,6 +361,7 @@ const AddServiceForm = () => {
                 type="file"
                 id="file"
                 autoComplete="file"
+                onChange={handleFileChange}
               />
             </Grid>
             <Grid item xs={12} md={12} lg={6}>
