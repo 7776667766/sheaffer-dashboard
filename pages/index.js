@@ -48,7 +48,6 @@ export default function ECommerce() {
     setOpen(false);
   };
 
-
   useEffect(() => {
     if (business && !business.businessFetch)
       dispatch(getMyBussinessFunApi({ data: business?.id }));
@@ -64,7 +63,6 @@ export default function ECommerce() {
     },
   ];
 
-  
   return (
     <>
       {/* Page title */}
@@ -82,14 +80,12 @@ export default function ECommerce() {
                   <ListItem disableGutters key={index}>
                     <ListItemButton onClick={() => {}}>
                       <ListItemAvatar>
-                        <Avatar sx={{ bgcolor: "", color: "" }}>
-                          {/* <PersonIcon /> */}
-                        </Avatar>
+                        <Avatar src={data.image} alt={data.title} />
                       </ListItemAvatar>
                       <ListItemText primary={data.title} />
                     </ListItemButton>
                   </ListItem>
-                ))} 
+                ))}
               </List>
             </Dialog>
           </li>
@@ -116,7 +112,7 @@ export default function ECommerce() {
             <Box
               sx={{
                 display: "flex",
-                justifyContent: "left",
+                justifyContent: "space-between",
                 alignItems: "center",
                 mb: "15px",
               }}
@@ -124,7 +120,7 @@ export default function ECommerce() {
               <Box>
                 <Typography
                   variant="h4"
-                  sx={{ fontSize: 15, fontWeight: 700, mb: "5px" }}
+                  sx={{ fontSize: 25, fontWeight: 600, mb: "5px" }}
                 >
                   <ul
                     style={{
@@ -133,13 +129,26 @@ export default function ECommerce() {
                       paddingLeft: "0px",
                     }}
                   >
-                    <li>Name</li>
-                    <li>Description</li>
-                    <li>Email</li>
-                    <li>Social icons</li>
-                    <li>Address</li>
-                    <li>Images</li>
-                    phone
+                     <li>{business.name}</li>
+                    <li style={{ fontSize: "15px", fontWeight: 500, mb: "5px" }}>{business.description}</li>
+                    <li style={{ fontSize: "15px", fontWeight: 500, mb: "5px" }}>{business.email}</li>
+                    {business.socialLinks &&
+                      business.socialLinks.map((socialLink, index) => (
+                        <span key={index}>
+                          <a
+                            href={socialLink.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{ fontSize: "15px", fontWeight: 500, mb: "5px" , marginRight:'15px'}}
+                          >
+                            {socialLink.name}
+                          </a>
+                        </span>
+                      ))}
+                      <li style={{ fontSize: "15px", fontWeight: 500, mb: "5px" }}>{business.phone}</li>
+                    <li style={{ fontSize: "20px", fontWeight: 600, mb: "5px" }}>{business.address}</li>
+                    
+
                   </ul>
                 </Typography>
               </Box>
@@ -149,34 +158,17 @@ export default function ECommerce() {
                   <ul
                     style={{
                       listStyle: "none",
-                      marginLeft: "35px",
-                      lineHeight: "35px",
                     }}
                   >
-                    <li>{business.name}</li>
-                    <li>{business.description}</li>
-                    <li>{business.email}</li>
-                    {business.socialLinks &&
-                      business.socialLinks.map((socialLink, index) => (
-                        <span key={index}>
-                          <a
-                            href={socialLink.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            style={{ marginRight: "12px" }}
-                          >
-                            {socialLink.name}
-                          </a>
-                        </span>
-                      ))}
-                    <li>{business.address}</li>
+                   
 
-                    <li style={{ height: "50px" }}>
+                    <li>
                       <Image
                         src={business.images[0]}
                         alt="ok"
-                        width={50}
-                        height={50}
+                        width={100}
+                        height={100}
+                        style={{ borderRadius: "10px" }}
                       />
                     </li>
                   </ul>
