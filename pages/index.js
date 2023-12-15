@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
 import Link from "next/link";
 import styles from "@/styles/PageTitle.module.css";
@@ -15,10 +15,56 @@ import RecentOrders from "@/components/Dashboard/eCommerce/RecentOrders";
 import BestSellingProducts from "@/components/Dashboard/eCommerce/BestSellingProducts";
 import LiveVisitsOnOurSite from "@/components/Dashboard/eCommerce/LiveVisitsOnOurSite";
 import UserList from "./users";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  Avatar,
+  Box,
+  Card,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemButton,
+  ListItemText,
+  Typography,
+} from "@mui/material";
+import Image from "next/image";
+import Button from "@mui/material/Button";
+import { getMyBussinessFunApi } from "store/business/services";
 
 export default function ECommerce() {
   const { role } = useSelector((state) => state.auth);
+  const { business } = useSelector((state) => state.business);
+  console.log(business, "done");
+  const dispatch = useDispatch();
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+
+  useEffect(() => {
+    if (business && !business.businessFetch)
+      dispatch(getMyBussinessFunApi({ data: business?.id }));
+  }, [dispatch, business?.businessFetch, business?.id]);
+  const businessList = [
+    {
+      title: "Business 1",
+      image: "",
+    },
+    {
+      title: "Business 2",
+      image: "",
+    },
+  ];
+
+  
   return (
     <>
       {/* Page title */}
@@ -26,15 +72,119 @@ export default function ECommerce() {
         <h1>MAKELY</h1>
         <ul>
           <li>
-            <Link href="/">Dashboard</Link>
+            <Button variant="contained" onClick={handleClickOpen}>
+              Sync Business
+            </Button>
+            <Dialog open={open} onClose={handleClose}>
+              <DialogTitle> Select Your Business </DialogTitle>
+              <List sx={{ pt: 0 }}>
+                {businessList.map((data, index) => (
+                  <ListItem disableGutters key={index}>
+                    <ListItemButton onClick={() => {}}>
+                      <ListItemAvatar>
+                        <Avatar sx={{ bgcolor: "", color: "" }}>
+                          {/* <PersonIcon /> */}
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText primary={data.title} />
+                    </ListItemButton>
+                  </ListItem>
+                ))} 
+              </List>
+            </Dialog>
           </li>
-          <li style={{ textTransform: "capitalize" }}>{role}</li>
+
+          {/* <li>
+            <Link href="/">Dashboard</Link>
+          </li> */}
+          {/* <li style={{ textTransform: "capitalize" }}>{role}</li> */}
         </ul>
       </div>
 
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 2 }}>
         <Grid item xs={12} md={12} lg={12} xl={8}>
           {/* Features */}
+
+          <Card
+            sx={{
+              boxShadow: "none",
+              borderRadius: "10px",
+              p: "0px 20px",
+              mb: "15px",
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "left",
+                alignItems: "center",
+                mb: "15px",
+              }}
+            >
+              <Box>
+                <Typography
+                  variant="h4"
+                  sx={{ fontSize: 15, fontWeight: 700, mb: "5px" }}
+                >
+                  <ul
+                    style={{
+                      listStyle: "none",
+                      lineHeight: "35px",
+                      paddingLeft: "0px",
+                    }}
+                  >
+                    <li>Name</li>
+                    <li>Description</li>
+                    <li>Email</li>
+                    <li>Social icons</li>
+                    <li>Address</li>
+                    <li>Images</li>
+                    phone
+                  </ul>
+                </Typography>
+              </Box>
+
+              <Box>
+                <Typography variant="p" fontSize={14}>
+                  <ul
+                    style={{
+                      listStyle: "none",
+                      marginLeft: "35px",
+                      lineHeight: "35px",
+                    }}
+                  >
+                    <li>{business.name}</li>
+                    <li>{business.description}</li>
+                    <li>{business.email}</li>
+                    {business.socialLinks &&
+                      business.socialLinks.map((socialLink, index) => (
+                        <span key={index}>
+                          <a
+                            href={socialLink.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{ marginRight: "12px" }}
+                          >
+                            {socialLink.name}
+                          </a>
+                        </span>
+                      ))}
+                    <li>{business.address}</li>
+
+                    <li style={{ height: "50px" }}>
+                      <Image
+                        src={business.images[0]}
+                        alt="ok"
+                        width={50}
+                        height={50}
+                      />
+                    </li>
+                  </ul>
+                </Typography>
+              </Box>
+            </Box>
+          </Card>
+
           <Features />
 
           {/* AudienceOverview */}
