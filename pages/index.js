@@ -235,46 +235,38 @@ export default function ECommerce() {
           <Features />
 
           {/* AudienceOverview */}
-          <AudienceOverview />
+          {/* <AudienceOverview /> */}
 
-          <Grid container columnSpacing={{ xs: 1, sm: 2, md: 2 }}>
+          {/* <Grid container columnSpacing={{ xs: 1, sm: 2, md: 2 }}>
             <Grid item xs={12} md={8}>
-              {/* VisitsByDay */}
               <VisitsByDay />
             </Grid>
 
             <Grid item xs={12} md={4}>
-              {/* Impressions */}
               <Impressions />
 
-              {/* ActivityTimeline */}
               <ActivityTimeline />
             </Grid>
 
             <Grid item xs={12} md={12}>
-              {/* RevenuStatus */}
               <RevenuStatus />
             </Grid>
-          </Grid>
+          </Grid> */}
         </Grid>
 
-        <Grid item xs={12} md={12} lg={12} xl={4}>
-          {/* Ratings */}
+        {/* <Grid item xs={12} md={12} lg={12} xl={4}>
           <Ratings />
 
-          {/* LiveVisitsOnOurSite */}
           <LiveVisitsOnOurSite />
 
-          {/* SalesByLocations */}
           <SalesByCountries />
 
-          {/* NewCustomers */}
           <NewCustomers />
-        </Grid>
+        </Grid> */}
       </Grid>
 
       {/* Recent Orders */}
-      <RecentOrders />
+      {/* <RecentOrders /> */}
 
       <Grid
         container
@@ -283,15 +275,13 @@ export default function ECommerce() {
       >
         {role === "admin" && (
           <Grid item xs={12} md={12} lg={12} xl={8}>
-            {/* UsersList */}
             <UserList />
           </Grid>
         )}
 
-        <Grid item xs={12} md={12} lg={12} xl={4}>
-          {/* BestSellingProducts */}
+        {/* <Grid item xs={12} md={12} lg={12} xl={4}>
           <BestSellingProducts />
-        </Grid>
+        </Grid> */}
       </Grid>
     </>
   );
