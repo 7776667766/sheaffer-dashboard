@@ -397,7 +397,7 @@ const Booking = () => {
                     fontSize: "13.5px",
                   }}
                 >
-                  Assigned
+                  Phone
                 </TableCell>
 
                 <TableCell
@@ -406,7 +406,7 @@ const Booking = () => {
                     fontSize: "13.5px",
                   }}
                 >
-                  Start Date
+                  Date
                 </TableCell>
 
                 <TableCell
@@ -415,7 +415,7 @@ const Booking = () => {
                     fontSize: "13.5px",
                   }}
                 >
-                  End Date
+                 timeSlot
                 </TableCell>
 
                 <TableCell
@@ -435,20 +435,10 @@ const Booking = () => {
                     fontSize: "13.5px",
                   }}
                 >
-                  Completion
+                  Price
                 </TableCell>
 
-                <TableCell
-                  align="center"
-                  sx={{
-                    borderBottom: "1px solid #F7FAFF",
-                    fontSize: "13.5px",
-                  }}
-                >
-                  Priority
-                </TableCell>
-
-                <TableCell
+                {/* <TableCell
                   align="right"
                   sx={{
                     borderBottom: "1px solid #F7FAFF",
@@ -456,7 +446,7 @@ const Booking = () => {
                   }}
                 >
                   Action
-                </TableCell>
+                </TableCell> */}
               </TableRow>
             </TableHead>
 
