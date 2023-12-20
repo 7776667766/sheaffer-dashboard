@@ -5,6 +5,7 @@ import { specialistReducer } from "./specialist/specialistSlice";
 import { businessReducer } from "./business/businessSlice";
 import { adminReducer } from "./admin/adminSlice";
 import { serviceReducer } from './service/serviceSlice';
+import { bookingReducer } from "./booking/bookingSlice";
 
 const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ const store = configureStore({
     business: businessReducer,
     admin: adminReducer,
     service: serviceReducer,
+    booking: bookingReducer
   },
 });
 

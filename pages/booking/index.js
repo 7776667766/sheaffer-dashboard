@@ -30,11 +30,15 @@ import Checkbox from "@mui/material/Checkbox";
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 import { styled } from "@mui/material/styles";
 import Dialog from "@mui/material/Dialog";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
 import DialogTitle from "@mui/material/DialogTitle";
 import CloseIcon from "@mui/icons-material/Close";
 import { useRouter } from "next/router";
+import { getMyBookingFunApi } from "store/booking/booking";
+import moment from 'moment';
 
-// Add Task Modal
+
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
@@ -45,8 +49,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 }));
 
 function BootstrapDialogTitle(props) {
-  const { children, onClose, ...other } = props;
-
+  ;
   return (
     <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
       {children}
@@ -72,7 +75,6 @@ BootstrapDialogTitle.propTypes = {
   children: PropTypes.node,
   onClose: PropTypes.func.isRequired,
 };
-// End Add Task Modal
 
 function ToDoList(props) {
   const theme = useTheme();
@@ -181,7 +183,7 @@ const rows = [
     "/images/user2.png",
     "1 Mar 2022",
     "1 May 2022",
-    "Completed",
+    "Pending",
     "successBadge",
     "10/10",
     "High"
@@ -191,7 +193,7 @@ const rows = [
     "/images/user3.png",
     "15 Apr 2022",
     "15 Jun 2022",
-    "On Going",
+    "Pending",
     "primaryBadge",
     "7/10",
     "Medium"
@@ -289,11 +291,36 @@ const rows = [
 ].sort((a, b) => (a.name < b.name ? -1 : 1));
 
 const Booking = () => {
+
+
+  const dispatch = useDispatch();
+
+  const { booking } = useSelector((state) => state.booking);
+  console.log("booking", booking)
+  const { role } = useSelector((state) => state.auth);
+  console.log("role", role)
+
+
+  const { business } = useSelector((state) => state.business);
+  console.log("business", business)
+
+  useEffect(() => {
+    if (booking.dataFatched !== true) {
+      dispatch(
+        getMyBookingFunApi({
+          businessId: business?.id,
+        })
+      );
+    }
+  }, [dispatch, booking.data, booking.dataFatched, business?.id]);
+
+  const bookingData = booking && booking.data ? booking.data : [];
+
+
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
   const router = useRouter();
 
-  // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
@@ -316,7 +343,6 @@ const Booking = () => {
       password: data.get("password"),
     });
   };
-  // End Add Task Modal
 
   return (
     <>
@@ -346,27 +372,8 @@ const Booking = () => {
               fontWeight: 500,
             }}
           >
-          My Booking List
+            My Booking List
           </Typography>
-
-          {/* <Button
-            onClick={handleNavigate}
-            variant="contained"
-            sx={{
-              textTransform: "capitalize",
-              borderRadius: "8px",
-              fontWeight: "500",
-              fontSize: "13px",
-              padding: "12px 20px",
-              color: "#fff !important",
-            }}
-          >
-            <AddIcon
-              sx={{ position: "relative", top: "-1px" }}
-              className="mr-5px"
-            />{" "}
-            Add Service Type
-          </Button> */}
         </Box>
 
         <TableContainer
@@ -382,6 +389,15 @@ const Booking = () => {
           >
             <TableHead sx={{ background: "#F7FAFF" }}>
               <TableRow>
+                <TableCell
+                  sx={{
+                    borderBottom: "1px solid #F7FAFF",
+                    fontSize: "13.5px",
+                  }}
+                >
+                  Sr.N
+                </TableCell>
+
                 <TableCell
                   sx={{
                     borderBottom: "1px solid #F7FAFF",
@@ -415,7 +431,17 @@ const Booking = () => {
                     fontSize: "13.5px",
                   }}
                 >
-                 timeSlot
+                  timeSlot
+                </TableCell>
+
+                <TableCell
+                  align="center"
+                  sx={{
+                    borderBottom: "1px solid #F7FAFF",
+                    fontSize: "13.5px",
+                  }}
+                >
+                  Price
                 </TableCell>
 
                 <TableCell
@@ -429,16 +455,6 @@ const Booking = () => {
                 </TableCell>
 
                 <TableCell
-                  align="center"
-                  sx={{
-                    borderBottom: "1px solid #F7FAFF",
-                    fontSize: "13.5px",
-                  }}
-                >
-                  Price
-                </TableCell>
-
-                {/* <TableCell
                   align="right"
                   sx={{
                     borderBottom: "1px solid #F7FAFF",
@@ -446,19 +462,32 @@ const Booking = () => {
                   }}
                 >
                   Action
-                </TableCell> */}
+                </TableCell>
               </TableRow>
             </TableHead>
 
             <TableBody>
-              {(rowsPerPage > 0
+              {(bookingData > 0
                 ? rows.slice(
-                    page * rowsPerPage,
-                    page * rowsPerPage + rowsPerPage
-                  )
-                : rows
-              ).map((row) => (
+                  page * rowsPerPage,
+                  page * rowsPerPage + rowsPerPage
+                )
+                : bookingData
+              ).map((row, index) => (
+
                 <TableRow key={row.name}>
+
+                  <TableCell
+                    sx={{
+                      borderBottom: "1px solid #F7FAFF",
+                      fontSize: "13px",
+                      pt: "16px",
+                      pb: "16px",
+                    }}
+                  >
+                    {index + 1}
+                  </TableCell>
+
                   <TableCell
                     sx={{
                       fontWeight: "500",
@@ -469,7 +498,7 @@ const Booking = () => {
                       pb: "16px",
                     }}
                   >
-                    <Checkbox {...label} size="small" />
+                    {/* <Checkbox {...label} size="small" /> */}
                     {row.name}
                   </TableCell>
 
@@ -480,11 +509,7 @@ const Booking = () => {
                       pb: "16px",
                     }}
                   >
-                    <Avatar
-                      alt="User"
-                      src={row.url}
-                      sx={{ width: 35, height: 35 }}
-                    />
+                    {row.phone}
                   </TableCell>
 
                   <TableCell
@@ -495,7 +520,7 @@ const Booking = () => {
                       pb: "16px",
                     }}
                   >
-                    {row.startDate}
+                    {moment(row.date).format('MMMM D, YYYY h:mm A')}
                   </TableCell>
 
                   <TableCell
@@ -506,45 +531,36 @@ const Booking = () => {
                       pb: "16px",
                     }}
                   >
-                    {row.endDate}
+                    {row.timeSlot}
                   </TableCell>
+
+                  <TableCell
+                    sx={{
+                      borderBottom: "1px solid #F7FAFF",
+                      fontSize: "13px",
+                      pt: "16px",
+                      pb: "16px",
+                    }}
+                    align="center"
+                  >
+                    {row.price}
+                  </TableCell>
+
 
                   <TableCell
                     align="center"
                     sx={{
                       fontWeight: 500,
                       borderBottom: "1px solid #F7FAFF",
-                      fontSize: "11px",
-                      pt: "16px",
-                      pb: "16px",
+                      fontSize: "12px",
+                      padding: "8px 10px",
                     }}
                   >
-                    <span className={row.badgeClass}>{row.status}</span>
-                  </TableCell>
-
-                  <TableCell
-                    sx={{
-                      borderBottom: "1px solid #F7FAFF",
-                      fontSize: "13px",
-                      pt: "16px",
-                      pb: "16px",
-                    }}
-                    align="center"
-                  >
-                    {row.completion}
-                  </TableCell>
-
-                  <TableCell
-                    sx={{
-                      borderBottom: "1px solid #F7FAFF",
-                      fontSize: "13px",
-                      pt: "16px",
-                      pb: "16px",
-                    }}
-                    align="center"
-                  >
-                    {row.priority}
-                  </TableCell>
+                    <span className={
+                      row.status === 'Delivered' ? 'successBadge' :
+                        row.status === 'Pending' ? 'primaryBadge' :
+                          row.status === 'Cancelled' ? 'dangerBadge' : ''
+                    }>{row.status}</span>                  </TableCell>
 
                   <TableCell
                     align="right"
@@ -555,16 +571,6 @@ const Booking = () => {
                         display: "inline-block",
                       }}
                     >
-                      <Tooltip title="Remove" placement="top">
-                        <IconButton
-                          aria-label="remove"
-                          size="small"
-                          color="danger"
-                          className="danger"
-                        >
-                          <DeleteIcon fontSize="inherit" />
-                        </IconButton>
-                      </Tooltip>
 
                       <Tooltip title="Rename" placement="top">
                         <IconButton
@@ -590,7 +596,68 @@ const Booking = () => {
                 </TableRow>
               )}
             </TableBody>
+            {/* <TableBody>
+      {bookingData.map((row) => (
+        <TableRow key={row._id}>
+          <TableCell
+            sx={{
+              fontWeight: '500',
+              fontSize: '13px',
+              borderBottom: '1px solid #F7FAFF',
+              color: '#260944',
+              pt: '16px',
+              pb: '16px',
+            }}
+          >
+            <Checkbox size="small" />
+            {row.name}
+          </TableCell>
 
+          <TableCell
+            sx={{
+              borderBottom: '1px solid #F7FAFF',
+              pt: '16px',
+              pb: '16px',
+            }}
+          >
+            <Avatar alt="User" src={row.url} sx={{ width: 35, height: 35 }} />
+          </TableCell>
+          <TableCell align="right" sx={{ borderBottom: '1px solid #F7FAFF' }}>
+            <Box sx={{ display: 'inline-block' }}>
+              <Tooltip title="Remove" placement="top">
+                <IconButton
+                  aria-label="remove"
+                  size="small"
+                  color="danger"
+                  className="danger"
+                >
+                  <DeleteIcon fontSize="inherit" />
+                </IconButton>
+              </Tooltip>
+
+              <Tooltip title="Rename" placement="top">
+                <IconButton
+                  aria-label="rename"
+                  size="small"
+                  color="primary"
+                  className="primary"
+                >
+                  <DriveFileRenameOutlineIcon fontSize="inherit" />
+                </IconButton>
+              </Tooltip>
+            </Box>
+          </TableCell>
+        </TableRow>
+      ))}
+        {emptyRows > 0 && (
+        <TableRow style={{ height: 53 * emptyRows }}>
+          <TableCell
+            colSpan={4}
+            style={{ borderBottom: '1px solid #F7FAFF' }}
+          />
+        </TableRow>
+      )}  
+    </TableBody> */}
             <TableFooter>
               <TableRow>
                 <TablePagination

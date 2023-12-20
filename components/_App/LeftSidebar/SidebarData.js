@@ -556,7 +556,7 @@ export const SidebarData = () => {
       icon: <AccountCircle />,
     },
 
-    {
+    role === "manager" || role === "owner" && {
       title: "Booking",
       path: "/booking/",
       icon: <LayersIcon />,
