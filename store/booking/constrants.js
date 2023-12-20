@@ -1,1 +1,1 @@
-export const getMyBooking = "booking/get-my-booking-list";
+export const getMyBooking = "booking/get";

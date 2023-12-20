@@ -4,7 +4,7 @@ import { getMyBooking } from "./constrants";
 import toast from "react-hot-toast";
 
 export const getMyBookingFunApi = createAsyncThunk(
-  "booking/add",
+  "booking/get",
   async () => {
     try {
       const response = await axios.get(getMyBooking);
