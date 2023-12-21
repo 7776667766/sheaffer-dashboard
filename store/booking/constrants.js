@@ -1,1 +1,1 @@
-export const getMyBooking = "booking/get";
+export const getMyBusinessBooking = "get-my-business-booking";

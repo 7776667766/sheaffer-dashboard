@@ -1,6 +1,6 @@
 import API from "axios";
 
-export const requestHandler = {
+const requestHandler = {
   Headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
