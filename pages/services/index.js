@@ -136,7 +136,7 @@ const Services = () => {
                   fontSize: "13.5px",
                 }}
               >
-                Date
+                Duration
               </TableCell>
 
               <TableCell
@@ -231,7 +231,7 @@ const Services = () => {
                   pb: "16px",
                 }}
               >
-                {data.date}
+                {data?.timeInterval} Min
               </TableCell>
 
               <TableCell
@@ -243,7 +243,7 @@ const Services = () => {
                 }}
                 align="center"
               >
-                {data.type.name}
+                {data?.type?.name}
               </TableCell>
 
               <TableCell
@@ -255,7 +255,7 @@ const Services = () => {
                 }}
                 align="center"
               >
-                {data.specialist.name}
+                {data?.specialist?.name}
               </TableCell>
 
               <TableCell

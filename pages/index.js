@@ -15,7 +15,7 @@ import RecentOrders from "@/components/Dashboard/eCommerce/RecentOrders";
 import BestSellingProducts from "@/components/Dashboard/eCommerce/BestSellingProducts";
 import LiveVisitsOnOurSite from "@/components/Dashboard/eCommerce/LiveVisitsOnOurSite";
 import UserList from "./users";
-import CloseIcon from '@mui/icons-material/Close';
+import CloseIcon from "@mui/icons-material/Close";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Avatar,
@@ -32,7 +32,6 @@ import {
   ListItemText,
   Typography,
   TextField,
-
 } from "@mui/material";
 import Image from "next/image";
 import Button from "@mui/material/Button";
@@ -44,12 +43,11 @@ import {
 export default function ECommerce() {
   const { user, role } = useSelector((state) => state.auth);
   const { business, dataFatched } = useSelector((state) => state.business);
-  console.log(business, "business")
+  console.log(business, "business");
 
   const dispatch = useDispatch();
-  const [slug, setSlug] = useState('');
+  const [slug, setSlug] = useState("");
   const [open, setOpen] = useState(false);
-  const [openFirstDialog, setOpenFirstDialog] = useState(false);
   const [openSecondDialog, setOpenSecondDialog] = useState(false);
   const [selectedBusiness, setSelectedBusiness] = useState(null);
 
@@ -64,17 +62,7 @@ export default function ECommerce() {
   const handleClose = () => {
     setSelectedBusiness(null);
     setOpenSecondDialog(false);
-    setOpenFirstDialog(false);
-    // setOpen(false)
-  };
-
-
-  const handleFirstDialogOpen = () => {
-    setOpenFirstDialog(true);
-  };
-
-  const handleFirstDialogClose = () => {
-    setOpenFirstDialog(false);
+    setOpen(false);
   };
 
   useEffect(() => {
@@ -100,7 +88,7 @@ export default function ECommerce() {
           name: `${user.name} Business`,
           email: user.email,
           phone: user.phone,
-          slug: slug, 
+          slug: slug,
           description: "My business description goes here ...",
           address: "Address goes here ...",
           googleId: "1234567890",
@@ -118,13 +106,11 @@ export default function ECommerce() {
             "https://files.slack.com/files-pri/T069L059YP6-F06ABUTS9L3/rectangle_2327.png",
           ],
         },
-        
-        
+
         onSuccess: () => {
           handleClose();
         },
-      }),
-     
+      })
     );
   };
 
@@ -139,14 +125,15 @@ export default function ECommerce() {
               <>
                 <Button
                   variant="contained"
+                  disabled={business}
                   onClick={handleClickOpen}
                 >
                   Sync Business
                 </Button>
-                <Dialog open={open} onClose={handleClose}
-
-                >
-                  <DialogTitle> Select Your Business
+                <Dialog open={open} onClose={handleClose}>
+                  <DialogTitle>
+                    {" "}
+                    Select Your Business
                     <IconButton
                       edge="end"
                       color="inherit"
@@ -158,7 +145,7 @@ export default function ECommerce() {
                   </DialogTitle>
                   <List sx={{ pt: 0 }}>
                     {businessList.map((data, index) => (
-                      <ListItem disableGutters key={index} >
+                      <ListItem disableGutters key={index}>
                         <ListItemButton onClick={() => handleOpen(data)}>
                           <ListItemAvatar>
                             <Avatar />
@@ -169,9 +156,10 @@ export default function ECommerce() {
                     ))}
                   </List>
                 </Dialog>
-                {selectedBusiness && business && (
-                  <Dialog open={open} onClose={handleClose}>
-                    <DialogTitle>{selectedBusiness.title} Grid
+                {selectedBusiness && (
+                  <Dialog open={openSecondDialog} onClose={handleClose}>
+                    <DialogTitle>
+                      {selectedBusiness?.title} Grid
                       <IconButton
                         edge="end"
                         color="inherit"
@@ -191,9 +179,8 @@ export default function ECommerce() {
                             fullWidth
                             InputProps={{
                               style: {
-                                borderRadius: '5px',
-                                padding: '5px',
-
+                                borderRadius: "5px",
+                                padding: "5px",
                               },
                             }}
                           />
@@ -204,32 +191,34 @@ export default function ECommerce() {
                           <Typography variant="p" fontSize={14}>
                             <ul
                               style={{
-                                listStyle: 'none',
-                                marginLeft: '35px',
-                                lineHeight: '35px',
+                                listStyle: "none",
+                                marginLeft: "35px",
+                                lineHeight: "35px",
                               }}
                             >
-                              <li>{business.name}</li>
-                              <li>{business.description}</li>
-                              <li>{business.email}</li>
-                              <li>{business.phone}</li>
-                              {business.socialLinks &&
-                                business.socialLinks.map((socialLink, index) => (
-                                  <span key={index}>
-                                    <a
-                                      href={socialLink.link}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      style={{
-                                        marginRight: '12px',
-                                        textTransform: 'capitalize',
-                                      }}
-                                    >
-                                      {socialLink.name}
-                                    </a>
-                                  </span>
-                                ))}
-                              <li>{business.address}</li>
+                              <li>{business?.name}</li>
+                              <li>{business?.description}</li>
+                              <li>{business?.email}</li>
+                              <li>{business?.phone}</li>
+                              {business?.socialLinks &&
+                                business?.socialLinks.map(
+                                  (socialLink, index) => (
+                                    <span key={index}>
+                                      <a
+                                        href={socialLink.link}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        style={{
+                                          marginRight: "12px",
+                                          textTransform: "capitalize",
+                                        }}
+                                      >
+                                        {socialLink.name}
+                                      </a>
+                                    </span>
+                                  )
+                                )}
+                              <li>{business?.address}</li>
 
                               {/* <li style={{ height: '50px' }}>
                                 {selectedBusiness &&
@@ -250,18 +239,21 @@ export default function ECommerce() {
                         </Box>
                       </Grid>
 
-                      <Grid item xs={12} style={{
-                        marginRight: '12px',
-                        textTransform: 'capitalize',
-                      }}>
-                        <Button   
-                        onClick={handleRegisterBusiness} 
+                      <Grid
+                        item
+                        xs={12}
+                        style={{
+                          marginRight: "12px",
+                          textTransform: "capitalize",
+                        }}
+                      >
+                        <Button
+                          onClick={handleRegisterBusiness}
                           variant="contained"
                           color="primary"
                         >
                           Submit
                         </Button>
-
                       </Grid>
                     </Grid>
                   </Dialog>
@@ -305,6 +297,7 @@ export default function ECommerce() {
                       }}
                     >
                       <li>Name</li>
+                      <li>Url</li>
                       <li>Description</li>
                       <li>Email</li>
                       <li>Phone</li>
@@ -325,6 +318,7 @@ export default function ECommerce() {
                       }}
                     >
                       <li>{business.name}</li>
+                      <li>{business?.slug}</li>
                       <li>{business.description}</li>
                       <li>{business.email}</li>
                       <li>{business.phone}</li>
