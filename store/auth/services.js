@@ -262,7 +262,7 @@ export const changePasswordFunApi = createAsyncThunk(
 
 export const updateProfileFunApi = createAsyncThunk(
   "auth/updateprofile",
-  async (data) => {
+  async ({ data }) => {
     console.log(data);
     try {
       const response = await axiosImage.post(updateprofileApi, data);

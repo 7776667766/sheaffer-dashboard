@@ -86,7 +86,7 @@ const AddServiceForm = () => {
       price: "",
       typeId: "",
       specialistId: "",
-      date: "",
+      timeInterval: 0, 
       businessId: business?.id,
       timeSlots: [
         {
@@ -139,7 +139,11 @@ const AddServiceForm = () => {
       price: Yup.number()
         .typeError("Price must be a number")
         .required("Price is Required"),
-      date: Yup.date().typeError("Invalid Date").required("Date is Required"),
+        timeInterval: Yup.number()
+        .typeError("Must be a number")
+        .required("TimeInterval is Required")
+        .positive("TimeInterval must be positive")
+        .integer("TimeInterval must be an integer"),
       timeSlots: Yup.array().of(
         Yup.object().shape({
           day: requiredValidation("Day"),
@@ -393,19 +397,18 @@ const AddServiceForm = () => {
                 as="h5"
                 sx={{ fontWeight: "500", fontSize: "14px", mb: "12px" }}
               >
-                Date
+                Time Interval in Minutes
               </Typography>
               <TextField
-                // autoComplete="date"
-                type="date"
-                name="date"
+                type="number"
+                name="timeInterval"
                 fullWidth
-                id="date"
-                {...formik.getFieldProps("date")}
-                error={formik.touched.date && formik.errors.date ? true : false}
+                id="timeInterval"
+                {...formik.getFieldProps("timeInterval")}
+                error={formik.touched.timeInterval && formik.errors.timeInterval ? true : false}
                 helperText={
-                  formik.touched.date && formik.errors.date
-                    ? formik.errors.date
+                  formik.touched.timeInterval && formik.errors.timeInterval
+                    ? formik.errors.timeInterval
                     : ""
                 }
                 InputProps={{
@@ -413,6 +416,8 @@ const AddServiceForm = () => {
                 }}
               />
             </Grid>
+
+
 
             {/* <Box mt={1} ml={2}>
                 <img
@@ -481,11 +486,10 @@ const AddServiceForm = () => {
                   width: "100%",
                   borderRadius: 8,
                   padding: "8px",
-                  border: `1px solid ${
-                    formik.touched.description && formik.errors.description
-                      ? "red"
-                      : "#e0e0e0"
-                  }`,
+                  border: `1px solid ${formik.touched.description && formik.errors.description
+                    ? "red"
+                    : "#e0e0e0"
+                    }`,
                 }}
               />
               {formik.touched.description && formik.errors.description && (

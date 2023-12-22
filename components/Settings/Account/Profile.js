@@ -14,8 +14,8 @@ import {
 } from "@/utils/validation";
 import { useDispatch, useSelector } from "react-redux";
 import { updateProfileFunApi } from "store/auth/services";
+import toast from "react-hot-toast";
 export default function Profile() {
-
   const [avatar, setavatar] = useState(null);
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -38,16 +38,13 @@ export default function Profile() {
     }
   };
 
-  const {user}= useSelector(
-    (state) => state.auth
-  );
- 
+  const { user } = useSelector((state) => state.auth);
 
-  const dispatch=useDispatch()
+  const dispatch = useDispatch();
 
   const formik = useFormik({
     initialValues: {
-      name: "ahmad",
+      name: user?.name || "",
       image: "",
     },
     validationSchema: Yup.object({
@@ -129,9 +126,7 @@ export default function Profile() {
               />
             </Grid>
 
-    
-
-            <Grid item xs={12} md={12} lg={6}>
+            <Grid item xs={12} sm={6}>
               <Typography
                 component="label"
                 sx={{

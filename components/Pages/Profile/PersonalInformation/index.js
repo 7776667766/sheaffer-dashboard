@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 const PersonalInformation = () => {
   const { user } = useSelector((state) => state.auth);
 
-  const personalInfo =  [
+  const personalInfo = [
     {
       title: "Name",
       text: user?.name,
@@ -24,8 +24,8 @@ const PersonalInformation = () => {
       text: user?.role,
     },
     {
-      title: "Account verified",
-      text: JSON.stringify(user?.verified)
+      title: "Account",
+      text: user?.verified ? "Verified" : "Not Verified",
     },
   ];
   return (
@@ -58,14 +58,14 @@ const PersonalInformation = () => {
         </Box>
 
         <Box>
-          <Typography as="h4" fontWeight="500" fontSize="15px" mb={1}>
+          {/* <Typography as="h4" fontWeight="500" fontSize="15px" mb={1}>
             About Me:
           </Typography>
 
           <Typography mb={1}>
             Hi I'm Andrew Burns,has been the industry's standard dummy text ever
             since the 1500s, when an unknown printer took a galley of type.
-          </Typography>
+          </Typography> */}
 
           {personalInfo.map((ever) => (
             <Box
@@ -86,9 +86,7 @@ const PersonalInformation = () => {
                 {ever.title}
               </Typography>
 
-              <Typography>
-               {ever.text}
-              </Typography>
+              <Typography>{ever.text}</Typography>
             </Box>
           ))}
         </Box>
