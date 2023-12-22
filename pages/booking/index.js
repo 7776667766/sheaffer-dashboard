@@ -297,8 +297,6 @@ const Booking = () => {
 
   const { booking } = useSelector((state) => state.booking);
   console.log("booking", booking)
-  const { role } = useSelector((state) => state.auth);
-  console.log("role", role)
 
 
   const { business } = useSelector((state) => state.business);
