@@ -98,9 +98,7 @@ const ForgotPasswordForm = () => {
                       <TextField
                         required
                         fullWidth
-                        id="phone"
                         label="Phone Number"
-                        name="phone"
                         autoComplete="phone"
                         {...formik.getFieldProps("phone")}
                         error={

@@ -15,6 +15,7 @@ import RecentOrders from "@/components/Dashboard/eCommerce/RecentOrders";
 import BestSellingProducts from "@/components/Dashboard/eCommerce/BestSellingProducts";
 import LiveVisitsOnOurSite from "@/components/Dashboard/eCommerce/LiveVisitsOnOurSite";
 import UserList from "./users";
+import CloseIcon from "@mui/icons-material/Close";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Avatar,
@@ -24,34 +25,51 @@ import {
   DialogContent,
   DialogTitle,
   List,
+  IconButton,
   ListItem,
   ListItemAvatar,
   ListItemButton,
   ListItemText,
   Typography,
+  TextField,
 } from "@mui/material";
 import Image from "next/image";
 import Button from "@mui/material/Button";
-import { getMyBussinessFunApi } from "store/business/services";
+import {
+  getMyBussinessFunApi,
+  regsiterBusinessFunApi,
+} from "store/business/services";
 
 export default function ECommerce() {
-  const { role } = useSelector((state) => state.auth);
-  const { business } = useSelector((state) => state.business);
-  console.log(business, "done");
+  const { user, role } = useSelector((state) => state.auth);
+  const { business, dataFatched } = useSelector((state) => state.business);
+  console.log(business, "business");
+
   const dispatch = useDispatch();
+  const [slug, setSlug] = useState("");
   const [open, setOpen] = useState(false);
+  const [openSecondDialog, setOpenSecondDialog] = useState(false);
+  const [selectedBusiness, setSelectedBusiness] = useState(null);
 
   const handleClickOpen = () => {
     setOpen(true);
   };
+  const handleOpen = (business) => {
+    setSelectedBusiness(business);
+    setOpenSecondDialog(true);
+  };
+
   const handleClose = () => {
+    setSelectedBusiness(null);
+    setOpenSecondDialog(false);
     setOpen(false);
   };
 
   useEffect(() => {
-    if (business && !business.businessFetch)
-      dispatch(getMyBussinessFunApi({ data: business?.id }));
-  }, [dispatch, business?.businessFetch, business?.id]);
+    if (role === "owner" || role === "manager") {
+      if (!dataFatched) dispatch(getMyBussinessFunApi());
+    }
+  }, [dispatch, dataFatched, role]);
   const businessList = [
     {
       title: "Business 1",
@@ -63,6 +81,39 @@ export default function ECommerce() {
     },
   ];
 
+  const handleRegisterBusiness = () => {
+    dispatch(
+      regsiterBusinessFunApi({
+        data: {
+          name: `${user.name} Business`,
+          email: user.email,
+          phone: user.phone,
+          slug: slug,
+          description: "My business description goes here ...",
+          address: "Address goes here ...",
+          googleId: "1234567890",
+          socialLinks: [
+            {
+              name: "facebook",
+              link: "https://www.facebook.com/",
+            },
+            {
+              name: "instagram",
+              link: "https://www.instagram.com/",
+            },
+          ],
+          images: [
+            "https://files.slack.com/files-pri/T069L059YP6-F06ABUTS9L3/rectangle_2327.png",
+          ],
+        },
+
+        onSuccess: () => {
+          handleClose();
+        },
+      })
+    );
+  };
+
   return (
     <>
       {/* Page title */}
@@ -70,156 +121,278 @@ export default function ECommerce() {
         <h1>MAKELY</h1>
         <ul>
           <li>
-            <Button variant="contained" onClick={handleClickOpen}>
-              Sync Business
-            </Button>
-            <Dialog open={open} onClose={handleClose}>
-              <DialogTitle> Select Your Business </DialogTitle>
-              <List sx={{ pt: 0 }}>
-                {businessList.map((data, index) => (
-                  <ListItem disableGutters key={index}>
-                    <ListItemButton onClick={() => {}}>
-                      <ListItemAvatar>
-                        <Avatar src={data.image} alt={data.title} />
-                      </ListItemAvatar>
-                      <ListItemText primary={data.title} />
-                    </ListItemButton>
-                  </ListItem>
-                ))}
-              </List>
-            </Dialog>
-          </li>
+            {role === "owner" && (
+              <>
+                <Button
+                  variant="contained"
+                  disabled={business}
+                  onClick={handleClickOpen}
+                >
+                  Sync Business
+                </Button>
+                <Dialog open={open} onClose={handleClose}>
+                  <DialogTitle>
+                    {" "}
+                    Select Your Business
+                    <IconButton
+                      edge="end"
+                      color="inherit"
+                      onClick={handleClose}
+                      aria-label="close"
+                    >
+                      <CloseIcon />
+                    </IconButton>
+                  </DialogTitle>
+                  <List sx={{ pt: 0 }}>
+                    {businessList.map((data, index) => (
+                      <ListItem disableGutters key={index}>
+                        <ListItemButton onClick={() => handleOpen(data)}>
+                          <ListItemAvatar>
+                            <Avatar />
+                          </ListItemAvatar>
+                          <ListItemText primary={data.title} />
+                        </ListItemButton>
+                      </ListItem>
+                    ))}
+                  </List>
+                </Dialog>
+                {selectedBusiness && (
+                  <Dialog open={openSecondDialog} onClose={handleClose}>
+                    <DialogTitle>
+                      {selectedBusiness?.title} Grid
+                      <IconButton
+                        edge="end"
+                        color="inherit"
+                        onClick={handleClose}
+                        aria-label="close"
+                      >
+                        <CloseIcon />
+                      </IconButton>
+                    </DialogTitle>
+                    <Grid container spacing={2}>
+                      <Grid item xs={12}>
+                        <Grid item xs={12}>
+                          <TextField
+                            label="Slug"
+                            name="slug"
+                            onChange={(e) => setSlug(e.target.value)} // Update slug state on input change
+                            fullWidth
+                            InputProps={{
+                              style: {
+                                borderRadius: "5px",
+                                padding: "5px",
+                              },
+                            }}
+                          />
+                        </Grid>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Box>
+                          <Typography variant="p" fontSize={14}>
+                            <ul
+                              style={{
+                                listStyle: "none",
+                                marginLeft: "35px",
+                                lineHeight: "35px",
+                              }}
+                            >
+                              <li>{business?.name}</li>
+                              <li>{business?.description}</li>
+                              <li>{business?.email}</li>
+                              <li>{business?.phone}</li>
+                              {business?.socialLinks &&
+                                business?.socialLinks.map(
+                                  (socialLink, index) => (
+                                    <span key={index}>
+                                      <a
+                                        href={socialLink.link}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        style={{
+                                          marginRight: "12px",
+                                          textTransform: "capitalize",
+                                        }}
+                                      >
+                                        {socialLink.name}
+                                      </a>
+                                    </span>
+                                  )
+                                )}
+                              <li>{business?.address}</li>
 
-          {/* <li>
-            <Link href="/">Dashboard</Link>
-          </li> */}
-          {/* <li style={{ textTransform: "capitalize" }}>{role}</li> */}
+                              {/* <li style={{ height: '50px' }}>
+                                {selectedBusiness &&
+                                  selectedBusiness.images &&
+                                  selectedBusiness.images.map((data, index) => (
+                                    <Image
+                                      key={index}
+                                      src={data}
+                                      alt={`Image ${index}`}
+                                      width={50}
+                                      height={50}
+                                      style={{ marginRight: '12px' }}
+                                    />
+                                  ))}
+                              </li> */}
+                            </ul>
+                          </Typography>
+                        </Box>
+                      </Grid>
+
+                      <Grid
+                        item
+                        xs={12}
+                        style={{
+                          marginRight: "12px",
+                          textTransform: "capitalize",
+                        }}
+                      >
+                        <Button
+                          onClick={handleRegisterBusiness}
+                          variant="contained"
+                          color="primary"
+                        >
+                          Submit
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </Dialog>
+                )}
+              </>
+            )}
+          </li>
         </ul>
       </div>
 
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 2 }}>
         <Grid item xs={12} md={12} lg={12} xl={8}>
           {/* Features */}
-
-          <Card
-            sx={{
-              boxShadow: "none",
-              borderRadius: "10px",
-              p: "0px 20px",
-              mb: "15px",
-            }}
-          >
-            <Box
+          {business && (
+            <Card
               sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
+                boxShadow: "none",
+                borderRadius: "10px",
+                p: "0px 20px",
                 mb: "15px",
               }}
             >
-              <Box>
-                <Typography
-                  variant="h4"
-                  sx={{ fontSize: 25, fontWeight: 600, mb: "5px" }}
-                >
-                  <ul
-                    style={{
-                      listStyle: "none",
-                      lineHeight: "35px",
-                      paddingLeft: "0px",
-                    }}
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "left",
+                  alignItems: "center",
+                  mb: "15px",
+                }}
+              >
+                <Box>
+                  <Typography
+                    variant="h4"
+                    sx={{ fontSize: 15, fontWeight: 700, mb: "5px" }}
                   >
-                     <li>{business.name}</li>
-                    <li style={{ fontSize: "15px", fontWeight: 500, mb: "5px" }}>{business.description}</li>
-                    <li style={{ fontSize: "15px", fontWeight: 500, mb: "5px" }}>{business.email}</li>
-                    {business.socialLinks &&
-                      business.socialLinks.map((socialLink, index) => (
-                        <span key={index}>
-                          <a
-                            href={socialLink.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            style={{ fontSize: "15px", fontWeight: 500, mb: "5px" , marginRight:'15px'}}
-                          >
-                            {socialLink.name}
-                          </a>
-                        </span>
-                      ))}
-                      <li style={{ fontSize: "15px", fontWeight: 500, mb: "5px" }}>{business.phone}</li>
-                    <li style={{ fontSize: "20px", fontWeight: 600, mb: "5px" }}>{business.address}</li>
-                    
+                    <ul
+                      style={{
+                        listStyle: "none",
+                        lineHeight: "35px",
+                        paddingLeft: "0px",
+                      }}
+                    >
+                      <li>Name</li>
+                      <li>Url</li>
+                      <li>Description</li>
+                      <li>Email</li>
+                      <li>Phone</li>
+                      <li>Social icons</li>
+                      <li>Address</li>
+                      <li>Images</li>
+                    </ul>
+                  </Typography>
+                </Box>
 
-                  </ul>
-                </Typography>
+                <Box>
+                  <Typography variant="p" fontSize={14}>
+                    <ul
+                      style={{
+                        listStyle: "none",
+                        marginLeft: "35px",
+                        lineHeight: "35px",
+                      }}
+                    >
+                      <li>{business.name}</li>
+                      <li>{business?.slug}</li>
+                      <li>{business.description}</li>
+                      <li>{business.email}</li>
+                      <li>{business.phone}</li>
+                      {business.socialLinks &&
+                        business.socialLinks.map((socialLink, index) => (
+                          <span key={index}>
+                            <a
+                              href={socialLink.link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              style={{
+                                marginRight: "12px",
+                                textTransform: "capitalize",
+                              }}
+                            >
+                              {socialLink.name}
+                            </a>
+                          </span>
+                        ))}
+                      <li>{business.address}</li>
+
+                      <li style={{ height: "50px" }}>
+                        {business.images.map((data) => {
+                          <Image
+                            src={data}
+                            alt="bisiness Image"
+                            width={50}
+                            height={50}
+                            style={{ marginRight: "12px" }}
+                          />;
+                        })}
+                      </li>
+                    </ul>
+                  </Typography>
+                </Box>
               </Box>
-
-              <Box>
-                <Typography variant="p" fontSize={14}>
-                  <ul
-                    style={{
-                      listStyle: "none",
-                    }}
-                  >
-                   
-
-                    <li>
-                      <Image
-                        src={business.images[0]}
-                        alt="ok"
-                        width={100}
-                        height={100}
-                        style={{ borderRadius: "10px" }}
-                      />
-                    </li>
-                  </ul>
-                </Typography>
-              </Box>
-            </Box>
-          </Card>
+            </Card>
+          )}
 
           <Features />
 
           {/* AudienceOverview */}
-          <AudienceOverview />
+          {/* <AudienceOverview /> */}
 
-          <Grid container columnSpacing={{ xs: 1, sm: 2, md: 2 }}>
+          {/* <Grid container columnSpacing={{ xs: 1, sm: 2, md: 2 }}>
             <Grid item xs={12} md={8}>
-              {/* VisitsByDay */}
               <VisitsByDay />
             </Grid>
 
             <Grid item xs={12} md={4}>
-              {/* Impressions */}
               <Impressions />
 
-              {/* ActivityTimeline */}
               <ActivityTimeline />
             </Grid>
 
             <Grid item xs={12} md={12}>
-              {/* RevenuStatus */}
               <RevenuStatus />
             </Grid>
-          </Grid>
+          </Grid> */}
         </Grid>
 
-        <Grid item xs={12} md={12} lg={12} xl={4}>
-          {/* Ratings */}
+        {/* <Grid item xs={12} md={12} lg={12} xl={4}>
           <Ratings />
 
-          {/* LiveVisitsOnOurSite */}
           <LiveVisitsOnOurSite />
 
-          {/* SalesByLocations */}
           <SalesByCountries />
 
-          {/* NewCustomers */}
           <NewCustomers />
-        </Grid>
+        </Grid> */}
       </Grid>
 
       {/* Recent Orders */}
-      <RecentOrders />
+      {/* <RecentOrders /> */}
 
       <Grid
         container
@@ -228,15 +401,13 @@ export default function ECommerce() {
       >
         {role === "admin" && (
           <Grid item xs={12} md={12} lg={12} xl={8}>
-            {/* UsersList */}
             <UserList />
           </Grid>
         )}
 
-        <Grid item xs={12} md={12} lg={12} xl={4}>
-          {/* BestSellingProducts */}
+        {/* <Grid item xs={12} md={12} lg={12} xl={4}>
           <BestSellingProducts />
-        </Grid>
+        </Grid> */}
       </Grid>
     </>
   );

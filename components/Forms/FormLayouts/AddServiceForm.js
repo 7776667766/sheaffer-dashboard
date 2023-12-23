@@ -6,6 +6,7 @@ import {
   MenuItem,
   FormControl,
   Autocomplete,
+  Checkbox,
 } from "@mui/material";
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
@@ -17,13 +18,17 @@ import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import * as Yup from "yup";
 import { requiredValidation } from "@/utils/validation";
-
 import { addservicesFunApi } from "store/service/services";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { getspecialistApi } from "store/specialist/services";
 import { getServicesTypeFunApi } from "store/service/services";
-import { top100Films } from "@/components/UIElements/Autocomplete/ComboBox";
+import toast from "react-hot-toast";
+// import dynamic from "next/dynamic";
+// import RichTextEditor from "@mantine/rte";
+// const RichTextEditor = dynamic(() => import("@mantine/rte"), {
+//   ssr: false,
+// });
 
 const AddServiceForm = () => {
   const [selectedSpecialist, setSelectedSpecialist] = useState(null);
@@ -32,16 +37,29 @@ const AddServiceForm = () => {
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
-    console.log(file);
-    setavatar(file);
+
+    if (!file) {
+      setavatar(null);
+      return false;
+    } else {
+      const type = file.type.split("/")[0];
+      if (type !== "image") {
+        toast.error("Please select an image");
+        setavatar(null);
+        console.log("File False", file);
+        event.target.value = null;
+        return false;
+      } else {
+        console.log("file true", file);
+        setavatar(file);
+      }
+    }
   };
-  const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const router = useRouter();
   const { business } = useSelector((state) => state.business);
   const { specialist } = useSelector((state) => state.specialist);
   const { serviceType } = useSelector((state) => state.service);
-  console.log(serviceType);
 
   useEffect(() => {
     if (!specialist.specialistFetch) {
@@ -68,43 +86,50 @@ const AddServiceForm = () => {
       price: "",
       typeId: "",
       specialistId: "",
-      date: "",
+      timeInterval: 0, 
       businessId: business?.id,
       timeSlots: [
         {
           day: "Monday",
           startTime: "10:00",
           endTime: "12:00",
+          active: false,
         },
         {
           day: "Tuesday",
           startTime: "10:00",
           endTime: "12:00",
+          active: false,
         },
         {
           day: "Wednesday",
           startTime: "10:00",
           endTime: "12:00",
+          active: false,
         },
         {
-          day: "thursday",
+          day: "Thursday",
           startTime: "10:00",
           endTime: "12:00",
+          active: false,
         },
         {
           day: "Friday",
           startTime: "10:00",
           endTime: "12:00",
+          active: false,
         },
         {
           day: "Saturday",
           startTime: "10:00",
           endTime: "12:00",
+          active: false,
         },
         {
           day: "Sunday",
           startTime: "10:00",
           endTime: "12:00",
+          active: false,
         },
       ],
     },
@@ -114,7 +139,11 @@ const AddServiceForm = () => {
       price: Yup.number()
         .typeError("Price must be a number")
         .required("Price is Required"),
-      date: Yup.date().typeError("Invalid Date").required("Date is Required"),
+        timeInterval: Yup.number()
+        .typeError("Must be a number")
+        .required("TimeInterval is Required")
+        .positive("TimeInterval must be positive")
+        .integer("TimeInterval must be an integer"),
       timeSlots: Yup.array().of(
         Yup.object().shape({
           day: requiredValidation("Day"),
@@ -125,13 +154,11 @@ const AddServiceForm = () => {
     }),
 
     onSubmit: async (values) => {
+      if (avatar === null) {
+        toast.error("Please select an image");
+        return false;
+      }
       try {
-        const config = {
-          headers: {
-            "Content-type": "multipart/form-data",
-          },
-        };
-
         const formData = {
           ...values,
           specialistId: selectedSpecialist ? selectedSpecialist.id : "",
@@ -180,7 +207,7 @@ const AddServiceForm = () => {
                 Name
               </Typography>
               <TextField
-                autoComplete="name"
+                // autoComplete="name"
                 name="name"
                 fullWidth
                 id="name"
@@ -208,7 +235,7 @@ const AddServiceForm = () => {
                     mb: "12px",
                   }}
                 >
-                  Select Services
+                  Service Type
                 </Typography>
 
                 <Autocomplete
@@ -221,7 +248,7 @@ const AddServiceForm = () => {
                   renderInput={(params) => (
                     <TextField
                       {...params}
-                      label="Select a service"
+                      label="Select Service Type"
                       autoComplete={serviceType}
                       inputProps={{
                         ...params.inputProps,
@@ -265,7 +292,7 @@ const AddServiceForm = () => {
                     mb: "12px",
                   }}
                 >
-                  Select Specialist
+                  Specialist
                 </Typography>
 
                 <Autocomplete
@@ -320,7 +347,7 @@ const AddServiceForm = () => {
                 Price
               </Typography>
               <TextField
-                autoComplete="price"
+                // autoComplete="price"
                 name="price"
                 fullWidth
                 id="price"
@@ -360,7 +387,8 @@ const AddServiceForm = () => {
                 name="file"
                 type="file"
                 id="file"
-                autoComplete="file"
+                accept="image/*"
+                // autoComplete="file"
                 onChange={handleFileChange}
               />
             </Grid>
@@ -369,21 +397,18 @@ const AddServiceForm = () => {
                 as="h5"
                 sx={{ fontWeight: "500", fontSize: "14px", mb: "12px" }}
               >
-                Date
+                Time Interval in Minutes
               </Typography>
               <TextField
-                autoComplete="date"
-                type="date"
-                name="date"
+                type="number"
+                name="timeInterval"
                 fullWidth
-                id="date"
-                {...formik.getFieldProps("date")}
-                error={
-                  formik.touched.price && formik.errors.date ? true : false
-                }
+                id="timeInterval"
+                {...formik.getFieldProps("timeInterval")}
+                error={formik.touched.timeInterval && formik.errors.timeInterval ? true : false}
                 helperText={
-                  formik.touched.date && formik.errors.date
-                    ? formik.errors.date
+                  formik.touched.timeInterval && formik.errors.timeInterval
+                    ? formik.errors.timeInterval
                     : ""
                 }
                 InputProps={{
@@ -391,6 +416,8 @@ const AddServiceForm = () => {
                 }}
               />
             </Grid>
+
+
 
             {/* <Box mt={1} ml={2}>
                 <img
@@ -441,10 +468,12 @@ const AddServiceForm = () => {
               >
                 Description
               </Typography>
+
               <TextareaAutosize
-                autoComplete="description"
+                // autoComplete="description"
                 name="description"
                 id="description"
+                fullWidth
                 minRows={5}
                 placeholder="Enter Description"
                 {...formik.getFieldProps("description")}
@@ -457,6 +486,10 @@ const AddServiceForm = () => {
                   width: "100%",
                   borderRadius: 8,
                   padding: "8px",
+                  border: `1px solid ${formik.touched.description && formik.errors.description
+                    ? "red"
+                    : "#e0e0e0"
+                    }`,
                 }}
               />
               {formik.touched.description && formik.errors.description && (
@@ -464,6 +497,35 @@ const AddServiceForm = () => {
                   {formik.errors.description}
                 </Typography>
               )}
+              {/* <RichTextEditor
+                id="description"
+                // value={}
+                onChange={() => {
+                  console.log(
+                    "rte.current.getContent()",
+                    rte.current.getContent()
+                  );
+
+                  formik.setFieldValue("description", rte.current.getContent());
+                }}
+                {...formik.getFieldProps("description")}
+                error={
+                  formik.touched.description && formik.errors.description
+                    ? true
+                    : false
+                }
+                helperText={
+                  formik.touched.description && formik.errors.description
+                    ? formik.errors.description
+                    : ""
+                }
+                controls={[
+                  ["bold", "italic", "underline", "link", "image"],
+                  ["unorderedList", "h1", "h2", "h3", "h4", "h5", "h6"],
+                  ["sup", "sub"],
+                  ["alignLeft", "alignCenter", "alignRight"],
+                ]}
+              /> */}
             </Grid>
             <Grid item xs={12}>
               <Typography
@@ -473,9 +535,18 @@ const AddServiceForm = () => {
                 Time Slots
               </Typography>
               {formik.values.timeSlots.map((slot, index) => (
-                <Grid container spacing={6} key={index}>
-                  <Grid item xs={12} md={4} sx={{ mb: 3 }}>
-                    <TextField
+                <Grid container spacing={5} key={index} marginBottom={4}>
+                  <Grid item xs={12} md={4}>
+                    <Checkbox
+                      name="timeSlots"
+                      checked={formik.values.timeSlots[index].active}
+                      {...formik.getFieldProps(`timeSlots[${index}].active`)}
+                      onChange={formik.handleChange}
+                    />
+                    {formik.values.timeSlots[index].day}
+
+                    {/* ))} */}
+                    {/* <TextField
                       name={`timeSlots[${index}].day`}
                       fullWidth
                       label={`Day ${index + 1}`}
@@ -495,7 +566,7 @@ const AddServiceForm = () => {
                         readOnly: true,
                         style: { borderRadius: 8 },
                       }}
-                    />
+                    /> */}
                   </Grid>
 
                   <Grid item xs={12} md={4}>
@@ -503,12 +574,15 @@ const AddServiceForm = () => {
                       name={`timeSlots[${index}].startTime`}
                       fullWidth
                       type="time"
-                      label={"start time"}
+                      label={"Start Time"}
                       {...formik.getFieldProps(`timeSlots[${index}].startTime`)}
                       error={
                         formik.touched.timeSlots && formik.errors.timeSlots
                           ? !!formik.errors.timeSlots[index]?.startTime
                           : false
+                      }
+                      disabled={
+                        !formik.values.timeSlots[index]?.active || false
                       }
                       helperText={
                         formik.touched.timeSlots && formik.errors.timeSlots
@@ -525,8 +599,11 @@ const AddServiceForm = () => {
                       name={`timeSlots[${index}].endTime`}
                       fullWidth
                       type="time"
-                      label={"End time"}
+                      label={"End Time"}
                       {...formik.getFieldProps(`timeSlots[${index}].endTime`)}
+                      disabled={
+                        !formik.values.timeSlots[index]?.active || false
+                      }
                       error={
                         formik.touched.timeSlots && formik.errors.timeSlots
                           ? !!formik.errors.timeSlots[index]?.endTime

@@ -11,42 +11,51 @@ import {
   updateprofileApi,
 } from "./constrants";
 import toast from "react-hot-toast";
+import axiosImage from "helper/api-image";
 
-export const loginFunApi = createAsyncThunk("auth/login", async (data) => {
-  try {
-    const response = await axios.post(loginApi, data);
-    console.log("response in loginFun => ", response.data);
-    if (response.data.status === "success") {
-      const responseData = response.data.data;
-      if (responseData.user.role !== "user") {
-        localStorage.setItem("token", responseData.token);
-        localStorage.setItem("user", JSON.stringify(responseData.user));
-        return responseData;
+export const loginFunApi = createAsyncThunk(
+  "auth/login",
+  async ({ data, onSuccess }) => {
+    try {
+      const response = await axios.post(loginApi, data);
+      console.log("response in loginFun => ", response.data);
+      if (response.data.status === "success") {
+        const responseData = response.data.data;
+        if (responseData.user.role !== "user") {
+          localStorage.setItem("token", responseData.token);
+          localStorage.setItem("user", JSON.stringify(responseData.user));
+          if (onSuccess) {
+            onSuccess(responseData.user.phone);
+          }
+          return;
+        } else {
+          toast.error("You are not authorized to access dashboard");
+          throw new Error("You are not authorized to access dashboard");
+        }
       } else {
-        toast.error("You are not authorized to access dashboard");
-        throw new Error("You are not authorized to access dashboard");
+        console.log("Error response in login Api => ", response.data);
+        const err =
+          response?.data?.message ||
+          response?.message ||
+          "Something went wrong!";
+        console.log("err: ", err);
+        toast.error(err);
+        throw new Error(err);
       }
-    } else {
-      console.log("Error response in login Api => ", response.data);
-      const err =
-        response?.data?.message || response?.message || "Something went wrong!";
-      console.log("err: ", err);
+    } catch (error) {
+      console.log("Error in login Api ", error);
+      let err =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Something went wrong!";
+      if (err === "Network Error") {
+        err = "Please check your internet connection";
+      }
       toast.error(err);
       throw new Error(err);
     }
-  } catch (error) {
-    console.log("Error in login Api ", error);
-    let err =
-      error?.response?.data?.message ||
-      error?.message ||
-      "Something went wrong!";
-    if (err === "Network Error") {
-      err = "Please check your internet connection";
-    }
-    toast.error(err);
-    throw new Error(err);
   }
-});
+);
 
 export const verifyOtpFunApi = createAsyncThunk(
   "auth/verifyOtpApi",
@@ -253,10 +262,10 @@ export const changePasswordFunApi = createAsyncThunk(
 
 export const updateProfileFunApi = createAsyncThunk(
   "auth/updateprofile",
-  async (data) => {
+  async ({ data }) => {
     console.log(data);
     try {
-      const response = await axios.post(updateprofileApi, data);
+      const response = await axiosImage.post(updateprofileApi, data);
       console.log("response in updateprofileFun => ", response.data);
       if (response.data.status === "success") {
         toast.success("Update Profile Successfully");

@@ -125,6 +125,11 @@ export const SidebarData = () => {
         },
       ],
     },
+    (role === "manager" || role === "owner") && {
+      title: "Booking",
+      path: "/booking/",
+      icon: <LayersIcon />,
+    },
     localServer && {
       title: "Apps",
       path: "/apps/file-manager/",
@@ -556,11 +561,6 @@ export const SidebarData = () => {
       icon: <AccountCircle />,
     },
 
-    {
-      title: "Booking",
-      path: "/booking/",
-      icon: <LayersIcon />,
-    },
     {
       title: "Notification",
       path: "/notification/",

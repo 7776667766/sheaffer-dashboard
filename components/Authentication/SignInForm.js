@@ -32,10 +32,15 @@ const SignInForm = () => {
       password: requiredValidation(),
     }),
     onSubmit: (values) => {
-      console.log("Handle Submit", values);
-      dispatch(loginFunApi(values));
-      // router.push("/authentication/verify-otp");
-      // alert(JSON.stringify(values, null, 2));
+      dispatch(
+        loginFunApi({
+          data: values,
+          onSuccess: (phone) => {
+            const myPhone = btoa(phone);
+            router.push(`/authentication/verify-otp/?verify=${myPhone}`);
+          },
+        })
+      );
     },
   });
 
@@ -44,8 +49,10 @@ const SignInForm = () => {
       if (otpVerified) {
         router.push("/");
       } else {
-        const myPhone = btoa(user?.phone);
-        router.push(`/authentication/verify-otp/?verify=${myPhone}`);
+        // const myPhone = btoa(user?.phone);
+        // router.push(`/authentication/
+        // verify-otp/?verify=${myPhone}
+        // `);
       }
     }
   }, [isAuthenticated, otpVerified, router, user?.phone]);
