@@ -130,6 +130,12 @@ export const SidebarData = () => {
       path: "/booking/",
       icon: <LayersIcon />,
     },
+
+    (role === "owner" || role === "admin") && {
+      title: "Transaction",
+      path: "/transaction/",
+      icon: <LayersIcon />,
+    },
     localServer && {
       title: "Apps",
       path: "/apps/file-manager/",

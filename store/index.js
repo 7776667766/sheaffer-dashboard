@@ -6,6 +6,8 @@ import { businessReducer } from "./business/businessSlice";
 import { adminReducer } from "./admin/adminSlice";
 import { serviceReducer } from './service/serviceSlice';
 import { bookingReducer } from "./booking/bookingSlice";
+import { cardReducer } from "./card/CardSlice";
+
 
 const store = configureStore({
   reducer: {
@@ -15,7 +17,8 @@ const store = configureStore({
     business: businessReducer,
     admin: adminReducer,
     service: serviceReducer,
-    booking: bookingReducer
+    booking: bookingReducer,
+    card: cardReducer
   },
 });
 

@@ -125,7 +125,7 @@ export default function ECommerce() {
               <>
                 <Button
                   variant="contained"
-                  disabled={business}
+                  // disabled={business}
                   onClick={handleClickOpen}
                 >
                   Sync Business
@@ -175,7 +175,7 @@ export default function ECommerce() {
                           <TextField
                             label="Slug"
                             name="slug"
-                            onChange={(e) => setSlug(e.target.value)} // Update slug state on input change
+                            onChange={(e) => setSlug(e.target.value)} 
                             fullWidth
                             InputProps={{
                               style: {
