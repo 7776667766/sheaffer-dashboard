@@ -11,7 +11,7 @@ import { getMyBusinessBookingFunApi } from "store/booking/service";
 import moment from "moment";
 import { CustomPaginationTable } from "@/components/Table/CustomPaginationTable";
 
-const Booking = () => {
+const bookingPage = () => {
   const dispatch = useDispatch();
 
   const { booking } = useSelector((state) => state.booking);
@@ -274,4 +274,4 @@ const Booking = () => {
   );
 };
 
-export default Booking;
+export default bookingPage;

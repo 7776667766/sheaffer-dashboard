@@ -170,7 +170,7 @@ export const SidebarData = () => {
         },
         {
           title: "Booking",
-          path: "templates/booking/",
+          path: "/templates/booking/",
         },
         
       ],
