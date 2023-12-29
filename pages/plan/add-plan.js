@@ -12,7 +12,7 @@ import AddIcon from "@mui/icons-material/Add";
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
-import { getServicesTypeFunApi } from "store/service/services";
+import { addPlanFunApi } from "store/plan/plan";
 import { CustomPaginationTable } from "@/components/Table/CustomPaginationTable";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -21,14 +21,13 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 
 const addPlans = () => {
-  //   const { serviceType } = useSelector((state) => state.service);
-  //   const dispatch = useDispatch();
+  const { plan ,isLoading} = useSelector((state) => state.plan);
+  console.log("plan-------->123", plan)
 
-  //   useEffect(() => {
-  //     if (serviceType.dataFatched !== true) {
-  //       dispatch(getServicesTypeFunApi());
-  //     }
-  //   }, [dispatch, serviceType.dataFatched, serviceType.serviceFetch]);
+
+  const dispatch = useDispatch();
+
+
   const plans = [
     {
       name: "3 Months",
@@ -40,7 +39,17 @@ const addPlans = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
+    const formData = new FormData(event.currentTarget);
+
+    const data = {
+      name: formData.get("name"),
+      duration: formData.get("duration"),
+      price: formData.get("Price"),
+      description: formData.get("Descripition"),
+      features: formData.get("isFeatured") === "on",
+    };
+
+    dispatch(addPlanFunApi({ data }));
   };
 
   return (
@@ -81,7 +90,13 @@ const addPlans = () => {
               </Grid>
 
               <Grid item xs={3}>
-                <TextField id="" select fullWidth label="duration">
+                <TextField
+                  id="duration"  
+                  select
+                  fullWidth
+                  label="Duration"
+                  name="duration"  
+                >
                   {plans.map((item, index) => (
                     <MenuItem key={index} value={item.value}>
                       {item.name}
@@ -121,12 +136,12 @@ const addPlans = () => {
           </Box>
           <Grid item xs={12}>
             <Box>
-              <FormGroup>
-                <FormControlLabel
-                  control={<Checkbox defaultChecked />}
-                  label="Is Featured"
-                />
-              </FormGroup>
+            <FormGroup>
+            <FormControlLabel
+              control={<Checkbox name="isFeatured" defaultChecked />}
+              label="Is Featured"
+            />
+          </FormGroup>
             </Box>
           </Grid>
           <Grid item xs={6} textAlign="left">
@@ -144,6 +159,7 @@ const addPlans = () => {
                 textAlign: "left",
                 width: "200px",
               }}
+              onClick={isLoading}
             >
               Get Started
             </Button>
