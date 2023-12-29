@@ -7,14 +7,13 @@ import {
   import { createAsyncThunk } from "@reduxjs/toolkit";
   import axios from "helper/api";
   import toast from "react-hot-toast";
-  import axiosImage from "helper/api-image";
   
   export const addPlanFunApi = createAsyncThunk(
-    "Plan/addPlan",
+    "plan/addPlan",
     async ({ data, onSuccess }) => {
       console.log("addPlanvalue", data);
       try {
-        const response = await axiosImage.post(addPlanApi, data);
+        const response = await axios.post(addPlanApi, data);
         console.log("response in addPlan => ", response.data);
         if (response.data.status === "success") {
           toast.success(response.data.message);
