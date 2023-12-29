@@ -19,6 +19,10 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { requiredValidation } from "@/utils/validation";
+
 
 const addPlans = () => {
   //   const { serviceType } = useSelector((state) => state.service);
@@ -37,11 +41,23 @@ const addPlans = () => {
     { name: "6 Months", value: "6months" },
     { name: "1 Year", value: "1 year" },
   ];
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-  };
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      duration:"",
+      Price:"",
+      Descripition:""
+    },
+    validationSchema: Yup.object({
+      name: requiredValidation(),
+      duration:requiredValidation('duration'),
+      Price: requiredValidation('Price'),
+      Descripition:requiredValidation('Descripition'),
+    }),
+    onSubmit: (values) => {
+      console.log("Handle Submit", values);
+    },
+  });
 
   return (
     <>
@@ -64,7 +80,7 @@ const addPlans = () => {
           Add Plans
         </Typography>
 
-        <Box component="form" noValidate onSubmit={handleSubmit}>
+        <Box component="form" noValidate onSubmit={formik.handleSubmit}>
           <Box sx={{ mb: "10px" }}>
             <Grid container alignItems="center" spacing={3}>
               <Grid item xs={6}>
@@ -77,16 +93,37 @@ const addPlans = () => {
                   InputProps={{
                     style: { borderRadius: 8 },
                   }}
+                  {...formik.getFieldProps("name")}
+                  error={
+                    formik.touched.name && formik.errors.name ? true : false
+                  }
+                  helperText={
+                    formik.touched.name && formik.errors.name
+                      ? formik.errors.name
+                      : ""
+                  }
                 />
               </Grid>
 
               <Grid item xs={3}>
-                <TextField id="" select fullWidth label="duration">
+                 
+                <TextField id="" select fullWidth label="Duration"  name="duration" 
+                 {...formik.getFieldProps("duration")}
+                 error={
+                   formik.touched.duration && formik.errors.duration ? true : false
+                 }
+                 helperText={
+                   formik.touched.duration && formik.errors.duration
+                     ? formik.errors.duration
+                     : ""
+                 }
+                >
                   {plans.map((item, index) => (
                     <MenuItem key={index} value={item.value}>
                       {item.name}
                     </MenuItem>
                   ))}
+                  
                 </TextField>
               </Grid>
 
@@ -101,6 +138,17 @@ const addPlans = () => {
                   InputProps={{
                     style: { borderRadius: 8 },
                   }}
+
+                  {...formik.getFieldProps("Price")}
+                  error={
+                    formik.touched.Price && formik.errors.Price ? true : false
+                  }
+                  helperText={
+                    formik.touched.Price && formik.errors.Price
+                      ? formik.errors.Price
+                      : ""
+                  }
+
                 />
               </Grid>
 
@@ -115,6 +163,15 @@ const addPlans = () => {
                   InputProps={{
                     style: { borderRadius: 8 },
                   }}
+                  {...formik.getFieldProps("Descripition")}
+                  error={
+                    formik.touched.Descripition && formik.errors.Descripition ? true : false
+                  }
+                  helperText={
+                    formik.touched.Descripition && formik.errors.Descripition
+                      ? formik.errors.Descripition
+                      : ""
+                  }
                 />
               </Grid>
             </Grid>
