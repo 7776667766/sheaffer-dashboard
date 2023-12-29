@@ -190,20 +190,20 @@ export const SidebarData = () => {
       ],
     },
     role === "admin" && {
-      title: "Plan",
-      path: "/plan/",
+      title: "Packages",
+      path: "/packages/",
 
       icon: <LayersIcon />,
       iconClosed: <KeyboardArrowRightIcon />,
       iconOpened: <KeyboardArrowDownIcon />,
       subNav: [
         {
-          title: "Plan",
-          path: "/plan/",
+          title: "Packages",
+          path: "/packages/",
         },
         {
-          title: "Add Plan",
-          path: "/plan/add-plan/ ",
+          title: "Add Package",
+          path: "/packages/add-package/",
         },
       ],
     },

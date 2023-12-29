@@ -1,60 +1,25 @@
 import React from "react";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, TableCell, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
-import IconButton from "@mui/material/IconButton";
-import TableCell from "@mui/material/TableCell";
 import Tooltip from "@mui/material/Tooltip";
-import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { getMyBusinessBookingFunApi } from "store/booking/service";
 import moment from "moment";
 import { CustomPaginationTable } from "@/components/Table/CustomPaginationTable";
 import Link from "next/link";
 import AddIcon from "@mui/icons-material/Add";
+import { getAllPlanFunApi } from "store/plan/plan";
 
-const planPage = () => {
-  // const dispatch = useDispatch();
+const PackagePage = () => {
+  const dispatch = useDispatch();
 
-  // const { booking } = useSelector((state) => state.booking);
+  const { plan } = useSelector((state) => state.plan);
 
-  // console.log("booking", booking);
-  // const { role } = useSelector((state) => state.auth);
-  // console.log("role", role);
-
-  // const { business } = useSelector((state) => state.business);
-  // console.log("business", business);
-
-  // useEffect(() => {
-  //   if (booking.dataFatched !== true) {
-  //     dispatch(
-  //       getMyBusinessBookingFunApi({
-  //         data: {
-  //           businessId: business?.id,
-  //         },
-  //       })
-  //     );
-  //   }
-  // }, [dispatch, booking.data, booking.dataFatched, business?.id]);
-
-  const Data = [
-    {
-      id: 1,
-      name: "Ali",
-      duration: "3months",
-      price: "$180",
-      descripition: "booking",
-      slug: "True",
-    },
-    {
-      id: 2,
-      name: "Bilal",
-      duration: "3months",
-      price: "$180",
-      descripition: "booking",
-      slug: "Flase",
-    },
-  ];
+  useEffect(() => {
+    if (!plan.dataFatched) {
+      dispatch(getAllPlanFunApi());
+    }
+  }, [dispatch, plan.dataFatched]);
 
   return (
     <>
@@ -84,10 +49,10 @@ const planPage = () => {
               fontWeight: 500,
             }}
           >
-            My Plans
+            Business Packages
           </Typography>
 
-          <Link href="/plan/add-plan">
+          <Link href="/packages/add-package">
             <Button
               variant="contained"
               sx={{
@@ -96,21 +61,20 @@ const planPage = () => {
                 fontWeight: "500",
                 fontSize: "13px",
                 padding: "12px 20px",
-                color: "#fff !important",
               }}
             >
               <AddIcon
                 sx={{ position: "relative", top: "-1px" }}
                 className="mr-5px"
               />
-              Add Plans
+              Add Package
             </Button>
           </Link>
         </Box>
 
         <CustomPaginationTable
-          tableData={Data}
-          isLoading={false}
+          tableData={plan.data}
+          isLoading={plan.isLoading}
           tableHeaderData={
             <>
               <TableCell
@@ -159,10 +123,18 @@ const planPage = () => {
                 sx={{
                   borderBottom: "1px solid #F7FAFF",
                   fontSize: "13.5px",
-                  textAlign: "end",
                 }}
               >
                 Featured
+              </TableCell>
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13.5px",
+                  textAlign: "end",
+                }}
+              >
+                Status
               </TableCell>
             </>
           }
@@ -219,17 +191,32 @@ const planPage = () => {
                   pb: "16px",
                 }}
               >
-                {item.descripition}
+                {item.description}
               </TableCell>
               <TableCell
                 sx={{
                   borderBottom: "1px solid #F7FAFF",
                   pt: "16px",
                   pb: "16px",
-                  textAlign: "end",
                 }}
               >
-                {item.slug}
+                {item.isFeatured ? "True" : "False"}
+              </TableCell>
+              <TableCell
+                align="right"
+                style={{
+                  fontWeight: 500,
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "12px",
+                }}
+              >
+                <span
+                  className={
+                    item.status === "active" ? "successBadge" : "dangerBadge"
+                  }
+                >
+                  {item.status ? "Active" : "In Active"}
+                </span>
               </TableCell>
             </>
           )}
@@ -239,4 +226,4 @@ const planPage = () => {
   );
 };
 
-export default planPage;
+export default PackagePage;
