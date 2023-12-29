@@ -119,7 +119,7 @@ const TransactionPage = () => {
                   fontSize: "13.5px",
                 }}
               >
-                Paypment
+                Payment
               </TableCell>
               <TableCell
                 sx={{

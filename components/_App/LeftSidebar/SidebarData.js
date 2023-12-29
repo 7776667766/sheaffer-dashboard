@@ -145,32 +145,6 @@ export const SidebarData = () => {
       path: "/transaction/",
       icon: <LayersIcon />,
     },
-    localServer && {
-      title: "Apps",
-      path: "/apps/file-manager/",
-      icon: <LayersIcon />,
-      iconClosed: <KeyboardArrowRightIcon />,
-      iconOpened: <KeyboardArrowDownIcon />,
-
-      subNav: [
-        {
-          title: "File Manager",
-          path: "/apps/file-manager/",
-        },
-        {
-          title: "Chat",
-          path: "/apps/chat/",
-        },
-        {
-          title: "To Do",
-          path: "/apps/to-do/",
-        },
-        {
-          title: "Calendar",
-          path: "/apps/calendar/",
-        },
-      ],
-    },
     role === "admin" && {
       title: "Templates",
       path: "/templates/website",
@@ -207,6 +181,33 @@ export const SidebarData = () => {
         },
       ],
     },
+    localServer && {
+      title: "Apps",
+      path: "/apps/file-manager/",
+      icon: <LayersIcon />,
+      iconClosed: <KeyboardArrowRightIcon />,
+      iconOpened: <KeyboardArrowDownIcon />,
+
+      subNav: [
+        {
+          title: "File Manager",
+          path: "/apps/file-manager/",
+        },
+        {
+          title: "Chat",
+          path: "/apps/chat/",
+        },
+        {
+          title: "To Do",
+          path: "/apps/to-do/",
+        },
+        {
+          title: "Calendar",
+          path: "/apps/calendar/",
+        },
+      ],
+    },
+
     localServer && {
       title: "Email",
       path: "/email/inbox/",
