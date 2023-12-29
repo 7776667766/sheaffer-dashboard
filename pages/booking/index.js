@@ -79,6 +79,14 @@ const BookingPage = () => {
                   fontSize: "13.5px",
                 }}
               >
+                Business
+              </TableCell>
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13.5px",
+                }}
+              >
                 Name
               </TableCell>
               <TableCell
@@ -88,6 +96,14 @@ const BookingPage = () => {
                 }}
               >
                 Phone
+              </TableCell>
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13.5px",
+                }}
+              >
+                Service
               </TableCell>
               <TableCell
                 sx={{
@@ -148,10 +164,16 @@ const BookingPage = () => {
               </TableCell>
               <TableCell
                 sx={{
-                  fontWeight: "500",
-                  fontSize: "13px",
                   borderBottom: "1px solid #F7FAFF",
-                  color: "#260944",
+                  pt: "16px",
+                  pb: "16px",
+                }}
+              >
+                {data.business?.name}
+              </TableCell>
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
                   pt: "16px",
                   pb: "16px",
                 }}
@@ -170,12 +192,21 @@ const BookingPage = () => {
               <TableCell
                 sx={{
                   borderBottom: "1px solid #F7FAFF",
+                  pt: "16px",
+                  pb: "16px",
+                }}
+              >
+                {data.service?.name || "N/A"}
+              </TableCell>
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
                   fontSize: "13px",
                   pt: "16px",
                   pb: "16px",
                 }}
               >
-                {moment(data.date).format("MMMM D, YYYY")}
+                {moment(data.date).format("MMM D, YYYY")}
               </TableCell>
               <TableCell
                 sx={{
@@ -233,9 +264,9 @@ const BookingPage = () => {
                     display: "inline-block",
                   }}
                 >
-                  <Tooltip title="Rename" placement="top">
+                  <Tooltip title="Edit" placement="top">
                     <IconButton
-                      aria-label="rename"
+                      aria-label="edit"
                       size="small"
                       color="primary"
                       className="primary"
