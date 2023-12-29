@@ -10,8 +10,10 @@ import { useEffect } from "react";
 import { getMyBusinessBookingFunApi } from "store/booking/service";
 import moment from "moment";
 import { CustomPaginationTable } from "@/components/Table/CustomPaginationTable";
+import Link from "next/link";
+import AddIcon from "@mui/icons-material/Add";
 
-const bookingPage = () => {
+const planPage = () => {
   // const dispatch = useDispatch();
 
   // const { booking } = useSelector((state) => state.booking);
@@ -39,12 +41,18 @@ const bookingPage = () => {
     {
       id: 1,
       name: "Ali",
-      slug: "Demo",
+      duration: "3months",
+      price: "$180",
+      descripition: "booking",
+      slug: "True",
     },
     {
       id: 2,
       name: "Bilal",
-      slug: "Demo",
+      duration: "3months",
+      price: "$180",
+      descripition: "booking",
+      slug: "Flase",
     },
   ];
 
@@ -76,8 +84,28 @@ const bookingPage = () => {
               fontWeight: 500,
             }}
           >
-            My Booking List
+            My Plans
           </Typography>
+
+          <Link href="/plan/add-plan">
+            <Button
+              variant="contained"
+              sx={{
+                textTransform: "capitalize",
+                borderRadius: "8px",
+                fontWeight: "500",
+                fontSize: "13px",
+                padding: "12px 20px",
+                color: "#fff !important",
+              }}
+            >
+              <AddIcon
+                sx={{ position: "relative", top: "-1px" }}
+                className="mr-5px"
+              />
+              Add Plans
+            </Button>
+          </Link>
         </Box>
 
         <CustomPaginationTable
@@ -107,10 +135,34 @@ const bookingPage = () => {
                 sx={{
                   borderBottom: "1px solid #F7FAFF",
                   fontSize: "13.5px",
+                }}
+              >
+                Duration
+              </TableCell>
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13.5px",
+                }}
+              >
+                Price
+              </TableCell>
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13.5px",
+                }}
+              >
+                Description
+              </TableCell>
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13.5px",
                   textAlign: "end",
                 }}
               >
-                View More
+                Featured
               </TableCell>
             </>
           }
@@ -128,7 +180,6 @@ const bookingPage = () => {
               >
                 {index + 0}
               </TableCell>
-
               <TableCell
                 sx={{
                   borderBottom: "1px solid #F7FAFF",
@@ -139,7 +190,37 @@ const bookingPage = () => {
               >
                 {item.name}
               </TableCell>
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13px",
+                  pt: "16px",
+                  pb: "16px",
+                }}
+              >
+                {item.duration}
+              </TableCell>
 
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13px",
+                  pt: "16px",
+                  pb: "16px",
+                }}
+              >
+                {item.price}
+              </TableCell>
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13px",
+                  pt: "16px",
+                  pb: "16px",
+                }}
+              >
+                {item.descripition}
+              </TableCell>
               <TableCell
                 sx={{
                   borderBottom: "1px solid #F7FAFF",
@@ -148,12 +229,7 @@ const bookingPage = () => {
                   textAlign: "end",
                 }}
               >
-                <Button variant="outlined" href="#" sx={{
-                  pt:"2px",
-                  pb:"2px",
-                }}>
-                  {item.slug}
-                </Button>
+                {item.slug}
               </TableCell>
             </>
           )}
@@ -163,4 +239,4 @@ const bookingPage = () => {
   );
 };
 
-export default bookingPage;
+export default planPage;
