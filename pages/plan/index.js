@@ -12,49 +12,22 @@ import moment from "moment";
 import { CustomPaginationTable } from "@/components/Table/CustomPaginationTable";
 import Link from "next/link";
 import AddIcon from "@mui/icons-material/Add";
+import { getAllPlanFunApi } from "store/plan/plan";
 
 const planPage = () => {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-  // const { booking } = useSelector((state) => state.booking);
-
-  // console.log("booking", booking);
-  // const { role } = useSelector((state) => state.auth);
-  // console.log("role", role);
-
-  // const { business } = useSelector((state) => state.business);
-  // console.log("business", business);
-
-  // useEffect(() => {
-  //   if (booking.dataFatched !== true) {
-  //     dispatch(
-  //       getMyBusinessBookingFunApi({
-  //         data: {
-  //           businessId: business?.id,
-  //         },
-  //       })
-  //     );
-  //   }
-  // }, [dispatch, booking.data, booking.dataFatched, business?.id]);
-
-  const Data = [
-    {
-      id: 1,
-      name: "Ali",
-      duration: "3months",
-      price: "$180",
-      descripition: "booking",
-      slug: "True",
-    },
-    {
-      id: 2,
-      name: "Bilal",
-      duration: "3months",
-      price: "$180",
-      descripition: "booking",
-      slug: "Flase",
-    },
-  ];
+  const { plan } = useSelector((state) => state.plan);
+ 
+  useEffect(() => {
+    if (!plan.dataFatched) {
+     
+      dispatch(
+        getAllPlanFunApi()
+      );
+    }
+  }, [dispatch,plan.dataFatched]);
+ 
 
   return (
     <>
@@ -109,8 +82,8 @@ const planPage = () => {
         </Box>
 
         <CustomPaginationTable
-          tableData={Data}
-          isLoading={false}
+          tableData={plan.data}
+          isLoading={plan.isLoading}
           tableHeaderData={
             <>
               <TableCell
@@ -219,7 +192,7 @@ const planPage = () => {
                   pb: "16px",
                 }}
               >
-                {item.descripition}
+                {item.description}
               </TableCell>
               <TableCell
                 sx={{
@@ -229,7 +202,7 @@ const planPage = () => {
                   textAlign: "end",
                 }}
               >
-                {item.slug}
+                {item.features}
               </TableCell>
             </>
           )}

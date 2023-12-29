@@ -52,7 +52,7 @@ import {
     async (data) => {
       try {
   
-        const response = await axios.post(getAllPlanApi, data);
+        const response = await axios.get(getAllPlanApi, data);
         console.log("response in get All Plan => ", response.data);
         if (response.data.status === "success") {
           return response.data.data;
