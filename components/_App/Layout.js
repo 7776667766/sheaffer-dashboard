@@ -5,11 +5,10 @@ import LeftSidebar from "@/components/_App/LeftSidebar";
 import TopNavbar from "@/components/_App/TopNavbar";
 import Footer from "@/components/_App/Footer";
 import ScrollToTop from "./ScrollToTop";
-import ControlPanelModal from "./ControlPanelModal";
 import { useDispatch, useSelector } from "react-redux";
 import { Box } from "@mui/material";
-import { login } from "store/auth/authSlice";
 import { getMyBussinessFunApi } from "store/business/services";
+import { checkTokenIsValidFunApi } from "store/auth/services";
 
 const Layout = ({ children }) => {
   const router = useRouter();
@@ -20,38 +19,50 @@ const Layout = ({ children }) => {
   const toogleActive = () => {
     setActive(!active);
   };
-  const { isAuthenticated, role, otpVerified } = useSelector(
+  const { isAuthenticated, role, otpVerified, validToken } = useSelector(
     (state) => state.auth
   );
   const { business } = useSelector((state) => state.business);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const user = localStorage.getItem("user");
-
-    if (token && user && !isAuthenticated) {
-      dispatch(login());
-      const myOtpVerified = localStorage.getItem("otpVerified");
-      if (myOtpVerified && role === "owner") {
-        dispatch(getMyBussinessFunApi());
+    if (validToken.dataFetched) {
+      if (validToken.validToken) {
+        const myOtpVerified = localStorage.getItem("otpVerified");
+        if (myOtpVerified && role === "owner" && business === null) {
+          dispatch(getMyBussinessFunApi());
+        }
+        if (router.pathname.includes("/authentication")) {
+          router.push("/");
+        }
+      } else {
+        if (!router.pathname.includes("/authentication")) {
+          if (!isAuthenticated) {
+            router.push("/authentication/sign-in");
+          }
+        }
       }
+      setTimeout(() => {
+        setLoading(false);
+      }, 1000);
     }
+  }, [
+    business,
+    dispatch,
+    isAuthenticated,
+    otpVerified,
+    role,
+    router,
+    validToken.dataFetched,
+    validToken.validToken,
+  ]);
 
-    if (!router.pathname.includes("/authentication")) {
-      if (!isAuthenticated) {
-        router.push("/authentication/sign-in");
-      }
-    } else {
-      if (otpVerified && role === "owner" && business === null) {
-        dispatch(getMyBussinessFunApi());
-      }
+  useEffect(() => {
+    if (!validToken.dataFetched) {
+      dispatch(checkTokenIsValidFunApi());
     }
-    setTimeout(() => {
-      setLoading(false);
-    }, 3000);
-  }, [business, dispatch, isAuthenticated, otpVerified, role, router]);
+  }, [dispatch, validToken.dataFetched]);
 
-  if (loading)
+  if (validToken.isLoading || loading)
     return (
       <Box
         display="flex"
@@ -72,17 +83,7 @@ const Layout = ({ children }) => {
       </Head>
 
       <div className={`main-wrapper-content ${active && "active"}`}>
-        {!(
-          router.pathname.includes("/authentication/")
-          // router.pathname === "/authentication/sign-in" ||
-          // router.pathname === "/authentication/sign-up" ||
-          // router.pathname === "/authentication/forgot-password" ||
-          // router.pathname === "/authentication/lock-screen" ||
-          // router.pathname === "/authentication/confirm-mail" ||
-          // router.pathname === "/authentication/verify-otp" ||
-          // router.pathname === "/authentication/reset-password" ||
-          // router.pathname === "/authentication/logout"
-        ) && (
+        {!router.pathname.includes("/authentication/") && (
           <>
             <TopNavbar toogleActive={toogleActive} />
 
@@ -93,18 +94,7 @@ const Layout = ({ children }) => {
         <div className="main-content">
           {children}
 
-          {!(
-            router.pathname.includes("/authentication/")
-
-            // router.pathname === "/authentication/sign-in" ||
-            // router.pathname === "/authentication/sign-up" ||
-            // router.pathname === "/authentication/forgot-password" ||
-            // router.pathname === "/authentication/lock-screen" ||
-            // router.pathname === "/authentication/confirm-mail" ||
-            // router.pathname === "/authentication/verify-otp" ||
-            // router.pathname === "/authentication/reset-password" ||
-            // router.pathname === "/authentication/logout"
-          ) && <Footer />}
+          {!router.pathname.includes("/authentication/") && <Footer />}
         </div>
       </div>
 

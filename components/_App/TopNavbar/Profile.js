@@ -7,16 +7,10 @@ import {
   Avatar,
   Menu,
   MenuItem,
-  Link,
   ListItemIcon,
   Divider,
-  Button,
 } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
-// import Settings from "@mui/icons-material/Settings";
-// import MailOutlineIcon from "@mui/icons-material/MailOutline";
-// import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
-// import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import Logout from "@mui/icons-material/Logout";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutFunApi } from "store/auth/services";
@@ -208,16 +202,6 @@ const Profile = () => {
           >
             Logout
           </Typography>
-          {/* <Link
-            href="/authentication/logout/"
-            fontSize="13px"
-            color="inherit"
-            underline="none"
-            variant="button"
-            onClick={handleLogout}
-          >
-            Logout
-          </Link> */}
         </MenuItem>
       </Menu>
     </>

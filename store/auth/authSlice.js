@@ -7,6 +7,7 @@ import {
   changePasswordFunApi,
   verifyOtpFunApi,
   updateProfileFunApi,
+  checkTokenIsValidFunApi,
 } from "./services";
 
 const authSlice = createSlice({
@@ -19,38 +20,18 @@ const authSlice = createSlice({
     otpVerified: false,
     token: null,
     role: null,
+    validToken: {
+      valid: false,
+      isLoading: false,
+      dataFetched: false,
+    },
     allUsers: {
       data: [],
       isLoading: false,
       error: null,
     },
   },
-  reducers: {
-    login: (state, action) => {
-      const token = localStorage.getItem("token");
-      let user = localStorage.getItem("user");
-      let otpVerified = localStorage.getItem("otpVerified");
-      console.log("otpVerified: ", otpVerified);
-      if (token === null || user === null) return;
-      user = JSON.parse(user);
-      state.isAuthenticated = true;
-      state.token = token;
-      state.user = user;
-      state.isVerified = user.verified;
-      state.role = user.role;
-      state.otpVerified = otpVerified;
-    },
-    // logout: (state) => {
-    //   state.isAuthenticated = false;
-    //   state.user = null;
-    //   state.isVerified = false;
-    //   state.token = null;
-    //   state.role = null;
-    //   state.otpVerified = false;
-    //   localStorage.removeItem("token");
-    //   localStorage.removeItem("user");
-    // },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(loginFunApi.pending, (state, action) => {
@@ -60,10 +41,6 @@ const authSlice = createSlice({
       .addCase(loginFunApi.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isAuthenticated = true;
-        // state.user = action.payload.user;
-        // state.isVerified = action.payload.user.verified;
-        // state.token = action.payload.token;
-        // state.role = action.payload.user.role;
         state.otpVerified = false;
       })
       .addCase(loginFunApi.rejected, (state, action) => {
@@ -194,6 +171,37 @@ const authSlice = createSlice({
       .addCase(updateProfileFunApi.rejected, (state, action) => {
         state.isLoading = false;
         state.user = null;
+      });
+
+    builder
+      .addCase(checkTokenIsValidFunApi.pending, (state, action) => {
+        state.validToken.isLoading = true;
+      })
+      .addCase(checkTokenIsValidFunApi.fulfilled, (state, action) => {
+        state.validToken.isLoading = false;
+        state.validToken.valid = true;
+        state.validToken.dataFetched = true;
+
+        state.isAuthenticated = true;
+        state.user = action.payload.user;
+        state.isVerified = action.payload.user.verified;
+        state.token = action.payload.token;
+        state.role = action.payload.user.role;
+        state.otpVerified =
+          localStorage.getItem("otpVerified")?.toString() === "true";
+      })
+      .addCase(checkTokenIsValidFunApi.rejected, (state, action) => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("otpVerified");
+        state.validToken.isLoading = false;
+        state.validToken.valid = false;
+        state.validToken.dataFetched = true;
+        state.isAuthenticated = false;
+        state.user = null;
+        state.isVerified = false;
+        state.role = null;
+        state.token = null;
+        state.otpVerified = false;
       });
   },
 });

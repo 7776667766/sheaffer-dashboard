@@ -2,13 +2,13 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "helper/api";
 import {
   forgotPasswordApi,
-  getAllUsersApi,
   loginApi,
   logoutApi,
   resetPasswordApi,
   verifyOtpApi,
   changePasswordApi,
   updateprofileApi,
+  checkTokenIsValidApi,
 } from "./constrants";
 import toast from "react-hot-toast";
 import axiosImage from "helper/api-image";
@@ -22,8 +22,6 @@ export const loginFunApi = createAsyncThunk(
       if (response.data.status === "success") {
         const responseData = response.data.data;
         if (responseData.user.role !== "user") {
-          localStorage.setItem("token", responseData.token);
-          localStorage.setItem("user", JSON.stringify(responseData.user));
           if (onSuccess) {
             onSuccess(responseData.user.phone);
           }
@@ -70,7 +68,6 @@ export const verifyOtpFunApi = createAsyncThunk(
         if (responseData.user.role !== "user") {
           if (data.forLogin) {
             localStorage.setItem("token", responseData.token);
-            localStorage.setItem("user", JSON.stringify(responseData.user));
             toast.success("Otp Verifed Successfully");
             if (onSuccess) {
               onSuccess();
@@ -119,29 +116,7 @@ export const logoutFunApi = createAsyncThunk("auth/logout", async () => {
   try {
     const response = await axios.get(logoutApi);
     console.log("response in logoutFun => ", response.data);
-    // if (response.data.status === "success") {
-    //   localStorage.removeItem("token");
-    //   localStorage.removeItem("user");
-    //   localStorage.removeItem("otpVerified");
-    //   toast.success("Account Logout Successfully");
-    //   return;
-    // } else {
-    //   console.log("Error response in logout Api => ", response.data);
-    //   const err =
-    //     response?.data?.message || response?.message || "Something went wrong!";
-    //   console.log("err: ", err);
-    // if (err === "invalid token") {
-    //   localStorage.removeItem("token");
-    //   localStorage.removeItem("user");
-    //   localStorage.removeItem("otpVerified");
-    //   return;
-    // } else {
-    //   toast.error(err);
-    //   throw new Error(err);
-    // }
-    // }
     localStorage.removeItem("token");
-    localStorage.removeItem("user");
     localStorage.removeItem("otpVerified");
     toast.success("Account Logout Successfully");
     return;
@@ -155,7 +130,6 @@ export const logoutFunApi = createAsyncThunk("auth/logout", async () => {
       err = "Please check your internet connection";
     } else if (err === "Invalid token") {
       localStorage.removeItem("token");
-      localStorage.removeItem("user");
       localStorage.removeItem("otpVerified");
       toast.success("Account Logout Successfully");
       return;
@@ -164,6 +138,40 @@ export const logoutFunApi = createAsyncThunk("auth/logout", async () => {
     throw new Error(err);
   }
 });
+
+export const checkTokenIsValidFunApi = createAsyncThunk(
+  "auth/checkTokenIsValid",
+  async () => {
+    try {
+      const response = await axios.get(checkTokenIsValidApi);
+      console.log("response in checkTokenIsValidFun => ", response.data);
+      if (response.data.status === "success") {
+        return response.data.data;
+      } else {
+        console.log(
+          "Error response in checkTokenIsValidFun Api => ",
+          response.data
+        );
+        const err =
+          response?.data?.message ||
+          response?.message ||
+          "Something went wrong!";
+        throw new Error(err);
+      }
+    } catch (error) {
+      console.log("Error in checkTokenIsValidFun Api ", error);
+      let err =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Something went wrong!";
+      if (err === "Network Error") {
+        err = "Please check your internet connection";
+      }
+
+      throw error;
+    }
+  }
+);
 
 export const forgetPasswordFunApi = createAsyncThunk(
   "auth/forgetPassword",
