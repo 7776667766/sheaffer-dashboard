@@ -16,23 +16,36 @@ import { getAllServiceFunApi } from "store/service/services";
 import TransitionsDialog from "@/components/UIElements/Modal/TransitionsDialog";
 
 const WebsitePage = () => {
-  const dispatch = useDispatch();
-  const { service } = useSelector((state) => state.service);
-  const { business } = useSelector((state) => state.business);
-  const { role } = useSelector((state) => state.auth);
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  // const dispatch = useDispatch();
+  // const { service } = useSelector((state) => state.service);
+  // const { business } = useSelector((state) => state.business);
+  // const { role } = useSelector((state) => state.auth);
+  // const [open, setOpen] = React.useState(false);
+  // const handleOpen = () => setOpen(true);
+  // const handleClose = () => setOpen(false);
 
-  useEffect(() => {
-    if (service.dataFatched !== true) {
-      dispatch(
-        getAllServiceFunApi({
-          businessId: business?.id,
-        })
-      );
-    }
-  }, [dispatch, service.data, service.dataFatched, business?.id]);
+  // useEffect(() => {
+  //   if (service.dataFatched !== true) {
+  //     dispatch(
+  //       getAllServiceFunApi({
+  //         businessId: business?.id,
+  //       })
+  //     );
+  //   }
+  // }, [dispatch, service.data, service.dataFatched, business?.id]);
+
+  const Data = [
+    {
+      id: 1,
+      name: "ali",
+      slug: "view",
+    },
+    {
+      id: 2,
+      name: "bilal",
+      slug: "view",
+    },
+  ];
 
   return (
     <>
@@ -64,35 +77,22 @@ const WebsitePage = () => {
           >
             My Website
           </Typography>
-
-          {(role === "owner" || role === "manager") && (
-            <Link href="/services/add-service">
-              <Button
-                variant="contained"
-                sx={{
-                  textTransform: "capitalize",
-                  borderRadius: "8px",
-                  fontWeight: "500",
-                  fontSize: "13px",
-                  padding: "12px 20px",
-                  color: "#fff !important",
-                }}
-              >
-                <AddIcon
-                  sx={{ position: "relative", top: "-1px" }}
-                  className="mr-5px"
-                />
-                Add Service
-              </Button>
-            </Link>
-          )}
         </Box>
 
         <CustomPaginationTable
-          tableData={service.data}
-          isLoading={service.isLoading}
+          tableData={Data}
+          isLoading={false}
           tableHeaderData={
             <>
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13.5px",
+                }}
+              >
+                Sr.No
+              </TableCell>
+
               <TableCell
                 sx={{
                   borderBottom: "1px solid #F7FAFF",
@@ -106,71 +106,14 @@ const WebsitePage = () => {
                 sx={{
                   borderBottom: "1px solid #F7FAFF",
                   fontSize: "13.5px",
+                  textAlign: "end",
                 }}
               >
-                Description
-              </TableCell>
-
-              <TableCell
-                sx={{
-                  borderBottom: "1px solid #F7FAFF",
-                  fontSize: "13.5px",
-                }}
-              >
-                Image
-              </TableCell>
-
-              <TableCell
-                sx={{
-                  borderBottom: "1px solid #F7FAFF",
-                  fontSize: "13.5px",
-                }}
-              >
-                Price
-              </TableCell>
-
-              <TableCell
-                align="center"
-                sx={{
-                  borderBottom: "1px solid #F7FAFF",
-                  fontSize: "13.5px",
-                }}
-              >
-                Duration
-              </TableCell>
-
-              <TableCell
-                align="center"
-                sx={{
-                  borderBottom: "1px solid #F7FAFF",
-                  fontSize: "13.5px",
-                }}
-              >
-                Type
-              </TableCell>
-
-              <TableCell
-                align="center"
-                sx={{
-                  borderBottom: "1px solid #F7FAFF",
-                  fontSize: "13.5px",
-                }}
-              >
-                Specialist
-              </TableCell>
-
-              <TableCell
-                align="right"
-                sx={{
-                  borderBottom: "1px solid #F7FAFF",
-                  fontSize: "13.5px",
-                }}
-              >
-                Action
+                View More
               </TableCell>
             </>
           }
-          tableBodyData={(data, index) => (
+          tableBodyData={(item, index) => (
             <>
               <TableCell
                 sx={{
@@ -182,7 +125,7 @@ const WebsitePage = () => {
                   pb: "16px",
                 }}
               >
-                {data.name}
+                {index + 0}
               </TableCell>
 
               <TableCell
@@ -193,7 +136,7 @@ const WebsitePage = () => {
                   pb: "16px",
                 }}
               >
-                {data.description}
+                {item.name}
               </TableCell>
 
               <TableCell
@@ -201,98 +144,19 @@ const WebsitePage = () => {
                   borderBottom: "1px solid #F7FAFF",
                   pt: "16px",
                   pb: "16px",
+                  textAlign: "end",
                 }}
               >
-                <Avatar
-                  alt="User"
-                  src={data.image}
-                  sx={{ width: 35, height: 35 }}
-                />
-              </TableCell>
-
-              <TableCell
-                sx={{
-                  borderBottom: "1px solid #F7FAFF",
-                  fontSize: "13px",
-                  pt: "16px",
-                  pb: "16px",
-                }}
-              >
-                {data.price}
-              </TableCell>
-
-              <TableCell
-                align="center"
-                sx={{
-                  fontWeight: 500,
-                  borderBottom: "1px solid #F7FAFF",
-                  fontSize: "11px",
-                  pt: "16px",
-                  pb: "16px",
-                }}
-              >
-                {data?.timeInterval} Min
-              </TableCell>
-
-              <TableCell
-                sx={{
-                  borderBottom: "1px solid #F7FAFF",
-                  fontSize: "13px",
-                  pt: "16px",
-                  pb: "16px",
-                }}
-                align="center"
-              >
-                {data?.type?.name}
-              </TableCell>
-
-              <TableCell
-                sx={{
-                  borderBottom: "1px solid #F7FAFF",
-                  fontSize: "13px",
-                  pt: "16px",
-                  pb: "16px",
-                }}
-                align="center"
-              >
-                {data?.specialist?.name}
-              </TableCell>
-
-              <TableCell
-                align="right"
-                sx={{ borderBottom: "1px solid #F7FAFF" }}
-              >
-                <Box
+                <Button
+                  variant="outlined"
+                  href="#"
                   sx={{
-                    display: "inline-block",
+                    pt: "2px",
+                    pb: "1px",
                   }}
                 >
-                  <Tooltip title="Remove" placement="top">
-                    <IconButton
-                      aria-label="remove"
-                      size="small"
-                      color="danger"
-                      className="danger"
-                    >
-                      <TransitionsDialog
-                        modelButton={<DeleteIcon fontSize="inherit" />}
-                      >
-                        <Typography>Are you sure want to delete ?</Typography>
-                      </TransitionsDialog>
-                    </IconButton>
-                  </Tooltip>
-
-                  <Tooltip title="Rename" placement="top">
-                    <IconButton
-                      aria-label="rename"
-                      size="small"
-                      color="primary"
-                      className="primary"
-                    >
-                      <DriveFileRenameOutlineIcon fontSize="inherit" />
-                    </IconButton>
-                  </Tooltip>
-                </Box>
+                  {item.slug}
+                </Button>
               </TableCell>
             </>
           )}

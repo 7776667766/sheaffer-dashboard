@@ -181,6 +181,24 @@ export const SidebarData = () => {
         
       ],
     },
+    role === "admin" && {
+      title: "Plan",
+      path: "/plan/",
+
+      icon: <LayersIcon />,
+      iconClosed: <KeyboardArrowRightIcon />,
+      iconOpened: <KeyboardArrowDownIcon />,
+      subNav: [
+        {
+          title: "Plan",
+          path: "/plan/",
+        },
+        {
+          title: "Add Plan",
+          path: "/plan/add-plan/ ",
+        },
+      ],
+    },
     localServer && {
       title: "Email",
       path: "/email/inbox/",
