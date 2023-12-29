@@ -178,10 +178,10 @@ const authSlice = createSlice({
         state.validToken.isLoading = true;
       })
       .addCase(checkTokenIsValidFunApi.fulfilled, (state, action) => {
+        localStorage.setItem("token", action.payload.token);
         state.validToken.isLoading = false;
         state.validToken.valid = true;
         state.validToken.dataFetched = true;
-
         state.isAuthenticated = true;
         state.user = action.payload.user;
         state.isVerified = action.payload.user.verified;
