@@ -1,19 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
-import Link from "next/link";
 import styles from "@/styles/PageTitle.module.css";
 import Features from "@/components/Dashboard/eCommerce/Features";
-import Ratings from "@/components/Dashboard/eCommerce/Ratings";
-import AudienceOverview from "@/components/Dashboard/eCommerce/AudienceOverview";
-import VisitsByDay from "@/components/Dashboard/eCommerce/VisitsByDay";
-import Impressions from "@/components/Dashboard/eCommerce/Impressions";
-import ActivityTimeline from "@/components/Dashboard/eCommerce/ActivityTimeline";
-import RevenuStatus from "@/components/Dashboard/eCommerce/RevenuStatus";
-import SalesByCountries from "@/components/Dashboard/eCommerce/SalesByCountries";
-import NewCustomers from "@/components/Dashboard/eCommerce/NewCustomers";
-import RecentOrders from "@/components/Dashboard/eCommerce/RecentOrders";
-import BestSellingProducts from "@/components/Dashboard/eCommerce/BestSellingProducts";
-import LiveVisitsOnOurSite from "@/components/Dashboard/eCommerce/LiveVisitsOnOurSite";
 import UserList from "./users";
 import CloseIcon from "@mui/icons-material/Close";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,7 +10,6 @@ import {
   Box,
   Card,
   Dialog,
-  DialogContent,
   DialogTitle,
   List,
   IconButton,
@@ -103,7 +90,7 @@ export default function ECommerce() {
             },
           ],
           images: [
-            "https://files.slack.com/files-pri/T069L059YP6-F06ABUTS9L3/rectangle_2327.png",
+            "https://resortcabanas.com/wp-content/uploads/Learn-to-Differentiate-Your-Spa-Business_Outdoor-Cabanas_39138676_m.jpg",
           ],
         },
 
@@ -125,7 +112,7 @@ export default function ECommerce() {
               <>
                 <Button
                   variant="contained"
-                  // disabled={business}
+                  disabled={business}
                   onClick={handleClickOpen}
                 >
                   Sync Business
@@ -318,7 +305,19 @@ export default function ECommerce() {
                       }}
                     >
                       <li>{business.name}</li>
-                      <li>{business?.slug || "N/A"}</li>
+                      <li>
+                        <Button
+                          variant="outlined"
+                          href={`${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}site/${business.slug}`}
+                          target="_blank"
+                          sx={{
+                            pt: "2px",
+                            pb: "1px",
+                          }}
+                        >
+                          {business.slug}
+                        </Button>
+                      </li>
                       <li>{business.description}</li>
                       <li>{business.email}</li>
                       <li>{business.phone}</li>
