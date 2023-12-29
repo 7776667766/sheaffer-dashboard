@@ -100,7 +100,24 @@ export const SidebarData = () => {
         },
       ],
     },
-    {
+    role === "admin" && {
+      title: "Services",
+      path: "/services/service-type",
+      icon: <LayersIcon />,
+      iconClosed: <KeyboardArrowRightIcon />,
+      iconOpened: <KeyboardArrowDownIcon />,
+      subNav: [
+        {
+          title: "Service Types",
+          path: "/services/service-type",
+        },
+        {
+          title: "Add Service Type",
+          path: "/services/add-service-type/",
+        },
+      ],
+    },
+    (role === "owner" || role === "manager") && {
       title: "Services",
       path: "/services/",
       icon: <LayersIcon />,
@@ -111,17 +128,9 @@ export const SidebarData = () => {
           title: "Services",
           path: "/services/",
         },
-        (role === "owner" || role === "manager") && {
+        {
           title: "Add Service",
           path: "/services/add-service/",
-        },
-        {
-          title: "Service Types",
-          path: "/services/service-type",
-        },
-        role === "admin" && {
-          title: "Add Service Type",
-          path: "/services/add-service-type/",
         },
       ],
     },
@@ -178,7 +187,6 @@ export const SidebarData = () => {
           title: "Booking",
           path: "/templates/booking/",
         },
-        
       ],
     },
     role === "admin" && {

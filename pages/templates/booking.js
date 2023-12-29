@@ -38,13 +38,18 @@ const bookingPage = () => {
   const Data = [
     {
       id: 1,
-      name: "Ali",
-      slug: "Demo",
+      name: "Booking Theme 1",
+      slug: "booking/booking-theme-1",
     },
     {
       id: 2,
-      name: "Bilal",
-      slug: "Demo",
+      name: "Booking Theme 2",
+      slug: "booking/booking-theme-2",
+    },
+    {
+      id: 3,
+      name: "Booking Theme 3",
+      slug: "booking/booking-theme-3",
     },
   ];
 
@@ -102,6 +107,14 @@ const bookingPage = () => {
               >
                 Name
               </TableCell>
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13.5px",
+                }}
+              >
+                Slug
+              </TableCell>
 
               <TableCell
                 sx={{
@@ -114,7 +127,7 @@ const bookingPage = () => {
               </TableCell>
             </>
           }
-          tableBodyData={(item, index) => (
+          tableBodyData={(data, index) => (
             <>
               <TableCell
                 sx={{
@@ -137,7 +150,18 @@ const bookingPage = () => {
                   pb: "16px",
                 }}
               >
-                {item.name}
+                {data.name}
+              </TableCell>
+
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13px",
+                  pt: "16px",
+                  pb: "16px",
+                }}
+              >
+                {data.slug}
               </TableCell>
 
               <TableCell
@@ -148,11 +172,16 @@ const bookingPage = () => {
                   textAlign: "end",
                 }}
               >
-                <Button variant="outlined" href="#" sx={{
-                  pt:"2px",
-                  pb:"2px",
-                }}>
-                  {item.slug}
+                <Button
+                  variant="outlined"
+                  href={`${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}${data.slug}`}
+                  target="_blank"
+                  sx={{
+                    pt: "2px",
+                    pb: "1px",
+                  }}
+                >
+                  Demo
                 </Button>
               </TableCell>
             </>

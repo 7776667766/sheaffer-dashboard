@@ -20,9 +20,6 @@ const Services = () => {
   const { service } = useSelector((state) => state.service);
   const { business } = useSelector((state) => state.business);
   const { role } = useSelector((state) => state.auth);
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
 
   useEffect(() => {
     if (service.dataFatched !== true) {
@@ -82,7 +79,7 @@ const Services = () => {
                   sx={{ position: "relative", top: "-1px" }}
                   className="mr-5px"
                 />
-                Add Service 
+                Add Service
               </Button>
             </Link>
           )}

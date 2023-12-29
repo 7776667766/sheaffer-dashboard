@@ -37,13 +37,13 @@ const WebsitePage = () => {
   const Data = [
     {
       id: 1,
-      name: "ali",
-      slug: "view",
+      name: "Web Theme 1",
+      slug: "site/web-theme-1",
     },
     {
       id: 2,
-      name: "bilal",
-      slug: "view",
+      name: "Web Theme 2",
+      slug: "site/web-theme-2",
     },
   ];
 
@@ -101,6 +101,14 @@ const WebsitePage = () => {
               >
                 Name
               </TableCell>
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13.5px",
+                }}
+              >
+                Slug
+              </TableCell>
 
               <TableCell
                 sx={{
@@ -113,7 +121,7 @@ const WebsitePage = () => {
               </TableCell>
             </>
           }
-          tableBodyData={(item, index) => (
+          tableBodyData={(data, index) => (
             <>
               <TableCell
                 sx={{
@@ -136,7 +144,18 @@ const WebsitePage = () => {
                   pb: "16px",
                 }}
               >
-                {item.name}
+                {data.name}
+              </TableCell>
+
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13px",
+                  pt: "16px",
+                  pb: "16px",
+                }}
+              >
+                {data.slug}
               </TableCell>
 
               <TableCell
@@ -149,13 +168,14 @@ const WebsitePage = () => {
               >
                 <Button
                   variant="outlined"
-                  href="#"
+                  href={`${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}${data.slug}`}
+                  target="_blank"
                   sx={{
                     pt: "2px",
                     pb: "1px",
                   }}
                 >
-                  {item.slug}
+                  Demo
                 </Button>
               </TableCell>
             </>

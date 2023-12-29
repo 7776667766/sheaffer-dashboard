@@ -143,9 +143,6 @@ const authSlice = createSlice({
         state.token = null;
         state.otpVerified = false;
       });
-    // builder.addDefaultCase((state, action) => {
-    //   state.isLoading = false;
-    // });
 
     builder
       .addCase(changePasswordFunApi.pending, (state, action) => {
@@ -205,7 +202,5 @@ const authSlice = createSlice({
       });
   },
 });
-
-export const { login } = authSlice.actions;
 
 export const authReducer = authSlice.reducer;

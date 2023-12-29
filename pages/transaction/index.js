@@ -15,7 +15,7 @@ const TransactionPage = () => {
   const dispatch = useDispatch();
 
   const { card } = useSelector((state) => state.card);
-  console.log("full card is here ----->", card)
+  console.log("full card is here ----->", card);
   const { business } = useSelector((state) => state.business);
   console.log("business", business);
 
@@ -83,7 +83,7 @@ const TransactionPage = () => {
                   fontSize: "13.5px",
                 }}
               >
-                Customer Name
+                Name
               </TableCell>
 
               <TableCell
@@ -94,7 +94,6 @@ const TransactionPage = () => {
               >
                 Customer Id
               </TableCell>
-
 
               <TableCell
                 sx={{
@@ -111,16 +110,8 @@ const TransactionPage = () => {
                   fontSize: "13.5px",
                 }}
               >
-                Subscription Plan
+                Package
               </TableCell>
-              {/* <TableCell
-                sx={{
-                  borderBottom: "1px solid #F7FAFF",
-                  fontSize: "13.5px",
-                }}
-              >
-                Amount
-              </TableCell> */}
 
               <TableCell
                 sx={{
@@ -128,7 +119,7 @@ const TransactionPage = () => {
                   fontSize: "13.5px",
                 }}
               >
-                Card Type
+                Paypment
               </TableCell>
               <TableCell
                 sx={{
@@ -136,16 +127,9 @@ const TransactionPage = () => {
                   fontSize: "13.5px",
                 }}
               >
-                Last 4 Digits
+                Card No.
               </TableCell>
-              {/* <TableCell
-                sx={{
-                  borderBottom: "1px solid #F7FAFF",
-                  fontSize: "13.5px",
-                }}
-              >
-                Expiry Date
-              </TableCell> */}
+
               <TableCell
                 sx={{
                   borderBottom: "1px solid #F7FAFF",
@@ -154,8 +138,6 @@ const TransactionPage = () => {
               >
                 Price
               </TableCell>
-
-
             </>
           }
           tableBodyData={(data, index) => (
@@ -194,7 +176,6 @@ const TransactionPage = () => {
                 {data.stripeCustomerId}
               </TableCell>
 
-
               <TableCell
                 sx={{
                   borderBottom: "1px solid #F7FAFF",
@@ -226,7 +207,8 @@ const TransactionPage = () => {
                 }}
                 align="center"
               >
-                {data.cardType}
+                {/* {data.cardType} */}
+                Stripe
               </TableCell>
               <TableCell
                 sx={{
@@ -239,17 +221,7 @@ const TransactionPage = () => {
               >
                 {data.cardDigits}
               </TableCell>
-              {/* <TableCell
-                sx={{
-                  borderBottom: "1px solid #F7FAFF",
-                  fontSize: "13px",
-                  pt: "16px",
-                  pb: "16px",
-                }}
-                align="center"
-              >
-                {data.expiryDate}
-              </TableCell> */}
+
               <TableCell
                 sx={{
                   borderBottom: "1px solid #F7FAFF",
@@ -273,7 +245,7 @@ const TransactionPage = () => {
                 }}
               >
                 <span
-                //   className={` 
+                //   className={`
                 //     ${
                 //       data.status?.toLowerCase() === "completed"
                 //         ? "successBadge"
@@ -287,28 +259,6 @@ const TransactionPage = () => {
                 >
                   {/* {data.status} */}
                 </span>
-              </TableCell>
-
-              <TableCell
-                align="right"
-                sx={{ borderBottom: "1px solid #F7FAFF" }}
-              >
-                <Box
-                  sx={{
-                    display: "inline-block",
-                  }}
-                >
-                  <Tooltip title="Rename" placement="top">
-                    <IconButton
-                      aria-label="rename"
-                      size="small"
-                      color="primary"
-                      className="primary"
-                    >
-                      <DriveFileRenameOutlineIcon fontSize="inherit" />
-                    </IconButton>
-                  </Tooltip>
-                </Box>
               </TableCell>
             </>
           )}
