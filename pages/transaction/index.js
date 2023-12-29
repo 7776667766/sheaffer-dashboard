@@ -138,14 +138,24 @@ const TransactionPage = () => {
               >
                 Last 4 Digits
               </TableCell>
-              <TableCell
+              {/* <TableCell
                 sx={{
                   borderBottom: "1px solid #F7FAFF",
                   fontSize: "13.5px",
                 }}
               >
                 Expiry Date
+              </TableCell> */}
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13.5px",
+                }}
+              >
+                Price
               </TableCell>
+
+
             </>
           }
           tableBodyData={(data, index) => (
@@ -229,7 +239,7 @@ const TransactionPage = () => {
               >
                 {data.cardDigits}
               </TableCell>
-              <TableCell
+              {/* <TableCell
                 sx={{
                   borderBottom: "1px solid #F7FAFF",
                   fontSize: "13px",
@@ -239,6 +249,17 @@ const TransactionPage = () => {
                 align="center"
               >
                 {data.expiryDate}
+              </TableCell> */}
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13px",
+                  pt: "16px",
+                  pb: "16px",
+                }}
+                align="center"
+              >
+                {data.amount}
               </TableCell>
 
               <TableCell
