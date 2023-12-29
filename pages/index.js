@@ -175,7 +175,7 @@ export default function ECommerce() {
                           <TextField
                             label="Slug"
                             name="slug"
-                            onChange={(e) => setSlug(e.target.value)} 
+                            onChange={(e) => setSlug(e.target.value)}
                             fullWidth
                             InputProps={{
                               style: {
@@ -318,7 +318,7 @@ export default function ECommerce() {
                       }}
                     >
                       <li>{business.name}</li>
-                      <li>{business?.slug}</li>
+                      <li>{business?.slug || "N/A"}</li>
                       <li>{business.description}</li>
                       <li>{business.email}</li>
                       <li>{business.phone}</li>
@@ -341,15 +341,16 @@ export default function ECommerce() {
                       <li>{business.address}</li>
 
                       <li style={{ height: "50px" }}>
-                        {business.images.map((data) => {
+                        {business.images.map((data, key) => (
                           <Image
+                            key={key}
                             src={data}
-                            alt="bisiness Image"
+                            alt={business.name}
                             width={50}
                             height={50}
                             style={{ marginRight: "12px" }}
-                          />;
-                        })}
+                          />
+                        ))}
                       </li>
                     </ul>
                   </Typography>
