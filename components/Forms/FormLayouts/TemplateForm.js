@@ -4,38 +4,77 @@ import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
+import { useState } from "react";
 import SendIcon from "@mui/icons-material/Send";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { requiredValidation, slugValidation } from "@/utils/validation";
 
-import { addManagerFunApi } from "store/manager/services";
+import { addtemplateApi } from "store/template/services";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 
 const TemplateForm = () => {
+
+  const [avatar1, setavatar1] = useState(null);
+  const [avatar2, setavatar2] = useState(null);
+
+  console.log(avatar1, "avatar1")
+  console.log(avatar2, "avatar2")
+
   const dispatch = useDispatch();
   const router = useRouter();
+
+
+  const handleWebsiteImageChange = (event) => {
+    const file = event.target.files[0];
+    setavatar1(file);
+    console.log("file1", file)
+  };
+
+  const handleBookingImageChange = (event) => {
+    const file = event.target.files[0];
+    setavatar2(file);
+    console.log("file2", file)
+  };
+
 
   const formik = useFormik({
     initialValues: {
       name: "",
       slug: "",
+      websiteImage: "",
+      bookingImage: ""
+
     },
     validationSchema: Yup.object({
       name: requiredValidation(),
       slug: slugValidation(),
     }),
-    onSubmit: (values) => {
-      dispatch(
-        addManagerFunApi({
-          data: values,
-          onSuccess: () => {
-            router.push("/templates/");
-          },
-        })
-      );
+    onSubmit: async (values) => {
+      try {
+        const formData = {
+          ...values,
+          websiteImage: avatar1,
+          bookingImage: avatar2
+        };
+
+        console.log(formData);
+
+
+        dispatch(
+          addtemplateApi({
+            data: formData,
+            onSuccess: () => {
+
+            },
+          })
+        );
+      } catch (error) {
+        console.error("Error adding template:", error);
+      }
     },
+
   });
 
   return (
@@ -102,6 +141,53 @@ const TemplateForm = () => {
                 InputProps={{
                   style: { borderRadius: 8 },
                 }}
+              />
+            </Grid>
+            <Grid item xs={12} md={12} lg={6}>
+              <Typography
+                component="label"
+                sx={{
+                  fontWeight: "500",
+                  fontSize: "14px",
+                  mb: "10px",
+                  display: "block",
+                }}
+              >
+                Upload Website Image
+              </Typography>
+
+              <TextField
+                required
+                fullWidth
+                name="websiteImage"
+                type="file"
+                onChange={handleWebsiteImageChange}
+                id="websiteImage"
+
+              />
+            </Grid>
+            <Grid item xs={12} md={12} lg={6}>
+              <Typography
+                component="label"
+                sx={{
+                  fontWeight: "500",
+                  fontSize: "14px",
+                  mb: "10px",
+                  display: "block",
+                }}
+              >
+                Upload Booking Image
+              </Typography>
+
+              <TextField
+                required
+                fullWidth
+                name="bookingImage"
+                type="file"
+                id="bookingImage"
+                accept="image/*"
+                onChange={handleBookingImageChange}
+
               />
             </Grid>
 
