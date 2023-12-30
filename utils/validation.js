@@ -50,6 +50,22 @@ export const requiredValidation = (name) => {
   );
 };
 
+export const slugValidation = (name) => {
+  return Yup.string()
+    .required(
+      `${
+        name ? name.charAt(0).toUpperCase() + name.slice(1) : "Slug"
+      } is Required`
+    )
+    .matches(/^\S*$/, "No spaces allowed")
+    .matches(
+      /^[a-zA-Z0-9-]*$/,
+      `${
+        name ? name.charAt(0).toUpperCase() + name.slice(1) : "Slug"
+      } is not valid`
+    );
+};
+
 export const passwordValidation = (name) => {
   return Yup.string()
     .required(

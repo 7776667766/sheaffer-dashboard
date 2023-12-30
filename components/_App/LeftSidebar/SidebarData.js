@@ -147,19 +147,18 @@ export const SidebarData = () => {
     },
     role === "admin" && {
       title: "Templates",
-      path: "/templates/website",
-
+      path: "/templates",
       icon: <LayersIcon />,
       iconClosed: <KeyboardArrowRightIcon />,
       iconOpened: <KeyboardArrowDownIcon />,
       subNav: [
         {
-          title: "Website",
-          path: "/templates/website/",
+          title: "Templates",
+          path: "/templates/",
         },
         {
-          title: "Booking",
-          path: "/templates/booking/",
+          title: "Add Template",
+          path: "/templates/add-template/",
         },
       ],
     },

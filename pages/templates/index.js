@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllServiceFunApi } from "store/service/services";
 import TransitionsDialog from "@/components/UIElements/Modal/TransitionsDialog";
 
-const WebsitePage = () => {
+const TemplatesPage = () => {
   // const dispatch = useDispatch();
   // const { service } = useSelector((state) => state.service);
   // const { business } = useSelector((state) => state.business);
@@ -38,12 +38,12 @@ const WebsitePage = () => {
     {
       id: 1,
       name: "Web Theme 1",
-      slug: "site/web-theme-1",
+      slug: "web-theme-1",
     },
     {
       id: 2,
       name: "Web Theme 2",
-      slug: "site/web-theme-2",
+      slug: "web-theme-2",
     },
   ];
 
@@ -75,8 +75,26 @@ const WebsitePage = () => {
               fontWeight: 500,
             }}
           >
-            My Website
+            My Templates
           </Typography>
+          <Link href="/templates/add-template">
+            <Button
+              variant="contained"
+              sx={{
+                textTransform: "capitalize",
+                borderRadius: "8px",
+                fontWeight: "500",
+                fontSize: "13px",
+                padding: "12px 20px",
+              }}
+            >
+              <AddIcon
+                sx={{ position: "relative", top: "-1px" }}
+                className="mr-5px"
+              />
+              Add Template
+            </Button>
+          </Link>
         </Box>
 
         <CustomPaginationTable
@@ -114,10 +132,17 @@ const WebsitePage = () => {
                 sx={{
                   borderBottom: "1px solid #F7FAFF",
                   fontSize: "13.5px",
-                  textAlign: "end",
                 }}
               >
-                View More
+                Website
+              </TableCell>
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13.5px",
+                }}
+              >
+                Booking
               </TableCell>
             </>
           }
@@ -157,25 +182,42 @@ const WebsitePage = () => {
               >
                 {data.slug}
               </TableCell>
-
               <TableCell
                 sx={{
                   borderBottom: "1px solid #F7FAFF",
                   pt: "16px",
                   pb: "16px",
-                  textAlign: "end",
                 }}
               >
                 <Button
                   variant="outlined"
-                  href={`${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}${data.slug}`}
+                  href={`${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}site/${data.slug}`}
                   target="_blank"
                   sx={{
                     pt: "2px",
                     pb: "1px",
                   }}
                 >
-                  Demo
+                  View Website
+                </Button>
+              </TableCell>
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  pt: "16px",
+                  pb: "16px",
+                }}
+              >
+                <Button
+                  variant="outlined"
+                  href={`${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}booking/${data.slug}`}
+                  target="_blank"
+                  sx={{
+                    pt: "2px",
+                    pb: "1px",
+                  }}
+                >
+                  View Booking
                 </Button>
               </TableCell>
             </>
@@ -186,4 +228,4 @@ const WebsitePage = () => {
   );
 };
 
-export default WebsitePage;
+export default TemplatesPage;
