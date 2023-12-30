@@ -1,10 +1,8 @@
 import React from "react";
 import { Box, Button, TableCell, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
-import Tooltip from "@mui/material/Tooltip";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import moment from "moment";
 import { CustomPaginationTable } from "@/components/Table/CustomPaginationTable";
 import Link from "next/link";
 import AddIcon from "@mui/icons-material/Add";
@@ -117,7 +115,7 @@ const PackagePage = () => {
                   fontSize: "13.5px",
                 }}
               >
-                Description
+              Features
               </TableCell>
               <TableCell
                 sx={{
@@ -191,8 +189,19 @@ const PackagePage = () => {
                   pb: "16px",
                 }}
               >
-                {item.description}
+                <ol
+                  style={{
+                    padding:0,
+                  }}
+                >
+                  {item.Features[0].split("\n").map((feature, index) => (
+                    <li key={index}>{feature.trim()}</li>
+                  ))}
+                </ol>
+
               </TableCell>
+
+
               <TableCell
                 sx={{
                   borderBottom: "1px solid #F7FAFF",

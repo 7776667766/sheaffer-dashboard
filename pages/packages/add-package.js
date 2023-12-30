@@ -33,14 +33,14 @@ const AddBusinessPackagePage = () => {
       name: "",
       duration: "",
       price: "",
-      description: "",
+      Features: "",
       isFeatured: false,
     },
     validationSchema: Yup.object({
       name: requiredValidation(),
       duration: requiredValidation("duration"),
       price: requiredValidation("Price"),
-      description: requiredValidation("Description"),
+      Features: requiredValidation("Features"),
     }),
 
     onSubmit: (values) => {
@@ -140,18 +140,18 @@ const AddBusinessPackagePage = () => {
               <Grid item xs={12}>
                 <TextField
                   fullWidth
-                  label="Description"
+                  label="Features"
                   minRows={3}
                   multiline
-                  {...formik.getFieldProps("description")}
+                  {...formik.getFieldProps("Features")}
                   error={
-                    formik.touched.description && formik.errors.description
+                    formik.touched.Features && formik.errors.Features
                       ? true
                       : false
                   }
                   helperText={
-                    formik.touched.description && formik.errors.description
-                      ? formik.errors.description
+                    formik.touched.Features && formik.errors.Features
+                      ? formik.errors.Features
                       : ""
                   }
                 />
