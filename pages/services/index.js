@@ -14,12 +14,22 @@ import { CustomPaginationTable } from "@/components/Table/CustomPaginationTable"
 import { useDispatch, useSelector } from "react-redux";
 import { getAllServiceFunApi } from "store/service/services";
 import TransitionsDialog from "@/components/UIElements/Modal/TransitionsDialog";
+import { useRouter } from "next/router";
 
 const Services = () => {
   const dispatch = useDispatch();
   const { service } = useSelector((state) => state.service);
   const { business } = useSelector((state) => state.business);
   const { role } = useSelector((state) => state.auth);
+
+  const router = useRouter();
+
+  const nextPage = (id, event) => {
+    event.preventDefault();
+   
+    router.push(`/services/edit-service/${id}`);
+    console.log()
+  };
 
   useEffect(() => {
     if (service.dataFatched !== true) {
@@ -285,6 +295,7 @@ const Services = () => {
                       size="small"
                       color="primary"
                       className="primary"
+                      onClick={(event) => nextPage(data.id, event)}
                     >
                       <DriveFileRenameOutlineIcon fontSize="inherit" />
                     </IconButton>

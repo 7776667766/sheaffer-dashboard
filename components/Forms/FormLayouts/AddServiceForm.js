@@ -18,7 +18,7 @@ import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import * as Yup from "yup";
 import { requiredValidation } from "@/utils/validation";
-import { addservicesFunApi } from "store/service/services";
+import { addservicesFunApi, editServicesFunApi } from "store/service/services";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { getspecialistApi } from "store/specialist/services";
@@ -30,7 +30,7 @@ import toast from "react-hot-toast";
 //   ssr: false,
 // });
 
-const AddServiceForm = () => {
+const AddServiceForm = ({ formData, isEditMode }) => {
   const [selectedSpecialist, setSelectedSpecialist] = useState(null);
   const [selectedServices, setSelectedServices] = useState(null);
   const [avatar, setavatar] = useState(null);
@@ -78,61 +78,66 @@ const AddServiceForm = () => {
     serviceType.dataFatched,
   ]);
 
-  const formik = useFormik({
-    initialValues: {
-      name: "",
-      description: "",
-      image: "",
-      price: "",
-      typeId: "",
-      specialistId: "",
-      timeInterval: 0, 
-      businessId: business?.id,
-      timeSlots: [
-        {
-          day: "Monday",
-          startTime: "10:00",
-          endTime: "12:00",
-          active: false,
-        },
-        {
-          day: "Tuesday",
-          startTime: "10:00",
-          endTime: "12:00",
-          active: false,
-        },
-        {
-          day: "Wednesday",
-          startTime: "10:00",
-          endTime: "12:00",
-          active: false,
-        },
-        {
-          day: "Thursday",
-          startTime: "10:00",
-          endTime: "12:00",
-          active: false,
-        },
-        {
-          day: "Friday",
-          startTime: "10:00",
-          endTime: "12:00",
-          active: false,
-        },
-        {
-          day: "Saturday",
-          startTime: "10:00",
-          endTime: "12:00",
-          active: false,
-        },
-        {
-          day: "Sunday",
-          startTime: "10:00",
-          endTime: "12:00",
-          active: false,
-        },
-      ],
+  const initialValues = isEditMode? {
+    ...formData
+  }
+: {
+  name: "",
+  description: "",
+  image: "",
+  price: "",
+  typeId: "",
+  specialistId: "",
+  timeInterval: 0, 
+  businessId: business?.id,
+  timeSlots: [
+    {
+      day: "Monday",
+      startTime: "10:00",
+      endTime: "12:00",
+      active: false,
     },
+    {
+      day: "Tuesday",
+      startTime: "10:00",
+      endTime: "12:00",
+      active: false,
+    },
+    {
+      day: "Wednesday",
+      startTime: "10:00",
+      endTime: "12:00",
+      active: false,
+    },
+    {
+      day: "Thursday",
+      startTime: "10:00",
+      endTime: "12:00",
+      active: false,
+    },
+    {
+      day: "Friday",
+      startTime: "10:00",
+      endTime: "12:00",
+      active: false,
+    },
+    {
+      day: "Saturday",
+      startTime: "10:00",
+      endTime: "12:00",
+      active: false,
+    },
+    {
+      day: "Sunday",
+      startTime: "10:00",
+      endTime: "12:00",
+      active: false,
+    },
+  ],
+};
+
+  const formik = useFormik({
+    initialValues:initialValues,
     validationSchema: Yup.object().shape({
       name: requiredValidation("Service Name"),
       description: requiredValidation("Service Description"),
@@ -168,19 +173,33 @@ const AddServiceForm = () => {
 
         console.log(formData);
 
-        dispatch(
-          addservicesFunApi({
-            data: formData,
-            onSuccess: () => {
-              console.log("Add Service Success");
-              router.push("/services/");
-            },
-          })
-        );
+        if (isEditMode) {
+          dispatch(
+            editServicesFunApi({
+              data: {values,},
+              onSuccess: () => {
+                console.log("Edit Service Success");
+                router.push("/service/");
+              },
+            })
+          );
+        }else{
+          dispatch(
+            addservicesFunApi({
+              data: formData,
+              onSuccess: () => {
+                console.log("Add Service Success");
+                router.push("/services/");
+              },
+            })
+          );
+        }
+       
       } catch (error) {
         console.error("Error adding service:", error);
       }
     },
+
   });
 
   return (
@@ -643,7 +662,7 @@ const AddServiceForm = () => {
                   }}
                   className="mr-5px"
                 />{" "}
-                Add Services
+                 {isEditMode ? "Edit" : "Add"} Add Services
               </Button>
             </Grid>
           </Grid>

@@ -1,6 +1,7 @@
 import {
   addserviceTypeApi,
   addservicesApi,
+  editServiceApi,
   getAllServiceApi,
   getsevicetypeApi,
 } from "./constrants";
@@ -148,6 +149,45 @@ export const getServicesTypeFunApi = createAsyncThunk(
       }
     } catch (error) {
       console.log("Error in get services type Api ", error);
+      let err =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Something went wrong!";
+      if (err === "Network Error") {
+        err = "Please check your internet connection";
+      }
+      toast.error(err);
+      throw new Error(err);
+    }
+  }
+);
+
+
+export const editServicesFunApi = createAsyncThunk(
+  "services/editServices",
+  async ({ data, onSuccess }) => {
+    console.log("Edit services value", data);
+    try {
+      const response = await axios.post(editServiceApi(data.id), data);
+      console.log("response in edit Service => ", response.data);
+      if (response.data.status === "success") {
+        toast.success(response.data.message);
+        if (onSuccess) {
+          onSuccess();
+        }
+        return response.data.data;
+      } else {
+        console.log("Error response in edit Service Api => ", response.data);
+        const err =
+          response?.data?.message ||
+          response?.message ||
+          "Something went wrong!";
+        console.log("err: ", err);
+        toast.error(err);
+        throw new Error(err);
+      }
+    } catch (error) {
+      console.log("Error in edit Service Api ", error);
       let err =
         error?.response?.data?.message ||
         error?.message ||

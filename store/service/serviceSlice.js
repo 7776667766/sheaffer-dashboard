@@ -1,6 +1,7 @@
 import {
   addServicesTypeFunApi,
   addservicesFunApi,
+  editServicesFunApi,
   getAllServiceFunApi,
   getServicesTypeFunApi,
 } from "./services";
@@ -83,6 +84,22 @@ const serviceSlice = createSlice({
         state.service.isLoading = false;
         state.service.error = action.payload;
         state.service.dataFatched = true;
+      });
+      builder
+      .addCase(editServicesFunApi.pending, (state, action) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(editServicesFunApi.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.service = state.service.map((ele) =>
+          ele.id === action.payload.id ? action.payload : ele
+        );
+      })
+      .addCase(editServicesFunApi.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+        state.dataFatched = true;
       });
   },
 });
