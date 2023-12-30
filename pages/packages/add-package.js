@@ -16,6 +16,10 @@ import { LoadingButtonComponent } from "@/components/UIElements/Buttons/LoadingB
 
 const plansList = [
   {
+    name: "1 Month",
+    value: "1 Month",
+  },
+  {
     name: "3 Months",
     value: "3 Months",
   },
@@ -33,20 +37,23 @@ const AddBusinessPackagePage = () => {
       name: "",
       duration: "",
       price: "",
-      Features: "",
+      features: "",
       isFeatured: false,
     },
     validationSchema: Yup.object({
       name: requiredValidation(),
       duration: requiredValidation("duration"),
       price: requiredValidation("Price"),
-      Features: requiredValidation("Features"),
+      features: requiredValidation("Features"),
     }),
 
     onSubmit: (values) => {
       dispatch(
         addPlanFunApi({
-          data: values,
+          data: {
+            ...values,
+            features: values.features.split("\n"),
+          },
           onSuccess: () => {
             router.push("/packages");
           },
@@ -143,15 +150,15 @@ const AddBusinessPackagePage = () => {
                   label="Features"
                   minRows={3}
                   multiline
-                  {...formik.getFieldProps("Features")}
+                  {...formik.getFieldProps("features")}
                   error={
-                    formik.touched.Features && formik.errors.Features
+                    formik.touched.features && formik.errors.features
                       ? true
                       : false
                   }
                   helperText={
-                    formik.touched.Features && formik.errors.Features
-                      ? formik.errors.Features
+                    formik.touched.features && formik.errors.features
+                      ? formik.errors.features
                       : ""
                   }
                 />

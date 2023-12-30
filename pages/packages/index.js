@@ -115,7 +115,7 @@ const PackagePage = () => {
                   fontSize: "13.5px",
                 }}
               >
-              Features
+                Features
               </TableCell>
               <TableCell
                 sx={{
@@ -191,16 +191,14 @@ const PackagePage = () => {
               >
                 <ol
                   style={{
-                    padding:0,
+                    padding: 0,
                   }}
                 >
-                  {item.Features[0].split("\n").map((feature, index) => (
+                  {item.features.map((feature, index) => (
                     <li key={index}>{feature.trim()}</li>
                   ))}
                 </ol>
-
               </TableCell>
-
 
               <TableCell
                 sx={{
