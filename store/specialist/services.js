@@ -51,7 +51,7 @@ export const getspecialistApi = createAsyncThunk(
       console.log("response in get specialist => ", response.data);
       if (response.data.status === "success") {
         if (onSuccess) {
-          onSuccess();
+          onSuccess(response.data.data);
         }
         return response.data.data;
       } else {

@@ -2,8 +2,6 @@ import React from "react";
 import {
   Box,
   Typography,
-  Select,
-  MenuItem,
   FormControl,
   Autocomplete,
   Checkbox,
@@ -24,6 +22,7 @@ import { useRouter } from "next/router";
 import { getspecialistApi } from "store/specialist/services";
 import { getServicesTypeFunApi } from "store/service/services";
 import toast from "react-hot-toast";
+import Image from "next/image";
 // import dynamic from "next/dynamic";
 // import RichTextEditor from "@mantine/rte";
 // const RichTextEditor = dynamic(() => import("@mantine/rte"), {
@@ -32,26 +31,40 @@ import toast from "react-hot-toast";
 
 const AddServiceForm = ({ formData, isEditMode }) => {
   const [selectedSpecialist, setSelectedSpecialist] = useState(null);
-  const [selectedServices, setSelectedServices] = useState(null);
+  const [selectedServiceType, setSelectedServiceType] = useState(null);
   const [avatar, setavatar] = useState(null);
+  const [profileImageUrl, setProfileImageUrl] = useState(null);
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
 
     if (!file) {
       setavatar(null);
+      if (isEditMode) {
+        setProfileImageUrl(formData?.image || null);
+      } else {
+        setProfileImageUrl(null);
+      }
       return false;
     } else {
       const type = file.type.split("/")[0];
       if (type !== "image") {
         toast.error("Please select an image");
         setavatar(null);
-        console.log("File False", file);
         event.target.value = null;
+        if (isEditMode) {
+          setProfileImageUrl(formData?.image || null);
+        } else {
+          setProfileImageUrl(null);
+        }
         return false;
       } else {
-        console.log("file true", file);
         setavatar(file);
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (e) => {
+          setProfileImageUrl(e.target.result);
+        };
       }
     }
   };
@@ -62,89 +75,136 @@ const AddServiceForm = ({ formData, isEditMode }) => {
   const { serviceType } = useSelector((state) => state.service);
 
   useEffect(() => {
-    if (!specialist.specialistFetch) {
-      dispatch(getspecialistApi({ data: business?.id }));
+    if (isEditMode) {
+      setProfileImageUrl(formData?.image || null);
     }
-  }, [dispatch, specialist.specialistFetch, business?.id]);
+  }, [formData?.image, isEditMode]);
+
+  useEffect(() => {
+    if (!specialist.specialistFetch) {
+      dispatch(
+        getspecialistApi({
+          data: business?.id,
+          onSuccess: (specialistList) => {
+            if (isEditMode) {
+              const selected = specialistList?.find(
+                (s) => s.id === formData.specialist.id
+              );
+              setSelectedSpecialist(selected || null);
+            }
+          },
+        })
+      );
+    }
+  }, [
+    business?.id,
+    dispatch,
+    formData?.specialist.id,
+    isEditMode,
+    specialist.specialistFetch,
+  ]);
 
   useEffect(() => {
     if (!serviceType.dataFatched) {
-      dispatch(getServicesTypeFunApi({ data: business?.id }));
+      dispatch(
+        getServicesTypeFunApi({
+          data: business?.id,
+          onSuccess: (serviceTypesList) => {
+            if (isEditMode) {
+              const selected = serviceTypesList?.find(
+                (s) => s.id === formData.type.id
+              );
+              setSelectedServiceType(selected || null);
+            }
+          },
+        })
+      );
+    } else {
+      if (isEditMode && selectedServiceType === null) {
+        const selected = serviceType.data?.find(
+          (s) => s.id === formData.type.id
+        );
+        setSelectedServiceType(selected || null);
+      }
     }
   }, [
-    dispatch,
-    serviceType.serviceFetch,
     business?.id,
+    dispatch,
+    formData?.type.id,
+    isEditMode,
+    selectedServiceType,
+    serviceType.data,
     serviceType.dataFatched,
   ]);
 
-  const initialValues = isEditMode? {
-    ...formData
-  }
-: {
-  name: "",
-  description: "",
-  image: "",
-  price: "",
-  typeId: "",
-  specialistId: "",
-  timeInterval: 0, 
-  businessId: business?.id,
-  timeSlots: [
-    {
-      day: "Monday",
-      startTime: "10:00",
-      endTime: "12:00",
-      active: false,
-    },
-    {
-      day: "Tuesday",
-      startTime: "10:00",
-      endTime: "12:00",
-      active: false,
-    },
-    {
-      day: "Wednesday",
-      startTime: "10:00",
-      endTime: "12:00",
-      active: false,
-    },
-    {
-      day: "Thursday",
-      startTime: "10:00",
-      endTime: "12:00",
-      active: false,
-    },
-    {
-      day: "Friday",
-      startTime: "10:00",
-      endTime: "12:00",
-      active: false,
-    },
-    {
-      day: "Saturday",
-      startTime: "10:00",
-      endTime: "12:00",
-      active: false,
-    },
-    {
-      day: "Sunday",
-      startTime: "10:00",
-      endTime: "12:00",
-      active: false,
-    },
-  ],
-};
+  const initialValues = isEditMode
+    ? {
+        ...formData,
+      }
+    : {
+        name: "",
+        description: "",
+        image: "",
+        price: "",
+        typeId: "",
+        specialistId: "",
+        timeInterval: 0,
+        businessId: business?.id,
+        timeSlots: [
+          {
+            day: "Monday",
+            startTime: "10:00",
+            endTime: "12:00",
+            active: false,
+          },
+          {
+            day: "Tuesday",
+            startTime: "10:00",
+            endTime: "12:00",
+            active: false,
+          },
+          {
+            day: "Wednesday",
+            startTime: "10:00",
+            endTime: "12:00",
+            active: false,
+          },
+          {
+            day: "Thursday",
+            startTime: "10:00",
+            endTime: "12:00",
+            active: false,
+          },
+          {
+            day: "Friday",
+            startTime: "10:00",
+            endTime: "12:00",
+            active: false,
+          },
+          {
+            day: "Saturday",
+            startTime: "10:00",
+            endTime: "12:00",
+            active: false,
+          },
+          {
+            day: "Sunday",
+            startTime: "10:00",
+            endTime: "12:00",
+            active: false,
+          },
+        ],
+      };
 
   const formik = useFormik({
-    initialValues:initialValues,
+    initialValues: initialValues,
     validationSchema: Yup.object().shape({
       name: requiredValidation("Service Name"),
       description: requiredValidation("Service Description"),
       price: Yup.number()
         .typeError("Price must be a number")
         .required("Price is Required"),
-        timeInterval: Yup.number()
+      timeInterval: Yup.number()
         .typeError("Must be a number")
         .required("TimeInterval is Required")
         .positive("TimeInterval must be positive")
@@ -163,30 +223,30 @@ const AddServiceForm = ({ formData, isEditMode }) => {
         toast.error("Please select an image");
         return false;
       }
+
       try {
-        const formData = {
+        const myServiceData = {
           ...values,
           specialistId: selectedSpecialist ? selectedSpecialist.id : "",
-          typeId: selectedServices ? selectedServices.id : "",
+          typeId: selectedServiceType ? selectedServiceType.id : "",
           image: avatar,
         };
 
-        console.log(formData);
-
+        console.log(myServiceData);
         if (isEditMode) {
           dispatch(
             editServicesFunApi({
-              data: {values,},
+              data: myServiceData,
               onSuccess: () => {
                 console.log("Edit Service Success");
                 router.push("/service/");
               },
             })
           );
-        }else{
+        } else {
           dispatch(
             addservicesFunApi({
-              data: formData,
+              data: myServiceData,
               onSuccess: () => {
                 console.log("Add Service Success");
                 router.push("/services/");
@@ -194,12 +254,10 @@ const AddServiceForm = ({ formData, isEditMode }) => {
             })
           );
         }
-       
       } catch (error) {
         console.error("Error adding service:", error);
       }
     },
-
   });
 
   return (
@@ -209,43 +267,14 @@ const AddServiceForm = ({ formData, isEditMode }) => {
           boxShadow: "none",
           borderRadius: "10px",
           p: "25px 20px 15px",
-          // mb: "15px",
         }}
       >
-        <Box component="form" noValidate onSubmit={formik.handleSubmit}>
-          <Grid container alignItems="center" spacing={2}>
-            <Grid item xs={12} md={12} lg={6}>
-              <Typography
-                as="h5"
-                sx={{
-                  fontWeight: "500",
-                  fontSize: "14px",
-                  mb: "12px",
-                }}
-              >
-                Name
-              </Typography>
-              <TextField
-                // autoComplete="name"
-                name="name"
-                fullWidth
-                id="name"
-                label="Enter Name"
-                {...formik.getFieldProps("name")}
-                error={formik.touched.name && formik.errors.name ? true : false}
-                helperText={
-                  formik.touched.name && formik.errors.name
-                    ? formik.errors.name
-                    : ""
-                }
-                InputProps={{
-                  style: { borderRadius: 8 },
-                }}
-              />
-            </Grid>
-
-            <Grid item xs={12} md={12} lg={6}>
-              <FormControl fullWidth>
+        {specialist.isLoading || serviceType.isLoading ? (
+          <p>Loading</p>
+        ) : (
+          <Box component="form" noValidate onSubmit={formik.handleSubmit}>
+            <Grid container alignItems="center" spacing={2}>
+              <Grid item xs={12} md={12} lg={6}>
                 <Typography
                   as="h5"
                   sx={{
@@ -254,55 +283,96 @@ const AddServiceForm = ({ formData, isEditMode }) => {
                     mb: "12px",
                   }}
                 >
-                  Service Type
+                  Name
                 </Typography>
-
-                <Autocomplete
-                  value={selectedServices || null}
-                  onChange={(event, newValue) => {
-                    setSelectedServices(newValue);
-                  }}
-                  options={serviceType?.data || []}
-                  getOptionLabel={(option) => option.name}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Select Service Type"
-                      autoComplete={serviceType}
-                      inputProps={{
-                        ...params.inputProps,
-                        style: { borderRadius: 8 },
-                      }}
-                    />
-                  )}
-                />
-                {/* <Select
-                
-                  value={selectedServices ? selectedServices.id : ""}
-                  onChange={(e) => {
-                    const selected = serviceType.data.find(
-                      (service) => service.id === e.target.value
-                    );
-                    setSelectedServices(selected || null);
-                  }}
-                  displayEmpty
-                  inputProps={{
+                <TextField
+                  name="name"
+                  fullWidth
+                  id="name"
+                  label="Enter Name"
+                  {...formik.getFieldProps("name")}
+                  error={
+                    formik.touched.name && formik.errors.name ? true : false
+                  }
+                  helperText={
+                    formik.touched.name && formik.errors.name
+                      ? formik.errors.name
+                      : ""
+                  }
+                  InputProps={{
                     style: { borderRadius: 8 },
                   }}
-                >
-                  <MenuItem value="" disabled>
-                    Select a service
-                  </MenuItem>
-                  {serviceType?.data.map((service) => (
-                    <MenuItem key={service.id} value={service.id}>
-                      {service.name}
-                    </MenuItem>
-                  ))}
-                </Select> */}
-              </FormControl>
-            </Grid>
-            <Grid item xs={12} md={12} lg={6}>
-              <FormControl fullWidth>
+                />
+              </Grid>
+
+              <Grid item xs={12} md={12} lg={6}>
+                <FormControl fullWidth>
+                  <Typography
+                    as="h5"
+                    sx={{
+                      fontWeight: "500",
+                      fontSize: "14px",
+                      mb: "12px",
+                    }}
+                  >
+                    Service Type
+                  </Typography>
+
+                  <Autocomplete
+                    value={selectedServiceType || null}
+                    onChange={(event, newValue) =>
+                      setSelectedServiceType(newValue)
+                    }
+                    options={serviceType?.data || []}
+                    getOptionLabel={(option) => option.name}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Select Service Type"
+                        inputProps={{
+                          ...params.inputProps,
+                          style: { borderRadius: 8 },
+                        }}
+                      />
+                    )}
+                  />
+                </FormControl>
+              </Grid>
+              <Grid item xs={12} md={12} lg={6}>
+                <FormControl fullWidth>
+                  <Typography
+                    as="h5"
+                    sx={{
+                      fontWeight: "500",
+                      fontSize: "14px",
+                      mb: "12px",
+                    }}
+                  >
+                    Specialist
+                  </Typography>
+
+                  <Autocomplete
+                    value={selectedSpecialist || null}
+                    onChange={(event, newValue) =>
+                      setSelectedSpecialist(newValue)
+                    }
+                    options={specialist || []}
+                    getOptionLabel={(option) => option.name}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Select a specialist"
+                        inputProps={{
+                          ...params.inputProps,
+                          style: { borderRadius: 8 },
+                        }}
+                      />
+                    )}
+                  />
+                </FormControl>
+              </Grid>
+
+              <Grid item xs={12} md={12} lg={6}>
                 <Typography
                   as="h5"
                   sx={{
@@ -311,134 +381,91 @@ const AddServiceForm = ({ formData, isEditMode }) => {
                     mb: "12px",
                   }}
                 >
-                  Specialist
+                  Price
                 </Typography>
-
-                <Autocomplete
-                  value={selectedSpecialist || null}
-                  onChange={(event, newValue) => {
-                    setSelectedSpecialist(newValue);
-                  }}
-                  options={specialist || []}
-                  getOptionLabel={(option) => option.name}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Select a specialist"
-                      inputProps={{
-                        ...params.inputProps,
-                        style: { borderRadius: 8 },
-                      }}
-                    />
-                  )}
-                />
-                {/* <Select
-                  value={selectedSpecialist ? selectedSpecialist.id : ""}
-                  onChange={(e) => {
-                    const selected = specialist.find(
-                      (s) => s.id === e.target.value
-                    );
-                    setSelectedSpecialist(selected || null);
-                  }}
-                  displayEmpty
-                  inputProps={{
+                <TextField
+                  name="price"
+                  fullWidth
+                  id="price"
+                  label="Price"
+                  type="number"
+                  {...formik.getFieldProps("price")}
+                  error={
+                    formik.touched.price && formik.errors.price ? true : false
+                  }
+                  helperText={
+                    formik.touched.price && formik.errors.price
+                      ? formik.errors.price
+                      : ""
+                  }
+                  InputProps={{
                     style: { borderRadius: 8 },
                   }}
+                />
+              </Grid>
+
+              <Grid item xs={12} md={12} lg={6}>
+                <Typography
+                  component="label"
+                  sx={{
+                    fontWeight: "500",
+                    fontSize: "14px",
+                    mb: "10px",
+                    display: "block",
+                  }}
                 >
-                  {specialist?.map((s) => (
-                    <MenuItem key={s.id} value={s.id}>
-                      {s.name}
-                    </MenuItem>
-                  ))}
-                </Select> */}
-              </FormControl>
-            </Grid>
+                  Upload Image
+                </Typography>
 
-            <Grid item xs={12} md={12} lg={6}>
-              <Typography
-                as="h5"
-                sx={{
-                  fontWeight: "500",
-                  fontSize: "14px",
-                  mb: "12px",
-                }}
-              >
-                Price
-              </Typography>
-              <TextField
-                // autoComplete="price"
-                name="price"
-                fullWidth
-                id="price"
-                label="Price"
-                type="number"
-                {...formik.getFieldProps("price")}
-                error={
-                  formik.touched.price && formik.errors.price ? true : false
-                }
-                helperText={
-                  formik.touched.price && formik.errors.price
-                    ? formik.errors.price
-                    : ""
-                }
-                InputProps={{
-                  style: { borderRadius: 8 },
-                }}
-              />
-            </Grid>
+                <TextField
+                  fullWidth
+                  name="file"
+                  type="file"
+                  id="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                />
+                {/* Show Image */}
+                {profileImageUrl && (
+                  <Image
+                    src={profileImageUrl}
+                    alt="profile"
+                    className="borRadius100"
+                    width={50}
+                    height={50}
+                  />
+                )}
+              </Grid>
+              <Grid item xs={12} md={12} lg={6}>
+                <Typography
+                  as="h5"
+                  sx={{ fontWeight: "500", fontSize: "14px", mb: "12px" }}
+                >
+                  Time Interval in Minutes
+                </Typography>
+                <TextField
+                  type="number"
+                  name="timeInterval"
+                  fullWidth
+                  id="timeInterval"
+                  {...formik.getFieldProps("timeInterval")}
+                  error={
+                    formik.touched.timeInterval && formik.errors.timeInterval
+                      ? true
+                      : false
+                  }
+                  helperText={
+                    formik.touched.timeInterval && formik.errors.timeInterval
+                      ? formik.errors.timeInterval
+                      : ""
+                  }
+                  InputProps={{
+                    style: { borderRadius: 8 },
+                  }}
+                />
+              </Grid>
 
-            <Grid item xs={12} md={12} lg={6}>
-              <Typography
-                component="label"
-                sx={{
-                  fontWeight: "500",
-                  fontSize: "14px",
-                  mb: "10px",
-                  display: "block",
-                }}
-              >
-                Upload Image
-              </Typography>
-
-              <TextField
-                required
-                fullWidth
-                name="file"
-                type="file"
-                id="file"
-                accept="image/*"
-                // autoComplete="file"
-                onChange={handleFileChange}
-              />
-            </Grid>
-            <Grid item xs={12} md={12} lg={6}>
-              <Typography
-                as="h5"
-                sx={{ fontWeight: "500", fontSize: "14px", mb: "12px" }}
-              >
-                Time Interval in Minutes
-              </Typography>
-              <TextField
-                type="number"
-                name="timeInterval"
-                fullWidth
-                id="timeInterval"
-                {...formik.getFieldProps("timeInterval")}
-                error={formik.touched.timeInterval && formik.errors.timeInterval ? true : false}
-                helperText={
-                  formik.touched.timeInterval && formik.errors.timeInterval
-                    ? formik.errors.timeInterval
-                    : ""
-                }
-                InputProps={{
-                  style: { borderRadius: 8 },
-                }}
-              />
-            </Grid>
-
-
-
-            {/* <Box mt={1} ml={2}>
+              {/* <Box mt={1} ml={2}>
                 <img
                   src={user.image}
                   alt="profile"
@@ -448,7 +475,7 @@ const AddServiceForm = ({ formData, isEditMode }) => {
                   
                 />
               </Box> */}
-            {/* <Grid item xs={6}>
+              {/* <Grid item xs={6}>
               <Typography
                 component="label"
                 sx={{
@@ -476,47 +503,47 @@ const AddServiceForm = ({ formData, isEditMode }) => {
               />
             </Grid> */}
 
-            <Grid item xs={12}>
-              <Typography
-                as="h5"
-                sx={{
-                  fontWeight: "500",
-                  fontSize: "14px",
-                  mb: "12px",
-                }}
-              >
-                Description
-              </Typography>
-
-              <TextareaAutosize
-                // autoComplete="description"
-                name="description"
-                id="description"
-                fullWidth
-                minRows={5}
-                placeholder="Enter Description"
-                {...formik.getFieldProps("description")}
-                error={
-                  formik.touched.description && formik.errors.description
-                    ? true
-                    : false
-                }
-                style={{
-                  width: "100%",
-                  borderRadius: 8,
-                  padding: "8px",
-                  border: `1px solid ${formik.touched.description && formik.errors.description
-                    ? "red"
-                    : "#e0e0e0"
-                    }`,
-                }}
-              />
-              {formik.touched.description && formik.errors.description && (
-                <Typography color="error" variant="body2">
-                  {formik.errors.description}
+              <Grid item xs={12}>
+                <Typography
+                  as="h5"
+                  sx={{
+                    fontWeight: "500",
+                    fontSize: "14px",
+                    mb: "12px",
+                  }}
+                >
+                  Description
                 </Typography>
-              )}
-              {/* <RichTextEditor
+
+                <TextareaAutosize
+                  name="description"
+                  id="description"
+                  fullWidth
+                  minRows={5}
+                  placeholder="Enter Description"
+                  {...formik.getFieldProps("description")}
+                  error={
+                    formik.touched.description && formik.errors.description
+                      ? true
+                      : false
+                  }
+                  style={{
+                    width: "100%",
+                    borderRadius: 8,
+                    padding: "8px",
+                    border: `1px solid ${
+                      formik.touched.description && formik.errors.description
+                        ? "red"
+                        : "#e0e0e0"
+                    }`,
+                  }}
+                />
+                {formik.touched.description && formik.errors.description && (
+                  <Typography color="error" variant="body2">
+                    {formik.errors.description}
+                  </Typography>
+                )}
+                {/* <RichTextEditor
                 id="description"
                 // value={}
                 onChange={() => {
@@ -545,27 +572,27 @@ const AddServiceForm = ({ formData, isEditMode }) => {
                   ["alignLeft", "alignCenter", "alignRight"],
                 ]}
               /> */}
-            </Grid>
-            <Grid item xs={12}>
-              <Typography
-                as="h5"
-                sx={{ fontWeight: "500", fontSize: "14px", mb: "12px" }}
-              >
-                Time Slots
-              </Typography>
-              {formik.values.timeSlots.map((slot, index) => (
-                <Grid container spacing={5} key={index} marginBottom={4}>
-                  <Grid item xs={12} md={4}>
-                    <Checkbox
-                      name="timeSlots"
-                      checked={formik.values.timeSlots[index].active}
-                      {...formik.getFieldProps(`timeSlots[${index}].active`)}
-                      onChange={formik.handleChange}
-                    />
-                    {formik.values.timeSlots[index].day}
+              </Grid>
+              <Grid item xs={12}>
+                <Typography
+                  as="h5"
+                  sx={{ fontWeight: "500", fontSize: "14px", mb: "12px" }}
+                >
+                  Time Slots
+                </Typography>
+                {formik.values.timeSlots.map((slot, index) => (
+                  <Grid container spacing={5} key={index} marginBottom={4}>
+                    <Grid item xs={12} md={4}>
+                      <Checkbox
+                        name="timeSlots"
+                        checked={formik.values.timeSlots[index].active}
+                        {...formik.getFieldProps(`timeSlots[${index}].active`)}
+                        onChange={formik.handleChange}
+                      />
+                      {formik.values.timeSlots[index].day}
 
-                    {/* ))} */}
-                    {/* <TextField
+                      {/* ))} */}
+                      {/* <TextField
                       name={`timeSlots[${index}].day`}
                       fullWidth
                       label={`Day ${index + 1}`}
@@ -586,87 +613,90 @@ const AddServiceForm = ({ formData, isEditMode }) => {
                         style: { borderRadius: 8 },
                       }}
                     /> */}
-                  </Grid>
+                    </Grid>
 
-                  <Grid item xs={12} md={4}>
-                    <TextField
-                      name={`timeSlots[${index}].startTime`}
-                      fullWidth
-                      type="time"
-                      label={"Start Time"}
-                      {...formik.getFieldProps(`timeSlots[${index}].startTime`)}
-                      error={
-                        formik.touched.timeSlots && formik.errors.timeSlots
-                          ? !!formik.errors.timeSlots[index]?.startTime
-                          : false
-                      }
-                      disabled={
-                        !formik.values.timeSlots[index]?.active || false
-                      }
-                      helperText={
-                        formik.touched.timeSlots && formik.errors.timeSlots
-                          ? formik.errors.timeSlots[index]?.startTime
-                          : ""
-                      }
-                      InputProps={{
-                        style: { borderRadius: 8 },
-                      }}
-                    />
+                    <Grid item xs={12} md={4}>
+                      <TextField
+                        name={`timeSlots[${index}].startTime`}
+                        fullWidth
+                        type="time"
+                        label={"Start Time"}
+                        {...formik.getFieldProps(
+                          `timeSlots[${index}].startTime`
+                        )}
+                        error={
+                          formik.touched.timeSlots && formik.errors.timeSlots
+                            ? !!formik.errors.timeSlots[index]?.startTime
+                            : false
+                        }
+                        disabled={
+                          !formik.values.timeSlots[index]?.active || false
+                        }
+                        helperText={
+                          formik.touched.timeSlots && formik.errors.timeSlots
+                            ? formik.errors.timeSlots[index]?.startTime
+                            : ""
+                        }
+                        InputProps={{
+                          style: { borderRadius: 8 },
+                        }}
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={4}>
+                      <TextField
+                        name={`timeSlots[${index}].endTime`}
+                        fullWidth
+                        type="time"
+                        label={"End Time"}
+                        {...formik.getFieldProps(`timeSlots[${index}].endTime`)}
+                        disabled={
+                          !formik.values.timeSlots[index]?.active || false
+                        }
+                        error={
+                          formik.touched.timeSlots && formik.errors.timeSlots
+                            ? !!formik.errors.timeSlots[index]?.endTime
+                            : false
+                        }
+                        helperText={
+                          formik.touched.timeSlots && formik.errors.timeSlots
+                            ? formik.errors.timeSlots[index]?.endTime
+                            : ""
+                        }
+                        InputProps={{
+                          style: { borderRadius: 8 },
+                        }}
+                      />
+                    </Grid>
                   </Grid>
-                  <Grid item xs={12} md={4}>
-                    <TextField
-                      name={`timeSlots[${index}].endTime`}
-                      fullWidth
-                      type="time"
-                      label={"End Time"}
-                      {...formik.getFieldProps(`timeSlots[${index}].endTime`)}
-                      disabled={
-                        !formik.values.timeSlots[index]?.active || false
-                      }
-                      error={
-                        formik.touched.timeSlots && formik.errors.timeSlots
-                          ? !!formik.errors.timeSlots[index]?.endTime
-                          : false
-                      }
-                      helperText={
-                        formik.touched.timeSlots && formik.errors.timeSlots
-                          ? formik.errors.timeSlots[index]?.endTime
-                          : ""
-                      }
-                      InputProps={{
-                        style: { borderRadius: 8 },
-                      }}
-                    />
-                  </Grid>
-                </Grid>
-              ))}
-            </Grid>
-            <Grid item xs={12} textAlign="left">
-              <Button
-                type="submit"
-                variant="contained"
-                sx={{
-                  mt: 1,
-                  textTransform: "capitalize",
-                  borderRadius: "8px",
-                  fontWeight: "500",
-                  fontSize: "13px",
-                  padding: "12px 20px",
-                  color: "#fff !important",
-                }}
-              >
-                <SendIcon
+                ))}
+              </Grid>
+              <Grid item xs={12} textAlign="left">
+                <Button
+                  type="submit"
+                  variant="contained"
                   sx={{
-                    position: "relative",
-                    top: "-2px",
+                    mt: 1,
+                    textTransform: "capitalize",
+                    borderRadius: "8px",
+                    fontWeight: "500",
+                    fontSize: "13px",
+                    padding: "12px 20px",
+                    color: "#fff !important",
                   }}
-                  className="mr-5px"
-                />{" "}
-                 {isEditMode ? "Edit" : "Add"} Add Services
-              </Button>
+                >
+                  <SendIcon
+                    sx={{
+                      position: "relative",
+                      top: "-2px",
+                    }}
+                    className="mr-5px"
+                  />{" "}
+                  {isEditMode ? "Edit" : "Add"} Add Services
+                </Button>
+              </Grid>
             </Grid>
-          </Grid>
-        </Box>
+          </Box>
+        )}
       </Card>
     </>
   );
