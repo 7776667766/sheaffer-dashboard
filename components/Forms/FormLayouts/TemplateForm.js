@@ -61,11 +61,11 @@ const TemplateForm = () => {
 
         console.log(formData);
 
-
         dispatch(
           addtemplateApi({
             data: formData,
             onSuccess: () => {
+              router.push("/templates")
 
             },
           })
