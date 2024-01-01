@@ -23,11 +23,6 @@ import { getspecialistApi } from "store/specialist/services";
 import { getServicesTypeFunApi } from "store/service/services";
 import toast from "react-hot-toast";
 import Image from "next/image";
-// import dynamic from "next/dynamic";
-// import RichTextEditor from "@mantine/rte";
-// const RichTextEditor = dynamic(() => import("@mantine/rte"), {
-//   ssr: false,
-// });
 
 const AddServiceForm = ({ formData, isEditMode }) => {
   const [selectedSpecialist, setSelectedSpecialist] = useState(null);
@@ -122,7 +117,7 @@ const AddServiceForm = ({ formData, isEditMode }) => {
     } else {
       if (isEditMode && selectedServiceType === null) {
         const selected = serviceType.data?.find(
-          (s) => s.id === formData.type.id
+          (s) => s.id === formData?.type.id
         );
         setSelectedServiceType(selected || null);
       }
@@ -580,7 +575,7 @@ const AddServiceForm = ({ formData, isEditMode }) => {
                 >
                   Time Slots
                 </Typography>
-                {formik.values.timeSlots.map((slot, index) => (
+                {formik.values.timeSlots?.map((slot, index) => (
                   <Grid container spacing={5} key={index} marginBottom={4}>
                     <Grid item xs={12} md={4}>
                       <Checkbox
