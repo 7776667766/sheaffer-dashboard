@@ -76,7 +76,7 @@ const AddServiceForm = ({ formData, isEditMode }) => {
 
   useEffect(() => {
     if (isEditMode) {
-      setProfileImageUrl(formData?.image || null);
+      setProfileImageUrl(formData?.image);
     }
   }, [formData?.image, isEditMode]);
 
@@ -139,62 +139,62 @@ const AddServiceForm = ({ formData, isEditMode }) => {
 
   const initialValues = isEditMode
     ? {
-        ...formData,
-      }
+      ...formData,
+    }
     : {
-        name: "",
-        description: "",
-        image: "",
-        price: "",
-        typeId: "",
-        specialistId: "",
-        timeInterval: 0,
-        businessId: business?.id,
-        timeSlots: [
-          {
-            day: "Monday",
-            startTime: "10:00",
-            endTime: "12:00",
-            active: false,
-          },
-          {
-            day: "Tuesday",
-            startTime: "10:00",
-            endTime: "12:00",
-            active: false,
-          },
-          {
-            day: "Wednesday",
-            startTime: "10:00",
-            endTime: "12:00",
-            active: false,
-          },
-          {
-            day: "Thursday",
-            startTime: "10:00",
-            endTime: "12:00",
-            active: false,
-          },
-          {
-            day: "Friday",
-            startTime: "10:00",
-            endTime: "12:00",
-            active: false,
-          },
-          {
-            day: "Saturday",
-            startTime: "10:00",
-            endTime: "12:00",
-            active: false,
-          },
-          {
-            day: "Sunday",
-            startTime: "10:00",
-            endTime: "12:00",
-            active: false,
-          },
-        ],
-      };
+      name: "",
+      description: "",
+      image: "",
+      price: "",
+      typeId: "",
+      specialistId: "",
+      timeInterval: 0,
+      businessId: business?.id,
+      timeSlots: [
+        {
+          day: "Monday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+        {
+          day: "Tuesday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+        {
+          day: "Wednesday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+        {
+          day: "Thursday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+        {
+          day: "Friday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+        {
+          day: "Saturday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+        {
+          day: "Sunday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+      ],
+    };
 
   const formik = useFormik({
     initialValues: initialValues,
@@ -203,7 +203,8 @@ const AddServiceForm = ({ formData, isEditMode }) => {
       description: requiredValidation("Service Description"),
       price: Yup.number()
         .typeError("Price must be a number")
-        .required("Price is Required"),
+        .required("Price is Required")
+        .min(0, "Price must be greater than or equal to 0"),
       timeInterval: Yup.number()
         .typeError("Must be a number")
         .required("TimeInterval is Required")
@@ -219,7 +220,7 @@ const AddServiceForm = ({ formData, isEditMode }) => {
     }),
 
     onSubmit: async (values) => {
-      if (avatar === null) {
+      if (avatar === null && isEditMode === false) {
         toast.error("Please select an image");
         return false;
       }
@@ -239,7 +240,7 @@ const AddServiceForm = ({ formData, isEditMode }) => {
               data: myServiceData,
               onSuccess: () => {
                 console.log("Edit Service Success");
-                router.push("/service/");
+                router.push("/services/");
               },
             })
           );
@@ -444,8 +445,8 @@ const AddServiceForm = ({ formData, isEditMode }) => {
                   Time Interval in Minutes
                 </Typography>
                 <TextField
-                  type="number"
-                  name="timeInterval"
+                  type="date"
+                  name="timeIntervalDate"
                   fullWidth
                   id="timeInterval"
                   {...formik.getFieldProps("timeInterval")}
@@ -531,11 +532,10 @@ const AddServiceForm = ({ formData, isEditMode }) => {
                     width: "100%",
                     borderRadius: 8,
                     padding: "8px",
-                    border: `1px solid ${
-                      formik.touched.description && formik.errors.description
-                        ? "red"
-                        : "#e0e0e0"
-                    }`,
+                    border: `1px solid ${formik.touched.description && formik.errors.description
+                      ? "red"
+                      : "#e0e0e0"
+                      }`,
                   }}
                 />
                 {formik.touched.description && formik.errors.description && (

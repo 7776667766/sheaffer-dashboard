@@ -168,7 +168,7 @@ export const editServicesFunApi = createAsyncThunk(
   async ({ data, onSuccess }) => {
     console.log("Edit services value", data);
     try {
-      const response = await axios.post(editServiceApi(data.id), data);
+      const response = await axiosImage.post(editServiceApi(data.id), data);
       console.log("response in edit Service => ", response.data);
       if (response.data.status === "success") {
         toast.success(response.data.message);

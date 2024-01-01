@@ -1,14 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { Box, DialogContent, Typography } from "@mui/material";
+import React, { useEffect} from "react";
+import { Box,  Typography } from "@mui/material";
 import Card from "@mui/material/Card";
-import IconButton from "@mui/material/IconButton";
 import TableCell from "@mui/material/TableCell";
-import Tooltip from "@mui/material/Tooltip";
-import DeleteIcon from "@mui/icons-material/Delete";
-import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
-import Avatar from "@mui/material/Avatar";
 import Link from "next/link";
 import { CustomPaginationTable } from "@/components/Table/CustomPaginationTable";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,7 +13,6 @@ const TemplatesPage = () => {
   const dispatch = useDispatch();
   const { template } = useSelector((state) => state.template);
   console.log(template, "template")
-
 
   useEffect(() => {
     if (template.dataFatched !== true) {

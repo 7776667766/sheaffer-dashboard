@@ -92,10 +92,10 @@ const serviceSlice = createSlice({
       })
       .addCase(editServicesFunApi.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.service = state.service.map((ele) =>
+        state.service.data = state.service.data?.map((ele) =>
           ele.id === action.payload.id ? action.payload : ele
         );
-      })
+      })      
       .addCase(editServicesFunApi.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
