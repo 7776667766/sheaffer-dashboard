@@ -12,40 +12,22 @@ import Avatar from "@mui/material/Avatar";
 import Link from "next/link";
 import { CustomPaginationTable } from "@/components/Table/CustomPaginationTable";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllServiceFunApi } from "store/service/services";
-import TransitionsDialog from "@/components/UIElements/Modal/TransitionsDialog";
+import { getAllTemplateFunApi } from "store/template/services";
 
 const TemplatesPage = () => {
-  // const dispatch = useDispatch();
-  // const { service } = useSelector((state) => state.service);
-  // const { business } = useSelector((state) => state.business);
-  // const { role } = useSelector((state) => state.auth);
-  // const [open, setOpen] = React.useState(false);
-  // const handleOpen = () => setOpen(true);
-  // const handleClose = () => setOpen(false);
+  const dispatch = useDispatch();
+  const { template } = useSelector((state) => state.template);
+  console.log(template, "template")
 
-  // useEffect(() => {
-  //   if (service.dataFatched !== true) {
-  //     dispatch(
-  //       getAllServiceFunApi({
-  //         businessId: business?.id,
-  //       })
-  //     );
-  //   }
-  // }, [dispatch, service.data, service.dataFatched, business?.id]);
 
-  const Data = [
-    {
-      id: 1,
-      name: "Web Theme 1",
-      slug: "web-theme-1",
-    },
-    {
-      id: 2,
-      name: "Web Theme 2",
-      slug: "web-theme-2",
-    },
-  ];
+  useEffect(() => {
+    if (template.dataFatched !== true) {
+      dispatch(
+        getAllTemplateFunApi(
+        )
+      );
+    }
+  }, [dispatch, template.data, template.dataFatched]);
 
   return (
     <>
@@ -98,7 +80,7 @@ const TemplatesPage = () => {
         </Box>
 
         <CustomPaginationTable
-          tableData={Data}
+          tableData={template}
           isLoading={false}
           tableHeaderData={
             <>
@@ -189,26 +171,7 @@ const TemplatesPage = () => {
                   pb: "16px",
                 }}
               >
-                <Button
-                  variant="outlined"
-                  href={`${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}site/${data.slug}`}
-                  target="_blank"
-                  sx={{
-                    pt: "2px",
-                    pb: "1px",
-                  }}
-                >
-                  View Website
-                </Button>
-              </TableCell>
-              <TableCell
-                sx={{
-                  borderBottom: "1px solid #F7FAFF",
-                  pt: "16px",
-                  pb: "16px",
-                }}
-              >
-                <Button
+               <Link
                   variant="outlined"
                   href={`${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}booking/${data.slug}`}
                   target="_blank"
@@ -217,8 +180,43 @@ const TemplatesPage = () => {
                     pb: "1px",
                   }}
                 >
-                  View Booking
-                </Button>
+                  <img
+                    src={data.websiteImage}
+                    alt="website Image"
+                    style={{
+                      width: "50px",
+                      height: "50px", 
+                    
+                    }}
+                  />
+                </Link>
+              </TableCell>
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  pt: "16px",
+                  pb: "16px",
+                }}
+              >
+                <Link
+                  variant="outlined"
+                  href={`${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}booking/${data.slug}`}
+                  target="_blank"
+                  sx={{
+                    pt: "2px",
+                    pb: "1px",
+                  }}
+                >
+                  <img
+                    src={data.bookingImage}
+                    style={{
+                      width: "50px",
+                      height: "50px", 
+                    
+                    }}
+                  />
+                </Link>
+
               </TableCell>
             </>
           )}

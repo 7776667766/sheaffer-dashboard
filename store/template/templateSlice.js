@@ -1,4 +1,4 @@
-import { addtemplateApi } from "./services";
+import { addtemplateApi,getAllTemplateFunApi } from "./services";
 import { createSlice } from "@reduxjs/toolkit";
 
 const templateSlice = createSlice({
@@ -27,21 +27,21 @@ const templateSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload;
       });
-    // builder
-    //   .addCase(gettemplateApi.pending, (state, action) => {
-    //     state.isLoading = true;
-    //     state.error = null;
-    //   })
-    //   .addCase(gettemplateApi.fulfilled, (state, action) => {
-    //     state.isLoading = false;
-    //     state.templateFetch = true;
-    //     state.template = action.payload;
-    //   })
-    //   .addCase(gettemplateApi.rejected, (state, action) => {
-    //     state.isLoading = false;
-    //     state.error = action.payload;
-    //     state.templateFetch = true;
-    //   });
+    builder
+      .addCase(getAllTemplateFunApi.pending, (state, action) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(getAllTemplateFunApi.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.templateFetch = true;
+        state.template = action.payload;
+      })
+      .addCase(getAllTemplateFunApi.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+        state.templateFetch = true;
+      });
   },
 });
 
