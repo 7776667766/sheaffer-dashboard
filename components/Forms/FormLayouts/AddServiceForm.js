@@ -23,12 +23,18 @@ import { getspecialistApi } from "store/specialist/services";
 import { getServicesTypeFunApi } from "store/service/services";
 import toast from "react-hot-toast";
 import Image from "next/image";
+import { LoadingButtonComponent } from "@/components/UIElements/Buttons/LoadingButton";
 
 const AddServiceForm = ({ formData, isEditMode }) => {
   const [selectedSpecialist, setSelectedSpecialist] = useState(null);
   const [selectedServiceType, setSelectedServiceType] = useState(null);
   const [avatar, setavatar] = useState(null);
   const [profileImageUrl, setProfileImageUrl] = useState(null);
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const { business } = useSelector((state) => state.business);
+  const { specialist } = useSelector((state) => state.specialist);
+  const { serviceType, service } = useSelector((state) => state.service);
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -63,11 +69,6 @@ const AddServiceForm = ({ formData, isEditMode }) => {
       }
     }
   };
-  const dispatch = useDispatch();
-  const router = useRouter();
-  const { business } = useSelector((state) => state.business);
-  const { specialist } = useSelector((state) => state.specialist);
-  const { serviceType } = useSelector((state) => state.service);
 
   useEffect(() => {
     if (isEditMode) {
@@ -134,62 +135,62 @@ const AddServiceForm = ({ formData, isEditMode }) => {
 
   const initialValues = isEditMode
     ? {
-      ...formData,
-    }
+        ...formData,
+      }
     : {
-      name: "",
-      description: "",
-      image: "",
-      price: "",
-      typeId: "",
-      specialistId: "",
-      timeInterval: 0,
-      businessId: business?.id,
-      timeSlots: [
-        {
-          day: "Monday",
-          startTime: "0:00",
-          endTime: "0:00",
-          active: false,
-        },
-        {
-          day: "Tuesday",
-          startTime: "0:00",
-          endTime: "0:00",
-          active: false,
-        },
-        {
-          day: "Wednesday",
-          startTime: "0:00",
-          endTime: "0:00",
-          active: false,
-        },
-        {
-          day: "Thursday",
-          startTime: "0:00",
-          endTime: "0:00",
-          active: false,
-        },
-        {
-          day: "Friday",
-          startTime: "0:00",
-          endTime: "0:00",
-          active: false,
-        },
-        {
-          day: "Saturday",
-          startTime: "0:00",
-          endTime: "0:00",
-          active: false,
-        },
-        {
-          day: "Sunday",
-          startTime: "0:00",
-          endTime: "0:00",
-          active: false,
-        },
-      ],
-    };
+        name: "",
+        description: "",
+        image: "",
+        price: "",
+        typeId: "",
+        specialistId: "",
+        timeInterval: 0,
+        businessId: business?.id,
+        timeSlots: [
+          {
+            day: "Monday",
+            startTime: "0:00",
+            endTime: "0:00",
+            active: false,
+          },
+          {
+            day: "Tuesday",
+            startTime: "0:00",
+            endTime: "0:00",
+            active: false,
+          },
+          {
+            day: "Wednesday",
+            startTime: "0:00",
+            endTime: "0:00",
+            active: false,
+          },
+          {
+            day: "Thursday",
+            startTime: "0:00",
+            endTime: "0:00",
+            active: false,
+          },
+          {
+            day: "Friday",
+            startTime: "0:00",
+            endTime: "0:00",
+            active: false,
+          },
+          {
+            day: "Saturday",
+            startTime: "0:00",
+            endTime: "0:00",
+            active: false,
+          },
+          {
+            day: "Sunday",
+            startTime: "0:00",
+            endTime: "0:00",
+            active: false,
+          },
+        ],
+      };
 
   const formik = useFormik({
     initialValues: initialValues,
@@ -215,7 +216,7 @@ const AddServiceForm = ({ formData, isEditMode }) => {
     }),
 
     onSubmit: async (values) => {
-      if (avatar === null && isEditMode === false) {
+      if (avatar === null && !isEditMode) {
         toast.error("Please select an image");
         return false;
       }
@@ -427,6 +428,7 @@ const AddServiceForm = ({ formData, isEditMode }) => {
                     src={profileImageUrl}
                     alt="profile"
                     className="borRadius100"
+                    style={{ marginTop: "1rem" }}
                     width={50}
                     height={50}
                   />
@@ -440,7 +442,7 @@ const AddServiceForm = ({ formData, isEditMode }) => {
                   Time Interval in Minutes
                 </Typography>
                 <TextField
-                  type="date"
+                  type="number"
                   name="timeIntervalDate"
                   fullWidth
                   id="timeInterval"
@@ -527,10 +529,11 @@ const AddServiceForm = ({ formData, isEditMode }) => {
                     width: "100%",
                     borderRadius: 8,
                     padding: "8px",
-                    border: `1px solid ${formik.touched.description && formik.errors.description
-                      ? "red"
-                      : "#e0e0e0"
-                      }`,
+                    border: `1px solid ${
+                      formik.touched.description && formik.errors.description
+                        ? "red"
+                        : "#e0e0e0"
+                    }`,
                   }}
                 />
                 {formik.touched.description && formik.errors.description && (
@@ -666,28 +669,26 @@ const AddServiceForm = ({ formData, isEditMode }) => {
                 ))}
               </Grid>
               <Grid item xs={12} textAlign="left">
-                <Button
+                <LoadingButtonComponent
                   type="submit"
-                  variant="contained"
+                  fullWidth={false}
                   sx={{
-                    mt: 1,
-                    textTransform: "capitalize",
-                    borderRadius: "8px",
-                    fontWeight: "500",
-                    fontSize: "13px",
-                    padding: "12px 20px",
-                    color: "#fff !important",
+                    paddingX: "30px",
                   }}
-                >
-                  <SendIcon
-                    sx={{
-                      position: "relative",
-                      top: "-2px",
-                    }}
-                    className="mr-5px"
-                  />{" "}
-                  {isEditMode ? "Edit" : "Add"} Add Services
-                </Button>
+                  isLoading={service.isLoading}
+                  value={
+                    <>
+                      <SendIcon
+                        sx={{
+                          position: "relative",
+                          top: "-2px",
+                        }}
+                        className="mr-5px"
+                      />{" "}
+                      {isEditMode ? "Edit" : "Add"} Services
+                    </>
+                  }
+                />
               </Grid>
             </Grid>
           </Box>

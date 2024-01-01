@@ -11,22 +11,19 @@ export default function EditServicePage() {
 
   const [serviceData, setServiceData] = useState();
   const [isLoading, setIsLoading] = useState(true);
-  console.log(router.query.id, "123")
+
   useEffect(() => {
     if (router.query.id) {
       const myService = service.data.find(
         (data) => data.id === router.query.id
       );
-      console.log(myService, "myservice")
-      if (service) {
+      console.log(myService, "myservice");
+      if (myService) {
         setServiceData(myService);
         setIsLoading(false);
-      }
-      else (
-        router.push("/services")
-      )
+      } else router.push("/services");
     }
-  }, [service, router.query.id]);
+  }, [router.query.id, router, service.data]);
   return (
     <>
       <div className={styles.pageTitle}>
