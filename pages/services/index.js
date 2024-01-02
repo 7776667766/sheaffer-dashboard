@@ -9,26 +9,54 @@ import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutli
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import Avatar from "@mui/material/Avatar";
+import Image from "next/image";
 import Link from "next/link";
 import { CustomPaginationTable } from "@/components/Table/CustomPaginationTable";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllServiceFunApi } from "store/service/services";
+import { deleteServiceFunApi, getAllServiceFunApi } from "store/service/services";
 import TransitionsDialog from "@/components/UIElements/Modal/TransitionsDialog";
+import { getMyBussinessFunApi } from 'store/business/services'
 import { useRouter } from "next/router";
 
 const Services = () => {
   const dispatch = useDispatch();
   const { service } = useSelector((state) => state.service);
-  const { business } = useSelector((state) => state.business);
+  const { business, dataFatched } = useSelector((state) => state.business);
+  console.log("busisnessId", dataFatched)
   const { role } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (dataFatched !== true) {
+      dispatch(
+
+        getMyBussinessFunApi({
+          onSuccess: (businessId) => {
+            dispatch(getAllServiceFunApi(
+              {
+                businessId: businessId
+              }
+            ));
+          },
+        }),
+      );
+    }
+  }, [dispatch, dataFatched]);
+
 
   const router = useRouter();
 
   const nextPage = (id, event) => {
+    console.log(id)
+
     event.preventDefault();
-   
+
     router.push(`/services/edit-service/${id}`);
     console.log()
+  };
+
+  const handleDelete = (id) => {
+    console.log(id, "service id ka note");
+    dispatch(deleteServiceFunApi(id));
   };
 
   useEffect(() => {
@@ -271,22 +299,43 @@ const Services = () => {
               >
                 <Box
                   sx={{
-                    display: "inline-block",
+                    display: "flex",
+                    justifyContent: "end",
                   }}
                 >
                   <Tooltip title="Remove" placement="top">
-                    <IconButton
-                      aria-label="remove"
-                      size="small"
-                      color="danger"
-                      className="danger"
+                    <TransitionsDialog
+                      modelButton={
+                        <IconButton
+                          aria-label="remove"
+                          size="small"
+                          color="danger"
+                          className="danger"
+                        >
+                          <DeleteIcon fontSize="inherit" />
+                        </IconButton>
+                      }
+                      submitButtonText="Delete"
+                      handleSubmit={() => handleDelete(data.id)}
                     >
-                      <TransitionsDialog
-                        modelButton={<DeleteIcon fontSize="inherit" />}
-                      >
-                        <Typography>Are you sure want to delete ?</Typography>
-                      </TransitionsDialog>
-                    </IconButton>
+                      <div style={{ textAlign: "center" }}>
+                        <Image
+                          src="/images/icon/alert.png"
+                          width={150}
+                          height={150}
+                          alt="ok"
+                        />
+
+                        <Typography sx={{ fontSize: 18 }}>
+                          <b>Are You Sure You Want To Delete ?</b>
+                          <br />
+                          <span style={{ fontSize: 14 }}>
+                            You are deleting this data & this action is
+                            irreversible
+                          </span>
+                        </Typography>
+                      </div>
+                    </TransitionsDialog>
                   </Tooltip>
 
                   <Tooltip title="Rename" placement="top">
@@ -295,7 +344,7 @@ const Services = () => {
                       size="small"
                       color="primary"
                       className="primary"
-                      onClick={(event) => nextPage(data.id, event)}
+                      onClick={(event) => nextPage(id, event)}
                     >
                       <DriveFileRenameOutlineIcon fontSize="inherit" />
                     </IconButton>

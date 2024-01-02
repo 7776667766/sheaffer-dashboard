@@ -21,6 +21,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { getspecialistApi } from "store/specialist/services";
 import { getServicesTypeFunApi } from "store/service/services";
+import { getMyBussinessFunApi } from 'store/business/services'
 import toast from "react-hot-toast";
 import Image from "next/image";
 import { LoadingButtonComponent } from "@/components/UIElements/Buttons/LoadingButton";
@@ -135,62 +136,62 @@ const AddServiceForm = ({ formData, isEditMode }) => {
 
   const initialValues = isEditMode
     ? {
-        ...formData,
-      }
+      ...formData,
+    }
     : {
-        name: "",
-        description: "",
-        image: "",
-        price: "",
-        typeId: "",
-        specialistId: "",
-        timeInterval: 0,
-        businessId: business?.id,
-        timeSlots: [
-          {
-            day: "Monday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-          {
-            day: "Tuesday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-          {
-            day: "Wednesday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-          {
-            day: "Thursday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-          {
-            day: "Friday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-          {
-            day: "Saturday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-          {
-            day: "Sunday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-        ],
-      };
+      name: "",
+      description: "",
+      image: "",
+      price: "",
+      typeId: "",
+      specialistId: "",
+      timeInterval: 0,
+      businessId: business?.id,
+      timeSlots: [
+        {
+          day: "Monday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+        {
+          day: "Tuesday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+        {
+          day: "Wednesday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+        {
+          day: "Thursday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+        {
+          day: "Friday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+        {
+          day: "Saturday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+        {
+          day: "Sunday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+      ],
+    };
 
   const formik = useFormik({
     initialValues: initialValues,
@@ -208,9 +209,10 @@ const AddServiceForm = ({ formData, isEditMode }) => {
         .integer("TimeInterval must be an integer"),
       timeSlots: Yup.array().of(
         Yup.object().shape({
-          day: requiredValidation("Day"),
-          startTime: requiredValidation("Start Time"),
-          endTime: requiredValidation("End Time"),
+          day: Yup.string().required("Day is required"),
+          startTime: Yup.string().required("Start Time is required"),
+          endTime: Yup.string().required("End Time is required"),
+          active: Yup.boolean().required("Please select whether the time slot is active or not"),
         })
       ),
     }),
@@ -218,9 +220,27 @@ const AddServiceForm = ({ formData, isEditMode }) => {
     onSubmit: async (values) => {
       if (avatar === null && !isEditMode) {
         toast.error("Please select an image");
-        return false;
+        return;
       }
 
+      const hasSelectedTimeSlot = values.timeSlots.some((slot) => slot.active);
+
+      if (!hasSelectedTimeSlot) {
+        toast.error("Please select at least one time slot before submitting.");
+        return;
+      }
+
+      const hasEmptyTime = values.timeSlots.some((slot) => {
+        return (
+          slot.active &&
+          (slot.startTime === "" || slot.startTime === "0:00" || slot.endTime === "" || slot.endTime === "0:00")
+        );
+      });
+
+      if (hasEmptyTime) {
+        toast.error("Please provide both start and end times for all selected time slots.");
+        return;
+      }
       try {
         const myServiceData = {
           ...values,
@@ -228,8 +248,6 @@ const AddServiceForm = ({ formData, isEditMode }) => {
           typeId: selectedServiceType ? selectedServiceType.id : "",
           image: avatar,
         };
-
-        console.log(myServiceData);
         if (isEditMode) {
           dispatch(
             editServicesFunApi({
@@ -252,10 +270,17 @@ const AddServiceForm = ({ formData, isEditMode }) => {
           );
         }
       } catch (error) {
-        console.error("Error adding service:", error);
+        console.error("Error adding/editing service:", error);
       }
     },
   });
+  const handleCheckboxChange = (index) => {
+    console.log(index, "index--")
+    const updatedTimeSlots = [...formik.values.timeSlots];
+    console.log(updatedTimeSlots, "updtedtimes--")
+    updatedTimeSlots[index].active = !updatedTimeSlots[index].active;
+    formik.setFieldValue('timeSlots', updatedTimeSlots);
+  };
 
   return (
     <>
@@ -529,11 +554,10 @@ const AddServiceForm = ({ formData, isEditMode }) => {
                     width: "100%",
                     borderRadius: 8,
                     padding: "8px",
-                    border: `1px solid ${
-                      formik.touched.description && formik.errors.description
-                        ? "red"
-                        : "#e0e0e0"
-                    }`,
+                    border: `1px solid ${formik.touched.description && formik.errors.description
+                      ? "red"
+                      : "#e0e0e0"
+                      }`,
                   }}
                 />
                 {formik.touched.description && formik.errors.description && (
@@ -582,35 +606,11 @@ const AddServiceForm = ({ formData, isEditMode }) => {
                   <Grid container spacing={5} key={index} marginBottom={4}>
                     <Grid item xs={12} md={4}>
                       <Checkbox
-                        name="timeSlots"
+                        name={`timeSlots[${index}].active`}
                         checked={formik.values.timeSlots[index].active}
-                        {...formik.getFieldProps(`timeSlots[${index}].active`)}
-                        onChange={formik.handleChange}
+                        onChange={() => handleCheckboxChange(index)}
                       />
                       {formik.values.timeSlots[index].day}
-
-                      {/* ))} */}
-                      {/* <TextField
-                      name={`timeSlots[${index}].day`}
-                      fullWidth
-                      label={`Day ${index + 1}`}
-                      value={formik.values.timeSlots[index]?.day || ""}
-                      onChange={formik.handleChange}
-                      error={
-                        formik.touched.timeSlots && formik.errors.timeSlots
-                          ? !!formik.errors.timeSlots[index]?.day
-                          : false
-                      }
-                      helperText={
-                        formik.touched.timeSlots && formik.errors.timeSlots
-                          ? formik.errors.timeSlots[index]?.day
-                          : ""
-                      }
-                      InputProps={{
-                        readOnly: true,
-                        style: { borderRadius: 8 },
-                      }}
-                    /> */}
                     </Grid>
 
                     <Grid item xs={12} md={4}>
@@ -619,17 +619,13 @@ const AddServiceForm = ({ formData, isEditMode }) => {
                         fullWidth
                         type="time"
                         label={"Start Time"}
-                        {...formik.getFieldProps(
-                          `timeSlots[${index}].startTime`
-                        )}
+                        {...formik.getFieldProps(`timeSlots[${index}].startTime`)}
                         error={
-                          formik.touched.timeSlots && formik.errors.timeSlots
-                            ? !!formik.errors.timeSlots[index]?.startTime
-                            : false
+                          formik.touched.timeSlots &&
+                          formik.errors.timeSlots &&
+                          !formik.values.timeSlots[index].active
                         }
-                        disabled={
-                          !formik.values.timeSlots[index]?.active || false
-                        }
+                        disabled={!formik.values.timeSlots[index]?.active || false}
                         helperText={
                           formik.touched.timeSlots && formik.errors.timeSlots
                             ? formik.errors.timeSlots[index]?.startTime
@@ -647,13 +643,11 @@ const AddServiceForm = ({ formData, isEditMode }) => {
                         type="time"
                         label={"End Time"}
                         {...formik.getFieldProps(`timeSlots[${index}].endTime`)}
-                        disabled={
-                          !formik.values.timeSlots[index]?.active || false
-                        }
+                        disabled={!formik.values.timeSlots[index]?.active || false}
                         error={
-                          formik.touched.timeSlots && formik.errors.timeSlots
-                            ? !!formik.errors.timeSlots[index]?.endTime
-                            : false
+                          formik.touched.timeSlots &&
+                          formik.errors.timeSlots &&
+                          !formik.values.timeSlots[index].active
                         }
                         helperText={
                           formik.touched.timeSlots && formik.errors.timeSlots

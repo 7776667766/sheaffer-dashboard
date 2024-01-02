@@ -1,6 +1,7 @@
 import {
   addserviceTypeApi,
   addservicesApi,
+  deleteServiceApi,
   editServiceApi,
   getAllServiceApi,
   getsevicetypeApi,
@@ -188,6 +189,42 @@ export const editServicesFunApi = createAsyncThunk(
       }
     } catch (error) {
       console.log("Error in edit Service Api ", error);
+      let err =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Something went wrong!";
+      if (err === "Network Error") {
+        err = "Please check your internet connection";
+      }
+      toast.error(err);
+      throw new Error(err);
+    }
+  }
+);
+
+
+export const deleteServiceFunApi = createAsyncThunk(
+  "services/deleteServices",
+  async (id) => {
+    console.log("delete services value", id);
+    try {
+      const response = await axios.get(deleteServiceApi(id));
+      console.log("response in delete Service => ", response.data);
+      if (response.data.status === "success") {
+        toast.success(response.data.message);
+        return id;
+      } else {
+        console.log("Error response in delete Service Api => ", response.data);
+        const err =
+          response?.data?.message ||
+          response?.message ||
+          "Something went wrong!";
+        console.log("err: ", err);
+        toast.error(err);
+        throw new Error(err);
+      }
+    } catch (error) {
+      console.log("Error in delete Service Api ", error);
       let err =
         error?.response?.data?.message ||
         error?.message ||
