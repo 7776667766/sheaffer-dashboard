@@ -75,66 +75,60 @@ const AddServiceForm = ({ formData, isEditMode }) => {
     }
   }, [formData?.image, isEditMode]);
 
-  useEffect(() => {
-    if (!specialist.specialistFetch) {
-      dispatch(
-        getspecialistApi({
-          data: business?.id,
-          onSuccess: (specialistList) => {
-            if (isEditMode) {
-              const selected = specialistList?.find(
-                (s) => s.id === formData.specialist.id
-              );
-              setSelectedSpecialist(selected || null);
-            }
-          },
-        })
-      );
-    }
-  }, [
-    business?.id,
-    dispatch,
-    formData?.specialist.id,
-    isEditMode,
-    specialist.specialistFetch,
-  ]);
-
-  useEffect(() => {
-    if (!serviceType.dataFatched) {
-      dispatch(
-        getServicesTypeFunApi({
-          data: business?.id,
-          onSuccess: (serviceTypesList) => {
-            if (isEditMode) {
-              const selected = serviceTypesList?.find(
-                (s) => s.id === formData.type.id
-              );
-              setSelectedServiceType(selected || null);
-            }
-          },
-        })
-      );
-    } else {
-      if (isEditMode && selectedServiceType === null) {
-        const selected = serviceType.data?.find(
-          (s) => s.id === formData?.type.id
-        );
-        setSelectedServiceType(selected || null);
-      }
-    }
-  }, [
-    business?.id,
-    dispatch,
-    formData?.type.id,
-    isEditMode,
-    selectedServiceType,
-    serviceType.data,
-    serviceType.dataFatched,
-  ]);
-
   const initialValues = isEditMode
     ? {
-        ...formData,
+        name: formData?.name || "",
+        description: formData?.description || "",
+        image: formData?.image || "",
+        price: formData?.price || "",
+        typeId: formData?.type?.id,
+        specialistId: formData?.specialist?.id || "",
+        timeInterval: formData?.timeInterval || 0,
+        businessId: business?.id,
+        timeSlots: formData?.timeSlots || [
+          {
+            day: "Monday",
+            startTime: "0:00",
+            endTime: "0:00",
+            active: false,
+          },
+          {
+            day: "Tuesday",
+            startTime: "0:00",
+            endTime: "0:00",
+            active: false,
+          },
+          {
+            day: "Wednesday",
+            startTime: "0:00",
+            endTime: "0:00",
+            active: false,
+          },
+          {
+            day: "Thursday",
+            startTime: "0:00",
+            endTime: "0:00",
+            active: false,
+          },
+          {
+            day: "Friday",
+            startTime: "0:00",
+            endTime: "0:00",
+            active: false,
+          },
+          {
+            day: "Saturday",
+            startTime: "0:00",
+            endTime: "0:00",
+            active: false,
+          },
+          {
+            day: "Sunday",
+            startTime: "0:00",
+            endTime: "0:00",
+            active: false,
+          },
+        ],
       }
     : {
         name: "",
@@ -191,13 +185,72 @@ const AddServiceForm = ({ formData, isEditMode }) => {
         ],
       };
 
+  useEffect(() => {
+    if (!specialist.specialistFetch) {
+      dispatch(
+        getspecialistApi({
+          data: business?.id,
+          onSuccess: (specialistList) => {
+            if (isEditMode) {
+              const selected = specialistList?.find(
+                (s) => s.id === formData.specialist.id
+              );
+              setSelectedSpecialist(selected || null);
+            }
+          },
+        })
+      );
+    }
+  }, [
+    business?.id,
+    dispatch,
+    formData?.specialist?.id,
+
+    isEditMode,
+    specialist.specialistFetch,
+  ]);
+
+  useEffect(() => {
+    if (!serviceType.dataFatched) {
+      dispatch(
+        getServicesTypeFunApi({
+          data: business?.id,
+          onSuccess: (serviceTypesList) => {
+            if (isEditMode) {
+              const selected = serviceTypesList?.find(
+                (s) => s.id === formData.type.id
+              );
+              setSelectedServiceType(selected || null);
+            }
+          },
+        })
+      );
+    } else {
+      if (isEditMode && selectedServiceType === null) {
+        const selected = serviceType.data?.find(
+          (s) => s.id === formData?.type.id
+        );
+        setSelectedServiceType(selected || null);
+      }
+    }
+  }, [
+    business?.id,
+    dispatch,
+    formData?.type?.id,
+
+    isEditMode,
+    selectedServiceType,
+    serviceType.data,
+    serviceType.dataFatched,
+  ]);
+
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: Yup.object().shape({
       name: requiredValidation("Service Name"),
       description: requiredValidation("Service Description"),
-      specialistId: Yup.string().required("Specialist is Required"),
-      typeId: Yup.string().required("Service Type is Required"),
+      specialistId: requiredValidation("Specialist"),
+      typeId: requiredValidation("Service Type"),
       price: Yup.number()
         .typeError("Price must be a number")
         .required("Price is Required")
@@ -209,18 +262,9 @@ const AddServiceForm = ({ formData, isEditMode }) => {
         .integer("TimeInterval must be an integer"),
       timeSlots: Yup.array().of(
         Yup.object().shape({
-          // day: requiredValidation("Day"),
-          // startTime: requiredValidation("Start Time"),
-          // endTime: requiredValidation("End Time"),
-          // if active is true then startTime and endTime is required
-          startTime: Yup.string().when("active", {
-            is: true,
-            then: requiredValidation("Start Time"),
-          }),
-          endTime: Yup.string().when("active", {
-            is: true,
-            then: requiredValidation("End Time"),
-          }),
+          day: requiredValidation("Day"),
+          startTime: requiredValidation("Start Time"),
+          endTime: requiredValidation("End Time"),
         })
       ),
     }),
@@ -324,15 +368,26 @@ const AddServiceForm = ({ formData, isEditMode }) => {
 
                   <Autocomplete
                     value={selectedServiceType || null}
-                    onChange={(event, newValue) =>
-                      setSelectedServiceType(newValue)
-                    }
+                    onChange={(event, newValue) => {
+                      setSelectedServiceType(newValue);
+                      formik.setFieldValue("typeId", newValue?.id || "");
+                    }}
                     options={serviceType?.data || []}
                     getOptionLabel={(option) => option.name}
                     renderInput={(params) => (
                       <TextField
                         {...params}
                         label="Select Service Type"
+                        error={
+                          formik.touched.typeId && formik.errors.typeId
+                            ? true
+                            : false
+                        }
+                        helperText={
+                          formik.touched.typeId && formik.errors.typeId
+                            ? formik.errors.typeId
+                            : ""
+                        }
                         inputProps={{
                           ...params.inputProps,
                         }}
@@ -366,7 +421,6 @@ const AddServiceForm = ({ formData, isEditMode }) => {
                       <TextField
                         {...params}
                         label="Select Specialist"
-                        {...formik.getFieldProps("specialistId")}
                         error={
                           formik.touched.specialistId &&
                           formik.errors.specialistId
