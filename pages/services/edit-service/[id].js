@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import styles from "@/styles/PageTitle.module.css";
-import { useDispatch, useSelector } from "react-redux";
-import AddServiceForm from "@/components/Forms/FormLayouts/AddServiceForm";
+import { useSelector } from "react-redux";
+import ServiceForm from "@/components/Forms/FormLayouts/ServiceForm";
 
 export default function EditServicePage() {
   const router = useRouter();
@@ -38,7 +38,7 @@ export default function EditServicePage() {
       {isLoading ? (
         <p>Loading...</p>
       ) : (
-        <AddServiceForm formData={serviceData} isEditMode={true} />
+        <ServiceForm formData={serviceData} isEditMode={true} />
       )}
     </>
   );

@@ -4,6 +4,8 @@ import {
   editServicesFunApi,
   getAllServiceFunApi,
   getServicesTypeFunApi,
+  deleteServiceFunApi
+
 } from "./services";
 import { createSlice } from "@reduxjs/toolkit";
 
@@ -92,11 +94,26 @@ const serviceSlice = createSlice({
       })
       .addCase(editServicesFunApi.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.service.data = state.service.data?.map((ele) =>
+        state.data = state.data?.map((ele) =>
           ele.id === action.payload.id ? action.payload : ele
         );
       })      
       .addCase(editServicesFunApi.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+        state.dataFatched = true;
+      });
+      builder
+      .addCase(deleteServiceFunApi.pending, (state, action) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(deleteServiceFunApi.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.service.data = state.service.data?.filter(ele => ele.id !== action.payload);
+        state.dataFetched = true;
+      })    
+      .addCase(deleteServiceFunApi.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
         state.dataFatched = true;

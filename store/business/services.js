@@ -5,11 +5,15 @@ import toast from "react-hot-toast";
 
 export const getMyBussinessFunApi = createAsyncThunk(
   "business/getMyBussiness",
-  async () => {
+  async ( { onSuccess }) => {
     try {
       const response = await axios.get(getMyBusiness);
       console.log("response in get My Bussiness => ", response.data);
       if (response.data.status === "success") {
+        if (onSuccess) {
+          onSuccess(response.data.data.id);
+          console.log(response.data.data.id,"logdataa")
+        }
         return response.data.data;
       } else {
         console.log(
