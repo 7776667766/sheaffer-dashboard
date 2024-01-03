@@ -20,7 +20,7 @@ const businessSlice = createSlice({
       .addCase(getMyBussinessFunApi.fulfilled, (state, action) => {
         state.isLoading = false;
         state.business = action.payload;
-        state.business.dataFatched = true;
+        state.dataFatched = true;
       })
       .addCase(getMyBussinessFunApi.rejected, (state, action) => {
         state.isLoading = false;

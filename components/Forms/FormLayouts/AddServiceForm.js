@@ -275,9 +275,7 @@ const AddServiceForm = ({ formData, isEditMode }) => {
     },
   });
   const handleCheckboxChange = (index) => {
-    console.log(index, "index--")
     const updatedTimeSlots = [...formik.values.timeSlots];
-    console.log(updatedTimeSlots, "updtedtimes--")
     updatedTimeSlots[index].active = !updatedTimeSlots[index].active;
     formik.setFieldValue('timeSlots', updatedTimeSlots);
   };
@@ -447,7 +445,6 @@ const AddServiceForm = ({ formData, isEditMode }) => {
                   accept="image/*"
                   onChange={handleFileChange}
                 />
-                {/* Show Image */}
                 {profileImageUrl && (
                   <Image
                     src={profileImageUrl}
