@@ -8,7 +8,6 @@ import {
 } from "@mui/material";
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
-import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 import SendIcon from "@mui/icons-material/Send";
@@ -197,6 +196,8 @@ const AddServiceForm = ({ formData, isEditMode }) => {
     validationSchema: Yup.object().shape({
       name: requiredValidation("Service Name"),
       description: requiredValidation("Service Description"),
+      specialistId: Yup.string().required("Specialist is Required"),
+      typeId: Yup.string().required("Service Type is Required"),
       price: Yup.number()
         .typeError("Price must be a number")
         .required("Price is Required")
@@ -208,9 +209,18 @@ const AddServiceForm = ({ formData, isEditMode }) => {
         .integer("TimeInterval must be an integer"),
       timeSlots: Yup.array().of(
         Yup.object().shape({
-          day: requiredValidation("Day"),
-          startTime: requiredValidation("Start Time"),
-          endTime: requiredValidation("End Time"),
+          // day: requiredValidation("Day"),
+          // startTime: requiredValidation("Start Time"),
+          // endTime: requiredValidation("End Time"),
+          // if active is true then startTime and endTime is required
+          startTime: Yup.string().when("active", {
+            is: true,
+            then: requiredValidation("Start Time"),
+          }),
+          endTime: Yup.string().when("active", {
+            is: true,
+            then: requiredValidation("End Time"),
+          }),
         })
       ),
     }),
@@ -296,9 +306,6 @@ const AddServiceForm = ({ formData, isEditMode }) => {
                       ? formik.errors.name
                       : ""
                   }
-                  InputProps={{
-                    style: { borderRadius: 8 },
-                  }}
                 />
               </Grid>
 
@@ -328,7 +335,6 @@ const AddServiceForm = ({ formData, isEditMode }) => {
                         label="Select Service Type"
                         inputProps={{
                           ...params.inputProps,
-                          style: { borderRadius: 8 },
                         }}
                       />
                     )}
@@ -350,18 +356,31 @@ const AddServiceForm = ({ formData, isEditMode }) => {
 
                   <Autocomplete
                     value={selectedSpecialist || null}
-                    onChange={(event, newValue) =>
-                      setSelectedSpecialist(newValue)
-                    }
+                    onChange={(event, newValue) => {
+                      setSelectedSpecialist(newValue);
+                      formik.setFieldValue("specialistId", newValue?.id || "");
+                    }}
                     options={specialist || []}
                     getOptionLabel={(option) => option.name}
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label="Select a specialist"
+                        label="Select Specialist"
+                        {...formik.getFieldProps("specialistId")}
+                        error={
+                          formik.touched.specialistId &&
+                          formik.errors.specialistId
+                            ? true
+                            : false
+                        }
+                        helperText={
+                          formik.touched.specialistId &&
+                          formik.errors.specialistId
+                            ? formik.errors.specialistId
+                            : ""
+                        }
                         inputProps={{
                           ...params.inputProps,
-                          style: { borderRadius: 8 },
                         }}
                       />
                     )}
@@ -395,44 +414,44 @@ const AddServiceForm = ({ formData, isEditMode }) => {
                       ? formik.errors.price
                       : ""
                   }
-                  InputProps={{
-                    style: { borderRadius: 8 },
-                  }}
                 />
               </Grid>
 
               <Grid item xs={12} md={12} lg={6}>
-                <Typography
-                  component="label"
-                  sx={{
-                    fontWeight: "500",
-                    fontSize: "14px",
-                    mb: "10px",
-                    display: "block",
-                  }}
-                >
-                  Upload Image
-                </Typography>
+                <Box sx={{ display: "flex", alignItems: "end", gap: 1 }}>
+                  <Box sx={{ flex: 1 }}>
+                    <Typography
+                      as="h5"
+                      sx={{
+                        fontWeight: "500",
+                        fontSize: "14px",
+                        mb: "12px",
+                      }}
+                    >
+                      Upload Image
+                    </Typography>
 
-                <TextField
-                  fullWidth
-                  name="file"
-                  type="file"
-                  id="file"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                />
-                {/* Show Image */}
-                {profileImageUrl && (
-                  <Image
-                    src={profileImageUrl}
-                    alt="profile"
-                    className="borRadius100"
-                    style={{ marginTop: "1rem" }}
-                    width={50}
-                    height={50}
-                  />
-                )}
+                    <TextField
+                      fullWidth
+                      name="file"
+                      type="file"
+                      id="file"
+                      accept="image/*"
+                      onChange={handleFileChange}
+                    />
+                  </Box>
+                  {profileImageUrl && (
+                    <Image
+                      src={profileImageUrl}
+                      alt="profile"
+                      style={{
+                        border: "1px solid #e0e0e0",
+                      }}
+                      width={50}
+                      height={50}
+                    />
+                  )}
+                </Box>
               </Grid>
               <Grid item xs={12} md={12} lg={6}>
                 <Typography
@@ -457,49 +476,8 @@ const AddServiceForm = ({ formData, isEditMode }) => {
                       ? formik.errors.timeInterval
                       : ""
                   }
-                  InputProps={{
-                    style: { borderRadius: 8 },
-                  }}
                 />
               </Grid>
-
-              {/* <Box mt={1} ml={2}>
-                <img
-                  src={user.image}
-                  alt="profile"
-                  className="borRadius100"
-                  width="50px"
-                  height="50px"
-                  
-                />
-              </Box> */}
-              {/* <Grid item xs={6}>
-              <Typography
-                component="label"
-                sx={{
-                  fontWeight: '500',
-                  fontSize: '14px',
-                  mb: '10px',
-                  display: 'block',
-                }}
-              >
-                Upload Image
-              </Typography>
-
-              <input
-                required
-                fullWidth
-                type="file"
-                name="file"
-                onChange={handleFileChange}
-                id="file"
-                autoComplete="file"
-                sx={{
-                  padding: '16px',
-                  borderRadius: '8px',
-                }}
-              />
-            </Grid> */}
 
               <Grid item xs={12}>
                 <Typography
@@ -635,9 +613,6 @@ const AddServiceForm = ({ formData, isEditMode }) => {
                             ? formik.errors.timeSlots[index]?.startTime
                             : ""
                         }
-                        InputProps={{
-                          style: { borderRadius: 8 },
-                        }}
                       />
                     </Grid>
                     <Grid item xs={12} md={4}>
@@ -660,9 +635,6 @@ const AddServiceForm = ({ formData, isEditMode }) => {
                             ? formik.errors.timeSlots[index]?.endTime
                             : ""
                         }
-                        InputProps={{
-                          style: { borderRadius: 8 },
-                        }}
                       />
                     </Grid>
                   </Grid>
