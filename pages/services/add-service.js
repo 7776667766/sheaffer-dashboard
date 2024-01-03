@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import styles from "@/styles/PageTitle.module.css";
-import AddServiceForm from "@/components/Forms/FormLayouts/AddServiceForm";
+import ServiceForm from "@/components/Forms/FormLayouts/ServiceForm";
 
 export default function AddService() {
   return (
@@ -17,7 +17,7 @@ export default function AddService() {
         </ul>
       </div>
 
-      <AddServiceForm />
+      <ServiceForm />
     </>
   );
 }

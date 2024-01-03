@@ -8,7 +8,6 @@ import {
 } from "@mui/material";
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
-import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 import SendIcon from "@mui/icons-material/Send";
@@ -21,12 +20,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { getspecialistApi } from "store/specialist/services";
 import { getServicesTypeFunApi } from "store/service/services";
-import { getMyBussinessFunApi } from 'store/business/services'
 import toast from "react-hot-toast";
 import Image from "next/image";
 import { LoadingButtonComponent } from "@/components/UIElements/Buttons/LoadingButton";
 
-const AddServiceForm = ({ formData, isEditMode }) => {
+const ServiceForm = ({ formData, isEditMode }) => {
   const [selectedSpecialist, setSelectedSpecialist] = useState(null);
   const [selectedServiceType, setSelectedServiceType] = useState(null);
   const [avatar, setavatar] = useState(null);
@@ -77,6 +75,116 @@ const AddServiceForm = ({ formData, isEditMode }) => {
     }
   }, [formData?.image, isEditMode]);
 
+  const initialValues = isEditMode
+    ? {
+        name: formData?.name || "",
+        description: formData?.description || "",
+        image: formData?.image || "",
+        price: formData?.price || "",
+        typeId: formData?.type?.id,
+        specialistId: formData?.specialist?.id || "",
+        timeInterval: formData?.timeInterval || 0,
+        businessId: business?.id,
+        timeSlots: formData?.timeSlots || [
+          {
+            day: "Monday",
+            startTime: "0:00",
+            endTime: "0:00",
+            active: false,
+          },
+          {
+            day: "Tuesday",
+            startTime: "0:00",
+            endTime: "0:00",
+            active: false,
+          },
+          {
+            day: "Wednesday",
+            startTime: "0:00",
+            endTime: "0:00",
+            active: false,
+          },
+          {
+            day: "Thursday",
+            startTime: "0:00",
+            endTime: "0:00",
+            active: false,
+          },
+          {
+            day: "Friday",
+            startTime: "0:00",
+            endTime: "0:00",
+            active: false,
+          },
+          {
+            day: "Saturday",
+            startTime: "0:00",
+            endTime: "0:00",
+            active: false,
+          },
+          {
+            day: "Sunday",
+            startTime: "0:00",
+            endTime: "0:00",
+            active: false,
+          },
+        ],
+      }
+    : {
+        name: "",
+        description: "",
+        image: "",
+        price: "",
+        typeId: "",
+        specialistId: "",
+        timeInterval: 0,
+        businessId: business?.id,
+        timeSlots: [
+          {
+            day: "Monday",
+            startTime: "0:00",
+            endTime: "0:00",
+            active: false,
+          },
+          {
+            day: "Tuesday",
+            startTime: "0:00",
+            endTime: "0:00",
+            active: false,
+          },
+          {
+            day: "Wednesday",
+            startTime: "0:00",
+            endTime: "0:00",
+            active: false,
+          },
+          {
+            day: "Thursday",
+            startTime: "0:00",
+            endTime: "0:00",
+            active: false,
+          },
+          {
+            day: "Friday",
+            startTime: "0:00",
+            endTime: "0:00",
+            active: false,
+          },
+          {
+            day: "Saturday",
+            startTime: "0:00",
+            endTime: "0:00",
+            active: false,
+          },
+          {
+            day: "Sunday",
+            startTime: "0:00",
+            endTime: "0:00",
+            active: false,
+          },
+        ],
+      };
+
   useEffect(() => {
     if (!specialist.specialistFetch) {
       dispatch(
@@ -96,7 +204,8 @@ const AddServiceForm = ({ formData, isEditMode }) => {
   }, [
     business?.id,
     dispatch,
-    formData?.specialist.id,
+    formData?.specialist?.id,
+
     isEditMode,
     specialist.specialistFetch,
   ]);
@@ -127,77 +236,20 @@ const AddServiceForm = ({ formData, isEditMode }) => {
   }, [
     business?.id,
     dispatch,
-    formData?.type.id,
+    formData?.type?.id,
     isEditMode,
     selectedServiceType,
     serviceType.data,
     serviceType.dataFatched,
   ]);
 
-  const initialValues = isEditMode
-    ? {
-      ...formData,
-    }
-    : {
-      name: "",
-      description: "",
-      image: "",
-      price: "",
-      typeId: "",
-      specialistId: "",
-      timeInterval: 0,
-      businessId: business?.id,
-      timeSlots: [
-        {
-          day: "Monday",
-          startTime: "0:00",
-          endTime: "0:00",
-          active: false,
-        },
-        {
-          day: "Tuesday",
-          startTime: "0:00",
-          endTime: "0:00",
-          active: false,
-        },
-        {
-          day: "Wednesday",
-          startTime: "0:00",
-          endTime: "0:00",
-          active: false,
-        },
-        {
-          day: "Thursday",
-          startTime: "0:00",
-          endTime: "0:00",
-          active: false,
-        },
-        {
-          day: "Friday",
-          startTime: "0:00",
-          endTime: "0:00",
-          active: false,
-        },
-        {
-          day: "Saturday",
-          startTime: "0:00",
-          endTime: "0:00",
-          active: false,
-        },
-        {
-          day: "Sunday",
-          startTime: "0:00",
-          endTime: "0:00",
-          active: false,
-        },
-      ],
-    };
-
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: Yup.object().shape({
       name: requiredValidation("Service Name"),
       description: requiredValidation("Service Description"),
+      specialistId: requiredValidation("Specialist"),
+      typeId: requiredValidation("Service Type"),
       price: Yup.number()
         .typeError("Price must be a number")
         .required("Price is Required")
@@ -212,7 +264,9 @@ const AddServiceForm = ({ formData, isEditMode }) => {
           day: Yup.string().required("Day is required"),
           startTime: Yup.string().required("Start Time is required"),
           endTime: Yup.string().required("End Time is required"),
-          active: Yup.boolean().required("Please select whether the time slot is active or not"),
+          active: Yup.boolean().required(
+            "Please select whether the time slot is active or not"
+          ),
         })
       ),
     }),
@@ -233,12 +287,17 @@ const AddServiceForm = ({ formData, isEditMode }) => {
       const hasEmptyTime = values.timeSlots.some((slot) => {
         return (
           slot.active &&
-          (slot.startTime === "" || slot.startTime === "0:00" || slot.endTime === "" || slot.endTime === "0:00")
+          (slot.startTime === "" ||
+            slot.startTime === "0:00" ||
+            slot.endTime === "" ||
+            slot.endTime === "0:00")
         );
       });
 
       if (hasEmptyTime) {
-        toast.error("Please provide both start and end times for all selected time slots.");
+        toast.error(
+          "Please provide both start and end times for all selected time slots."
+        );
         return;
       }
       try {
@@ -277,7 +336,7 @@ const AddServiceForm = ({ formData, isEditMode }) => {
   const handleCheckboxChange = (index) => {
     const updatedTimeSlots = [...formik.values.timeSlots];
     updatedTimeSlots[index].active = !updatedTimeSlots[index].active;
-    formik.setFieldValue('timeSlots', updatedTimeSlots);
+    formik.setFieldValue("timeSlots", updatedTimeSlots);
   };
 
   return (
@@ -319,9 +378,6 @@ const AddServiceForm = ({ formData, isEditMode }) => {
                       ? formik.errors.name
                       : ""
                   }
-                  InputProps={{
-                    style: { borderRadius: 8 },
-                  }}
                 />
               </Grid>
 
@@ -340,18 +396,28 @@ const AddServiceForm = ({ formData, isEditMode }) => {
 
                   <Autocomplete
                     value={selectedServiceType || null}
-                    onChange={(event, newValue) =>
-                      setSelectedServiceType(newValue)
-                    }
+                    onChange={(event, newValue) => {
+                      setSelectedServiceType(newValue);
+                      formik.setFieldValue("typeId", newValue?.id || "");
+                    }}
                     options={serviceType?.data || []}
                     getOptionLabel={(option) => option.name}
                     renderInput={(params) => (
                       <TextField
                         {...params}
                         label="Select Service Type"
+                        error={
+                          formik.touched.typeId && formik.errors.typeId
+                            ? true
+                            : false
+                        }
+                        helperText={
+                          formik.touched.typeId && formik.errors.typeId
+                            ? formik.errors.typeId
+                            : ""
+                        }
                         inputProps={{
                           ...params.inputProps,
-                          style: { borderRadius: 8 },
                         }}
                       />
                     )}
@@ -373,18 +439,30 @@ const AddServiceForm = ({ formData, isEditMode }) => {
 
                   <Autocomplete
                     value={selectedSpecialist || null}
-                    onChange={(event, newValue) =>
-                      setSelectedSpecialist(newValue)
-                    }
+                    onChange={(event, newValue) => {
+                      setSelectedSpecialist(newValue);
+                      formik.setFieldValue("specialistId", newValue?.id || "");
+                    }}
                     options={specialist || []}
                     getOptionLabel={(option) => option.name}
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label="Select a specialist"
+                        label="Select Specialist"
+                        error={
+                          formik.touched.specialistId &&
+                          formik.errors.specialistId
+                            ? true
+                            : false
+                        }
+                        helperText={
+                          formik.touched.specialistId &&
+                          formik.errors.specialistId
+                            ? formik.errors.specialistId
+                            : ""
+                        }
                         inputProps={{
                           ...params.inputProps,
-                          style: { borderRadius: 8 },
                         }}
                       />
                     )}
@@ -418,43 +496,44 @@ const AddServiceForm = ({ formData, isEditMode }) => {
                       ? formik.errors.price
                       : ""
                   }
-                  InputProps={{
-                    style: { borderRadius: 8 },
-                  }}
                 />
               </Grid>
 
               <Grid item xs={12} md={12} lg={6}>
-                <Typography
-                  component="label"
-                  sx={{
-                    fontWeight: "500",
-                    fontSize: "14px",
-                    mb: "10px",
-                    display: "block",
-                  }}
-                >
-                  Upload Image
-                </Typography>
+                <Box sx={{ display: "flex", alignItems: "end", gap: 1 }}>
+                  <Box sx={{ flex: 1 }}>
+                    <Typography
+                      as="h5"
+                      sx={{
+                        fontWeight: "500",
+                        fontSize: "14px",
+                        mb: "12px",
+                      }}
+                    >
+                      Upload Image
+                    </Typography>
 
-                <TextField
-                  fullWidth
-                  name="file"
-                  type="file"
-                  id="file"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                />
-                {profileImageUrl && (
-                  <Image
-                    src={profileImageUrl}
-                    alt="profile"
-                    className="borRadius100"
-                    style={{ marginTop: "1rem" }}
-                    width={50}
-                    height={50}
-                  />
-                )}
+                    <TextField
+                      fullWidth
+                      name="file"
+                      type="file"
+                      id="file"
+                      accept="image/*"
+                      onChange={handleFileChange}
+                    />
+                  </Box>
+                  {profileImageUrl && (
+                    <Image
+                      src={profileImageUrl}
+                      alt="profile"
+                      style={{
+                        border: "1px solid #e0e0e0",
+                      }}
+                      width={50}
+                      height={50}
+                    />
+                  )}
+                </Box>
               </Grid>
               <Grid item xs={12} md={12} lg={6}>
                 <Typography
@@ -479,49 +558,8 @@ const AddServiceForm = ({ formData, isEditMode }) => {
                       ? formik.errors.timeInterval
                       : ""
                   }
-                  InputProps={{
-                    style: { borderRadius: 8 },
-                  }}
                 />
               </Grid>
-
-              {/* <Box mt={1} ml={2}>
-                <img
-                  src={user.image}
-                  alt="profile"
-                  className="borRadius100"
-                  width="50px"
-                  height="50px"
-                  
-                />
-              </Box> */}
-              {/* <Grid item xs={6}>
-              <Typography
-                component="label"
-                sx={{
-                  fontWeight: '500',
-                  fontSize: '14px',
-                  mb: '10px',
-                  display: 'block',
-                }}
-              >
-                Upload Image
-              </Typography>
-
-              <input
-                required
-                fullWidth
-                type="file"
-                name="file"
-                onChange={handleFileChange}
-                id="file"
-                autoComplete="file"
-                sx={{
-                  padding: '16px',
-                  borderRadius: '8px',
-                }}
-              />
-            </Grid> */}
 
               <Grid item xs={12}>
                 <Typography
@@ -551,10 +589,11 @@ const AddServiceForm = ({ formData, isEditMode }) => {
                     width: "100%",
                     borderRadius: 8,
                     padding: "8px",
-                    border: `1px solid ${formik.touched.description && formik.errors.description
-                      ? "red"
-                      : "#e0e0e0"
-                      }`,
+                    border: `1px solid ${
+                      formik.touched.description && formik.errors.description
+                        ? "red"
+                        : "#e0e0e0"
+                    }`,
                   }}
                 />
                 {formik.touched.description && formik.errors.description && (
@@ -616,21 +655,22 @@ const AddServiceForm = ({ formData, isEditMode }) => {
                         fullWidth
                         type="time"
                         label={"Start Time"}
-                        {...formik.getFieldProps(`timeSlots[${index}].startTime`)}
+                        {...formik.getFieldProps(
+                          `timeSlots[${index}].startTime`
+                        )}
                         error={
                           formik.touched.timeSlots &&
                           formik.errors.timeSlots &&
                           !formik.values.timeSlots[index].active
                         }
-                        disabled={!formik.values.timeSlots[index]?.active || false}
+                        disabled={
+                          !formik.values.timeSlots[index]?.active || false
+                        }
                         helperText={
                           formik.touched.timeSlots && formik.errors.timeSlots
                             ? formik.errors.timeSlots[index]?.startTime
                             : ""
                         }
-                        InputProps={{
-                          style: { borderRadius: 8 },
-                        }}
                       />
                     </Grid>
                     <Grid item xs={12} md={4}>
@@ -640,7 +680,9 @@ const AddServiceForm = ({ formData, isEditMode }) => {
                         type="time"
                         label={"End Time"}
                         {...formik.getFieldProps(`timeSlots[${index}].endTime`)}
-                        disabled={!formik.values.timeSlots[index]?.active || false}
+                        disabled={
+                          !formik.values.timeSlots[index]?.active || false
+                        }
                         error={
                           formik.touched.timeSlots &&
                           formik.errors.timeSlots &&
@@ -651,9 +693,6 @@ const AddServiceForm = ({ formData, isEditMode }) => {
                             ? formik.errors.timeSlots[index]?.endTime
                             : ""
                         }
-                        InputProps={{
-                          style: { borderRadius: 8 },
-                        }}
                       />
                     </Grid>
                   </Grid>
@@ -689,4 +728,4 @@ const AddServiceForm = ({ formData, isEditMode }) => {
   );
 };
 
-export default AddServiceForm;
+export default ServiceForm;
