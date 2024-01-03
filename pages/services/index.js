@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Box, DialogContent, Typography } from "@mui/material";
+import React, { useEffect } from "react";
+import { Box, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
 import IconButton from "@mui/material/IconButton";
 import TableCell from "@mui/material/TableCell";
@@ -21,11 +21,10 @@ import TransitionsDialog from "@/components/UIElements/Modal/TransitionsDialog";
 import { getMyBussinessFunApi } from "store/business/services";
 import { useRouter } from "next/router";
 
-const Services = () => {
+const ServicesPage = () => {
   const dispatch = useDispatch();
   const { service } = useSelector((state) => state.service);
   const { business, dataFatched } = useSelector((state) => state.business);
-
   const { role } = useSelector((state) => state.auth);
 
   useEffect(() => {
@@ -48,7 +47,7 @@ const Services = () => {
 
   const nextPage = (id, event) => {
     event.preventDefault();
-    router.push(`/services/edit-service/${id}`);
+    router.push(`/Page/edit-service/${id}`);
   };
 
   const handleDelete = (id) => {
@@ -355,4 +354,4 @@ const Services = () => {
   );
 };
 
-export default Services;
+export default ServicesPage;
