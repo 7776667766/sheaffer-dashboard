@@ -13,61 +13,57 @@ import Image from "next/image";
 import Link from "next/link";
 import { CustomPaginationTable } from "@/components/Table/CustomPaginationTable";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteServiceFunApi, getAllServiceFunApi } from "store/service/services";
+import {
+  deleteServiceFunApi,
+  getAllServiceFunApi,
+} from "store/service/services";
 import TransitionsDialog from "@/components/UIElements/Modal/TransitionsDialog";
-import { getMyBussinessFunApi } from 'store/business/services'
+import { getMyBussinessFunApi } from "store/business/services";
 import { useRouter } from "next/router";
 
 const Services = () => {
   const dispatch = useDispatch();
   const { service } = useSelector((state) => state.service);
   const { business, dataFatched } = useSelector((state) => state.business);
-  console.log("busisnessId", dataFatched)
+
   const { role } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (dataFatched !== true) {
       dispatch(
-
         getMyBussinessFunApi({
           onSuccess: (businessId) => {
-            dispatch(getAllServiceFunApi(
-              {
-                businessId: businessId
-              }
-            ));
+            dispatch(
+              getAllServiceFunApi({
+                businessId: businessId,
+              })
+            );
           },
-        }),
+        })
       );
     }
   }, [dispatch, dataFatched]);
 
-
   const router = useRouter();
 
   const nextPage = (id, event) => {
-    console.log(id)
-
     event.preventDefault();
-
     router.push(`/services/edit-service/${id}`);
-    console.log()
   };
 
   const handleDelete = (id) => {
-    console.log(id, "service id ka note");
     dispatch(deleteServiceFunApi(id));
   };
 
   useEffect(() => {
-    if (service.dataFatched !== true) {
+    if (service.dataFatched !== true && dataFatched === true) {
       dispatch(
         getAllServiceFunApi({
           businessId: business?.id,
         })
       );
     }
-  }, [dispatch, service.data, service.dataFatched, business?.id]);
+  }, [dispatch, service.data, service.dataFatched, business?.id, dataFatched]);
 
   return (
     <>
@@ -338,9 +334,9 @@ const Services = () => {
                     </TransitionsDialog>
                   </Tooltip>
 
-                  <Tooltip title="Rename" placement="top">
+                  <Tooltip title="Edit" placement="top">
                     <IconButton
-                      aria-label="rename"
+                      aria-label="edit"
                       size="small"
                       color="primary"
                       className="primary"

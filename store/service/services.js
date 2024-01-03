@@ -53,7 +53,6 @@ export const getAllServiceFunApi = createAsyncThunk(
   "services/All Service",
   async (data) => {
     try {
-
       const response = await axios.post(getAllServiceApi, data);
       console.log("response in get All Service => ", response.data);
       if (response.data.status === "success") {
@@ -163,7 +162,6 @@ export const getServicesTypeFunApi = createAsyncThunk(
   }
 );
 
-
 export const editServicesFunApi = createAsyncThunk(
   "services/editServices",
   async ({ data, onSuccess }) => {
@@ -201,7 +199,6 @@ export const editServicesFunApi = createAsyncThunk(
     }
   }
 );
-
 
 export const deleteServiceFunApi = createAsyncThunk(
   "services/deleteServices",
