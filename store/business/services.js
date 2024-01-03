@@ -2,6 +2,7 @@ import axios from "helper/api";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { getMyBusiness, registerBusinessApi } from "./constrants";
 import toast from "react-hot-toast";
+import axiosImage from "helper/api-image";
 
 export const getMyBussinessFunApi = createAsyncThunk(
   "business/getMyBussiness",
@@ -51,7 +52,7 @@ export const regsiterBusinessFunApi = createAsyncThunk(
   "business/createBusiness",
   async ({ data, onSuccess }) => {
     try {
-      const response = await axios.post(registerBusinessApi, data);
+      const response = await axiosImage.post(registerBusinessApi, data);
       console.log("response in create Business => ", response.data);
       if (response.data.status === "success") {
         toast.success("Business registed successfully");

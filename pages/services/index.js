@@ -47,7 +47,7 @@ const ServicesPage = () => {
 
   const nextPage = (id, event) => {
     event.preventDefault();
-    router.push(`/Page/edit-service/${id}`);
+    router.push(`/services/edit-service/${id}`);
   };
 
   const handleDelete = (id) => {
