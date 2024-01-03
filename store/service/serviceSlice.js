@@ -89,34 +89,34 @@ const serviceSlice = createSlice({
       });
       builder
       .addCase(editServicesFunApi.pending, (state, action) => {
-        state.isLoading = true;
-        state.error = null;
+        state.service.isLoading = true;
+        state.service.error = null;
       })
       .addCase(editServicesFunApi.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.data = state.data?.map((ele) =>
+        state.service.isLoading = false;
+        state.service.data = state.service.data?.map((ele) =>
           ele.id === action.payload.id ? action.payload : ele
         );
       })      
       .addCase(editServicesFunApi.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.payload;
-        state.dataFatched = true;
+        state.service.isLoading = false;
+        state.service.error = action.payload;
+        state.service.dataFatched = true;
       });
       builder
       .addCase(deleteServiceFunApi.pending, (state, action) => {
-        state.isLoading = true;
-        state.error = null;
+        state.service.isLoading = true;
+        state.service.error = null;
       })
       .addCase(deleteServiceFunApi.fulfilled, (state, action) => {
-        state.isLoading = false;
+        state.service.isLoading = false;
         state.service.data = state.service.data?.filter(ele => ele.id !== action.payload);
-        state.dataFetched = true;
+        state.service.dataFatched = true;
       })    
       .addCase(deleteServiceFunApi.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.payload;
-        state.dataFatched = true;
+        state.service.isLoading = false;
+        state.service.error = action.payload;
+        state.service.dataFatched = true;
       });
   },
 });

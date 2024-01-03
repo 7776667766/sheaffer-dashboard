@@ -340,7 +340,7 @@ const Services = () => {
                       size="small"
                       color="primary"
                       className="primary"
-                      onClick={(event) => nextPage(id, event)}
+                      onClick={(event) => nextPage(data.id, event)}
                     >
                       <DriveFileRenameOutlineIcon fontSize="inherit" />
                     </IconButton>

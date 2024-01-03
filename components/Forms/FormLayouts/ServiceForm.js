@@ -77,113 +77,114 @@ const ServiceForm = ({ formData, isEditMode }) => {
 
   const initialValues = isEditMode
     ? {
-        name: formData?.name || "",
-        description: formData?.description || "",
-        image: formData?.image || "",
-        price: formData?.price || "",
-        typeId: formData?.type?.id,
-        specialistId: formData?.specialist?.id || "",
-        timeInterval: formData?.timeInterval || 0,
-        businessId: business?.id,
-        timeSlots: formData?.timeSlots || [
-          {
-            day: "Monday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-          {
-            day: "Tuesday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-          {
-            day: "Wednesday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-          {
-            day: "Thursday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-          {
-            day: "Friday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-          {
-            day: "Saturday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-          {
-            day: "Sunday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-        ],
-      }
+      id: formData?.id || "",
+      name: formData?.name || "",
+      description: formData?.description || "",
+      image: formData?.image || "",
+      price: formData?.price || "",
+      typeId: formData?.type?.id,
+      specialistId: formData?.specialist?.id || "",
+      timeInterval: formData?.timeInterval || 0,
+      businessId: business?.id,
+      timeSlots: formData?.timeSlots || [
+        {
+          day: "Monday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+        {
+          day: "Tuesday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+        {
+          day: "Wednesday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+        {
+          day: "Thursday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+        {
+          day: "Friday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+        {
+          day: "Saturday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+        {
+          day: "Sunday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+      ],
+    }
     : {
-        name: "",
-        description: "",
-        image: "",
-        price: "",
-        typeId: "",
-        specialistId: "",
-        timeInterval: 0,
-        businessId: business?.id,
-        timeSlots: [
-          {
-            day: "Monday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-          {
-            day: "Tuesday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-          {
-            day: "Wednesday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-          {
-            day: "Thursday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-          {
-            day: "Friday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-          {
-            day: "Saturday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-          {
-            day: "Sunday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-        ],
-      };
+      name: "",
+      description: "",
+      image: "",
+      price: "",
+      typeId: "",
+      specialistId: "",
+      timeInterval: 0,
+      businessId: business?.id,
+      timeSlots: [
+        {
+          day: "Monday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+        {
+          day: "Tuesday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+        {
+          day: "Wednesday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+        {
+          day: "Thursday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+        {
+          day: "Friday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+        {
+          day: "Saturday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+        {
+          day: "Sunday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+      ],
+    };
 
   useEffect(() => {
     if (!specialist.specialistFetch) {
@@ -333,11 +334,7 @@ const ServiceForm = ({ formData, isEditMode }) => {
       }
     },
   });
-  const handleCheckboxChange = (index) => {
-    const updatedTimeSlots = [...formik.values.timeSlots];
-    updatedTimeSlots[index].active = !updatedTimeSlots[index].active;
-    formik.setFieldValue("timeSlots", updatedTimeSlots);
-  };
+
 
   return (
     <>
@@ -451,13 +448,13 @@ const ServiceForm = ({ formData, isEditMode }) => {
                         label="Select Specialist"
                         error={
                           formik.touched.specialistId &&
-                          formik.errors.specialistId
+                            formik.errors.specialistId
                             ? true
                             : false
                         }
                         helperText={
                           formik.touched.specialistId &&
-                          formik.errors.specialistId
+                            formik.errors.specialistId
                             ? formik.errors.specialistId
                             : ""
                         }
@@ -589,11 +586,10 @@ const ServiceForm = ({ formData, isEditMode }) => {
                     width: "100%",
                     borderRadius: 8,
                     padding: "8px",
-                    border: `1px solid ${
-                      formik.touched.description && formik.errors.description
+                    border: `1px solid ${formik.touched.description && formik.errors.description
                         ? "red"
                         : "#e0e0e0"
-                    }`,
+                      }`,
                   }}
                 />
                 {formik.touched.description && formik.errors.description && (
@@ -641,10 +637,11 @@ const ServiceForm = ({ formData, isEditMode }) => {
                 {formik.values.timeSlots?.map((slot, index) => (
                   <Grid container spacing={5} key={index} marginBottom={4}>
                     <Grid item xs={12} md={4}>
-                      <Checkbox
-                        name={`timeSlots[${index}].active`}
+                    <Checkbox
+                        name="timeSlots"
                         checked={formik.values.timeSlots[index].active}
-                        onChange={() => handleCheckboxChange(index)}
+                        {...formik.getFieldProps(`timeSlots[${index}].active`)}
+                        onChange={formik.handleChange}
                       />
                       {formik.values.timeSlots[index].day}
                     </Grid>
