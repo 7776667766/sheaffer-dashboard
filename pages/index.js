@@ -54,7 +54,9 @@ export default function ECommerce() {
 
   useEffect(() => {
     if (role === "owner" || role === "manager") {
-      if (!dataFatched) dispatch(getMyBussinessFunApi());
+      if (!dataFatched) {
+        dispatch(getMyBussinessFunApi({}));
+      }
     }
   }, [dispatch, dataFatched, role]);
   const businessList = [
