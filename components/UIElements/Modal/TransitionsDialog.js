@@ -3,8 +3,6 @@ import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
 import Grid from "@mui/material/Grid";
 
@@ -54,21 +52,19 @@ export default function TransitionsDialog({
             <DialogContent>{children}</DialogContent>
 
             <DialogActions sx={{ paddingTop: 0, padding: 1.5 }}>
-              <Grid spacing={1} justifyContent='center' container>
+              <Grid spacing={1} justifyContent="center" container>
                 {handleSubmit && (
                   <Grid item xs={6}>
-                     <Button
-                          variant="contained"
-                          fullWidth
-                          onClick={()=>{
-                            handleSubmit();
-                            handleClose();
-                          }}
-                        >
-                          {submitButtonText ?? 'Apply'}
-                        </Button>
-                   
-                    <submitButton onClick={props.handleSubmit} />
+                    <Button
+                      variant="contained"
+                      fullWidth
+                      onClick={() => {
+                        handleSubmit();
+                        handleClose();
+                      }}
+                    >
+                      {submitButtonText ?? "Apply"}
+                    </Button>
                   </Grid>
                 )}
                 <Grid item xs={6}>
