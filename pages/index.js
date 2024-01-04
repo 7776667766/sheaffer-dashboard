@@ -27,11 +27,9 @@ import {
   regsiterBusinessFunApi,
 } from "store/business/services";
 
-export default function ECommerce() {
+export default function DashboardPage() {
   const { user, role } = useSelector((state) => state.auth);
   const { business, dataFatched } = useSelector((state) => state.business);
-  console.log(business, "business");
-
 
   const dispatch = useDispatch();
   const [slug, setSlug] = useState("");
@@ -39,7 +37,6 @@ export default function ECommerce() {
   const [openSecondDialog, setOpenSecondDialog] = useState(false);
   const [selectedBusiness, setSelectedBusiness] = useState(null);
   const [avatar, setavatar] = useState(null);
-  console.log("avatar", avatar)
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -109,7 +106,6 @@ export default function ECommerce() {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setavatar(file);
-    console.log("file", file)
   };
 
   return (
@@ -123,7 +119,7 @@ export default function ECommerce() {
               <>
                 <Button
                   variant="contained"
-                  // disabled={business}
+                  disabled={business ? true : false}
                   onClick={handleClickOpen}
                 >
                   Sync Business
@@ -186,7 +182,9 @@ export default function ECommerce() {
                       </Grid>
 
                       <Grid item xs={6} md={6} lg={6}>
-                        <Box sx={{ display: "flex", alignItems: "end", gap: 1 }}>
+                        <Box
+                          sx={{ display: "flex", alignItems: "end", gap: 1 }}
+                        >
                           <Box sx={{ flex: 1 }}>
                             <Typography
                               as="h5"
@@ -208,7 +206,6 @@ export default function ECommerce() {
                               onChange={handleFileChange}
                             />
                           </Box>
-
                         </Box>
                       </Grid>
                       <Grid item xs={12}>
@@ -276,7 +273,7 @@ export default function ECommerce() {
 
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 2 }}>
         <Grid item xs={12} md={12} lg={12} xl={8}>
-          {business?.websiteService === true &&  (
+          {business && (
             <Card
               sx={{
                 boxShadow: "none",
@@ -305,15 +302,22 @@ export default function ECommerce() {
                         paddingLeft: "0px",
                       }}
                     >
-                      <li>Website Name</li>
-                      <li>Website Url</li>
-                      <li>Website Description</li>
-                      <li>Website Email</li>
-                      <li>Website Phone</li>
-                      <li> Website Logo</li>
-                      <li>Website Social icons</li>
-                      <li>Website Address</li>
-                      <li>Website Images</li>
+                      <li>Name</li>
+                      {business?.websiteService === true && (
+                        <li>Website Url</li>
+                      )}
+                      {business?.bookingService === true && (
+                        <li>Booking Url</li>
+                      )}
+
+                      <li>Description</li>
+                      <li>Email</li>
+                      <li>Phone</li>
+                      <li>Logo</li>
+                      <li>Theme</li>
+                      <li>Social icons</li>
+                      <li>Address</li>
+                      <li>Images</li>
                     </ul>
                   </Typography>
                 </Box>
@@ -327,47 +331,69 @@ export default function ECommerce() {
                         lineHeight: "35px",
                       }}
                     >
-                      <li>{business.name}</li>
-                      <li>
-                        <Button
-                          variant="outlined"
-                          href={`${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}site/${business.slug}`}
-                          target="_blank"
-                          sx={{
-                            pt: "2px",
-                            pb: "1px",
-                          }}
-                        >
-                          {business.slug}
-                        </Button>
-                      </li>
+                      <li>{business?.name}</li>
+                      {business?.websiteService === true && (
+                        <li>
+                          <Button
+                            variant="outlined"
+                            href={`${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}site/${business.slug}`}
+                            target="_blank"
+                            sx={{
+                              pt: "2px",
+                              pb: "1px",
+                            }}
+                          >
+                            {business.slug}
+                          </Button>
+                        </li>
+                      )}
+
+                      {business?.bookingService === true && (
+                        <li>
+                          <Button
+                            variant="outlined"
+                            href={`${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}booking/${business.slug}`}
+                            target="_blank"
+                            sx={{
+                              pt: "2px",
+                              pb: "1px",
+                            }}
+                          >
+                            {business.slug}
+                          </Button>
+                        </li>
+                      )}
+
                       <li>{business.description}</li>
                       <li>{business.email}</li>
                       <li>{business.phone}</li>
-                      <Image
-                        src={business.logo}
-                        width={50}
-                        height={50}
-                        alt="ok"
-                      />
-
-                     
-                      {business.socialLinks &&
-                        business.socialLinks.map((socialLink, index) => (
-                          <span key={index}>
-                            <a
-                              href={socialLink.link}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              style={{
-                                marginRight: "12px",
-                                textTransform: "capitalize",
-                              }}
-                            >
-                              {socialLink.name}
-                            </a>
-                          </span>
-                        ))}
+                      <li>
+                        <Image
+                          src={business.logo}
+                          width={50}
+                          height={50}
+                          alt="Logo"
+                        />
+                      </li>
+                      <li>{business.theme || "N/A"}</li>
+                      <li>
+                        {business.socialLinks &&
+                          business.socialLinks.map((socialLink, index) => (
+                            <span key={index}>
+                              <a
+                                href={socialLink.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{
+                                  marginRight: "12px",
+                                  textTransform: "capitalize",
+                                }}
+                              >
+                                {socialLink.name}
+                              </a>
+                            </span>
+                          ))}
+                      </li>
                       <li>{business.address}</li>
 
                       <li style={{ height: "50px" }}>
@@ -382,8 +408,6 @@ export default function ECommerce() {
                           />
                         ))}
                       </li>
-
-                 
                     </ul>
                   </Typography>
                 </Box>
@@ -392,131 +416,7 @@ export default function ECommerce() {
           )}
 
           <Features />
-
-         
         </Grid>
-
-        <Grid item xs={12} md={12} lg={12} xl={8}>
-          {business?.bookingService === true &&  (
-            <Card
-              sx={{
-                boxShadow: "none",
-                borderRadius: "10px",
-                p: "0px 20px",
-                mb: "15px",
-              }}
-            >
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "left",
-                  alignItems: "center",
-                  mb: "15px",
-                }}
-              >
-                <Box>
-                  <Typography
-                    variant="h4"
-                    sx={{ fontSize: 15, fontWeight: 700, mb: "5px" }}
-                  >
-                    <ul
-                      style={{
-                        listStyle: "none",
-                        lineHeight: "35px",
-                        paddingLeft: "0px",
-                      }}
-                    >
-                      <li>Booking Name</li>
-                      <li>Booking Url</li>
-                      <li>Booking Description</li>
-                      <li>Booking Email</li>
-                      <li>Booking Phone</li>
-                      <li>Booking Logo</li>
-                      <li>Booking Social icons</li>
-                      <li>Booking Address</li>
-                      <li>Booking Images</li>
-                    </ul>
-                  </Typography>
-                </Box>
-
-                <Box>
-                  <Typography variant="p" fontSize={14}>
-                    <ul
-                      style={{
-                        listStyle: "none",
-                        marginLeft: "35px",
-                        lineHeight: "35px",
-                      }}
-                    >
-                      <li>{business.name}</li>
-                      <li>
-                        <Button
-                          variant="outlined"
-                          href={`${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}site/${business.slug}`}
-                          target="_blank"
-                          sx={{
-                            pt: "2px",
-                            pb: "1px",
-                          }}
-                        >
-                          {business.slug}
-                        </Button>
-                      </li>
-                      <li>{business.description}</li>
-                      <li>{business.email}</li>
-                      <li>{business.phone}</li>
-                      <Image
-                        src={business.logo}
-                        width={50}
-                        height={50}
-                        alt="ok"
-                      />
-
-                     
-                      {business.socialLinks &&
-                        business.socialLinks.map((socialLink, index) => (
-                          <span key={index}>
-                            <a
-                              href={socialLink.link}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              style={{
-                                marginRight: "12px",
-                                textTransform: "capitalize",
-                              }}
-                            >
-                              {socialLink.name}
-                            </a>
-                          </span>
-                        ))}
-                      <li>{business.address}</li>
-
-                      <li style={{ height: "50px" }}>
-                        {business.images.map((data, key) => (
-                          <Image
-                            key={key}
-                            src={data}
-                            alt={business.name}
-                            width={50}
-                            height={50}
-                            style={{ marginRight: "12px" }}
-                          />
-                        ))}
-                      </li>
-
-                 
-                    </ul>
-                  </Typography>
-                </Box>
-              </Box>
-            </Card>
-          )}
-
-          <Features />
-
-         
-        </Grid>
- 
       </Grid>
 
       {/* Recent Orders */}
