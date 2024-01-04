@@ -119,7 +119,7 @@ export default function DashboardPage() {
               <>
                 <Button
                   variant="contained"
-                  disabled={business ? true : false}
+                  // disabled={business ? true : false}
                   onClick={handleClickOpen}
                 >
                   Sync Business
@@ -397,7 +397,7 @@ export default function DashboardPage() {
                       <li>{business.address}</li>
 
                       <li style={{ height: "50px" }}>
-                        {business.images.map((data, key) => (
+                        {business?.images?.map((data, key) => (
                           <Image
                             key={key}
                             src={data}
