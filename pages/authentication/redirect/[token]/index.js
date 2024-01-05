@@ -8,17 +8,16 @@ export default function SignIn() {
   const router = useRouter();
   const dispatch = useDispatch();
   const { isLoading } = useSelector((state) => state.auth);
-  console.log(isLoading, "loading")
+  console.log(isLoading, "loading");
 
   useEffect(() => {
     console.log("token", router.query.token);
     if (router.query.token) {
       localStorage.setItem("token", router.query.token);
-      console.log("token exist", router.query.token);
       dispatch(
         autoLoginFunApi({
-          onSuccess: () => {         
-            router.push("/")
+          onSuccess: () => {
+            router.push("/");
           },
         })
       );
@@ -27,9 +26,7 @@ export default function SignIn() {
 
   return (
     <div>
-    <h1>
-     please Wait...
-    </h1>
+      <h1>please Wait...</h1>
     </div>
   );
 }

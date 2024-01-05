@@ -163,86 +163,52 @@ export default function DashboardPage() {
                         <CloseIcon />
                       </IconButton>
                     </DialogTitle>
-                    <Grid container spacing={2}>
+                    <Grid container spacing={3} paddingX={3} paddingBottom={3}>
                       <Grid item xs={12}>
-                        <Grid item xs={12}>
-                          <TextField
-                            label="Slug"
-                            name="slug"
-                            onChange={(e) => setSlug(e.target.value)}
-                            fullWidth
-                            InputProps={{
-                              style: {
-                                borderRadius: "5px",
-                                padding: "5px",
-                              },
-                            }}
-                          />
-                        </Grid>
-                      </Grid>
-
-                      <Grid item xs={6} md={6} lg={6}>
-                        <Box
-                          sx={{ display: "flex", alignItems: "end", gap: 1 }}
+                        <Typography
+                          as="h5"
+                          sx={{
+                            fontWeight: "500",
+                            fontSize: "14px",
+                            mb: "12px",
+                          }}
                         >
-                          <Box sx={{ flex: 1 }}>
-                            <Typography
-                              as="h5"
-                              sx={{
-                                fontWeight: "500",
-                                fontSize: "14px",
-                                mb: "12px",
-                              }}
-                            >
-                              Upload Logo
-                            </Typography>
-
-                            <TextField
-                              fullWidth
-                              name="logo"
-                              type="file"
-                              id="logo"
-                              accept="image/*"
-                              onChange={handleFileChange}
-                            />
-                          </Box>
-                        </Box>
+                          Business Slug
+                        </Typography>
+                        <TextField
+                          label="Slug"
+                          name="slug"
+                          onChange={(e) => setSlug(e.target.value)}
+                          fullWidth
+                          InputProps={{
+                            style: {
+                              borderRadius: "5px",
+                              padding: "5px",
+                            },
+                          }}
+                        />
                       </Grid>
                       <Grid item xs={12}>
-                        <Box>
-                          <Typography variant="p" fontSize={14}>
-                            <ul
-                              style={{
-                                listStyle: "none",
-                                marginLeft: "35px",
-                                lineHeight: "35px",
-                              }}
-                            >
-                              <li>{business?.name}</li>
-                              <li>{business?.description}</li>
-                              <li>{business?.email}</li>
-                              <li>{business?.phone}</li>
-                              {business?.socialLinks &&
-                                business?.socialLinks.map(
-                                  (socialLink, index) => (
-                                    <span key={index}>
-                                      <a
-                                        href={socialLink.link}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        style={{
-                                          marginRight: "12px",
-                                          textTransform: "capitalize",
-                                        }}
-                                      >
-                                        {socialLink.name}
-                                      </a>
-                                    </span>
-                                  )
-                                )}
-                              <li>{business?.address}</li>
-                            </ul>
+                        <Box sx={{ flex: 1 }}>
+                          <Typography
+                            as="h5"
+                            sx={{
+                              fontWeight: "500",
+                              fontSize: "14px",
+                              mb: "12px",
+                            }}
+                          >
+                            Upload Logo
                           </Typography>
+
+                          <TextField
+                            fullWidth
+                            name="logo"
+                            type="file"
+                            id="logo"
+                            accept="image/*"
+                            onChange={handleFileChange}
+                          />
                         </Box>
                       </Grid>
 
@@ -259,7 +225,7 @@ export default function DashboardPage() {
                           variant="contained"
                           color="primary"
                         >
-                          Submit
+                          Register Business
                         </Button>
                       </Grid>
                     </Grid>
@@ -286,7 +252,6 @@ export default function DashboardPage() {
                 sx={{
                   display: "flex",
                   justifyContent: "left",
-                  alignItems: "center",
                   mb: "15px",
                 }}
               >
@@ -370,9 +335,12 @@ export default function DashboardPage() {
                       <li>
                         <Image
                           src={business.logo}
-                          width={50}
+                          width={100}
                           height={50}
                           alt="Logo"
+                          style={{
+                            objectFit: "contain",
+                          }}
                         />
                       </li>
                       <li>{business.theme || "N/A"}</li>

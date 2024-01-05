@@ -4,30 +4,25 @@ import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import AddIcon from "@mui/icons-material/Add";
 import SendIcon from "@mui/icons-material/Send";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-
 import dynamic from "next/dynamic";
-import {
-  confirmPasswordValidation,
-  emailValidation,
-  passwordValidation,
-  phoneValidation,
-  requiredValidation,
-} from "@/utils/validation";
-import { useDispatch } from "react-redux";
-import {
-  addServicesTypeFunApi,
-  addservicesFunApi,
-} from "store/service/services";
+import { requiredValidation } from "@/utils/validation";
+import { useDispatch, useSelector } from "react-redux";
+
+import { addServicesTypeFunApi } from "store/service/services";
+import { useRouter } from "next/router";
+import { LoadingButtonComponent } from "@/components/UIElements/Buttons/LoadingButton";
 const RichTextEditor = dynamic(() => import("@mantine/rte"), {
   ssr: false,
 });
 
 const AddServiceTypeForm = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
+  const { serviceType } = useSelector((state) => state.service);
+
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -36,10 +31,14 @@ const AddServiceTypeForm = () => {
       name: requiredValidation(),
     }),
     onSubmit: (values) => {
-      console.log("Handle Submit", values);
-      dispatch(addServicesTypeFunApi({ data: values }));
-      // router.push("/authentication/verify-otp");
-      // alert(JSON.stringify(values, null, 2));
+      dispatch(
+        addServicesTypeFunApi({
+          data: values,
+          onSuccess: () => {
+            router.push("/services/service-type/");
+          },
+        })
+      );
     },
   });
 
@@ -86,28 +85,26 @@ const AddServiceTypeForm = () => {
             </Grid>
 
             <Grid item xs={12} textAlign="left">
-              <Button
+              <LoadingButtonComponent
                 type="submit"
-                variant="contained"
+                fullWidth={false}
                 sx={{
-                  mt: 1,
-                  textTransform: "capitalize",
-                  borderRadius: "8px",
-                  fontWeight: "500",
-                  fontSize: "13px",
                   padding: "12px 20px",
-                  color: "#fff !important",
                 }}
-              >
-                <SendIcon
-                  sx={{
-                    position: "relative",
-                    top: "-2px",
-                  }}
-                  className="mr-5px"
-                />
-                Add Services Type
-              </Button>
+                isLoading={serviceType.isLoading}
+                value={
+                  <>
+                    <SendIcon
+                      sx={{
+                        position: "relative",
+                        top: "-2px",
+                      }}
+                      className="mr-5px"
+                    />{" "}
+                    Add Services Type
+                  </>
+                }
+              />
             </Grid>
           </Grid>
         </Box>
