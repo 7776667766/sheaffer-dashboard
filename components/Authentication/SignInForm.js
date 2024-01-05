@@ -1,44 +1,26 @@
-import React, { use, useCallback, useEffect } from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import Grid from "@mui/material/Grid";
 import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
 import styles from "@/components/Authentication/Authentication.module.css";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { emailValidation, requiredValidation } from "@/utils/validation";
+import { requiredValidation } from "@/utils/validation";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { loginFunApi } from "store/auth/services";
 import { LoadingButtonComponent } from "../UIElements/Buttons/LoadingButton";
-import { checkTokenIsValidFunApi } from "store/auth/services"
-import { useParams } from "react-router-dom";
 
 const SignInForm = () => {
-  const router = useRouter()
- 
+  const router = useRouter();
+
   const dispatch = useDispatch();
   const { isAuthenticated, isLoading, otpVerified, user } = useSelector(
     (state) => state.auth
   );
-
-  const handleCheckToken = useCallback(() => {
-    const { token } = router.query;
-    console.log("token",token)
-    if (token) {
-      dispatch(
-        checkTokenIsValidFunApi(
-        )
-      );
-    }
-  }, [ ]);
-
-  useEffect(() => {
-    handleCheckToken();
-  }, [handleCheckToken]);
 
   const formik = useFormik({
     initialValues: {

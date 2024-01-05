@@ -9,6 +9,7 @@ import {
   changePasswordApi,
   updateprofileApi,
   checkTokenIsValidApi,
+  autoLoginApi,
 } from "./constrants";
 import toast from "react-hot-toast";
 import axiosImage from "helper/api-image";
@@ -146,6 +147,43 @@ export const checkTokenIsValidFunApi = createAsyncThunk(
       const response = await axios.get(checkTokenIsValidApi);
       console.log("response in checkTokenIsValidFun => ", response.data);
       if (response.data.status === "success") {
+        return response.data.data;
+      } else {
+        console.log(
+          "Error response in checkTokenIsValidFun Api => ",
+          response.data
+        );
+        const err =
+          response?.data?.message ||
+          response?.message ||
+          "Something went wrong!";
+        throw new Error(err);
+      }
+    } catch (error) {
+      console.log("Error in checkTokenIsValidFun Api ", error);
+      let err =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Something went wrong!";
+      if (err === "Network Error") {
+        err = "Please check your internet connection";
+      }
+
+      throw error;
+    }
+  }
+);
+
+export const autoLoginFunApi = createAsyncThunk(
+  "auth/autoLogin",
+  async ({ onSuccess }) => {
+    try {
+      const response = await axios.get(checkTokenIsValidApi);
+      console.log("response in checkTokenIsValidFun => ", response.data);
+      if (response.data.status === "success") {
+        if (onSuccess) {
+          onSuccess();
+        }
         return response.data.data;
       } else {
         console.log(

@@ -6,3 +6,4 @@ export const changePasswordApi = "change-password";
 export const updateprofileApi = "update-user-profile";
 export const checkTokenIsValidApi = "auth/token-is-valid";
 export const logoutApi = "auth/logout";
+export const autoLoginApi = "auth/auto-login";
