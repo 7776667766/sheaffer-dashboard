@@ -1,10 +1,9 @@
-import SignInForm from "@/components/Authentication/SignInForm";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { autoLoginFunApi } from "store/auth/services";
 
-export default function SignIn() {
+export default function RedirectPage() {
   const router = useRouter();
   const dispatch = useDispatch();
   const { isLoading } = useSelector((state) => state.auth);
