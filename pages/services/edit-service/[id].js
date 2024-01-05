@@ -32,7 +32,7 @@ export default function EditServicePage() {
           <li>
             <Link href="/">Dashboard</Link>
           </li>
-          <li>Manager</li>
+          <li>Service</li>
         </ul>
       </div>
       {isLoading ? (

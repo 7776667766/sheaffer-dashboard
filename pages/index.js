@@ -119,7 +119,7 @@ export default function DashboardPage() {
               <>
                 <Button
                   variant="contained"
-                  // disabled={business ? true : false}
+                  disabled={business ? true : false}
                   onClick={handleClickOpen}
                 >
                   Sync Business

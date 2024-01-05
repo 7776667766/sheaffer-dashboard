@@ -143,6 +143,7 @@ export const logoutFunApi = createAsyncThunk("auth/logout", async () => {
 export const checkTokenIsValidFunApi = createAsyncThunk(
   "auth/checkTokenIsValid",
   async () => {
+    console.log("checkTokenIsValidFunApi");
     try {
       const response = await axios.get(checkTokenIsValidApi);
       console.log("response in checkTokenIsValidFun => ", response.data);

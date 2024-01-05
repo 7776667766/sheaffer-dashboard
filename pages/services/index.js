@@ -45,8 +45,8 @@ const ServicesPage = () => {
 
   const router = useRouter();
 
-  const nextPage = (id, event) => {
-    event.preventDefault();
+  const nextPage = (id) => {
+    // event.preventDefault();
     router.push(`/services/edit-service/${id}`);
   };
 
@@ -339,7 +339,7 @@ const ServicesPage = () => {
                       size="small"
                       color="primary"
                       className="primary"
-                      onClick={(event) => nextPage(data.id, event)}
+                      onClick={() => nextPage(data.id)}
                     >
                       <DriveFileRenameOutlineIcon fontSize="inherit" />
                     </IconButton>
