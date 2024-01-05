@@ -17,11 +17,8 @@ export default function SignIn() {
       console.log("token exist", router.query.token);
       dispatch(
         autoLoginFunApi({
-          onSuccess: () => {
-            if (isLoading) {
-              router.push("/loading")
-            } else (router.push("/services"))
-              ;
+          onSuccess: () => {         
+            router.push("/")
           },
         })
       );
@@ -29,8 +26,10 @@ export default function SignIn() {
   }, [dispatch, router.query.token]);
 
   return (
-    <>
-      <SignInForm />
-    </>
+    <div>
+    <h1>
+     please Wait...
+    </h1>
+    </div>
   );
 }
