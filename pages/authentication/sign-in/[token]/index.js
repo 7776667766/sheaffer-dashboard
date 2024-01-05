@@ -2,12 +2,13 @@ import SignInForm from "@/components/Authentication/SignInForm";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { autoLoginFunApi, checkTokenIsValidFunApi } from "store/auth/services";
+import { autoLoginFunApi } from "store/auth/services";
 
 export default function SignIn() {
   const router = useRouter();
   const dispatch = useDispatch();
   const { isLoading } = useSelector((state) => state.auth);
+  console.log(isLoading, "loading")
 
   useEffect(() => {
     console.log("token", router.query.token);
@@ -17,7 +18,10 @@ export default function SignIn() {
       dispatch(
         autoLoginFunApi({
           onSuccess: () => {
-            router.push("/");
+            if (isLoading) {
+              router.push("/loading")
+            } else (router.push("/services"))
+              ;
           },
         })
       );
