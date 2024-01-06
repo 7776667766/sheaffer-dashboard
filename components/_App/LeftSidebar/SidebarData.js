@@ -134,6 +134,27 @@ export const SidebarData = () => {
         },
       ],
     },
+
+    (role === "admin") && {
+      title: "Dummy Data",
+      path: "/services/add-dummy-service",
+      icon: <LayersIcon />,
+      iconClosed: <KeyboardArrowRightIcon />,
+      iconOpened: <KeyboardArrowDownIcon />,
+      subNav: [
+        {
+          title: "Add Dummy Services",
+          path: "/services/add-dummy-service/",
+        },
+        {
+          title: "Add Dummy Business",
+          path: "/services/add-dummy-business/",
+        },
+      ],
+    },
+
+   
+
     (role === "manager" || role === "owner") && {
       title: "Booking",
       path: "/booking/",

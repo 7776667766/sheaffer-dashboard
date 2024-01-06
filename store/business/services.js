@@ -1,6 +1,6 @@
 import axios from "helper/api";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getMyBusiness, registerBusinessApi } from "./constrants";
+import { getMyBusiness, registerBusinessApi,addBusinessApi } from "./constrants";
 import toast from "react-hot-toast";
 import axiosImage from "helper/api-image";
 
@@ -72,6 +72,42 @@ export const regsiterBusinessFunApi = createAsyncThunk(
       }
     } catch (error) {
       console.log("Error in create Business Api ", error);
+      let err =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Something went wrong!";
+      if (err === "Network Error") {
+        err = "Please check your internet connection";
+      }
+      toast.error(err);
+      throw new Error(err);
+    }
+  }
+);
+
+export const addBusinessFunApi = createAsyncThunk(
+  "business/addBusiness",
+  async ({ data }) => {
+    console.log("res data",data)
+    try {
+      const response = await axiosImage.post(addBusinessApi, data);
+
+      console.log("response in create dummy Business => ", response.data);
+      if (response.data.status === "success") {
+        toast.success("dummy Business registed successfully");
+
+      } else {
+        console.log("Error response in create dummy Business Api => ", response.data);
+        const err =
+          response?.data?.message ||
+          response?.message ||
+          "Something went wrong!";
+        console.log("err: ", err);
+        toast.error(err);
+        throw new Error(err);
+      }
+    } catch (error) {
+      console.log("Error in create dummy Business Api ", error);
       let err =
         error?.response?.data?.message ||
         error?.message ||

@@ -4,8 +4,8 @@ import {
   editServicesFunApi,
   getAllServiceFunApi,
   getServicesTypeFunApi,
-  deleteServiceFunApi
-
+  deleteServiceFunApi,
+  addDummyservicesFunApi
 } from "./services";
 import { createSlice } from "@reduxjs/toolkit";
 
@@ -118,6 +118,20 @@ const serviceSlice = createSlice({
         state.service.error = action.payload;
         state.service.dataFatched = true;
       });
+      builder
+      .addCase(addDummyservicesFunApi.pending, (state, action) => {
+        state.service.isLoading = true;
+        state.service.error = null;
+      })
+      .addCase(addDummyservicesFunApi.fulfilled, (state, action) => {
+        console.log("Add Services  Response", action.payload);
+        state.service.isLoading = false;
+        state.service.data.push(action.payload);
+      })
+      .addCase(addDummyservicesFunApi.rejected, (state, action) => {
+        state.service.isLoading = false;
+        state.service.error = action.payload;
+      });      
   },
 });
 
