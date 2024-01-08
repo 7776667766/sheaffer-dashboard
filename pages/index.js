@@ -55,10 +55,13 @@ export default function DashboardPage() {
   useEffect(() => {
     if (role === "owner" || role === "manager") {
       if (!dataFatched) {
-        dispatch(getMyBussinessFunApi({}));
+        dispatch(getMyBussinessFunApi({
+          
+        }));
       }
     }
   }, [dispatch, dataFatched, role]);
+
   const businessList = [
     {
       title: "Business 1",

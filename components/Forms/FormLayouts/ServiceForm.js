@@ -83,7 +83,7 @@ const ServiceForm = ({ formData, isEditMode }) => {
       image: formData?.image || "",
       price: formData?.price || "",
       typeId: formData?.type?.id,
-      specialistId: formData?.specialist?.id || "",
+      specialistId: formData?.specialist?.id || ['dummy1', 'dummy2'],
       timeInterval: formData?.timeInterval || 0,
       businessId: business?.id,
       timeSlots: formData?.timeSlots || [

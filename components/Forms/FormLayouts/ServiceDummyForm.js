@@ -69,6 +69,31 @@ const ServiceForm = ({ formData, isEditMode }) => {
     }
   };
 
+
+  const specialistArray = [
+    { id: 'dummy1', name: 'Dummy Specialist 1' },
+    { id: 'dummy2', name: 'Dummy Specialist 2' },
+
+  ];
+
+  useEffect(() => {
+    if (!specialist.specialistFetch) {
+      dispatch(
+        getspecialistApi({
+          data: business?.id,
+          onSuccess: (specialistList) => {
+            if (isEditMode) {
+              const selected = specialistList?.filter(
+                (s) => formData.specialistName.includes(s.id)
+              );
+              setSelectedSpecialist(selected || []);
+            }
+          },
+        })
+      );
+    }
+  }, [business?.id, dispatch, formData?.specialistName, isEditMode, specialist.specialistFetch]);
+
   useEffect(() => {
     if (isEditMode) {
       setProfileImageUrl(formData?.image);
@@ -83,9 +108,8 @@ const ServiceForm = ({ formData, isEditMode }) => {
       image: formData?.image || "",
       price: formData?.price || "",
       typeId: formData?.type?.id,
-    //   specialistId: formData?.specialist?.id || "",
+      specialistName: formData?.specialistName || [],
       timeInterval: formData?.timeInterval || 0,
-      businessId: business?.id,
       timeSlots: formData?.timeSlots || [
         {
           day: "Monday",
@@ -137,9 +161,8 @@ const ServiceForm = ({ formData, isEditMode }) => {
       image: "",
       price: "",
       typeId: "",
-    //   specialistId: "",
       timeInterval: 0,
-      businessId: business?.id,
+      // specialistArray:"",
       timeSlots: [
         {
           day: "Monday",
@@ -186,30 +209,6 @@ const ServiceForm = ({ formData, isEditMode }) => {
       ],
     };
 
-  useEffect(() => {
-    if (!specialist.specialistFetch) {
-      dispatch(
-        getspecialistApi({
-          data: business?.id,
-          onSuccess: (specialistList) => {
-            if (isEditMode) {
-              const selected = specialistList?.find(
-                (s) => s.id === formData.specialist.id
-              );
-              setSelectedSpecialist(selected || null);
-            }
-          },
-        })
-      );
-    }
-  }, [
-    business?.id,
-    dispatch,
-    formData?.specialist?.id,
-
-    isEditMode,
-    specialist.specialistFetch,
-  ]);
 
   useEffect(() => {
     if (!serviceType.dataFatched) {
@@ -249,7 +248,6 @@ const ServiceForm = ({ formData, isEditMode }) => {
     validationSchema: Yup.object().shape({
       name: requiredValidation("Service Name"),
       description: requiredValidation("Service Description"),
-    //   specialistId: requiredValidation("Specialist"),
       typeId: requiredValidation("Service Type"),
       price: Yup.number()
         .typeError("Price must be a number")
@@ -304,7 +302,6 @@ const ServiceForm = ({ formData, isEditMode }) => {
       try {
         const myServiceData = {
           ...values,
-        //   specialistId: selectedSpecialist ? selectedSpecialist.id : "",
           typeId: selectedServiceType ? selectedServiceType.id : "",
           image: avatar,
         };
@@ -421,7 +418,7 @@ const ServiceForm = ({ formData, isEditMode }) => {
                   />
                 </FormControl>
               </Grid>
-              {/* <Grid item xs={12} md={12} lg={6}>
+              <Grid item xs={12} md={12} lg={6}>
                 <FormControl fullWidth>
                   <Typography
                     as="h5"
@@ -438,34 +435,23 @@ const ServiceForm = ({ formData, isEditMode }) => {
                     value={selectedSpecialist || null}
                     onChange={(event, newValue) => {
                       setSelectedSpecialist(newValue);
-                      formik.setFieldValue("specialistId", newValue?.id || "");
+                      formik.setFieldValue("specialistName", newValue?.id || "");
                     }}
-                    options={specialist || []}
+                    options={specialistArray}
                     getOptionLabel={(option) => option.name}
                     renderInput={(params) => (
                       <TextField
                         {...params}
                         label="Select Specialist"
-                        error={
-                          formik.touched.specialistId &&
-                            formik.errors.specialistId
-                            ? true
-                            : false
-                        }
-                        helperText={
-                          formik.touched.specialistId &&
-                            formik.errors.specialistId
-                            ? formik.errors.specialistId
-                            : ""
-                        }
-                        inputProps={{
-                          ...params.inputProps,
-                        }}
+                      
+                      
+                       
                       />
                     )}
                   />
                 </FormControl>
-              </Grid> */}
+              </Grid>
+
 
               <Grid item xs={12} md={12} lg={6}>
                 <Typography
@@ -587,8 +573,8 @@ const ServiceForm = ({ formData, isEditMode }) => {
                     borderRadius: 8,
                     padding: "8px",
                     border: `1px solid ${formik.touched.description && formik.errors.description
-                        ? "red"
-                        : "#e0e0e0"
+                      ? "red"
+                      : "#e0e0e0"
                       }`,
                   }}
                 />
@@ -597,35 +583,7 @@ const ServiceForm = ({ formData, isEditMode }) => {
                     {formik.errors.description}
                   </Typography>
                 )}
-                {/* <RichTextEditor
-                id="description"
-                // value={}
-                onChange={() => {
-                  console.log(
-                    "rte.current.getContent()",
-                    rte.current.getContent()
-                  );
 
-                  formik.setFieldValue("description", rte.current.getContent());
-                }}
-                {...formik.getFieldProps("description")}
-                error={
-                  formik.touched.description && formik.errors.description
-                    ? true
-                    : false
-                }
-                helperText={
-                  formik.touched.description && formik.errors.description
-                    ? formik.errors.description
-                    : ""
-                }
-                controls={[
-                  ["bold", "italic", "underline", "link", "image"],
-                  ["unorderedList", "h1", "h2", "h3", "h4", "h5", "h6"],
-                  ["sup", "sub"],
-                  ["alignLeft", "alignCenter", "alignRight"],
-                ]}
-              /> */}
               </Grid>
               <Grid item xs={12}>
                 <Typography
@@ -637,7 +595,7 @@ const ServiceForm = ({ formData, isEditMode }) => {
                 {formik.values.timeSlots?.map((slot, index) => (
                   <Grid container spacing={5} key={index} marginBottom={4}>
                     <Grid item xs={12} md={4}>
-                    <Checkbox
+                      <Checkbox
                         name="timeSlots"
                         checked={formik.values.timeSlots[index].active}
                         {...formik.getFieldProps(`timeSlots[${index}].active`)}

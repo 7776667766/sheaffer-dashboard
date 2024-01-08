@@ -24,6 +24,7 @@ import { useRouter } from "next/router";
 const ServicesPage = () => {
   const dispatch = useDispatch();
   const { service } = useSelector((state) => state.service);
+  console.log(service)
   const { business, dataFatched } = useSelector((state) => state.business);
   const { role } = useSelector((state) => state.auth);
 
@@ -285,8 +286,14 @@ const ServicesPage = () => {
                 }}
                 align="center"
               >
-                {data?.specialist?.name}
+                {role === 'admin' ? (
+                  data?.specialistName
+                ) : (
+                  data?.specialist?.name
+                )}
               </TableCell>
+
+
 
               <TableCell
                 align="right"
@@ -333,17 +340,20 @@ const ServicesPage = () => {
                     </TransitionsDialog>
                   </Tooltip>
 
-                  <Tooltip title="Edit" placement="top">
-                    <IconButton
-                      aria-label="edit"
-                      size="small"
-                      color="primary"
-                      className="primary"
-                      onClick={() => nextPage(data.id)}
-                    >
-                      <DriveFileRenameOutlineIcon fontSize="inherit" />
-                    </IconButton>
-                  </Tooltip>
+                  {role !== 'admin' ? (
+                    <Tooltip title="Edit" placement="top">
+                      <IconButton
+                        aria-label="edit"
+                        size="small"
+                        color="primary"
+                        className="primary"
+                        onClick={() => nextPage(data.id)}
+                      >
+                        <DriveFileRenameOutlineIcon fontSize="inherit" />
+                      </IconButton>
+                    </Tooltip>
+                  ) : null}
+
                 </Box>
               </TableCell>
             </>
