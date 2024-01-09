@@ -153,13 +153,18 @@ export const SidebarData = () => {
       ],
     },
 
-   
-
     (role === "manager" || role === "owner") && {
       title: "Booking",
       path: "/booking/",
       icon: <LayersIcon />,
     },
+
+    (role === "manager" || role === "owner") && {
+      title: "Reviews",
+      path: "/reviews/",
+      icon: <LayersIcon />,
+    },
+
 
     (role === "owner" || role === "admin") && {
       title: "Transaction",
