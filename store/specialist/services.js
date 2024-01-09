@@ -46,6 +46,7 @@ export const addspecialistApi = createAsyncThunk(
 export const getspecialistApi = createAsyncThunk(
   "specialist/getspecialist",
   async ({ data, onSuccess }) => {
+    console.log("getspecialist value", data);
     try {
       const response = await axios.get(getspecialist(data));
       console.log("response in get specialist => ", response.data);

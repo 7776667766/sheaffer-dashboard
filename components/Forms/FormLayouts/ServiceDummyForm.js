@@ -15,7 +15,10 @@ import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import * as Yup from "yup";
 import { requiredValidation } from "@/utils/validation";
-import { addDummyservicesFunApi, editServicesFunApi } from "store/service/services";
+import {
+  addDummyservicesFunApi,
+  editServicesFunApi,
+} from "store/service/services";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { getspecialistApi } from "store/specialist/services";
@@ -69,11 +72,9 @@ const ServiceForm = ({ formData, isEditMode }) => {
     }
   };
 
-
   const specialistArray = [
-    { id: 'dummy1', name: 'Dummy Specialist 1' },
-    { id: 'dummy2', name: 'Dummy Specialist 2' },
-
+    { id: "dummy1", name: "Dummy Specialist 1" },
+    { id: "dummy2", name: "Dummy Specialist 2" },
   ];
 
   useEffect(() => {
@@ -83,8 +84,8 @@ const ServiceForm = ({ formData, isEditMode }) => {
           data: business?.id,
           onSuccess: (specialistList) => {
             if (isEditMode) {
-              const selected = specialistList?.filter(
-                (s) => formData.specialistName.includes(s.id)
+              const selected = specialistList?.filter((s) =>
+                formData.specialistName.includes(s.id)
               );
               setSelectedSpecialist(selected || []);
             }
@@ -92,7 +93,13 @@ const ServiceForm = ({ formData, isEditMode }) => {
         })
       );
     }
-  }, [business?.id, dispatch, formData?.specialistName, isEditMode, specialist.specialistFetch]);
+  }, [
+    business?.id,
+    dispatch,
+    formData?.specialistName,
+    isEditMode,
+    specialist.specialistFetch,
+  ]);
 
   useEffect(() => {
     if (isEditMode) {
@@ -102,113 +109,112 @@ const ServiceForm = ({ formData, isEditMode }) => {
 
   const initialValues = isEditMode
     ? {
-      id: formData?.id || "",
-      name: formData?.name || "",
-      description: formData?.description || "",
-      image: formData?.image || "",
-      price: formData?.price || "",
-      typeId: formData?.type?.id,
-      specialistName: formData?.specialistName || [],
-      timeInterval: formData?.timeInterval || 0,
-      timeSlots: formData?.timeSlots || [
-        {
-          day: "Monday",
-          startTime: "0:00",
-          endTime: "0:00",
-          active: false,
-        },
-        {
-          day: "Tuesday",
-          startTime: "0:00",
-          endTime: "0:00",
-          active: false,
-        },
-        {
-          day: "Wednesday",
-          startTime: "0:00",
-          endTime: "0:00",
-          active: false,
-        },
-        {
-          day: "Thursday",
-          startTime: "0:00",
-          endTime: "0:00",
-          active: false,
-        },
-        {
-          day: "Friday",
-          startTime: "0:00",
-          endTime: "0:00",
-          active: false,
-        },
-        {
-          day: "Saturday",
-          startTime: "0:00",
-          endTime: "0:00",
-          active: false,
-        },
-        {
-          day: "Sunday",
-          startTime: "0:00",
-          endTime: "0:00",
-          active: false,
-        },
-      ],
-    }
+        id: formData?.id || "",
+        name: formData?.name || "",
+        description: formData?.description || "",
+        image: formData?.image || "",
+        price: formData?.price || "",
+        typeId: formData?.type?.id,
+        specialistName: formData?.specialistName || [],
+        timeInterval: formData?.timeInterval || "",
+        timeSlots: formData?.timeSlots || [
+          {
+            day: "Monday",
+            startTime: "0:00",
+            endTime: "0:00",
+            active: false,
+          },
+          {
+            day: "Tuesday",
+            startTime: "0:00",
+            endTime: "0:00",
+            active: false,
+          },
+          {
+            day: "Wednesday",
+            startTime: "0:00",
+            endTime: "0:00",
+            active: false,
+          },
+          {
+            day: "Thursday",
+            startTime: "0:00",
+            endTime: "0:00",
+            active: false,
+          },
+          {
+            day: "Friday",
+            startTime: "0:00",
+            endTime: "0:00",
+            active: false,
+          },
+          {
+            day: "Saturday",
+            startTime: "0:00",
+            endTime: "0:00",
+            active: false,
+          },
+          {
+            day: "Sunday",
+            startTime: "0:00",
+            endTime: "0:00",
+            active: false,
+          },
+        ],
+      }
     : {
-      name: "",
-      description: "",
-      image: "",
-      price: "",
-      typeId: "",
-      timeInterval: 0,
-      // specialistArray:"",
-      timeSlots: [
-        {
-          day: "Monday",
-          startTime: "0:00",
-          endTime: "0:00",
-          active: false,
-        },
-        {
-          day: "Tuesday",
-          startTime: "0:00",
-          endTime: "0:00",
-          active: false,
-        },
-        {
-          day: "Wednesday",
-          startTime: "0:00",
-          endTime: "0:00",
-          active: false,
-        },
-        {
-          day: "Thursday",
-          startTime: "0:00",
-          endTime: "0:00",
-          active: false,
-        },
-        {
-          day: "Friday",
-          startTime: "0:00",
-          endTime: "0:00",
-          active: false,
-        },
-        {
-          day: "Saturday",
-          startTime: "0:00",
-          endTime: "0:00",
-          active: false,
-        },
-        {
-          day: "Sunday",
-          startTime: "0:00",
-          endTime: "0:00",
-          active: false,
-        },
-      ],
-    };
-
+        name: "",
+        description: "",
+        image: "",
+        price: "",
+        typeId: "",
+        timeInterval: "",
+        // specialistArray:"",
+        timeSlots: [
+          {
+            day: "Monday",
+            startTime: "0:00",
+            endTime: "0:00",
+            active: false,
+          },
+          {
+            day: "Tuesday",
+            startTime: "0:00",
+            endTime: "0:00",
+            active: false,
+          },
+          {
+            day: "Wednesday",
+            startTime: "0:00",
+            endTime: "0:00",
+            active: false,
+          },
+          {
+            day: "Thursday",
+            startTime: "0:00",
+            endTime: "0:00",
+            active: false,
+          },
+          {
+            day: "Friday",
+            startTime: "0:00",
+            endTime: "0:00",
+            active: false,
+          },
+          {
+            day: "Saturday",
+            startTime: "0:00",
+            endTime: "0:00",
+            active: false,
+          },
+          {
+            day: "Sunday",
+            startTime: "0:00",
+            endTime: "0:00",
+            active: false,
+          },
+        ],
+      };
 
   useEffect(() => {
     if (!serviceType.dataFatched) {
@@ -332,7 +338,6 @@ const ServiceForm = ({ formData, isEditMode }) => {
     },
   });
 
-
   return (
     <>
       <Card
@@ -435,23 +440,19 @@ const ServiceForm = ({ formData, isEditMode }) => {
                     value={selectedSpecialist || null}
                     onChange={(event, newValue) => {
                       setSelectedSpecialist(newValue);
-                      formik.setFieldValue("specialistName", newValue?.id || "");
+                      formik.setFieldValue(
+                        "specialistName",
+                        newValue?.id || ""
+                      );
                     }}
                     options={specialistArray}
                     getOptionLabel={(option) => option.name}
                     renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label="Select Specialist"
-                      
-                      
-                       
-                      />
+                      <TextField {...params} label="Select Specialist" />
                     )}
                   />
                 </FormControl>
               </Grid>
-
 
               <Grid item xs={12} md={12} lg={6}>
                 <Typography
@@ -556,34 +557,25 @@ const ServiceForm = ({ formData, isEditMode }) => {
                   Description
                 </Typography>
 
-                <TextareaAutosize
+                <TextField
+                  type="text"
                   name="description"
-                  id="description"
                   fullWidth
-                  minRows={5}
-                  placeholder="Enter Description"
+                  id="description"
                   {...formik.getFieldProps("description")}
+                  minRows={5}
+                  multiline
                   error={
                     formik.touched.description && formik.errors.description
                       ? true
                       : false
                   }
-                  style={{
-                    width: "100%",
-                    borderRadius: 8,
-                    padding: "8px",
-                    border: `1px solid ${formik.touched.description && formik.errors.description
-                      ? "red"
-                      : "#e0e0e0"
-                      }`,
-                  }}
+                  helperText={
+                    formik.touched.description && formik.errors.description
+                      ? formik.errors.description
+                      : ""
+                  }
                 />
-                {formik.touched.description && formik.errors.description && (
-                  <Typography color="error" variant="body2">
-                    {formik.errors.description}
-                  </Typography>
-                )}
-
               </Grid>
               <Grid item xs={12}>
                 <Typography
