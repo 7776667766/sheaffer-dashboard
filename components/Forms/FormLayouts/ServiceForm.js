@@ -77,62 +77,6 @@ const ServiceForm = ({ formData, isEditMode }) => {
 
   const initialValues = isEditMode
     ? {
-<<<<<<< HEAD
-      id: formData?.id || "",
-      name: formData?.name || "",
-      description: formData?.description || "",
-      image: formData?.image || "",
-      price: formData?.price || "",
-      typeId: formData?.type?.id,
-      specialistId: formData?.specialist?.id || "",
-      timeInterval: formData?.timeInterval || 0,
-      businessId: business?.id,
-      timeSlots: formData?.timeSlots || [
-        {
-          day: "Monday",
-          startTime: "0:00",
-          endTime: "0:00",
-          active: false,
-        },
-        {
-          day: "Tuesday",
-          startTime: "0:00",
-          endTime: "0:00",
-          active: false,
-        },
-        {
-          day: "Wednesday",
-          startTime: "0:00",
-          endTime: "0:00",
-          active: false,
-        },
-        {
-          day: "Thursday",
-          startTime: "0:00",
-          endTime: "0:00",
-          active: false,
-        },
-        {
-          day: "Friday",
-          startTime: "0:00",
-          endTime: "0:00",
-          active: false,
-        },
-        {
-          day: "Saturday",
-          startTime: "0:00",
-          endTime: "0:00",
-          active: false,
-        },
-        {
-          day: "Sunday",
-          startTime: "0:00",
-          endTime: "0:00",
-          active: false,
-        },
-      ],
-    }
-=======
         id: formData?.id || "",
         name: formData?.name || "",
         description: formData?.description || "",
@@ -187,7 +131,6 @@ const ServiceForm = ({ formData, isEditMode }) => {
           },
         ],
       }
->>>>>>> 0dcb4be599850988d11a73e6ea7a3415bef14901
     : {
         name: "",
         description: "",

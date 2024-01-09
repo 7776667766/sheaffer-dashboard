@@ -13,6 +13,7 @@ import {
 } from "./constrants";
 import toast from "react-hot-toast";
 import axiosImage from "helper/api-image";
+import { useRouter } from "next/router";
 
 export const loginFunApi = createAsyncThunk(
   "auth/login",
@@ -183,7 +184,7 @@ export const autoLoginFunApi = createAsyncThunk(
       console.log("response in checkTokenIsValidFun => ", response.data);
       if (response.data.status === "success") {
         if (onSuccess) {
-          onSuccess();
+        onSuccess()
         }
         return response.data.data;
       } else {
