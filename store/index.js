@@ -9,6 +9,8 @@ import { bookingReducer } from "./booking/bookingSlice";
 import { cardReducer } from "./card/cardSlice";
 import { planReducer } from "./plan/planSlice";
 import { templateReducer } from "./template/templateSlice";
+import { reviewReducer } from "./review/reviewSlice";
+
 
 const store = configureStore({
   reducer: {
@@ -21,7 +23,9 @@ const store = configureStore({
     booking: bookingReducer,
     card: cardReducer,
     plan: planReducer,
-    template: templateReducer
+    template: templateReducer,
+    review: reviewReducer
+
   },
 });
 
