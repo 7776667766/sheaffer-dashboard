@@ -293,8 +293,6 @@ const ServicesPage = () => {
                 )}
               </TableCell>
 
-
-
               <TableCell
                 align="right"
                 sx={{ borderBottom: "1px solid #F7FAFF" }}
