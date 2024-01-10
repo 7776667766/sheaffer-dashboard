@@ -55,9 +55,7 @@ export default function DashboardPage() {
   useEffect(() => {
     if (role === "owner" || role === "manager") {
       if (!dataFatched) {
-        dispatch(getMyBussinessFunApi({
-          
-        }));
+        dispatch(getMyBussinessFunApi({}));
       }
     }
   }, [dispatch, dataFatched, role]);
@@ -254,52 +252,57 @@ export default function DashboardPage() {
               <Box
                 sx={{
                   display: "flex",
-                  justifyContent: "left",
+                  justifyContent: "space-between",
+                  alignItems: "center",
                   mb: "15px",
                 }}
               >
-                <Box>
-                  <Typography
-                    variant="h4"
-                    sx={{ fontSize: 15, fontWeight: 700, mb: "5px" }}
-                  >
-                    <ul
-                      style={{
-                        listStyle: "none",
-                        lineHeight: "35px",
-                        paddingLeft: "0px",
-                      }}
-                    >
-                      <li>Name</li>
-                      {business?.websiteService === true && (
-                        <li>Website Url</li>
-                      )}
-                      {business?.bookingService === true && (
-                        <li>Booking Url</li>
-                      )}
-
-                      <li>Description</li>
-                      <li>Email</li>
-                      <li>Phone</li>
-                      <li>Logo</li>
-                      <li>Theme</li>
-                      <li>Social icons</li>
-                      <li>Address</li>
-                      <li>Images</li>
-                    </ul>
-                  </Typography>
-                </Box>
-
-                <Box>
+                <Box sx={{width:"50%"}}>
                   <Typography variant="p" fontSize={14}>
                     <ul
                       style={{
                         listStyle: "none",
-                        marginLeft: "35px",
+                        marginLeft: "0px",
+                        paddingLeft: "0px",
                         lineHeight: "35px",
                       }}
                     >
-                      <li>{business?.name}</li>
+                      <li
+                        style={{
+                          fontSize: "20px",
+                          fontWeight: "600",
+                        }}
+                      >
+                        {business?.name}
+                      </li>
+                      <li>
+                        {business.description}
+                        Lorem Ipsum is simply dummy text of the printing and
+                        typesetting industry. Lorem Ipsum has been the
+                        industry's standard dummy text ever since the 1500s,
+                      </li>
+                      <li>{business.email}</li>
+                      <li>{business.phone}</li>
+                      <li>
+                        {business.socialLinks &&
+                          business.socialLinks.map((socialLink, index) => (
+                            <span key={index}>
+                              <a
+                                href={socialLink.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{
+                                  marginRight: "12px",
+                                  textTransform: "capitalize",
+                                  color: "#757FEF",
+                                }}
+                              >
+                                {socialLink.name}
+                              </a>
+                            </span>
+                          ))}
+                      </li>
+
                       {business?.websiteService === true && (
                         <li>
                           <Button
@@ -332,9 +335,6 @@ export default function DashboardPage() {
                         </li>
                       )}
 
-                      <li>{business.description}</li>
-                      <li>{business.email}</li>
-                      <li>{business.phone}</li>
                       <li>
                         <Image
                           src={business.logo}
@@ -347,39 +347,47 @@ export default function DashboardPage() {
                         />
                       </li>
                       <li>{business.theme || "N/A"}</li>
-                      <li>
-                        {business.socialLinks &&
-                          business.socialLinks.map((socialLink, index) => (
-                            <span key={index}>
-                              <a
-                                href={socialLink.link}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                style={{
-                                  marginRight: "12px",
-                                  textTransform: "capitalize",
-                                }}
-                              >
-                                {socialLink.name}
-                              </a>
-                            </span>
-                          ))}
-                      </li>
-                      <li>{business.address}</li>
 
-                      <li style={{ height: "50px" }}>
+                      <li>{business.address}</li>
+                    </ul>
+                  </Typography>
+                </Box>
+                
+                <Box sx={{width:"50%", textAlign:"right"}}>
+                  <Typography variant="p" fontSize={14}>
+                    <div
+                      style={{
+                        listStyle: "none",
+                        marginLeft: "0px",
+                        paddingLeft: "0px",
+                        lineHeight: "35px",
+                      }}
+                    >
+                      <div style={{ height: "100px" }}>
                         {business?.images?.map((data, key) => (
                           <Image
                             key={key}
                             src={data}
                             alt={business.name}
-                            width={50}
-                            height={50}
-                            style={{ marginRight: "12px" }}
+                            width={100}
+                            height={100}
+                            style={{ borderRadius: "10px" }}
                           />
                         ))}
-                      </li>
-                    </ul>
+
+                        {business?.images?.map((data, key) => (
+                          <Image
+                            key={key}
+                            src={data}
+                            alt={business.name}
+                            width={100}
+                            height={100}
+                            style={{ borderRadius: "10px", marginLeft:"8px" }}
+                          />
+                        ))}
+                       
+                      </div>
+                    </div>
                   </Typography>
                 </Box>
               </Box>
