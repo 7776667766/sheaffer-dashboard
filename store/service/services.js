@@ -5,6 +5,7 @@ import {
   editServiceApi,
   getAllServiceApi,
   getsevicetypeApi,
+  deleteServiceTypeApi,
   adddummyservicesApi
 } from "./constrants";
 import { createAsyncThunk } from "@reduxjs/toolkit";
@@ -130,7 +131,7 @@ export const addServicesTypeFunApi = createAsyncThunk(
   async ({ data, onSuccess }) => {
     console.log("Add Services Type value", data);
     try {
-      const response = await axios.post(addserviceTypeApi, data);
+      const response = await axiosImage.post(addserviceTypeApi, data);
       console.log("response in Add Service Type => ", response.data);
       if (response.data.status === "success") {
         toast.success(response.data.message);
@@ -240,6 +241,46 @@ export const editServicesFunApi = createAsyncThunk(
   }
 );
 
+
+
+export const editServicesTypeFunApi = createAsyncThunk(
+  "services/editTypesServices",
+  async ({ data, onSuccess }) => {
+    console.log("Edit services Type value", data);
+    try {
+      const response = await axiosImage.post(editServiceApi(data.id), data);
+      console.log("response in edit Type Service => ", response.data);
+      if (response.data.status === "success") {
+        toast.success(response.data.message);
+        if (onSuccess) {
+          onSuccess();
+        }
+        return response.data.data;
+      } else {
+        console.log("Error response in edit Service Type Api => ", response.data);
+        const err =
+          response?.data?.message ||
+          response?.message ||
+          "Something went wrong!";
+        console.log("err: ", err);
+        toast.error(err);
+        throw new Error(err);
+      }
+    } catch (error) {
+      console.log("Error in edit Service Type Api ", error);
+      let err =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Something went wrong!";
+      if (err === "Network Error") {
+        err = "Please check your internet connection";
+      }
+      toast.error(err);
+      throw new Error(err);
+    }
+  }
+);
+
 export const deleteServiceFunApi = createAsyncThunk(
   "services/deleteServices",
   async (id) => {
@@ -262,6 +303,42 @@ export const deleteServiceFunApi = createAsyncThunk(
       }
     } catch (error) {
       console.log("Error in delete Service Api ", error);
+      let err =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Something went wrong!";
+      if (err === "Network Error") {
+        err = "Please check your internet connection";
+      }
+      toast.error(err);
+      throw new Error(err);
+    }
+  }
+);
+
+
+export const deleteServicTypeFunApi = createAsyncThunk(
+  "services/deleteServicesType",
+  async (id) => {
+    console.log("delete services type value", id);
+    try {
+      const response = await axios.get(deleteServiceTypeApi(id));
+      console.log("response in delete Service type => ", response.data);
+      if (response.data.status === "success") {
+        toast.success(response.data.message);
+        return id;
+      } else {
+        console.log("Error response in delete Service type Api => ", response.data);
+        const err =
+          response?.data?.message ||
+          response?.message ||
+          "Something went wrong!";
+        console.log("err: ", err);
+        toast.error(err);
+        throw new Error(err);
+      }
+    } catch (error) {
+      console.log("Error in delete Service type Api ", error);
       let err =
         error?.response?.data?.message ||
         error?.message ||

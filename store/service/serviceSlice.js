@@ -5,7 +5,9 @@ import {
   getAllServiceFunApi,
   getServicesTypeFunApi,
   deleteServiceFunApi,
-  addDummyservicesFunApi
+  addDummyservicesFunApi,
+  deleteServicTypeFunApi,
+  editServicesTypeFunApi,
 } from "./services";
 import { createSlice } from "@reduxjs/toolkit";
 
@@ -131,7 +133,39 @@ const serviceSlice = createSlice({
       .addCase(addDummyservicesFunApi.rejected, (state, action) => {
         state.service.isLoading = false;
         state.service.error = action.payload;
-      });      
+      }); 
+
+      builder
+      .addCase(deleteServicTypeFunApi.pending, (state, action) => {
+        state.serviceType.isLoading = true;
+        state.serviceType.error = null;
+      })
+      .addCase(deleteServicTypeFunApi.fulfilled, (state, action) => {
+        state.serviceType.isLoading = false;
+        state.serviceType.data = state.service.data?.filter(ele => ele.id !== action.payload);
+        state.serviceType.dataFatched = true;
+      })    
+      .addCase(deleteServicTypeFunApi.rejected, (state, action) => {
+        state.serviceType.isLoading = false;
+        state.serviceType.error = action.payload;
+        state.serviceType.dataFatched = true;
+      }); 
+      builder
+      .addCase(editServicesTypeFunApi.pending, (state, action) => {
+        state.serviceType.isLoading = true;
+        state.serviceType.error = null;
+      })
+      .addCase(editServicesTypeFunApi.fulfilled, (state, action) => {
+        state.serviceType.isLoading = false;
+        state.serviceType.data = state.service.data?.map((ele) =>
+          ele.id === action.payload.id ? action.payload : ele
+        );
+      })      
+      .addCase(editServicesTypeFunApi.rejected, (state, action) => {
+        state.serviceType.isLoading = false;
+        state.serviceType.error = action.payload;
+        state.serviceType.dataFatched = true;
+      });   
   },
 });
 

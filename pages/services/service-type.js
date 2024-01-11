@@ -7,17 +7,32 @@ import Paper from "@mui/material/Paper";
 import Tooltip from "@mui/material/Tooltip";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
+import Image from "next/image";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
+import TransitionsDialog from "@/components/UIElements/Modal/TransitionsDialog";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
-import { getServicesTypeFunApi } from "store/service/services";
+import { deleteServicTypeFunApi, getServicesTypeFunApi } from "store/service/services";
 import { CustomPaginationTable } from "@/components/Table/CustomPaginationTable";
+import { useRouter } from "next/router";
 
 const ServicesType = () => {
   const { serviceType } = useSelector((state) => state.service);
+  const { role } = useSelector((state) => state.auth);
+
+  console.log("servicetype data", serviceType)
   const dispatch = useDispatch();
+  const router = useRouter();
+
+  const handleDelete = (id) => {
+    dispatch(deleteServicTypeFunApi(id));
+  };
+
+  const nextPage = (id) => {
+    router.push(`/services/edit-servicetype/${id}`);
+  };
 
   useEffect(() => {
     if (serviceType.dataFatched !== true) {
@@ -105,6 +120,14 @@ const ServicesType = () => {
               >
                 Name
               </TableCell>
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13.5px",
+                }}
+              >
+                Image
+              </TableCell>
 
               <TableCell
                 align="right"
@@ -139,6 +162,15 @@ const ServicesType = () => {
               >
                 {data.name}
               </TableCell>
+              <Image
+                src={data.image}
+                width={100}
+                height={50}
+                alt="image"
+                style={{
+                  objectFit: "contain",
+                }}
+              />
 
               <TableCell
                 align="right"
@@ -150,26 +182,54 @@ const ServicesType = () => {
                   }}
                 >
                   <Tooltip title="Remove" placement="top">
-                    <IconButton
-                      aria-label="remove"
-                      size="small"
-                      color="danger"
-                      className="danger"
+                    <TransitionsDialog
+                      modelButton={
+                        <IconButton
+                          aria-label="remove"
+                          size="small"
+                          color="danger"
+                          className="danger"
+                        >
+                          <DeleteIcon fontSize="inherit" />
+                        </IconButton>
+                      }
+                      submitButtonText="Delete"
+                      handleSubmit={() => handleDelete(data.id)}
                     >
-                      <DeleteIcon fontSize="inherit" />
-                    </IconButton>
-                  </Tooltip>
+                      <div style={{ textAlign: "center" }}>
+                        <Image
+                          src="/images/icon/alert.png"
+                          width={150}
+                          height={150}
+                          alt="ok"
+                        />
 
-                  <Tooltip title="Rename" placement="top">
-                    <IconButton
-                      aria-label="rename"
-                      size="small"
-                      color="primary"
-                      className="primary"
-                    >
-                      <DriveFileRenameOutlineIcon fontSize="inherit" />
-                    </IconButton>
+                        <Typography sx={{ fontSize: 18 }}>
+                          <b>Are You Sure You Want To Delete ?</b>
+                          <br />
+                          <span style={{ fontSize: 14 }}>
+                            You are deleting this data & this action is
+                            irreversible
+                          </span>
+                        </Typography>
+                      </div>
+                    </TransitionsDialog>
                   </Tooltip>
+                
+
+               
+                    <Tooltip title="Edit" placement="top">
+                      <IconButton
+                        aria-label="edit"
+                        size="small"
+                        color="primary"
+                        className="primary"
+                        onClick={() => nextPage(data.id)}
+                      >
+                        <DriveFileRenameOutlineIcon fontSize="inherit" />
+                      </IconButton>
+                    </Tooltip>
+             
                 </Box>
               </TableCell>
             </>

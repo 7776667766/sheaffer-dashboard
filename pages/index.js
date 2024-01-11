@@ -30,6 +30,7 @@ import {
 export default function DashboardPage() {
   const { user, role } = useSelector((state) => state.auth);
   const { business, dataFatched } = useSelector((state) => state.business);
+  console.log(business,"business information")
 
   const dispatch = useDispatch();
   const [slug, setSlug] = useState("");
@@ -289,6 +290,18 @@ export default function DashboardPage() {
                       <li>{business.description}</li>
                       <li>{business.email}</li>
                       <li>{business.phone}</li>
+                      <li>{business.bannerText}</li>
+                      <li>
+                        <Image
+                          src={business.bannerImg}
+                          width={100}
+                          height={50}
+                          alt="bannerImg"
+                          style={{
+                            objectFit: "contain",
+                          }}
+                        />
+                      </li>
                       <li>
                         {business.socialLinks &&
                           business.socialLinks.map((socialLink, index) => (
