@@ -257,7 +257,7 @@ export default function DashboardPage() {
                   mb: "15px",
                 }}
               >
-                <Box sx={{width:"50%"}}>
+                <Box sx={{ width: "50%" }}>
                   <Typography variant="p" fontSize={14}>
                     <ul
                       style={{
@@ -267,6 +267,17 @@ export default function DashboardPage() {
                         lineHeight: "35px",
                       }}
                     >
+                      <li>
+                        <Image
+                          src={business.logo}
+                          width={100}
+                          height={50}
+                          alt="Logo"
+                          style={{
+                            objectFit: "contain",
+                          }}
+                        />
+                      </li>
                       <li
                         style={{
                           fontSize: "20px",
@@ -275,12 +286,7 @@ export default function DashboardPage() {
                       >
                         {business?.name}
                       </li>
-                      <li>
-                        {business.description}
-                        Lorem Ipsum is simply dummy text of the printing and
-                        typesetting industry. Lorem Ipsum has been the
-                        industry's standard dummy text ever since the 1500s,
-                      </li>
+                      <li>{business.description}</li>
                       <li>{business.email}</li>
                       <li>{business.phone}</li>
                       <li>
@@ -314,7 +320,7 @@ export default function DashboardPage() {
                               pb: "1px",
                             }}
                           >
-                            {business.slug}
+                            Go to Website
                           </Button>
                         </li>
                       )}
@@ -330,30 +336,19 @@ export default function DashboardPage() {
                               pb: "1px",
                             }}
                           >
-                            {business.slug}
+                            Go to Booking Page
                           </Button>
                         </li>
                       )}
 
-                      <li>
-                        <Image
-                          src={business.logo}
-                          width={100}
-                          height={50}
-                          alt="Logo"
-                          style={{
-                            objectFit: "contain",
-                          }}
-                        />
-                      </li>
-                      <li>{business.theme || "N/A"}</li>
+                      <li>Current Theme: {business.theme || "N/A"}</li>
 
                       <li>{business.address}</li>
                     </ul>
                   </Typography>
                 </Box>
-                
-                <Box sx={{width:"50%", textAlign:"right"}}>
+
+                <Box sx={{ width: "50%", textAlign: "right" }}>
                   <Typography variant="p" fontSize={14}>
                     <div
                       style={{
@@ -382,10 +377,9 @@ export default function DashboardPage() {
                             alt={business.name}
                             width={100}
                             height={100}
-                            style={{ borderRadius: "10px", marginLeft:"8px" }}
+                            style={{ borderRadius: "10px", marginLeft: "8px" }}
                           />
                         ))}
-                       
                       </div>
                     </div>
                   </Typography>

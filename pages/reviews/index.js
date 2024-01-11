@@ -5,12 +5,12 @@ import TableCell from "@mui/material/TableCell";
 import { useDispatch, useSelector } from "react-redux";
 import { getMyreviewsFunApi } from "store/review/service";
 import { CustomPaginationTable } from "@/components/Table/CustomPaginationTable";
-
+import Image from "next/image";
 
 const Review = () => {
   const dispatch = useDispatch();
   const { review } = useSelector((state) => state.review);
-  console.log(review.data,"review")
+  console.log(review.data, "review");
   const { business } = useSelector((state) => state.business);
 
   useEffect(() => {
@@ -22,8 +22,6 @@ const Review = () => {
       );
     }
   }, [business?.id, dispatch, review.dataFatched]);
-  
-
 
   return (
     <>
@@ -58,8 +56,8 @@ const Review = () => {
         </Box>
 
         <CustomPaginationTable
-        //   isLoading={review.isLoading}
-          tableData={review}
+          isLoading={review.isLoading}
+          tableData={review.data}
           tableHeaderData={
             <>
               <TableCell
@@ -76,7 +74,7 @@ const Review = () => {
                   fontSize: "13.5px",
                 }}
               >
-                title
+                Name
               </TableCell>
 
               <TableCell
@@ -94,7 +92,7 @@ const Review = () => {
                   fontSize: "13.5px",
                 }}
               >
-              description
+                Description
               </TableCell>
 
               <TableCell
@@ -104,7 +102,7 @@ const Review = () => {
                   fontSize: "13.5px",
                 }}
               >
-               Review
+                Rating
               </TableCell>
             </>
           }
@@ -143,7 +141,12 @@ const Review = () => {
                   pb: "16px",
                 }}
               >
-                {data.Image}
+                <Image
+                  src={data.image}
+                  alt={data.title}
+                  width={50}
+                  height={50}
+                />
               </TableCell>
 
               <TableCell
@@ -161,14 +164,7 @@ const Review = () => {
                 align="right"
                 sx={{ borderBottom: "1px solid #F7FAFF" }}
               >
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "end",
-                  }}
-                >
-        
-                </Box>
+                {data.rating}
               </TableCell>
             </>
           )}
