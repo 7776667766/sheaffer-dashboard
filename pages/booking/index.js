@@ -113,14 +113,7 @@ const BookingPage = () => {
               >
                 Date
               </TableCell>
-              <TableCell
-                sx={{
-                  borderBottom: "1px solid #F7FAFF",
-                  fontSize: "13.5px",
-                }}
-              >
-                Token
-              </TableCell>
+
               <TableCell
                 sx={{
                   borderBottom: "1px solid #F7FAFF",
@@ -215,17 +208,6 @@ const BookingPage = () => {
                 }}
               >
                 {moment(data.date).format("DD MMM  YYYY")}
-              </TableCell>
-              <TableCell
-                align="center"
-                sx={{
-                  borderBottom: "1px solid #F7FAFF",
-                  fontSize: "13px",
-                  pt: "16px",
-                  pb: "16px",
-                }}
-              >
-                {data.token}
               </TableCell>
               <TableCell
                 sx={{

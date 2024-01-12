@@ -14,7 +14,7 @@ import SendIcon from "@mui/icons-material/Send";
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import * as Yup from "yup";
-import { requiredValidation } from "@/utils/validation";
+import { requiredValidation, slugValidation } from "@/utils/validation";
 import { addservicesFunApi, editServicesFunApi } from "store/service/services";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
@@ -240,7 +240,7 @@ const ServiceForm = ({ formData, isEditMode }) => {
     initialValues: initialValues,
     validationSchema: Yup.object().shape({
       name: requiredValidation("Service Name"),
-      slug: requiredValidation("Slug"),
+      slug: slugValidation("Slug"),
       description: requiredValidation("Service Description"),
       specialistId: requiredValidation("Specialist"),
       typeId: requiredValidation("Service Type"),
