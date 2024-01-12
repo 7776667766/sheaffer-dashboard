@@ -214,17 +214,18 @@ const ServiceForm = ({ formData, isEditMode }) => {
   useEffect(() => {
     if (!serviceType.dataFatched) {
       dispatch(
-        getServicesTypeFunApi({
-          data: business?.id,
-          onSuccess: (serviceTypesList) => {
-            if (isEditMode) {
-              const selected = serviceTypesList?.find(
-                (s) => s.id === formData.type.id
-              );
-              setSelectedServiceType(selected || null);
-            }
-          },
-        })
+        getServicesTypeFunApi()
+        //   {
+        //   data: business?.id,
+        //   onSuccess: (serviceTypesList) => {
+        //     if (isEditMode) {
+        //       const selected = serviceTypesList?.find(
+        //         (s) => s.id === formData.type.id
+        //       );
+        //       setSelectedServiceType(selected || null);
+        //     }
+        //   },
+        // }
       );
     } else {
       if (isEditMode && selectedServiceType === null) {
