@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 export const getMyreviewsFunApi = createAsyncThunk(
   "review/Myreview",
   async (data) => {
+    console.log("data",data)
     try {
       const response = await axios.get(getMyreview, data);
       console.log("response in get All Myreview => ", response.data);
