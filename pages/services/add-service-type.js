@@ -1,12 +1,9 @@
 import React from "react";
 import Link from "next/link";
 import styles from "@/styles/PageTitle.module.css";
-import AddServiceTypeForm from "@/components/Forms/FormLayouts/AddServiceTypeForm";
-
+import ServiceTypeForm from "@/components/Forms/FormLayouts/ServiceTypeForm";
 
 export default function FormLayouts() {
-
-
   return (
     <>
       <div className={styles.pageTitle}>
@@ -15,11 +12,11 @@ export default function FormLayouts() {
           <li>
             <Link href="/">Dashboard</Link>
           </li>
-          <li>Services</li>
+          <li>Service Types</li>
         </ul>
       </div>
 
-      <AddServiceTypeForm />
+      <ServiceTypeForm />
     </>
   );
 }

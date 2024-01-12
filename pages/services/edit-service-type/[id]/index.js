@@ -3,43 +3,43 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import styles from "@/styles/PageTitle.module.css";
 import { useSelector } from "react-redux";
-import AddServiceTypeForm from "@/components/Forms/FormLayouts/AddServiceTypeForm";
+import ServiceTypeForm from "@/components/Forms/FormLayouts/ServiceTypeForm";
 
 export default function EditServicePage() {
   const router = useRouter();
   const { serviceType } = useSelector((state) => state.service);
-  console.log("serviceType Data ",serviceType)
+  console.log("serviceType Data ", serviceType);
 
-  const [serviceData, setServiceData] = useState();
+  const [serviceTypeData, setServiceTypeData] = useState();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (router.query.id) {
-      const myService = serviceType.data.find(
+      const myServiceType = serviceType.data.find(
         (data) => data.id === router.query.id
       );
-      console.log(myService, "myserviceType");
-      if (myService) {
-        setServiceData(myService);
+      console.log(myServiceType, "myserviceTypeType");
+      if (myServiceType) {
+        setServiceTypeData(myServiceType);
         setIsLoading(false);
-      } else router.push("/service-type");
+      } else router.push("/services/service-type");
     }
   }, [router.query.id, router, serviceType.data]);
   return (
     <>
       <div className={styles.pageTitle}>
-        <h1>Edit Service</h1>
+        <h1>Edit Service Type</h1>
         <ul>
           <li>
             <Link href="/">Dashboard</Link>
           </li>
-          <li>Service</li>
+          <li>Service Types</li>
         </ul>
       </div>
       {isLoading ? (
         <p>Loading...</p>
       ) : (
-        <AddServiceTypeForm formData={serviceData} isEditMode={true} />
+        <ServiceTypeForm formData={serviceTypeData} isEditMode={true} />
       )}
     </>
   );

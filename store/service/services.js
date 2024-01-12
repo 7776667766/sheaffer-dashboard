@@ -6,7 +6,8 @@ import {
   getAllServiceApi,
   getsevicetypeApi,
   deleteServiceTypeApi,
-  adddummyservicesApi
+  adddummyservicesApi,
+  editServiceTypeApi,
 } from "./constrants";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "helper/api";
@@ -65,7 +66,10 @@ export const addDummyservicesFunApi = createAsyncThunk(
         }
         return response.data.data;
       } else {
-        console.log("Error response in add dummy Services Api => ", response.data);
+        console.log(
+          "Error response in add dummy Services Api => ",
+          response.data
+        );
         const err =
           response?.data?.message ||
           response?.message ||
@@ -88,7 +92,6 @@ export const addDummyservicesFunApi = createAsyncThunk(
     }
   }
 );
-
 
 export const getAllServiceFunApi = createAsyncThunk(
   "services/All Service",
@@ -241,15 +244,12 @@ export const editServicesFunApi = createAsyncThunk(
   }
 );
 
-
-
 export const editServicesTypeFunApi = createAsyncThunk(
   "services/editTypesServices",
   async ({ data, onSuccess }) => {
-    console.log("Edit services Type value", data);
     try {
-      const response = await axiosImage.post(editServiceApi(data.id), data);
-      console.log("response in edit Type Service => ", response.data);
+      const response = await axiosImage.post(editServiceTypeApi(data.id), data);
+
       if (response.data.status === "success") {
         toast.success(response.data.message);
         if (onSuccess) {
@@ -257,7 +257,10 @@ export const editServicesTypeFunApi = createAsyncThunk(
         }
         return response.data.data;
       } else {
-        console.log("Error response in edit Service Type Api => ", response.data);
+        console.log(
+          "Error response in edit Service Type Api => ",
+          response.data
+        );
         const err =
           response?.data?.message ||
           response?.message ||
@@ -316,7 +319,6 @@ export const deleteServiceFunApi = createAsyncThunk(
   }
 );
 
-
 export const deleteServicTypeFunApi = createAsyncThunk(
   "services/deleteServicesType",
   async (id) => {
@@ -328,7 +330,10 @@ export const deleteServicTypeFunApi = createAsyncThunk(
         toast.success(response.data.message);
         return id;
       } else {
-        console.log("Error response in delete Service type Api => ", response.data);
+        console.log(
+          "Error response in delete Service type Api => ",
+          response.data
+        );
         const err =
           response?.data?.message ||
           response?.message ||

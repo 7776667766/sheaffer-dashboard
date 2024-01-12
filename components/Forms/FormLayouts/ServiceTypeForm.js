@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
-import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import SendIcon from "@mui/icons-material/Send";
 import { useFormik } from "formik";
@@ -10,76 +9,117 @@ import * as Yup from "yup";
 import dynamic from "next/dynamic";
 import { requiredValidation } from "@/utils/validation";
 import { useDispatch, useSelector } from "react-redux";
-import { addServicesTypeFunApi , editServicesTypeFunApi } from "store/service/services";
+import {
+  addServicesTypeFunApi,
+  editServicesTypeFunApi,
+} from "store/service/services";
 
 import { useRouter } from "next/router";
 import { LoadingButtonComponent } from "@/components/UIElements/Buttons/LoadingButton";
-const RichTextEditor = dynamic(() => import("@mantine/rte"), {
-  ssr: false,
-});
+import Image from "next/image";
+import toast from "react-hot-toast";
 
-const AddServiceTypeForm = ({formData, isEditMode}) => {
+const ServiceTypeForm = ({ formData, isEditMode }) => {
   const [avatar, setavatar] = useState(null);
-  console.log("avatar",avatar)
-const [profileImageUrl, setProfileImageUrl] = useState(null);
+  const [profileImageUrl, setProfileImageUrl] = useState(null);
 
-const handleFileChange = (event) => {
-  const file = event.target.files[0];
-  setavatar(file)
-};
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+
+    if (!file) {
+      setavatar(null);
+      if (isEditMode) {
+        setProfileImageUrl(formData?.image || null);
+      } else {
+        setProfileImageUrl(null);
+      }
+      return false;
+    } else {
+      const type = file.type.split("/")[0];
+      if (type !== "image") {
+        toast.error("Please select an image");
+        setavatar(null);
+        event.target.value = null;
+        if (isEditMode) {
+          setProfileImageUrl(formData?.image || null);
+        } else {
+          setProfileImageUrl(null);
+        }
+        return false;
+      } else {
+        setavatar(file);
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (e) => {
+          setProfileImageUrl(e.target.result);
+        };
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (isEditMode) {
+      setProfileImageUrl(formData?.image);
+    }
+  }, [formData?.image, isEditMode]);
+
   const dispatch = useDispatch();
   const router = useRouter();
   const { serviceType } = useSelector((state) => state.service);
 
   const initialValues = isEditMode
-  ? {
-      name: formData?.name || "",
-      image: formData?.image || "",
-    }
-  : {
-      name: "",
-      image: "",
-    };
-      
-const formik = useFormik({
-  initialValues: initialValues,
-  validationSchema: Yup.object().shape({
-    name: requiredValidation("ServiceType Name"),
-  }), 
-
-  onSubmit: async (values) => {   
-    try {
-      const myServiceData = {
-        ...values,
-        image: avatar,
-      };
-      if (isEditMode) {
-        dispatch(
-          editServicesTypeFunApi({
-            data: myServiceData,
-            onSuccess: () => {
-              console.log("Edit Service Success");
-              router.push("/service-type/");
-            },
-          })
-        );
-      } else {
-        dispatch(
-          addServicesTypeFunApi({
-            data: myServiceData,
-            onSuccess: () => {
-              console.log("Add Service Success");
-              router.push("/service-type/");
-            },
-          })
-        );
+    ? {
+        name: formData?.name || "",
+        image: formData?.image || "",
+        id: formData?.id || "",
       }
-    } catch (error) {
-      console.error("Error adding/editing service:", error);
-    }
-  },
-}); 
+    : {
+        name: "",
+        image: "",
+      };
 
+  const formik = useFormik({
+    initialValues: initialValues,
+    validationSchema: Yup.object().shape({
+      name: requiredValidation("Service Type Name"),
+    }),
+
+    onSubmit: async (values) => {
+      if (avatar === null && !isEditMode) {
+        toast.error("Please select an image");
+        return;
+      }
+      try {
+        const myServiceData = {
+          ...values,
+          image: avatar,
+        };
+
+        if (isEditMode) {
+          dispatch(
+            editServicesTypeFunApi({
+              data: myServiceData,
+              onSuccess: () => {
+                console.log("Edit Service Success");
+                router.push("/services/service-type/");
+              },
+            })
+          );
+        } else {
+          dispatch(
+            addServicesTypeFunApi({
+              data: myServiceData,
+              onSuccess: () => {
+                router.push("/services/service-type/");
+              },
+            })
+          );
+        }
+      } catch (error) {
+        console.error("Error adding/editing service:", error);
+      }
+    },
+  });
 
   return (
     <>
@@ -188,4 +228,4 @@ const formik = useFormik({
   );
 };
 
-export default AddServiceTypeForm;
+export default ServiceTypeForm;

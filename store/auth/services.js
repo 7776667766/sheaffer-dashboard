@@ -121,6 +121,7 @@ export const logoutFunApi = createAsyncThunk("auth/logout", async () => {
     localStorage.removeItem("token");
     localStorage.removeItem("otpVerified");
     toast.success("Account Logout Successfully");
+    window.location.reload();
     return;
   } catch (error) {
     console.log("Error in logout Api", error);
@@ -184,7 +185,7 @@ export const autoLoginFunApi = createAsyncThunk(
       console.log("response in checkTokenIsValidFun => ", response.data);
       if (response.data.status === "success") {
         if (onSuccess) {
-        onSuccess()
+          onSuccess();
         }
         return response.data.data;
       } else {

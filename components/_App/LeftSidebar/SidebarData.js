@@ -673,12 +673,5 @@ export const SidebarData = () => {
         },
       ],
     },
-    {
-      title: "Loading",
-      path: "/loading",
-      icon: <GridViewIcon />,
-      iconClosed: <KeyboardArrowRightIcon />,
-      iconOpened: <KeyboardArrowDownIcon />,
-    },
   ];
 };
