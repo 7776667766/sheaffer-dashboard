@@ -1,1 +1,1 @@
-export const getMyreview = "reviews/get";
+export const getMyreview = "/reviews/get:businessId";

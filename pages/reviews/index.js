@@ -21,7 +21,7 @@ const Review = () => {
         })
       );
     }
-  }, [business?.id, dispatch, review.dataFatched]);
+  }, [ dispatch, review.dataFatched]);
 
   return (
     <>
