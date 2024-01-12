@@ -55,7 +55,7 @@ const formik = useFormik({
       };
       if (isEditMode) {
         dispatch(
-          editServicesTypeFunApi({
+          editServicesTypeFunApi ({
             data: myServiceData,
             onSuccess: () => {
               console.log("Edit Service Success");
