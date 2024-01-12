@@ -290,18 +290,6 @@ export default function DashboardPage() {
                       <li>{business.description}</li>
                       <li>{business.email}</li>
                       <li>{business.phone}</li>
-                      <li>{business.bannerText}</li>
-                      <li>
-                        <Image
-                          src={business.bannerImg}
-                          width={100}
-                          height={50}
-                          alt="bannerImg"
-                          style={{
-                            objectFit: "contain",
-                          }}
-                        />
-                      </li>
                       <li>
                         {business.socialLinks &&
                           business.socialLinks.map((socialLink, index) => (
@@ -357,6 +345,24 @@ export default function DashboardPage() {
                       <li>Current Theme: {business.theme || "N/A"}</li>
 
                       <li>{business.address}</li>
+                       <li>{business.bannerText}</li>
+                      <li>
+                        <Image
+                          src={business.bannerImg}
+                          width={100}
+                          height={50}
+                          alt="bannerImg"
+                          style={{
+                            objectFit: "contain",
+                          }}
+                        />
+                      </li>
+                      <li style={{
+                        backgroundColor:business.color,
+                        height: "30px",
+                        width: "50px",
+                        
+                       }}></li>
                     </ul>
                   </Typography>
                 </Box>

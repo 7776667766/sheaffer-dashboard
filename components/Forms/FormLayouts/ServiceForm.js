@@ -77,114 +77,116 @@ const ServiceForm = ({ formData, isEditMode }) => {
 
   const initialValues = isEditMode
     ? {
-        id: formData?.id || "",
-        name: formData?.name || "",
-        description: formData?.description || "",
-        image: formData?.image || "",
-        price: formData?.price || "",
-        typeId: formData?.type?.id,
-        specialistId: formData?.specialist?.id,
-        timeInterval: formData?.timeInterval || "",
-        businessId: business?.id,
-        timeSlots: formData?.timeSlots || [
-          {
-            day: "Monday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-          {
-            day: "Tuesday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-          {
-            day: "Wednesday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-          {
-            day: "Thursday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-          {
-            day: "Friday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-          {
-            day: "Saturday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-          {
-            day: "Sunday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-        ],
-      }
+      id: formData?.id || "",
+      name: formData?.name || "",
+      slug: formData?.slug || "",
+      description: formData?.description || "",
+      image: formData?.image || "",
+      price: formData?.price || "",
+      typeId: formData?.type?.id,
+      specialistId: formData?.specialist?.id,
+      timeInterval: formData?.timeInterval || "",
+      businessId: business?.id,
+      timeSlots: formData?.timeSlots || [
+        {
+          day: "Monday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+        {
+          day: "Tuesday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+        {
+          day: "Wednesday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+        {
+          day: "Thursday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+        {
+          day: "Friday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+        {
+          day: "Saturday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+        {
+          day: "Sunday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+      ],
+    }
     : {
-        name: "",
-        description: "",
-        image: "",
-        price: "",
-        typeId: "",
-        specialistId: "",
-        timeInterval: "",
-        businessId: business?.id,
-        timeSlots: [
-          {
-            day: "Monday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-          {
-            day: "Tuesday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-          {
-            day: "Wednesday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-          {
-            day: "Thursday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-          {
-            day: "Friday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-          {
-            day: "Saturday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-          {
-            day: "Sunday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-        ],
-      };
+      name: "",
+      slug:"",
+      description: "",
+      image: "",
+      price: "",
+      typeId: "",
+      specialistId: "",
+      timeInterval: "",
+      businessId: business?.id,
+      timeSlots: [
+        {
+          day: "Monday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+        {
+          day: "Tuesday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+        {
+          day: "Wednesday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+        {
+          day: "Thursday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+        {
+          day: "Friday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+        {
+          day: "Saturday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+        {
+          day: "Sunday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+      ],
+    };
 
   useEffect(() => {
     if (!specialist.specialistFetch) {
@@ -214,17 +216,7 @@ const ServiceForm = ({ formData, isEditMode }) => {
   useEffect(() => {
     if (!serviceType.dataFatched) {
       dispatch(
-        getServicesTypeFunApi({
-          data: business?.id,
-          onSuccess: (serviceTypesList) => {
-            if (isEditMode) {
-              const selected = serviceTypesList?.find(
-                (s) => s.id === formData.type.id
-              );
-              setSelectedServiceType(selected || null);
-            }
-          },
-        })
+        getServicesTypeFunApi()
       );
     } else {
       if (isEditMode && selectedServiceType === null) {
@@ -248,6 +240,7 @@ const ServiceForm = ({ formData, isEditMode }) => {
     initialValues: initialValues,
     validationSchema: Yup.object().shape({
       name: requiredValidation("Service Name"),
+      slug: requiredValidation("Slug"),
       description: requiredValidation("Service Description"),
       specialistId: requiredValidation("Specialist"),
       typeId: requiredValidation("Service Type"),
@@ -377,6 +370,36 @@ const ServiceForm = ({ formData, isEditMode }) => {
                 />
               </Grid>
 
+
+              <Grid item xs={12} md={12} lg={6}>
+                <Typography
+                  as="h5"
+                  sx={{
+                    fontWeight: "500",
+                    fontSize: "14px",
+                    mb: "12px",
+                  }}
+                >
+                  Slug
+                </Typography>
+                <TextField
+                  name="slug"
+                  fullWidth
+                  id="slug"
+                  label="Enter Slug"
+                  {...formik.getFieldProps("slug")}
+                  error={
+                    formik.touched.slug && formik.errors.slug ? true : false
+                  }
+                  helperText={
+                    formik.touched.slug && formik.errors.slug
+                      ? formik.errors.slug
+                      : ""
+                  }
+                />
+              </Grid>
+            
+
               <Grid item xs={12} md={12} lg={6}>
                 <FormControl fullWidth>
                   <Typography
@@ -447,13 +470,13 @@ const ServiceForm = ({ formData, isEditMode }) => {
                         label="Select Specialist"
                         error={
                           formik.touched.specialistId &&
-                          formik.errors.specialistId
+                            formik.errors.specialistId
                             ? true
                             : false
                         }
                         helperText={
                           formik.touched.specialistId &&
-                          formik.errors.specialistId
+                            formik.errors.specialistId
                             ? formik.errors.specialistId
                             : ""
                         }

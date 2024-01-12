@@ -9,19 +9,14 @@ import {
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
-import TextareaAutosize from "@mui/material/TextareaAutosize";
 import SendIcon from "@mui/icons-material/Send";
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import * as Yup from "yup";
 import { requiredValidation } from "@/utils/validation";
-import {
-  addDummyservicesFunApi,
-  editServicesFunApi,
-} from "store/service/services";
+import { addDummyservicesFunApi } from "store/service/services";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
-import { getspecialistApi } from "store/specialist/services";
 import { getServicesTypeFunApi } from "store/service/services";
 import toast from "react-hot-toast";
 import Image from "next/image";
@@ -78,179 +73,70 @@ const ServiceForm = ({ formData, isEditMode }) => {
   ];
 
   useEffect(() => {
-    if (!specialist.specialistFetch) {
-      dispatch(
-        getspecialistApi({
-          data: business?.id,
-          onSuccess: (specialistList) => {
-            if (isEditMode) {
-              const selected = specialistList?.filter((s) =>
-                formData.specialistName.includes(s.id)
-              );
-              setSelectedSpecialist(selected || []);
-            }
-          },
-        })
-      );
-    }
-  }, [
-    business?.id,
-    dispatch,
-    formData?.specialistName,
-    isEditMode,
-    specialist.specialistFetch,
-  ]);
-
-  useEffect(() => {
-    if (isEditMode) {
-      setProfileImageUrl(formData?.image);
-    }
-  }, [formData?.image, isEditMode]);
-
-  const initialValues = isEditMode
-    ? {
-        id: formData?.id || "",
-        name: formData?.name || "",
-        description: formData?.description || "",
-        image: formData?.image || "",
-        price: formData?.price || "",
-        typeId: formData?.type?.id,
-        specialistName: formData?.specialistName || [],
-        timeInterval: formData?.timeInterval || "",
-        timeSlots: formData?.timeSlots || [
-          {
-            day: "Monday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-          {
-            day: "Tuesday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-          {
-            day: "Wednesday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-          {
-            day: "Thursday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-          {
-            day: "Friday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-          {
-            day: "Saturday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-          {
-            day: "Sunday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-        ],
-      }
-    : {
-        name: "",
-        description: "",
-        image: "",
-        price: "",
-        typeId: "",
-        timeInterval: "",
-        // specialistArray:"",
-        timeSlots: [
-          {
-            day: "Monday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-          {
-            day: "Tuesday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-          {
-            day: "Wednesday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-          {
-            day: "Thursday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-          {
-            day: "Friday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-          {
-            day: "Saturday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-          {
-            day: "Sunday",
-            startTime: "0:00",
-            endTime: "0:00",
-            active: false,
-          },
-        ],
-      };
-
-  useEffect(() => {
     if (!serviceType.dataFatched) {
-      dispatch(
-        getServicesTypeFunApi({
-          data: business?.id,
-          onSuccess: (serviceTypesList) => {
-            if (isEditMode) {
-              const selected = serviceTypesList?.find(
-                (s) => s.id === formData.type.id
-              );
-              setSelectedServiceType(selected || null);
-            }
-          },
-        })
-      );
-    } else {
-      if (isEditMode && selectedServiceType === null) {
-        const selected = serviceType.data?.find(
-          (s) => s.id === formData?.type.id
-        );
-        setSelectedServiceType(selected || null);
-      }
+      dispatch(getServicesTypeFunApi());
     }
   }, [
-    business?.id,
-    dispatch,
-    formData?.type?.id,
-    isEditMode,
-    selectedServiceType,
-    serviceType.data,
     serviceType.dataFatched,
+    dispatch,
+    business?.id,
+    serviceType?.data?.length,
   ]);
 
   const formik = useFormik({
-    initialValues: initialValues,
+    initialValues: {
+      name: "",
+      description: "",
+      image: "",
+      price: "",
+      typeId: "",
+      timeInterval: "",
+      // specialistArray:"",
+      timeSlots: [
+        {
+          day: "Monday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+        {
+          day: "Tuesday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+        {
+          day: "Wednesday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+        {
+          day: "Thursday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+        {
+          day: "Friday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+        {
+          day: "Saturday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+        {
+          day: "Sunday",
+          startTime: "0:00",
+          endTime: "0:00",
+          active: false,
+        },
+      ],
+    },
     validationSchema: Yup.object().shape({
       name: requiredValidation("Service Name"),
       description: requiredValidation("Service Description"),
@@ -311,27 +197,15 @@ const ServiceForm = ({ formData, isEditMode }) => {
           typeId: selectedServiceType ? selectedServiceType.id : "",
           image: avatar,
         };
-        if (isEditMode) {
-          dispatch(
-            editServicesFunApi({
-              data: myServiceData,
-              onSuccess: () => {
-                console.log("Edit Service Success");
-                router.push("/services/");
-              },
-            })
-          );
-        } else {
-          dispatch(
-            addDummyservicesFunApi({
-              data: myServiceData,
-              onSuccess: () => {
-                console.log("Add Service Success");
-                router.push("/services/");
-              },
-            })
-          );
-        }
+        dispatch(
+          addDummyservicesFunApi({
+            data: myServiceData,
+            onSuccess: () => {
+              console.log("Add Service Success");
+              router.push("/services/");
+            },
+          })
+        );
       } catch (error) {
         console.error("Error adding/editing service:", error);
       }

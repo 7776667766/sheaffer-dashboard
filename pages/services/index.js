@@ -169,6 +169,15 @@ const ServicesPage = () => {
               >
                 Duration
               </TableCell>
+              <TableCell
+                align="center"
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13.5px",
+                }}
+              >
+                Slug
+              </TableCell>
 
               <TableCell
                 align="center"
@@ -265,6 +274,18 @@ const ServicesPage = () => {
                 {data?.timeInterval} Min
               </TableCell>
 
+
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13px",
+                  pt: "16px",
+                  pb: "16px",
+                }}
+              >
+                {data.slug}
+              </TableCell>
+
               <TableCell
                 sx={{
                   borderBottom: "1px solid #F7FAFF",
@@ -276,6 +297,8 @@ const ServicesPage = () => {
               >
                 {data?.type?.name}
               </TableCell>
+
+
 
               <TableCell
                 sx={{

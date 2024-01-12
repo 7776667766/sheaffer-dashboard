@@ -14,7 +14,10 @@ const label = { inputProps: { "aria-label": "Checkbox demo" } };
 import TransitionsDialog from "@/components/UIElements/Modal/TransitionsDialog";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteServicTypeFunApi, getServicesTypeFunApi } from "store/service/services";
+import {
+  deleteServicTypeFunApi,
+  getServicesTypeFunApi,
+} from "store/service/services";
 import { CustomPaginationTable } from "@/components/Table/CustomPaginationTable";
 import { useRouter } from "next/router";
 
@@ -22,7 +25,7 @@ const ServicesType = () => {
   const { serviceType } = useSelector((state) => state.service);
   const { role } = useSelector((state) => state.auth);
 
-  console.log("servicetype data", serviceType)
+  console.log("servicetype data", serviceType);
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -31,7 +34,7 @@ const ServicesType = () => {
   };
 
   const nextPage = (id) => {
-    router.push(`/services/edit-servicetype/${id}`);
+    router.push(`/services/edit-service-type/${id}`);
   };
 
   useEffect(() => {
@@ -162,15 +165,24 @@ const ServicesType = () => {
               >
                 {data.name}
               </TableCell>
-              <Image
-                src={data.image}
-                width={100}
-                height={50}
-                alt="image"
-                style={{
-                  objectFit: "contain",
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13px",
+                  pt: "16px",
+                  pb: "16px",
                 }}
-              />
+              >
+                <Image
+                  src={data.image}
+                  width={100}
+                  height={50}
+                  alt="image"
+                  style={{
+                    objectFit: "contain",
+                  }}
+                />
+              </TableCell>
 
               <TableCell
                 align="right"
@@ -178,14 +190,14 @@ const ServicesType = () => {
               >
                 <Box
                   sx={{
-                    display: "inline-block",
+                    display: "inline-flex",
                   }}
                 >
-                  <Tooltip title="Remove" placement="top">
+                  <Tooltip title="Delete" placement="top">
                     <TransitionsDialog
                       modelButton={
                         <IconButton
-                          aria-label="remove"
+                          aria-label="delete"
                           size="small"
                           color="danger"
                           className="danger"
@@ -215,21 +227,18 @@ const ServicesType = () => {
                       </div>
                     </TransitionsDialog>
                   </Tooltip>
-                
 
-               
-                    <Tooltip title="Edit" placement="top">
-                      <IconButton
-                        aria-label="edit"
-                        size="small"
-                        color="primary"
-                        className="primary"
-                        onClick={() => nextPage(data.id)}
-                      >
-                        <DriveFileRenameOutlineIcon fontSize="inherit" />
-                      </IconButton>
-                    </Tooltip>
-             
+                  <Tooltip title="Edit" placement="top">
+                    <IconButton
+                      aria-label="edit"
+                      size="small"
+                      color="primary"
+                      className="primary"
+                      onClick={() => nextPage(data.id)}
+                    >
+                      <DriveFileRenameOutlineIcon fontSize="inherit" />
+                    </IconButton>
+                  </Tooltip>
                 </Box>
               </TableCell>
             </>
