@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { Box, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@mui/material";
+import {
+  Box,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Typography,
+} from "@mui/material";
 import Card from "@mui/material/Card";
 import IconButton from "@mui/material/IconButton";
 import TableCell from "@mui/material/TableCell";
@@ -8,14 +15,18 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { cancelBookingFunApi, completeBookingFunApi, deleteBookingFunApi, getMyBusinessBookingFunApi } from "store/booking/service";
+import {
+  cancelBookingFunApi,
+  completeBookingFunApi,
+  deleteBookingFunApi,
+  getMyBusinessBookingFunApi,
+} from "store/booking/service";
 import moment from "moment";
 import { CustomPaginationTable } from "@/components/Table/CustomPaginationTable";
 import { getMyBussinessFunApi } from "store/business/services";
 import TransitionsDialog from "@/components/UIElements/Modal/TransitionsDialog";
 import Image from "next/image";
 import { Button } from "@mui/base";
-
 
 const BookingPage = () => {
   const [isDialogOpen, setDialogOpen] = useState(false);
@@ -40,15 +51,15 @@ const BookingPage = () => {
   };
 
   const handleCancelBooking = (id) => {
-    console.log("id", id)
+    console.log("id", id);
     dispatch(cancelBookingFunApi(id));
-    console.log('Cancel Booking');
+    console.log("Cancel Booking");
     setDialogOpen(false);
   };
 
   const handleCompleteBooking = (id) => {
     dispatch(completeBookingFunApi(id));
-    console.log('Complete Booking');
+    console.log("Complete Booking");
     setDialogOpen(false);
   };
 
@@ -67,6 +78,16 @@ const BookingPage = () => {
           },
         })
       );
+    } else {
+      if (!booking.dataFatched) {
+        dispatch(
+          getMyBusinessBookingFunApi({
+            data: {
+              businessId: business.id,
+            },
+          })
+        );
+      }
     }
   }, [dispatch, booking.data, booking.dataFatched, business?.id, dataFatched]);
   return (
@@ -282,13 +303,14 @@ const BookingPage = () => {
               >
                 <span
                   className={`
-                    ${data.status?.toLowerCase() === "completed"
-                      ? "successBadge"
-                      : data.status?.toLowerCase() === "pending"
+                    ${
+                      data.status?.toLowerCase() === "completed"
+                        ? "successBadge"
+                        : data.status?.toLowerCase() === "pending"
                         ? "primaryBadge"
                         : data.status?.toLowerCase() === "cancelled"
-                          ? "dangerBadge"
-                          : ""
+                        ? "dangerBadge"
+                        : ""
                     }
                       `}
                 >
@@ -299,7 +321,7 @@ const BookingPage = () => {
                 align="right"
                 sx={{ borderBottom: "1px solid #F7FAFF" }}
               >
-                {data.status === "pending" ?
+                {data.status === "pending" ? (
                   <Box
                     sx={{
                       display: "inline-block",
@@ -340,7 +362,6 @@ const BookingPage = () => {
                       </TransitionsDialog>
                     </Tooltip>
 
-
                     <Tooltip title="Edit" placement="top">
                       <IconButton
                         aria-label="edit"
@@ -361,16 +382,24 @@ const BookingPage = () => {
                         </Typography>
                       </DialogContent>
                       <DialogActions>
-                        <Button onClick={() => handleCancelBooking(data.id)} color="secondary">
+                        <Button
+                          onClick={() => handleCancelBooking(data.id)}
+                          color="secondary"
+                        >
                           Cancel Booking
                         </Button>
-                        <Button onClick={() => handleCompleteBooking(data.id)} color="primary">
+                        <Button
+                          onClick={() => handleCompleteBooking(data.id)}
+                          color="primary"
+                        >
                           Complete Booking
                         </Button>
                       </DialogActions>
                     </Dialog>
-                  </Box> : "N/A"
-                }
+                  </Box>
+                ) : (
+                  "N/A"
+                )}
               </TableCell>
             </>
           )}

@@ -1,12 +1,17 @@
 import axios from "helper/api";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getMyBusinessBooking , deleteBookingApi , cancelBookingApi ,complateBookingApi } from "./constrants";
+import {
+  getMyBusinessBooking,
+  deleteBookingApi,
+  cancelBookingApi,
+  complateBookingApi,
+} from "./constrants";
 import toast from "react-hot-toast";
 // deleteBookingFunApi
 export const getMyBusinessBookingFunApi = createAsyncThunk(
   "booking/getMyBusinessBookingFunApi",
   async ({ data }) => {
-    console.log("data",data)
+    console.log("data", data);
     console.log("data in get My Booking Api => ", data);
     try {
       const response = await axios.post(getMyBusinessBooking, data);
@@ -73,7 +78,6 @@ export const deleteBookingFunApi = createAsyncThunk(
   }
 );
 
-
 export const cancelBookingFunApi = createAsyncThunk(
   "booking/cancelbooking",
   async (id) => {
@@ -83,7 +87,7 @@ export const cancelBookingFunApi = createAsyncThunk(
       console.log("response in cancel Booking => ", response.data);
       if (response.data.status === "success") {
         toast.success(response.data.message);
-        return id;
+        return response.data.data;
       } else {
         console.log("Error response in cancel booking Api => ", response.data);
         const err =
@@ -118,9 +122,12 @@ export const completeBookingFunApi = createAsyncThunk(
       console.log("response in complete Booking => ", response.data);
       if (response.data.status === "success") {
         toast.success(response.data.message);
-        return id;
+        return response.data.data;
       } else {
-        console.log("Error response in complete booking Api => ", response.data);
+        console.log(
+          "Error response in complete booking Api => ",
+          response.data
+        );
         const err =
           response?.data?.message ||
           response?.message ||
@@ -143,4 +150,3 @@ export const completeBookingFunApi = createAsyncThunk(
     }
   }
 );
-
