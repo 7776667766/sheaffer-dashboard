@@ -21,7 +21,7 @@ const Review = () => {
         })
       );
     }
-  }, [ dispatch, review.dataFatched]);
+  }, [dispatch, review.dataFatched]);
 
   return (
     <>
@@ -92,7 +92,7 @@ const Review = () => {
                   fontSize: "13.5px",
                 }}
               >
-                Description
+                Message
               </TableCell>
 
               <TableCell
@@ -130,7 +130,7 @@ const Review = () => {
                   pb: "16px",
                 }}
               >
-                {data.title}
+                {data.name}
               </TableCell>
 
               <TableCell
@@ -157,7 +157,7 @@ const Review = () => {
                   pb: "16px",
                 }}
               >
-                {data.description}
+                {data.message}
               </TableCell>
 
               <TableCell
