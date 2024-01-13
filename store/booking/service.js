@@ -1,11 +1,12 @@
 import axios from "helper/api";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getMyBusinessBooking } from "./constrants";
+import { getMyBusinessBooking , deleteBookingApi , cancelBookingApi ,complateBookingApi } from "./constrants";
 import toast from "react-hot-toast";
-
+// deleteBookingFunApi
 export const getMyBusinessBookingFunApi = createAsyncThunk(
   "booking/getMyBusinessBookingFunApi",
   async ({ data }) => {
+    console.log("data",data)
     console.log("data in get My Booking Api => ", data);
     try {
       const response = await axios.post(getMyBusinessBooking, data);
@@ -36,3 +37,110 @@ export const getMyBusinessBookingFunApi = createAsyncThunk(
     }
   }
 );
+
+export const deleteBookingFunApi = createAsyncThunk(
+  "services/deleteServices",
+  async (id) => {
+    console.log("delete services value", id);
+    try {
+      const response = await axios.get(deleteBookingApi(id));
+      console.log("response in delete Booking => ", response.data);
+      if (response.data.status === "success") {
+        toast.success(response.data.message);
+        return id;
+      } else {
+        console.log("Error response in delete booking Api => ", response.data);
+        const err =
+          response?.data?.message ||
+          response?.message ||
+          "Something went wrong!";
+        console.log("err: ", err);
+        toast.error(err);
+        throw new Error(err);
+      }
+    } catch (error) {
+      console.log("Error in delete booking Api ", error);
+      let err =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Something went wrong!";
+      if (err === "Network Error") {
+        err = "Please check your internet connection";
+      }
+      toast.error(err);
+      throw new Error(err);
+    }
+  }
+);
+
+
+export const cancelBookingFunApi = createAsyncThunk(
+  "booking/cancelbooking",
+  async (id) => {
+    console.log("cancel booking value", id);
+    try {
+      const response = await axios.get(cancelBookingApi(id));
+      console.log("response in cancel Booking => ", response.data);
+      if (response.data.status === "success") {
+        toast.success(response.data.message);
+        return id;
+      } else {
+        console.log("Error response in cancel booking Api => ", response.data);
+        const err =
+          response?.data?.message ||
+          response?.message ||
+          "Something went wrong!";
+        console.log("err: ", err);
+        toast.error(err);
+        throw new Error(err);
+      }
+    } catch (error) {
+      console.log("Error in cancel booking Api ", error);
+      let err =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Something went wrong!";
+      if (err === "Network Error") {
+        err = "Please check your internet connection";
+      }
+      toast.error(err);
+      throw new Error(err);
+    }
+  }
+);
+
+export const completeBookingFunApi = createAsyncThunk(
+  "booking/completeBooking",
+  async (id) => {
+    console.log("complete booking value", id);
+    try {
+      const response = await axios.get(complateBookingApi(id));
+      console.log("response in complete Booking => ", response.data);
+      if (response.data.status === "success") {
+        toast.success(response.data.message);
+        return id;
+      } else {
+        console.log("Error response in complete booking Api => ", response.data);
+        const err =
+          response?.data?.message ||
+          response?.message ||
+          "Something went wrong!";
+        console.log("err: ", err);
+        toast.error(err);
+        throw new Error(err);
+      }
+    } catch (error) {
+      console.log("Error in complete booking Api ", error);
+      let err =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Something went wrong!";
+      if (err === "Network Error") {
+        err = "Please check your internet connection";
+      }
+      toast.error(err);
+      throw new Error(err);
+    }
+  }
+);
+
