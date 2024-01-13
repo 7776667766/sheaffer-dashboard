@@ -1,17 +1,25 @@
-import React from "react";
-import { Box, Typography } from "@mui/material";
+import React, { useState } from "react";
+import { Box, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
 import IconButton from "@mui/material/IconButton";
 import TableCell from "@mui/material/TableCell";
 import Tooltip from "@mui/material/Tooltip";
+import DeleteIcon from "@mui/icons-material/Delete";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { getMyBusinessBookingFunApi } from "store/booking/service";
+import { cancelBookingFunApi, completeBookingFunApi, deleteBookingFunApi, getMyBusinessBookingFunApi } from "store/booking/service";
 import moment from "moment";
 import { CustomPaginationTable } from "@/components/Table/CustomPaginationTable";
 import { getMyBussinessFunApi } from "store/business/services";
+import TransitionsDialog from "@/components/UIElements/Modal/TransitionsDialog";
+import Image from "next/image";
+import { Button } from "@mui/base";
+
+
 const BookingPage = () => {
+  const [isDialogOpen, setDialogOpen] = useState(false);
+
   const dispatch = useDispatch();
   const { booking } = useSelector((state) => state.booking);
   console.log("booking", booking);
@@ -20,29 +28,47 @@ const BookingPage = () => {
   const { business, dataFatched } = useSelector((state) => state.business);
   console.log("business", business?.id);
 
-  useEffect(() => {
-    if (booking.dataFatched !== true) {
-      dispatch(
-        getMyBusinessBookingFunApi({
-          data: {
-            businessId: business?.id,
-          },
-        })
-      );
-    }
-  }, [dispatch, booking.data, booking.dataFatched, business?.id]);
+  const handleDelete = (id) => {
+    dispatch(deleteBookingFunApi(id));
+  };
+  const handleTooltipClick = () => {
+    setDialogOpen(true);
+  };
+
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+  };
+
+  const handleCancelBooking = (id) => {
+    console.log("id", id)
+    dispatch(cancelBookingFunApi(id));
+    console.log('Cancel Booking');
+    setDialogOpen(false);
+  };
+
+  const handleCompleteBooking = (id) => {
+    dispatch(completeBookingFunApi(id));
+    console.log('Complete Booking');
+    setDialogOpen(false);
+  };
 
   useEffect(() => {
     if (!dataFatched) {
       dispatch(
         getMyBussinessFunApi({
           onSuccess: (businessId) => {
-            console.log(businessId, "businessIdd");
+            dispatch(
+              getMyBusinessBookingFunApi({
+                data: {
+                  businessId: businessId,
+                },
+              })
+            );
           },
         })
       );
     }
-  }, [dispatch, dataFatched]);
+  }, [dispatch, booking.data, booking.dataFatched, business?.id, dataFatched]);
   return (
     <>
       <Card
@@ -273,22 +299,78 @@ const BookingPage = () => {
                 align="right"
                 sx={{ borderBottom: "1px solid #F7FAFF" }}
               >
-                <Box
-                  sx={{
-                    display: "inline-block",
-                  }}
-                >
-                  <Tooltip title="Edit" placement="top">
-                    <IconButton
-                      aria-label="edit"
-                      size="small"
-                      color="primary"
-                      className="primary"
-                    >
-                      <DriveFileRenameOutlineIcon fontSize="inherit" />
-                    </IconButton>
-                  </Tooltip>
-                </Box>
+                {data.status === "pending" ?
+                  <Box
+                    sx={{
+                      display: "inline-block",
+                    }}
+                  >
+                    <Tooltip title="Delete" placement="top">
+                      <TransitionsDialog
+                        modelButton={
+                          <IconButton
+                            aria-label="delete"
+                            size="small"
+                            color="danger"
+                            className="danger"
+                          >
+                            <DeleteIcon fontSize="inherit" />
+                          </IconButton>
+                        }
+                        submitButtonText="Delete"
+                        handleSubmit={() => handleDelete(data.id)}
+                      >
+                        <div style={{ textAlign: "center" }}>
+                          <Image
+                            src="/images/icon/alert.png"
+                            width={150}
+                            height={150}
+                            alt="ok"
+                          />
+
+                          <Typography sx={{ fontSize: 18 }}>
+                            <b>Are You Sure You Want To Delete ?</b>
+                            <br />
+                            <span style={{ fontSize: 14 }}>
+                              You are deleting this data & this action is
+                              irreversible
+                            </span>
+                          </Typography>
+                        </div>
+                      </TransitionsDialog>
+                    </Tooltip>
+
+
+                    <Tooltip title="Edit" placement="top">
+                      <IconButton
+                        aria-label="edit"
+                        size="small"
+                        color="primary"
+                        className="primary"
+                        onClick={handleTooltipClick}
+                      >
+                        <DriveFileRenameOutlineIcon fontSize="inherit" />
+                      </IconButton>
+                    </Tooltip>
+
+                    <Dialog open={isDialogOpen} onClose={handleDialogClose}>
+                      <DialogTitle>Edit Booking Details</DialogTitle>
+                      <DialogContent>
+                        <Typography sx={{ fontSize: 18 }}>
+                          Edit the data as needed.
+                        </Typography>
+                      </DialogContent>
+                      <DialogActions>
+                        <Button onClick={() => handleCancelBooking(data.id)} color="secondary">
+                          Cancel Booking
+                        </Button>
+                        <Button onClick={() => handleCompleteBooking(data.id)} color="primary">
+                          Complete Booking
+                        </Button>
+                      </DialogActions>
+                    </Dialog>
+                  </Box> : "N/A"
+                }
               </TableCell>
             </>
           )}
