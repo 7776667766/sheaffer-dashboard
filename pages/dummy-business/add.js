@@ -1,4 +1,4 @@
-import React, {  useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Typography,
@@ -10,11 +10,21 @@ import {
 } from "@mui/material";
 
 import { useDispatch, useSelector } from "react-redux";
-import { addBusinessFunApi } from "store/business/services";
+import { addBusinessFunApi, getMyBussinessFunApi } from "store/business/services";
 import { useRouter } from "next/router";
+import { requiredValidation, slugValidation } from "@/utils/validation";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { LoadingButtonComponent } from "@/components/UIElements/Buttons/LoadingButton";
+import SendIcon from "@mui/icons-material/Send";
+import { ColorPicker } from "@mantine/core";
+
 
 const BusinessForm = () => {
   const { role } = useSelector((state) => state.auth);
+  const { business, dataFatched, isLoading } = useSelector((state) => state.business);
+  console.log(isLoading, "business123");
+
   const router = useRouter();
   const dispatch = useDispatch();
   const [avatar1, setavatar1] = useState(null);
@@ -27,32 +37,101 @@ const BusinessForm = () => {
     setavatar1(file);
   };
 
+  useEffect(() => {
+    if (!dataFatched) {
+      dispatch(
+        getMyBussinessFunApi({
+          onSuccess: (businessId) => {
+            console.log(businessId, "businessIdd");
+          },
+        })
+      );
+    }
+  }, [dispatch, dataFatched]);
+
+
   const handleFileChange2 = (event) => {
     const file = event.target.files[0];
     setavatar2(file);
     console.log("file2", file)
   };
 
-  const [businessData, setBusinessData] = useState({
-    name: "",
-    slug:"dummy-business",
-    email: "",
-    phone: "",
-    description: "",
-    address: "",
-    logo: "",
-    bookingService: false,
-    websiteService: false,
-    bannerText: "",
-    bannerImg: "",
-    color: "",
-    theme: "",
-    socialLinks: {
-      facebook: "",
-      twitter: "",
-      instagram: "",
+  // const [businessData, setBusinessData] = useState({
+  //   name: "",
+  //   slug: "dummy-business",
+  //   email: "",
+  //   phone: "",
+  //   description: "",
+  //   address: "",
+  //   logo: "",
+  //   bookingService: false,
+  //   websiteService: false,
+  //   bannerText: "",
+  //   bannerImg: "",
+  //   color: "",
+  //   theme: "",
+  //   socialLinks: {
+  //     facebook: "",
+  //     twitter: "",
+  //     instagram: "",
+  //   },
+  // });
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      slug: "dummy-business",
+      email: "",
+      phone: "",
+      description: "",
+      address: "",
+      logo: "",
+      bookingService: false,
+      websiteService: false,
+      bannerText: "",
+      bannerImg: "",
+      color: "",
+      // theme: "",
+      // socialLinks: {
+      //   facebook: "",
+      //   twitter: "",
+      //   instagram: "",
+      // },
+    },
+    validationSchema: Yup.object({
+      name: requiredValidation("name required"),
+      slug: slugValidation("slug"),
+      email: requiredValidation("email"),
+      phone: requiredValidation("phone"),
+      description: requiredValidation("description"),
+      address: requiredValidation("address"),
+      bannerText: requiredValidation("bannerText"),
+      color: requiredValidation("color"),
+
+    }),
+    onSubmit: async (values) => {
+      try {
+        const formData = {
+          ...values,
+          logo: avatar1,
+          bannerImg: avatar2
+        };
+
+        console.log(formData);
+
+        dispatch(
+          addBusinessFunApi({
+            data: formData,
+            onSuccess: () => {
+              router.push("/services/add-dummy-business/");
+            },
+          })
+        );
+      } catch (error) {
+        console.error("Error adding dummy business:", error);
+      }
     },
   });
+
 
   const handleInputChange = (field, value) => {
     setBusinessData((prevData) => ({
@@ -61,103 +140,50 @@ const BusinessForm = () => {
     }));
   };
 
-  const handleSubmit = () => {
-    dispatch(
-      addBusinessFunApi({
-        data: {
-          name: businessData.name,
-          email: businessData.email,
-          phone: businessData.phone,
-          slug: businessData.slug,
-          logo: avatar1,
-          description: businessData.description,
-          address: businessData.address,
-          bannerText: businessData.bannerText,
-          bannerImg:avatar2,
-          color: businessData.color,
-          googleId: "1234567890",
-          socialLinks: [
-            {
-              name: "facebook",
-              link: "https://www.facebook.com/",
-            },
-            {
-              name: "instagram",
-              link: "https://www.instagram.com/",
-            },
-          ],
-        },
-        onSuccess: () => {
-          router.push("/services/add-dummy-business/");
-        },
-      })
-    );
-  };
+  // const handleSubmit = () => {
+  //   dispatch(
+  //     addBusinessFunApi({
+  //       data: {
+  //         name: businessData.name,
+  //         email: businessData.email,
+  //         phone: businessData.phone,
+  //         slug: businessData.slug,
+  //         logo: avatar1,
+  //         description: businessData.description,
+  //         address: businessData.address,
+  //         bannerText: businessData.bannerText,
+  //         bannerImg: avatar2,
+  //         color: businessData.color,
+  //         googleId: "1234567890",
+  //         socialLinks: [
+  //           {
+  //             name: "facebook",
+  //             link: "https://www.facebook.com/",
+  //           },
+  //           {
+  //             name: "instagram",
+  //             link: "https://www.instagram.com/",
+  //           },
+  //         ],
+  //       },
+  //       onSuccess: () => {
+  //         router.push("/services/add-dummy-business/");
+  //       },
+  //     })
+  //   );
+  // };
 
   return (
     <>
-      <h1>Add dummy Business</h1>
-      <Card
-        sx={{ boxShadow: "none", borderRadius: "10px", p: "25px 20px 15px" }}
-      >
-        <CardContent>
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={6}>
-              <TextField
-                label="Name"
-                fullWidth
-                value={businessData.name}
-                onChange={(e) => handleInputChange("name", e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <TextField
-                label="Slug"
-                fullWidth
-                value={businessData.slug}
-                defaultValue={"dummy-business" || businessData.slug}
-                disabled={true}
-                onChange={(e) => handleInputChange("slug", e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <TextField
-                label="Email"
-                fullWidth
-                value={businessData.email}
-                onChange={(e) => handleInputChange("email", e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <TextField
-                label="Phone"
-                fullWidth
-                value={businessData.phone}
-                onChange={(e) => handleInputChange("phone", e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                label="Description"
-                multiline
-                minRows={4}
-                fullWidth
-                value={businessData.description}
-                onChange={(e) =>
-                  handleInputChange("description", e.target.value)
-                }
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                label="Address"
-                fullWidth
-                value={businessData.address}
-                onChange={(e) => handleInputChange("address", e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <Box sx={{ flex: 1 }}>
+      <h1>Add Dummy Business</h1>
+      <Box component="form" noValidate onSubmit={formik.handleSubmit}>
+
+        <Card
+          sx={{ boxShadow: "none", borderRadius: "10px", p: "25px 20px 15px" }}
+        >
+          <CardContent>
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={12} lg={6}>
                 <Typography
                   as="h5"
                   sx={{
@@ -166,22 +192,20 @@ const BusinessForm = () => {
                     mb: "12px",
                   }}
                 >
-                  Business Logo
+                  Name
                 </Typography>
-
                 <TextField
+                  name="name"
                   fullWidth
-                  name="logo"
-                  type="file"
-                  id="logo"
-                  accept="image/*"
-                  onChange={handleFileChange1}
+                  id="name"
+                  label="Enter Name"
+                  {...formik.getFieldProps("name")}
+                  error={formik.touched.name && formik.errors.name}
+                  helperText={formik.touched.name && formik.errors.name ? formik.errors.name : ""}
                 />
-              </Box>
-            </Grid>
+              </Grid>
 
-            <Grid item xs={12} md={6}>
-              <Box sx={{ flex: 1 }}>
+              <Grid item xs={12} md={12} lg={6}>
                 <Typography
                   as="h5"
                   sx={{
@@ -190,48 +214,236 @@ const BusinessForm = () => {
                     mb: "12px",
                   }}
                 >
-                  Banner Image
+                  Slug
                 </Typography>
-
                 <TextField
+                  name="slug"
                   fullWidth
-                  name="banner-img"
-                  type="file"
-                  id="banner-img"
-                  accept="image/*"
-                  onChange={handleFileChange2}
+                  id="slug"
+                  label="Enter Slug"
+                  {...formik.getFieldProps("slug")}
+                  error={formik.touched.slug && formik.errors.slug}
+                  helperText={formik.touched.slug && formik.errors.slug ? formik.errors.slug : ""}
                 />
-              </Box>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <TextField
-                type="color"
-                label="Theme Color"
-                fullWidth
-                defaultValue={"#4F46E5" || businessData.color}
-                value={businessData.color}
-                onChange={(e) => handleInputChange("color", e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <TextField
-                label="Banner Text"
-                fullWidth
-                value={businessData.bannerText}
-                onChange={(e) =>
-                  handleInputChange("bannerText", e.target.value)
-                }
-              />
-            </Grid>
+              </Grid>
 
-            <Grid item xs={12}>
-              <Button variant="contained" onClick={handleSubmit}>
-                Add Dummy Business
-              </Button>
+              <Grid item xs={12} md={12} lg={6}>
+                <Typography
+                  as="h5"
+                  sx={{
+                    fontWeight: "500",
+                    fontSize: "14px",
+                    mb: "12px",
+                  }}
+                >
+                  Email
+                </Typography>
+                <TextField
+                  name="email"
+                  fullWidth
+                  id="email"
+                  label="Enter email"
+                  {...formik.getFieldProps("email")}
+                  error={formik.touched.email && formik.errors.email}
+                  helperText={formik.touched.email && formik.errors.email ? formik.errors.email : ""}
+                />
+              </Grid>
+
+              <Grid item xs={12} md={12} lg={6}>
+                <Typography
+                  as="h5"
+                  sx={{
+                    fontWeight: "500",
+                    fontSize: "14px",
+                    mb: "12px",
+                  }}
+                >
+                  Phone
+                </Typography>
+                <TextField
+                  name="phone"
+                  fullWidth
+                  id="phone"
+                  label="Enter Phone"
+                  {...formik.getFieldProps("phone")}
+                  error={formik.touched.phone && formik.errors.phone}
+                  helperText={formik.touched.phone && formik.errors.phone ? formik.errors.phone : ""}
+                />
+              </Grid>
+
+              <Grid item xs={12} md={12} lg={6}>
+                <Typography
+                  as="h5"
+                  sx={{
+                    fontWeight: "500",
+                    fontSize: "14px",
+                    mb: "12px",
+                  }}
+                >
+                  Description
+                </Typography>
+                <TextField
+                  name="description"
+                  fullWidth
+                  id="description"
+                  label="Enter description"
+                  {...formik.getFieldProps("description")}
+                  error={formik.touched.description && formik.errors.description}
+                  helperText={formik.touched.description && formik.errors.description ? formik.errors.description : ""}
+                />
+              </Grid>
+
+              <Grid item xs={12} md={12} lg={6}>
+                <Typography
+                  as="h5"
+                  sx={{
+                    fontWeight: "500",
+                    fontSize: "14px",
+                    mb: "12px",
+                  }}
+                >
+                  Address
+                </Typography>
+                <TextField
+                  name="address"
+                  fullWidth
+                  id="address"
+                  label="Enter Address"
+                  {...formik.getFieldProps("address")}
+                  error={formik.touched.address && formik.errors.address}
+                  helperText={formik.touched.address && formik.errors.address ? formik.errors.address : ""}
+                />
+              </Grid>
+
+              {/* Other fields go here */}
+
+              <Grid item xs={12} md={6}>
+                <Box sx={{ flex: 1 }}>
+                  <Typography
+                    as="h5"
+                    sx={{
+                      fontWeight: "500",
+                      fontSize: "14px",
+                      mb: "12px",
+                    }}
+                  >
+                    Business Logo
+                  </Typography>
+                  <TextField
+                    fullWidth
+                    name="logo"
+                    type="file"
+                    id="logo"
+                    accept="image/*"
+                    onChange={handleFileChange1}
+                  />
+                </Box>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <Box sx={{ flex: 1 }}>
+                  <Typography
+                    as="h5"
+                    sx={{
+                      fontWeight: "500",
+                      fontSize: "14px",
+                      mb: "12px",
+                    }}
+                  >
+                    Banner Image
+                  </Typography>
+
+                  <TextField
+                    fullWidth
+                    name="banner-img"
+                    type="file"
+                    id="banner-img"
+                    accept="image/*"
+                    onChange={handleFileChange2}
+                  />
+                </Box>
+              </Grid>
+              <Grid item xs={12} md={12} lg={6}>
+                <Typography
+                  as="h5"
+                  sx={{
+                    fontWeight: "500",
+                    fontSize: "14px",
+                    mb: "12px",
+                  }}
+                >
+                  Theme Color
+                </Typography>
+                <ColorPicker
+                  name="color"
+                  defaultValue="#4F46E5"
+                  value={formik.values.color}
+                  onChange={(color) => formik.setFieldValue('color', color)}
+                />
+                {formik.touched.color && formik.errors.color && (
+                  <Typography color="error" variant="caption">
+                    {formik.errors.color}
+                  </Typography>
+                )}
+              </Grid>
+
+              <Grid item xs={12} md={12} lg={6}>
+                <Typography
+                  as="h5"
+                  sx={{
+                    fontWeight: "500",
+                    fontSize: "14px",
+                    mb: "12px",
+                  }}
+                >
+                  bannerText
+                </Typography>
+                <TextField
+                  name="bannerText"
+                  fullWidth
+                  id="bannerText"
+                  label="Enter bannerText"
+
+
+                  {...formik.getFieldProps("bannerText")}
+                  error={
+                    formik.touched.bannerText && formik.errors.bannerText ? true : false
+                  }
+                  helperText={
+                    formik.touched.bannerText && formik.errors.bannerText
+                      ? formik.errors.bannerText
+                      : ""
+                  }
+                />
+              </Grid>
+
+
+
+              <Grid item xs={12} textAlign="left">
+                <LoadingButtonComponent
+                  type="submit"
+                  fullWidth={false}
+                  sx={{
+                    paddingX: "30px",
+                  }}
+                  isLoading={isLoading}
+                  value={
+                    <>
+                      <SendIcon
+                        sx={{
+                          position: "relative",
+                          top: "-2px",
+                        }}
+                        className="mr-5px"
+                      />{" "}
+                      Add Business
+                    </>
+                  }
+                />
+              </Grid>
             </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </Box>
     </>
   );
 };
