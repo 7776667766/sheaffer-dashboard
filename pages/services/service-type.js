@@ -123,6 +123,17 @@ const ServicesType = () => {
               >
                 Name
               </TableCell>
+
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13px",
+                  pt: "16px",
+                  pb: "16px",
+                }}
+              >
+                Slug
+              </TableCell>
               <TableCell
                 sx={{
                   borderBottom: "1px solid #F7FAFF",
@@ -164,6 +175,17 @@ const ServicesType = () => {
                 }}
               >
                 {data.name}
+              </TableCell>
+
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13px",
+                  pt: "16px",
+                  pb: "16px",
+                }}
+              >
+                {data.slug}
               </TableCell>
               <TableCell
                 sx={{

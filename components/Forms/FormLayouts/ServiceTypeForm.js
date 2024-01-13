@@ -7,7 +7,7 @@ import SendIcon from "@mui/icons-material/Send";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import dynamic from "next/dynamic";
-import { requiredValidation } from "@/utils/validation";
+import { requiredValidation, slugValidation } from "@/utils/validation";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addServicesTypeFunApi,
@@ -69,19 +69,21 @@ const ServiceTypeForm = ({ formData, isEditMode }) => {
 
   const initialValues = isEditMode
     ? {
-        name: formData?.name || "",
-        image: formData?.image || "",
-        id: formData?.id || "",
-      }
+      name: formData?.name || "",
+      slug: formData?.slug || "",
+      image: formData?.image || "",
+      id: formData?.id || "",
+    }
     : {
-        name: "",
-        image: "",
-      };
+      name: "",
+      image: "",
+      slug:"",    };
 
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: Yup.object().shape({
       name: requiredValidation("Service Type Name"),
+      slug: slugValidation("Slug"),
     }),
 
     onSubmit: async (values) => {
@@ -162,6 +164,34 @@ const ServiceTypeForm = ({ formData, isEditMode }) => {
                 }}
               />
             </Grid>
+            <Grid item xs={12} md={12} lg={6}>
+              <Typography
+                as="h5"
+                sx={{
+                  fontWeight: "500",
+                  fontSize: "14px",
+                  mb: "12px",
+                }}
+              >
+                Slug
+              </Typography>
+              <TextField
+                name="slug"
+                fullWidth
+                id="slug"
+                label="Enter Slug"
+                {...formik.getFieldProps("slug")}
+                error={
+                  formik.touched.slug && formik.errors.slug ? true : false
+                }
+                helperText={
+                  formik.touched.slug && formik.errors.slug
+                    ? formik.errors.slug
+                    : ""
+                }
+              />
+            </Grid>
+
             <Grid item xs={12} md={12} lg={6}>
               <Box sx={{ display: "flex", alignItems: "end", gap: 1 }}>
                 <Box sx={{ flex: 1 }}>
