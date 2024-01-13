@@ -1,4 +1,4 @@
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import {
   Box,
   Typography,
@@ -20,7 +20,7 @@ const BusinessForm = () => {
   const [avatar1, setavatar1] = useState(null);
   console.log(avatar1);
   const [avatar2, setavatar2] = useState(null);
-  console.log(avatar2, "avatar2")
+  console.log(avatar2, "avatar2");
 
   const handleFileChange1 = (event) => {
     const file = event.target.files[0];
@@ -30,12 +30,12 @@ const BusinessForm = () => {
   const handleFileChange2 = (event) => {
     const file = event.target.files[0];
     setavatar2(file);
-    console.log("file2", file)
+    console.log("file2", file);
   };
 
   const [businessData, setBusinessData] = useState({
     name: "",
-    slug:"dummy-business",
+    slug: "dummy-business",
     email: "",
     phone: "",
     description: "",
@@ -73,7 +73,7 @@ const BusinessForm = () => {
           description: businessData.description,
           address: businessData.address,
           bannerText: businessData.bannerText,
-          bannerImg:avatar2,
+          bannerImg: avatar2,
           color: businessData.color,
           googleId: "1234567890",
           socialLinks: [
@@ -208,7 +208,7 @@ const BusinessForm = () => {
                 type="color"
                 label="Theme Color"
                 fullWidth
-                defaultValue={"#4F46E5" || businessData.color}
+                defaultValue={"#4F46E5"}
                 value={businessData.color}
                 onChange={(e) => handleInputChange("color", e.target.value)}
               />
