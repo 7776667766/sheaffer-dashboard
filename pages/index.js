@@ -26,11 +26,14 @@ import {
   getMyBussinessFunApi,
   regsiterBusinessFunApi,
 } from "store/business/services";
+import { Twitter } from "@mui/icons-material";
+import Facebook from "@mui/icons-material/Facebook";
+import Instagram from "@mui/icons-material/Instagram";
 
 export default function DashboardPage() {
   const { user, role } = useSelector((state) => state.auth);
   const { business, dataFatched } = useSelector((state) => state.business);
-  console.log(business,"business information")
+  console.log(business, "business information");
 
   const dispatch = useDispatch();
   const [slug, setSlug] = useState("");
@@ -278,38 +281,53 @@ export default function DashboardPage() {
                             objectFit: "contain",
                           }}
                         />
+                        <span
+                          style={{
+                            fontSize: "20px",
+                            fontWeight: "600",
+                            paddingLeft: "10px",
+                          }}
+                        >
+                          {" "}
+                          {business?.name}{" "}
+                        </span>
                       </li>
-                      <li
+                      {/* <li
                         style={{
                           fontSize: "20px",
                           fontWeight: "600",
                         }}
                       >
                         {business?.name}
-                      </li>
+                      </li> */}
                       <li>{business.description}</li>
-                      <li>{business.email}</li>
-                      <li>{business.phone}</li>
-                      <li>
-                        {business.socialLinks &&
-                          business.socialLinks.map((socialLink, index) => (
-                            <span key={index}>
-                              <a
-                                href={socialLink.link}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                style={{
-                                  marginRight: "12px",
-                                  textTransform: "capitalize",
-                                  color: "#757FEF",
-                                }}
-                              >
-                                {socialLink.name}
-                              </a>
-                            </span>
-                          ))}
+                      <li
+                        style={{
+                          fontSize: "14px",
+                          fontWeight: "500",
+                          color: "#303030",
+                        }}
+                      >
+                        {business.email}
                       </li>
-
+                      <li
+                        style={{
+                          fontSize: "14px",
+                          fontWeight: "500",
+                          color: "#303030",
+                        }}
+                      >
+                        {business.phone}
+                      </li>
+                      <li
+                        style={{
+                          fontSize: "14px",
+                          fontWeight: "500",
+                          color: "#303030",
+                        }}
+                      >
+                        {business.address}
+                      </li>
                       {business?.websiteService === true && (
                         <li>
                           <Button
@@ -344,8 +362,7 @@ export default function DashboardPage() {
 
                       <li>Current Theme: {business.theme || "N/A"}</li>
 
-                      <li>{business.address}</li>
-                       <li>{business.bannerText}</li>
+                      <li>{business.bannerText}</li>
                       <li>
                         <Image
                           src={business.bannerImg}
@@ -357,12 +374,13 @@ export default function DashboardPage() {
                           }}
                         />
                       </li>
-                      <li style={{
-                        backgroundColor:business.color,
-                        height: "30px",
-                        width: "50px",
-                        
-                       }}></li>
+                      <li
+                        style={{
+                          backgroundColor: business.color,
+                          height: "30px",
+                          width: "50px",
+                        }}
+                      ></li>
                     </ul>
                   </Typography>
                 </Box>
@@ -400,6 +418,48 @@ export default function DashboardPage() {
                           />
                         ))}
                       </div>
+                      <Box sx={{ marginTop: "15px" , display: "flex", justifyContent:"end"}}>
+                        {business.socialLinks?.map((socialLink, index) => (
+                          <div key={index}>
+                            <a
+                              href={socialLink.link}
+                              target="_blank"
+                              className="text-3xl"
+                              style={{
+                                color: "#000",
+                                marginRight: "12px",
+                              }}
+                            >
+                              {socialLink.name === "facebook" ? (
+                                <Facebook style={{fontSize:"30px",}} />
+                              ) : socialLink.name === "instagram" ? (
+                                <Instagram style={{fontSize:"29px",}} />
+                              ) : (
+                                <Twitter />
+                              )}
+                            </a>
+                          </div>
+                        ))}
+                        {/* 
+                        {business.socialLinks &&
+                          business.socialLinks.map((socialLink, index) => (
+                            <span key={index}>
+                              <a
+                                href={socialLink.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{
+                                  marginRight: "12px",
+                                  textTransform: "capitalize",
+                                  color: "#757FEF",
+                                }}
+                              >
+                                {socialLink.name}
+                                
+                              </a>
+                            </span>
+                          ))} */}
+                      </Box>
                     </div>
                   </Typography>
                 </Box>
