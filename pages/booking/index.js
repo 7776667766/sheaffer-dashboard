@@ -10,14 +10,16 @@ import { useEffect } from "react";
 import { getMyBusinessBookingFunApi } from "store/booking/service";
 import moment from "moment";
 import { CustomPaginationTable } from "@/components/Table/CustomPaginationTable";
+import { getMyBussinessFunApi } from "store/business/services";
 const BookingPage = () => {
   const dispatch = useDispatch();
   const { booking } = useSelector((state) => state.booking);
   console.log("booking", booking);
   const { role } = useSelector((state) => state.auth);
   console.log("role", role);
-  const { business } = useSelector((state) => state.business);
-  console.log("business", business);
+  const { business, dataFatched } = useSelector((state) => state.business);
+  console.log("business", business?.id);
+
   useEffect(() => {
     if (booking.dataFatched !== true) {
       dispatch(
@@ -29,6 +31,18 @@ const BookingPage = () => {
       );
     }
   }, [dispatch, booking.data, booking.dataFatched, business?.id]);
+
+  useEffect(() => {
+    if (!dataFatched) {
+      dispatch(
+        getMyBussinessFunApi({
+          onSuccess: (businessId) => {
+            console.log(businessId, "businessIdd");
+          },
+        })
+      );
+    }
+  }, [dispatch, dataFatched]);
   return (
     <>
       <Card
@@ -242,14 +256,13 @@ const BookingPage = () => {
               >
                 <span
                   className={`
-                    ${
-                      data.status?.toLowerCase() === "completed"
-                        ? "successBadge"
-                        : data.status?.toLowerCase() === "pending"
+                    ${data.status?.toLowerCase() === "completed"
+                      ? "successBadge"
+                      : data.status?.toLowerCase() === "pending"
                         ? "primaryBadge"
                         : data.status?.toLowerCase() === "cancelled"
-                        ? "dangerBadge"
-                        : ""
+                          ? "dangerBadge"
+                          : ""
                     }
                       `}
                 >

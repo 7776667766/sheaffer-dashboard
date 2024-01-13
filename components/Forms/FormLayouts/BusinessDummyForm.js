@@ -38,7 +38,7 @@ const BusinessForm = () => {
               <>
                 <Button
                   variant="contained"
-                  disabled={business ? true : false}
+                  // disabled={business ? true : false}
                   onClick={handleClickOpen}
                 >
                   Add Dummy Business
