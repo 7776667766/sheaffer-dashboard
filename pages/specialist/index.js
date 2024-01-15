@@ -51,10 +51,6 @@ const Specialist = () => {
     dispatch(deleteSpecialistFunApi(id));
   };
 
-
-
-
-
   return (
     <>
       <Card
