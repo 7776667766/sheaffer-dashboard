@@ -12,6 +12,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { getspecialistApi } from "store/specialist/services";
 import { CustomPaginationTable } from "@/components/Table/CustomPaginationTable";
 import Link from "next/link";
+import TransitionsDialog from "@/components/UIElements/Modal/TransitionsDialog";
+import Image from "next/image";
+
 
 const Specialist = () => {
   const dispatch = useDispatch();
@@ -171,18 +174,44 @@ const Specialist = () => {
               >
                 <Box
                   sx={{
-                    display: "inline-block",
+                    display: "flex",
+                    justifyContent:"end"
                   }}
                 >
                   <Tooltip title="Remove" placement="top">
-                    <IconButton
-                      aria-label="remove"
-                      size="small"
-                      color="danger"
-                      className="danger"
+                  <TransitionsDialog
+                      modelButton={
+                        <IconButton
+                          aria-label="remove"
+                          size="small"
+                          color="danger"
+                          className="danger"
+                        >
+                          <DeleteIcon fontSize="inherit" />
+                        </IconButton>
+                      }
+                      submitButtonText="Delete"
+                      handleSubmit={() => {}}
+                      // handleSubmit={() => handleDelete(data.id)}
                     >
-                      <DeleteIcon fontSize="inherit" />
-                    </IconButton>
+                      <div style={{ textAlign: "center" }}>
+                        <Image
+                          src="/images/icon/alert.png"
+                          width={150}
+                          height={150}
+                          alt="ok"
+                        />
+
+                        <Typography sx={{ fontSize: 18 }}>
+                          <b>Are You Sure You Want To Delete ?</b>
+                          <br />
+                          <span style={{ fontSize: 14 }}>
+                            You are deleting this data & this action is
+                            irreversible
+                          </span>
+                        </Typography>
+                      </div>
+                    </TransitionsDialog>
                   </Tooltip>
 
                   <Tooltip title="Rename" placement="top">
