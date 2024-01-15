@@ -1,17 +1,32 @@
 import React from "react";
-import { Box, Button, TableCell, Typography } from "@mui/material";
+import { Box, Button, IconButton, TableCell, Tooltip, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { CustomPaginationTable } from "@/components/Table/CustomPaginationTable";
 import Link from "next/link";
 import AddIcon from "@mui/icons-material/Add";
-import { getAllPlanFunApi } from "store/plan/plan";
+import { deletePackageFunApi, getAllPlanFunApi } from "store/plan/plan";
+import DeleteIcon from "@mui/icons-material/Delete";
+import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
+import TransitionsDialog from "@/components/UIElements/Modal/TransitionsDialog";
+import Image from "next/image";
+import { useRouter } from "next/router";
 
 const PackagePage = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const { plan } = useSelector((state) => state.plan);
+
+
+  const nextPage = (id) => {
+    router.push(`/packages/edit-service/${id}`);
+  };
+  const handleDelete = (id) => {
+    console.log(id, "note");
+    dispatch(deletePackageFunApi(id));
+  };
 
   useEffect(() => {
     if (!plan.dataFatched) {
@@ -134,9 +149,22 @@ const PackagePage = () => {
               >
                 Status
               </TableCell>
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13.5px",
+                  textAlign: "end",
+                }}
+              >
+                Action
+              </TableCell>
+
+
+
             </>
           }
-          tableBodyData={(item, index) => (
+          tableBodyData={(data, index) => (
+
             <>
               <TableCell
                 sx={{
@@ -148,6 +176,8 @@ const PackagePage = () => {
                   pb: "16px",
                 }}
               >
+                {/* {console.log("iddddd",item.id)}
+                 */}
                 {index + 0}
               </TableCell>
               <TableCell
@@ -158,7 +188,7 @@ const PackagePage = () => {
                   pb: "16px",
                 }}
               >
-                {item.name}
+                {data.name}
               </TableCell>
               <TableCell
                 sx={{
@@ -168,7 +198,7 @@ const PackagePage = () => {
                   pb: "16px",
                 }}
               >
-                {item.duration}
+                {data.duration}
               </TableCell>
 
               <TableCell
@@ -179,7 +209,7 @@ const PackagePage = () => {
                   pb: "16px",
                 }}
               >
-                {item.price}
+                {data.price}
               </TableCell>
               <TableCell
                 sx={{
@@ -194,7 +224,7 @@ const PackagePage = () => {
                     padding: 0,
                   }}
                 >
-                  {item.features.map((feature, index) => (
+                  {data.features.map((feature, index) => (
                     <li key={index}>{feature.trim()}</li>
                   ))}
                 </ol>
@@ -207,7 +237,7 @@ const PackagePage = () => {
                   pb: "16px",
                 }}
               >
-                {item.isFeatured ? "True" : "False"}
+                {data.isFeatured ? "True" : "False"}
               </TableCell>
               <TableCell
                 align="right"
@@ -219,12 +249,58 @@ const PackagePage = () => {
               >
                 <span
                   className={
-                    item.status === "active" ? "successBadge" : "dangerBadge"
+                    data.status === "active" ? "successBadge" : "dangerBadge"
                   }
                 >
-                  {item.status ? "Active" : "In Active"}
+                  {data.status ? "Active" : "In Active"}
                 </span>
               </TableCell>
+              <Tooltip title="Remove" placement="top">
+                <TransitionsDialog
+                  modelButton={
+                    <IconButton
+                      aria-label="remove"
+                      size="small"
+                      color="danger"
+                      className="danger"
+                    >
+                      <DeleteIcon fontSize="inherit" />
+                    </IconButton>
+                  }
+                  submitButtonText="Delete"
+                  handleSubmit={() => handleDelete(data.id)}
+                >
+                  <div style={{ textAlign: "center" }}>
+                    <Image
+                      src="/images/icon/alert.png"
+                      width={150}
+                      height={150}
+                      alt="ok"
+                    />
+
+                    <Typography sx={{ fontSize: 18 }}>
+                      <b>Are You Sure You Want To Delete ?</b>
+                      <br />
+                      <span style={{ fontSize: 14 }}>
+                        You are deleting this data & this action is
+                        irreversible
+                      </span>
+                    </Typography>
+                  </div>
+                </TransitionsDialog>
+              </Tooltip>
+
+              <Tooltip title="Rename" placement="top">
+                <IconButton
+                  aria-label="edit"
+                  size="small"
+                  color="primary"
+                  className="primary"
+                  onClick={() => nextPage(data.id)}
+                >
+                  <DriveFileRenameOutlineIcon fontSize="inherit" />
+                </IconButton>
+              </Tooltip>
             </>
           )}
         />
