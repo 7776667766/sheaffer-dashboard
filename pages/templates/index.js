@@ -177,16 +177,18 @@ const TemplatesPage = () => {
               >
                 <Link
                   variant="outlined"
-                  href={`${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}booking/${data.slug}`}
+                  href={`${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}templates/site/${data.slug}`}
                   target="_blank"
                   sx={{
                     pt: "2px",
                     pb: "1px",
                   }}
                 >
-                  <img
+                  <Image
                     src={data.websiteImage}
-                    alt="website Image"
+                    alt={`Website ${data.slug}`}
+                    width={50}
+                    height={50}
                     style={{
                       width: "50px",
                       height: "50px",
@@ -203,15 +205,18 @@ const TemplatesPage = () => {
               >
                 <Link
                   variant="outlined"
-                  href={`${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}booking/${data.slug}`}
+                  href={`${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}templates/booking/${data.slug}`}
                   target="_blank"
                   sx={{
                     pt: "2px",
                     pb: "1px",
                   }}
                 >
-                  <img
+                  <Image
+                    alt={`booking ${data.slug}`}
                     src={data.bookingImage}
+                    width={50}
+                    height={50}
                     style={{
                       width: "50px",
                       height: "50px",
