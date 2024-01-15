@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
@@ -19,38 +19,85 @@ import {
   requiredValidation,
 } from "@/utils/validation";
 import { useRouter } from "next/router";
-import { addspecialistApi } from "store/specialist/services";
+import { addspecialistApi, editSpecialistFunApi } from "store/specialist/services";
+import { Router } from "react-router-dom";
+import { getMyBussinessFunApi } from "store/business/services";
 const RichTextEditor = dynamic(() => import("@mantine/rte"), {
   ssr: false,
 });
 
-const AddSpecialistForm = () => {
-  const dispatch = useDispatch();
-  const { business } = useSelector((state) => state.business);
+const AddSpecialistForm = ({ formData, isEditMode }) => {
 
   const router = useRouter();
+  console.log("formData", formData)
 
-  const formik = useFormik({
-    initialValues: {
-      name: "",
-      email: "",
-      businessId: business?.id,
-    },
-    validationSchema: Yup.object({
-      name: requiredValidation(),
-      email: emailValidation(),
-    }),
-    onSubmit: (values) => {
-      console.log("Handle Submit", values);
+  const dispatch = useDispatch();
+  const { business } = useSelector((state) => state.business);
+  console.log(business?.id)
+
+
+
+useEffect(() => {
+
       dispatch(
-        addspecialistApi({
-          data: values,
+        getMyBussinessFunApi({
+          data: business?.id,
           onSuccess: () => {
-            console.log("Add Specialist Success");
-            router.push("/specialist/");
+      
           },
         })
       );
+    
+  },[])
+
+
+  const initialValues = isEditMode
+    ? {
+      ...formData,
+      businessId: business?.id,
+    }
+    : {
+      name: "",
+      email: "",
+      businessId: business?.id,
+
+    };
+
+  const validation = {
+    name: requiredValidation(),
+    email: emailValidation(),
+
+  }
+
+  const formik = useFormik({
+    initialValues: initialValues,
+    validationSchema: Yup.object(
+      validation
+
+    ),
+    onSubmit: (values) => {
+      if (isEditMode) {
+        dispatch(
+          editSpecialistFunApi({
+            data: values,
+            onSuccess: () => {
+              console.log("Edit Specialist Success");
+              router.push("/specialist/");
+            },
+          })
+        );
+      } else {
+        console.log("Handle Submit", values);
+        dispatch(
+          addspecialistApi({
+            data: values,
+            onSuccess: () => {
+              console.log("Add Specialist Success");
+              router.push("/specialist/");
+            },
+          })
+        );
+      }
     },
   });
 

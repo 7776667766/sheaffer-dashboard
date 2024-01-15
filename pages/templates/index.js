@@ -11,11 +11,14 @@ import Tooltip from "@mui/material/Tooltip";
 import Link from "next/link";
 import { CustomPaginationTable } from "@/components/Table/CustomPaginationTable";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllTemplateFunApi } from "store/template/services";
+import { deletetemplateFunApi, getAllTemplateFunApi } from "store/template/services";
 import TransitionsDialog from "@/components/UIElements/Modal/TransitionsDialog";
+import { useRouter } from "next/router";
 
 const TemplatesPage = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
+
   const { template } = useSelector((state) => state.template);
   console.log(template, "template");
 
@@ -24,6 +27,15 @@ const TemplatesPage = () => {
       dispatch(getAllTemplateFunApi());
     }
   }, [dispatch, template.data, template.dataFatched]);
+
+  const nextPage = (id) => {
+    console.log("id", id)
+    router.push(`/templates/edit-form/${id}`);
+  };
+
+  const handleDelete = (id) => {
+    dispatch(deletetemplateFunApi(id));
+  };
 
   return (
     <>
@@ -262,8 +274,7 @@ const TemplatesPage = () => {
                         </IconButton>
                       }
                       submitButtonText="Delete"
-                      handleSubmit={() => {}}
-                      // handleSubmit={() => handleDelete(data.id)}
+                      handleSubmit={() => handleDelete(data.id)}
                     >
                       <div style={{ textAlign: "center" }}>
                         <Image

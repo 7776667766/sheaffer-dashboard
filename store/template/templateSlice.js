@@ -1,4 +1,4 @@
-import { addtemplateApi,getAllTemplateFunApi } from "./services";
+import { addtemplateApi, getAllTemplateFunApi, deletetemplateFunApi, edittemplateFunApi } from "./services";
 import { createSlice } from "@reduxjs/toolkit";
 
 const templateSlice = createSlice({
@@ -27,6 +27,42 @@ const templateSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload;
       });
+    //edit template
+    builder
+      .addCase(edittemplateFunApi.pending, (state, action) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(edittemplateFunApi.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.template = state.template?.map((ele) =>
+          ele.id === action.payload.id ? action.payload : ele
+        );
+      })
+      .addCase(edittemplateFunApi.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+        state.dataFatched = true;
+      });
+    //delete template
+    builder
+      .addCase(deletetemplateFunApi.pending, (state, action) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(deletetemplateFunApi.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.template= state.template.filter(
+          (ele) => ele.id !== action.payload
+        );
+        state.template.dataFatched = true;
+      })
+      .addCase(deletetemplateFunApi.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+        state.dataFatched = true;
+      });
+    //get all templates
     builder
       .addCase(getAllTemplateFunApi.pending, (state, action) => {
         state.isLoading = true;

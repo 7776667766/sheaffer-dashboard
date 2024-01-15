@@ -9,17 +9,23 @@ import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutli
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import { useDispatch, useSelector } from "react-redux";
-import { getspecialistApi } from "store/specialist/services";
+import {
+  deleteSpecialistFunApi,
+  getspecialistApi,
+} from "store/specialist/services";
 import { CustomPaginationTable } from "@/components/Table/CustomPaginationTable";
 import Link from "next/link";
 import TransitionsDialog from "@/components/UIElements/Modal/TransitionsDialog";
 import Image from "next/image";
-
+import { useRouter } from "next/router";
+import { deletetemplateFunApi } from "store/template/services";
 
 const Specialist = () => {
   const dispatch = useDispatch();
   const { specialist, isLoading } = useSelector((state) => state.specialist);
   const { business } = useSelector((state) => state.business);
+
+  const router = useRouter();
 
   useEffect(() => {
     if (specialist.specialistFetch !== true) {
@@ -35,6 +41,15 @@ const Specialist = () => {
     specialist.specialistFetch,
     business?.id,
   ]);
+
+  const nextPage = (id) => {
+    console.log("id", id);
+    router.push(`/specialist/edit-form/${id}`);
+  };
+
+  const handleDelete = (id) => {
+    dispatch(deleteSpecialistFunApi(id));
+  };
 
   return (
     <>
@@ -175,11 +190,11 @@ const Specialist = () => {
                 <Box
                   sx={{
                     display: "flex",
-                    justifyContent:"end"
+                    justifyContent: "end",
                   }}
                 >
                   <Tooltip title="Remove" placement="top">
-                  <TransitionsDialog
+                    <TransitionsDialog
                       modelButton={
                         <IconButton
                           aria-label="remove"
@@ -191,8 +206,7 @@ const Specialist = () => {
                         </IconButton>
                       }
                       submitButtonText="Delete"
-                      handleSubmit={() => {}}
-                      // handleSubmit={() => handleDelete(data.id)} 
+                      handleSubmit={() => handleDelete(data.id)}
                     >
                       <div style={{ textAlign: "center" }}>
                         <Image
@@ -220,6 +234,7 @@ const Specialist = () => {
                       size="small"
                       color="primary"
                       className="primary"
+                      onClick={() => nextPage(data.id)}
                     >
                       <DriveFileRenameOutlineIcon fontSize="inherit" />
                     </IconButton>

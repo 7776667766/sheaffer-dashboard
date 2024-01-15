@@ -3,7 +3,7 @@ import { Box, Grid, TextField, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
 import Button from "@mui/material/Button";
 import { useDispatch, useSelector } from "react-redux";
-import { addPlanFunApi } from "store/plan/plan";
+import { addPlanFunApi, editPackagesFunApi } from "store/plan/plan";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
@@ -28,6 +28,7 @@ const plansList = [
 ];
 
 const AddPackagePage = ({ formData, isEditMode }) => {
+    console.log("formData,isEditmopda",formData,isEditMode)
   const router = useRouter();
   const dispatch = useDispatch();
   const { plan } = useSelector((state) => state.plan);
@@ -73,6 +74,7 @@ const AddPackagePage = ({ formData, isEditMode }) => {
       price: "",
       features: "",
       isFeatured: false,
+      
     };
 
   const validation = {

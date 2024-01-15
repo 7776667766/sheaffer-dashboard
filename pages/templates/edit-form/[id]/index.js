@@ -4,12 +4,11 @@ import Link from "next/link";
 import styles from "@/styles/PageTitle.module.css";
 import { useSelector } from "react-redux";
 import ServiceForm from "@/components/Forms/FormLayouts/ServiceForm";
-import AddPackagePage from "@/components/Forms/FormLayouts/editPackageForm";
+import TemplateForm from "@/components/Forms/FormLayouts/TemplateForm";
 
 export default function EditServicePage({ id }) {
   const router = useRouter();
-  const { plan } = useSelector((state) => state.plan);
-  console.log("plan",plan)
+  const { template } = useSelector((state) => state.template);
 
   const [serviceData, setServiceData] = useState();
   const [isLoading, setIsLoading] = useState(true);
@@ -18,21 +17,22 @@ export default function EditServicePage({ id }) {
   useEffect(() => {
     if (
       id
+    
     ) {
-      const myService = plan.data.find(
-        (data) => data._id === id 
+      const mytemplate = template?.find(
+        (id) => id === id 
       );
-      console.log(myService, "myservice");
-      if (myService) {
-        setServiceData(myService);
+      console.log(mytemplate, "mytemplate");
+      if (mytemplate) {
+        setServiceData(mytemplate);
         setIsLoading(false);
-      } else router.push("/packages/add-package");
+      } else router.push("/templates/add-template");
     }
   }, [
     id,
-    // router.query.id,
+
     router,
-    plan.data,
+    template.data,
   ]);
   if (router.isFallback) {
     return <div>Loading Fallback ...</div>;
@@ -40,18 +40,18 @@ export default function EditServicePage({ id }) {
   return (
     <>
       <div className={styles.pageTitle}>
-        <h1>Edit Plan</h1>
+        <h1>Edit Template</h1>
         <ul>
           <li>
             <Link href="/">Dashboard</Link>
           </li>
-          <li>Service</li>
+          <li>Template</li>
         </ul>
       </div>
       {isLoading ? (
         <p>Loading...</p>
       ) : (
-        <AddPackagePage formData={serviceData} isEditMode={true} />
+        <TemplateForm formData={serviceData} isEditMode={true} />
       )}
     </>
   );

@@ -3,36 +3,37 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import styles from "@/styles/PageTitle.module.css";
 import { useSelector } from "react-redux";
-import ServiceForm from "@/components/Forms/FormLayouts/ServiceForm";
-import AddPackagePage from "@/components/Forms/FormLayouts/editPackageForm";
+import TemplateForm from "@/components/Forms/FormLayouts/TemplateForm";
+import AddSpecialistForm from "@/components/Forms/FormLayouts/AddSpecialistForm";
 
 export default function EditServicePage({ id }) {
   const router = useRouter();
-  const { plan } = useSelector((state) => state.plan);
-  console.log("plan",plan)
+  const { specialist } = useSelector((state) => state.specialist);
+  console.log("specialist",specialist)
 
-  const [serviceData, setServiceData] = useState();
+  const [tempData, settempData] = useState();
   const [isLoading, setIsLoading] = useState(true);
   console.log("my Getting id", id);
 
   useEffect(() => {
     if (
       id
+    
     ) {
-      const myService = plan.data.find(
-        (data) => data._id === id 
+      const myspecialist = specialist.find(
+        (id) =>id === id 
       );
-      console.log(myService, "myservice");
-      if (myService) {
-        setServiceData(myService);
+      console.log(myspecialist, "mytemplate");
+      if (myspecialist) {
+        settempData(myspecialist);
         setIsLoading(false);
-      } else router.push("/packages/add-package");
+      } else router.push("/specialist/add-specialist");
     }
   }, [
     id,
-    // router.query.id,
+
     router,
-    plan.data,
+    specialist.data,
   ]);
   if (router.isFallback) {
     return <div>Loading Fallback ...</div>;
@@ -40,18 +41,18 @@ export default function EditServicePage({ id }) {
   return (
     <>
       <div className={styles.pageTitle}>
-        <h1>Edit Plan</h1>
+        <h1>Edit specialist</h1>
         <ul>
           <li>
             <Link href="/">Dashboard</Link>
           </li>
-          <li>Service</li>
+          <li>specialist</li>
         </ul>
       </div>
       {isLoading ? (
         <p>Loading...</p>
       ) : (
-        <AddPackagePage formData={serviceData} isEditMode={true} />
+        <AddSpecialistForm formData={tempData} isEditMode={true} />
       )}
     </>
   );
