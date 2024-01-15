@@ -192,7 +192,7 @@ const Specialist = () => {
                       }
                       submitButtonText="Delete"
                       handleSubmit={() => {}}
-                      // handleSubmit={() => handleDelete(data.id)}
+                      // handleSubmit={() => handleDelete(data.id)} 
                     >
                       <div style={{ textAlign: "center" }}>
                         <Image
