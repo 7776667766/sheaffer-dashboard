@@ -96,7 +96,7 @@ const ServicesPage = () => {
             My Services
           </Typography>
 
-          {(role === "owner" || role === "manager") && (
+          {(role === "owner" || role === "manager" ) && (
             <Link href="/services/add-service">
               <Button
                 variant="contained"

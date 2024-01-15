@@ -1,25 +1,27 @@
-import React, { useEffect} from "react";
-import { Box,  Typography } from "@mui/material";
+import React, { useEffect } from "react";
+import { Box, IconButton, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
 import TableCell from "@mui/material/TableCell";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
+import DeleteIcon from "@mui/icons-material/Delete";
+import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
+import Image from "next/image";
+import Tooltip from "@mui/material/Tooltip";
 import Link from "next/link";
 import { CustomPaginationTable } from "@/components/Table/CustomPaginationTable";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllTemplateFunApi } from "store/template/services";
+import TransitionsDialog from "@/components/UIElements/Modal/TransitionsDialog";
 
 const TemplatesPage = () => {
   const dispatch = useDispatch();
   const { template } = useSelector((state) => state.template);
-  console.log(template, "template")
+  console.log(template, "template");
 
   useEffect(() => {
     if (template.dataFatched !== true) {
-      dispatch(
-        getAllTemplateFunApi(
-        )
-      );
+      dispatch(getAllTemplateFunApi());
     }
   }, [dispatch, template.data, template.dataFatched]);
 
@@ -120,6 +122,14 @@ const TemplatesPage = () => {
               >
                 Booking
               </TableCell>
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13.5px",
+                }}
+              >
+                Action
+              </TableCell>
             </>
           }
           tableBodyData={(data, index) => (
@@ -165,7 +175,7 @@ const TemplatesPage = () => {
                   pb: "16px",
                 }}
               >
-               <Link
+                <Link
                   variant="outlined"
                   href={`${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}booking/${data.slug}`}
                   target="_blank"
@@ -179,8 +189,7 @@ const TemplatesPage = () => {
                     alt="website Image"
                     style={{
                       width: "50px",
-                      height: "50px", 
-                    
+                      height: "50px",
                     }}
                   />
                 </Link>
@@ -205,12 +214,72 @@ const TemplatesPage = () => {
                     src={data.bookingImage}
                     style={{
                       width: "50px",
-                      height: "50px", 
-                    
+                      height: "50px",
                     }}
                   />
                 </Link>
+              </TableCell>
 
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  pt: "16px",
+                  pb: "16px",
+                }}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "left",
+                  }}
+                >
+                  <Tooltip title="Edit" placement="top">
+                    <IconButton
+                      aria-label="edit"
+                      size="small"
+                      color="primary"
+                      className="primary"
+                      onClick={() => nextPage(data.id)}
+                    >
+                      <DriveFileRenameOutlineIcon fontSize="inherit" />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Remove" placement="top">
+                    <TransitionsDialog
+                      modelButton={
+                        <IconButton
+                          aria-label="remove"
+                          size="small"
+                          color="danger"
+                          className="danger"
+                        >
+                          <DeleteIcon fontSize="inherit" />
+                        </IconButton>
+                      }
+                      submitButtonText="Delete"
+                      handleSubmit={() => {}}
+                      // handleSubmit={() => handleDelete(data.id)}
+                    >
+                      <div style={{ textAlign: "center" }}>
+                        <Image
+                          src="/images/icon/alert.png"
+                          width={150}
+                          height={150}
+                          alt="ok"
+                        />
+
+                        <Typography sx={{ fontSize: 18 }}>
+                          <b>Are You Sure You Want To Delete ?</b>
+                          <br />
+                          <span style={{ fontSize: 14 }}>
+                            You are deleting this data & this action is
+                            irreversible
+                          </span>
+                        </Typography>
+                      </div>
+                    </TransitionsDialog>
+                  </Tooltip>
+                </Box>
               </TableCell>
             </>
           )}
