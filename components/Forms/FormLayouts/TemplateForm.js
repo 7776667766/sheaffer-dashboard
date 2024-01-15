@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
@@ -9,6 +9,7 @@ import SendIcon from "@mui/icons-material/Send";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { requiredValidation, slugValidation } from "@/utils/validation";
+import Image from "next/image";
 
 import { addtemplateApi, edittemplateFunApi } from "store/template/services";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,25 +20,90 @@ const TemplateForm = ({ formData, isEditMode }) => {
   const [avatar1, setavatar1] = useState(null);
   const [avatar2, setavatar2] = useState(null);
 
-  console.log(avatar1, "avatar1")
-  console.log(avatar2, "avatar2")
-
   const dispatch = useDispatch();
   const router = useRouter();
-
+  const [profileImageUrl1, setProfileImageUrl1] = useState(null);
+  const [profileImageUrl2, setProfileImageUrl2] = useState(null);
 
   const handleWebsiteImageChange = (event) => {
     const file = event.target.files[0];
-    setavatar1(file);
-    console.log("file1", file)
+
+    if (!file) {
+      setavatar1(null);
+      if (isEditMode) {
+        setProfileImageUrl1(formData?.websiteImage || null);
+      } else {
+        setProfileImageUrl1(null);
+      }
+      return false;
+    } else {
+      const type = file.type.split("/")[0];
+      if (type !== "image") {
+        toast.error("Please select an image");
+        setavatar1(null);
+        event.target.value = null;
+        if (isEditMode) {
+          setProfileImageUrl1(formData?.websiteImage || null);
+        } else {
+          setProfileImageUrl1(null);
+        }
+        return false;
+      } else {
+        setavatar1(file);
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (e) => {
+          setProfileImageUrl1(e.target.result);
+        };
+      }
+    }
   };
 
   const handleBookingImageChange = (event) => {
     const file = event.target.files[0];
-    setavatar2(file);
-    console.log("file2", file)
+
+    if (!file) {
+      setavatar2(null);
+      if (isEditMode) {
+        setProfileImageUrl2(formData?.bookingImage || null);
+      } else {
+        setProfileImageUrl2(null);
+      }
+      return false;
+    } else {
+      const type = file.type.split("/")[0];
+      if (type !== "image") {
+        toast.error("Please select an image");
+        setavatar2(null);
+        event.target.value = null;
+        if (isEditMode) {
+          setProfileImageUrl2(formData?.bookingImage || null);
+        } else {
+          setProfileImageUrl2(null);
+        }
+        return false;
+      } else {
+        setavatar1(file);
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (e) => {
+          setProfileImageUrl2(e.target.result);
+        };
+      }
+    }
   };
 
+  useEffect(() => {
+    if (isEditMode) {
+      setProfileImageUrl2(formData?.bookingImage);
+    }
+  }, [formData?.bookingImage, isEditMode]);
+
+  useEffect(() => {
+    if (isEditMode) {
+      setProfileImageUrl1(formData?.websiteImage);
+    }
+  }, [formData?.websiteImage, isEditMode]);
 
   const initialValues = isEditMode
     ? {
@@ -97,43 +163,6 @@ const TemplateForm = ({ formData, isEditMode }) => {
       }
     },
   });
-
-  // const formik = useFormik({
-  //   initialValues: {
-  //     name: "",
-  //     slug: "",
-  //     websiteImage: "",
-  //     bookingImage: ""
-  //   },
-  //   validationSchema: Yup.object({
-  //     name: requiredValidation(),
-  //     slug: slugValidation(),
-  //   }),
-  //   onSubmit: async (values) => {
-  //     try {
-  //       const formData = {
-  //         ...values,
-  //         websiteImage: avatar1,
-  //         bookingImage: avatar2
-  //       };
-
-  //       console.log(formData);
-
-  //       dispatch(
-  //         addtemplateApi({
-  //           data: formData,
-  //           onSuccess: () => {
-  //             router.push("/templates")
-
-  //           },
-  //         })
-  //       );
-  //     } catch (error) {
-  //       console.error("Error adding template:", error);
-  //     }
-  //   },
-
-  // });
 
   return (
     <>
@@ -211,6 +240,7 @@ const TemplateForm = ({ formData, isEditMode }) => {
                   display: "block",
                 }}
               >
+
                 Upload Website Image
               </Typography>
 
@@ -223,6 +253,17 @@ const TemplateForm = ({ formData, isEditMode }) => {
                 id="websiteImage"
 
               />
+              {profileImageUrl1 && (
+                  <Image
+                    src={profileImageUrl1}
+                    alt="profile"
+                    style={{
+                      border: "1px solid #e0e0e0",
+                    }}
+                    width={50}
+                    height={50}
+                  />
+                )}
             </Grid>
             <Grid item xs={12} md={12} lg={6}>
               <Typography
@@ -234,6 +275,17 @@ const TemplateForm = ({ formData, isEditMode }) => {
                   display: "block",
                 }}
               >
+                {profileImageUrl2 && (
+                  <Image
+                    src={profileImageUrl2}
+                    alt="profile"
+                    style={{
+                      border: "1px solid #e0e0e0",
+                    }}
+                    width={50}
+                    height={50}
+                  />
+                )}
                 Upload Booking Image
               </Typography>
 

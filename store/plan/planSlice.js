@@ -55,11 +55,15 @@ const planSlice = createSlice({
         state.plan.error = null;
       })
       .addCase(editPackagesFunApi.fulfilled, (state, action) => {
+        console.log("Edit Packages API Fulfilled", action.payload);
         state.plan.isLoading = false;
         state.plan.data = state.plan.data?.map((ele) =>
-          ele.id === action.payload.id ? action.payload : ele
+          ele._id === action.payload?.id ? action.payload : ele
         );
+        state.plan.dataFatched = true;
       })
+      
+         
       .addCase(editPackagesFunApi.rejected, (state, action) => {
         state.plan.isLoading = false;
         state.plan.error = action.payload;
@@ -74,7 +78,7 @@ const planSlice = createSlice({
       .addCase(deletePackageFunApi.fulfilled, (state, action) => {
         state.plan.isLoading = false;
         state.plan.data = state.plan.data?.filter(
-          (ele) => ele.id !== action.payload
+          (ele) => ele._id !== action.payload
         );
         state.plan.dataFatched = true;
       })

@@ -134,7 +134,7 @@ const serviceSlice = createSlice({
         state.serviceType.data = state.serviceType.data?.map((ele) =>
           ele.id === action.payload.id ? action.payload : ele
         );
-      })
+      })  
       .addCase(editServicesTypeFunApi.rejected, (state, action) => {
         state.serviceType.isLoading = false;
         state.serviceType.error = action.payload;

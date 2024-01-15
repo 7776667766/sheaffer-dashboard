@@ -9,31 +9,30 @@ import TemplateForm from "@/components/Forms/FormLayouts/TemplateForm";
 export default function EditServicePage({ id }) {
   const router = useRouter();
   const { template } = useSelector((state) => state.template);
+  console.log("template",template)
 
   const [serviceData, setServiceData] = useState();
   const [isLoading, setIsLoading] = useState(true);
   console.log("my Getting id", id);
 
   useEffect(() => {
-    if (
-      id
-    
-    ) {
+    if (id) {
       const mytemplate = template?.find(
-        (id) => id === id 
+        (item) => item.id === id
       );
+  
       console.log(mytemplate, "mytemplate");
+      
       if (mytemplate) {
         setServiceData(mytemplate);
         setIsLoading(false);
-      } else router.push("/templates/add-template");
+      } else {
+        router.push("/templates/add-template");
+      }
     }
-  }, [
-    id,
-
-    router,
-    template.data,
-  ]);
+  }, [id, router, template]);
+  
+  
   if (router.isFallback) {
     return <div>Loading Fallback ...</div>;
   }
