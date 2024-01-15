@@ -1,4 +1,4 @@
-import { addspecialistApi, getspecialistApi } from "./services";
+import { addspecialistApi, getspecialistApi,deleteSpecialistFunApi,editSpecialistFunApi } from "./services";
 import { createSlice } from "@reduxjs/toolkit";
 
 const specialistSlice = createSlice({
@@ -42,6 +42,40 @@ const specialistSlice = createSlice({
         state.error = action.payload;
         state.specialistFetch = true;
       });
+      builder
+      .addCase(editSpecialistFunApi.pending, (state, action) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(editSpecialistFunApi.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.specialist = state.specialist?.map((ele) =>
+          ele.id === action.payload.id ? action.payload : ele
+        );
+      })
+      .addCase(editSpecialistFunApi.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+        state.dataFatched = true;
+      });
+    builder
+      .addCase(deleteSpecialistFunApi.pending, (state, action) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(deleteSpecialistFunApi.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.specialist = state.specialist?.filter(
+          (ele) => ele.id !== action.payload
+        );
+        state.dataFatched = true;
+      })
+      .addCase(deleteSpecialistFunApi.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+        state.dataFatched = true;
+      });
+
   },
 });
 

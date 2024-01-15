@@ -10,11 +10,11 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { requiredValidation, slugValidation } from "@/utils/validation";
 
-import { addtemplateApi } from "store/template/services";
+import { addtemplateApi, edittemplateFunApi } from "store/template/services";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 
-const TemplateForm = () => {
+const TemplateForm = ({ formData, isEditMode }) => {
 
   const [avatar1, setavatar1] = useState(null);
   const [avatar2, setavatar2] = useState(null);
@@ -39,43 +39,101 @@ const TemplateForm = () => {
   };
 
 
-  const formik = useFormik({
-    initialValues: {
+  const initialValues = isEditMode
+    ? {
+      name: formData?.name || "",
+      slug: formData?.slug || "",
+      websiteImage: formData?.websiteImage || "",
+      bookingImage: formData?.bookingImage || "",
+      id: formData?.id || "",
+    }
+    : {
       name: "",
-      slug: "",
       websiteImage: "",
-      bookingImage: ""
+      bookingImage: "",
+      slug: "",
+    };
 
-    },
-    validationSchema: Yup.object({
-      name: requiredValidation(),
-      slug: slugValidation(),
+  const formik = useFormik({
+    initialValues: initialValues,
+    validationSchema: Yup.object().shape({
+      name: requiredValidation(" Name"),
+      slug: slugValidation("Slug"),
     }),
+
     onSubmit: async (values) => {
+      if (avatar1 === null && avatar2 === null && !isEditMode) {
+        toast.error("Please select an image");
+        return;
+      }
       try {
         const formData = {
           ...values,
           websiteImage: avatar1,
           bookingImage: avatar2
         };
-
-        console.log(formData);
-
-        dispatch(
-          addtemplateApi({
-            data: formData,
-            onSuccess: () => {
-              router.push("/templates")
-
-            },
-          })
-        );
+        if (isEditMode) {
+          dispatch(
+            edittemplateFunApi({
+              data: formData,
+              onSuccess: () => {
+                console.log("Edit template Success");
+                router.push("/templates/");
+              },
+            })
+          );
+        } else {
+          dispatch(
+            addtemplateApi({
+              data: formData,
+              onSuccess: () => {
+                router.push("/templates/");
+              },
+            })
+          );
+        }
       } catch (error) {
-        console.error("Error adding template:", error);
+        console.error("Error adding/editing template:", error);
       }
     },
-
   });
+
+  // const formik = useFormik({
+  //   initialValues: {
+  //     name: "",
+  //     slug: "",
+  //     websiteImage: "",
+  //     bookingImage: ""
+  //   },
+  //   validationSchema: Yup.object({
+  //     name: requiredValidation(),
+  //     slug: slugValidation(),
+  //   }),
+  //   onSubmit: async (values) => {
+  //     try {
+  //       const formData = {
+  //         ...values,
+  //         websiteImage: avatar1,
+  //         bookingImage: avatar2
+  //       };
+
+  //       console.log(formData);
+
+  //       dispatch(
+  //         addtemplateApi({
+  //           data: formData,
+  //           onSuccess: () => {
+  //             router.push("/templates")
+
+  //           },
+  //         })
+  //       );
+  //     } catch (error) {
+  //       console.error("Error adding template:", error);
+  //     }
+  //   },
+
+  // });
 
   return (
     <>

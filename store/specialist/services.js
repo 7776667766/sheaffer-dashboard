@@ -1,4 +1,4 @@
-import { addspecialist, getspecialist } from "./constrants";
+import { addspecialist, getspecialist,editSpecialistApi,deleteSpecialistApi } from "./constrants";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "helper/api";
 import toast from "react-hot-toast";
@@ -67,6 +67,83 @@ export const getspecialistApi = createAsyncThunk(
       }
     } catch (error) {
       console.log("Error in get specialist Api ", error);
+      let err =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Something went wrong!";
+      if (err === "Network Error") {
+        err = "Please check your internet connection";
+      }
+      toast.error(err);
+      throw new Error(err);
+    }
+  }
+);
+
+export const editSpecialistFunApi = createAsyncThunk(
+  "specialist/editspecialist",
+  async ({ data, onSuccess }) => {
+    try {
+      const response = await axios.post(editSpecialistApi(data.id), data);
+
+      if (response.data.status === "success") {
+        toast.success(response.data.message);
+        if (onSuccess) {
+          onSuccess();
+        }
+        return response.data.data;
+      } else {
+        console.log(
+          "Error response in edit specialist=> ",
+          response.data
+        );
+        const err =
+          response?.data?.message ||
+          response?.message ||
+          "Something went wrong!";
+        console.log("err: ", err);
+        toast.error(err);
+        throw new Error(err);
+      }
+    } catch (error) {
+      console.log("Error in edit specialist", error);
+      let err =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Something went wrong!";
+      if (err === "Network Error") {
+        err = "Please check your internet connection";
+      }
+      toast.error(err);
+      throw new Error(err);
+    }
+  }
+);
+export const deleteSpecialistFunApi = createAsyncThunk(
+  "specialist/deletepackages",
+  async (id) => {
+    console.log("delete services type value", id);
+    try {
+      const response = await axios.get(deleteSpecialistApi(id));
+      console.log("response in delete specialist type => ", response.data);
+      if (response.data.status === "success") {
+        toast.success(response.data.message);
+        return id;
+      } else {
+        console.log(
+          "Error response in delete specialist Api => ",
+          response.data
+        );
+        const err =
+          response?.data?.message ||
+          response?.message ||
+          "Something went wrong!";
+        console.log("err: ", err);
+        toast.error(err);
+        throw new Error(err);
+      }
+    } catch (error) {
+      console.log("Error in delete specialist Api ", error);
       let err =
         error?.response?.data?.message ||
         error?.message ||
