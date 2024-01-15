@@ -5,18 +5,21 @@ import styles from "@/styles/PageTitle.module.css";
 import { useSelector } from "react-redux";
 import ServiceForm from "@/components/Forms/FormLayouts/ServiceForm";
 
-export default function EditServicePage() {
+export default function EditServicePage({ id }) {
   const router = useRouter();
   const { service } = useSelector((state) => state.service);
 
-
   const [serviceData, setServiceData] = useState();
   const [isLoading, setIsLoading] = useState(true);
+  console.log("my Getting id", id);
 
   useEffect(() => {
-    if (router.query.id) {
+    if (
+      id
+      // router.query.id
+    ) {
       const myService = service.data.find(
-        (data) => data.id === router.query.id
+        (data) => data.id === id //router.query.id
       );
       console.log(myService, "myservice");
       if (myService) {
@@ -24,7 +27,15 @@ export default function EditServicePage() {
         setIsLoading(false);
       } else router.push("/services");
     }
-  }, [router.query.id, router, service.data]);
+  }, [
+    id,
+    // router.query.id,
+    router,
+    service.data,
+  ]);
+  if (router.isFallback) {
+    return <div>Loading Fallback ...</div>;
+  }
   return (
     <>
       <div className={styles.pageTitle}>
@@ -43,4 +54,13 @@ export default function EditServicePage() {
       )}
     </>
   );
+}
+
+export async function getServerSideProps({ params }) {
+  const { id } = params;
+  return {
+    props: {
+      id,
+    },
+  };
 }
