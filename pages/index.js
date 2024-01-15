@@ -29,6 +29,11 @@ import {
 import { Twitter } from "@mui/icons-material";
 import Facebook from "@mui/icons-material/Facebook";
 import Instagram from "@mui/icons-material/Instagram";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import copyImage from "@/public/images/icon/solar_copy-bold.png";
 
 export default function DashboardPage() {
   const { user, role } = useSelector((state) => state.auth);
@@ -249,121 +254,209 @@ export default function DashboardPage() {
               sx={{
                 boxShadow: "none",
                 borderRadius: "10px",
-                p: "0px 20px",
+                p: "0px 0px",
                 mb: "15px",
               }}
             >
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  mb: "15px",
-                }}
-              >
-                <Box sx={{ width: "50%" }}>
-                  <Typography variant="p" fontSize={14}>
-                    <ul
-                      style={{
-                        listStyle: "none",
-                        marginLeft: "0px",
-                        paddingLeft: "0px",
-                        lineHeight: "35px",
-                      }}
-                    >
-                      <li>
-                        <Image
-                          src={business.logo}
-                          width={100}
-                          height={50}
-                          alt="Logo"
-                          style={{
-                            objectFit: "contain",
-                          }}
-                        />
-                        <span
-                          style={{
-                            fontSize: "20px",
-                            fontWeight: "600",
-                            paddingLeft: "10px",
-                          }}
-                        >
-                          {" "}
-                          {business?.name}{" "}
-                        </span>
-                      </li>
-                      {/* <li
+              <Accordion className="bg-black">
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                >
+                  <Typography component="h1" fontWeight="500">
+                    <div>
+                      <Image
+                        src={business.logo}
+                        width={100}
+                        height={50}
+                        alt="Logo"
+                        style={{
+                          objectFit: "contain",
+                        }}
+                      />
+                      <span
                         style={{
                           fontSize: "20px",
                           fontWeight: "600",
+                          paddingLeft: "10px",
                         }}
                       >
-                        {business?.name}
-                      </li> */}
-                      <li>{business.description}</li>
-                      <li
-                        style={{
-                          fontSize: "14px",
-                          fontWeight: "500",
-                          color: "#303030",
-                        }}
-                      >
-                        {business.email}
-                      </li>
-                      <li
-                        style={{
-                          fontSize: "14px",
-                          fontWeight: "500",
-                          color: "#303030",
-                        }}
-                      >
-                        {business.phone}
-                      </li>
-                      <li
-                        style={{
-                          fontSize: "14px",
-                          fontWeight: "500",
-                          color: "#303030",
-                        }}
-                      >
-                        {business.address}
-                      </li>
-                      {business?.websiteService === true && (
-                        <li>
-                          <Button
-                            variant="outlined"
-                            href={`${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}site/${business.slug}`}
-                            target="_blank"
+                        {" "}
+                        {business?.name}{" "}
+                      </span>
+                    </div>
+                  </Typography>
+                </AccordionSummary>
+                <AccordionDetails style={{marginTop: "-24px"}}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      mb: "15px",
+                    }}
+                  >
+                    <Box sx={{ width: "50%" }}>
+                      <Typography variant="p" fontSize={14}>
+                        <ul
+                          style={{
+                            listStyle: "none",
+                            marginLeft: "0px",
+                            paddingLeft: "0px",
+                            lineHeight: "20px",
+                          }}
+                        >
+                          <Box
                             sx={{
-                              pt: "2px",
-                              pb: "1px",
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "14%",
+                              marginBottom: "20px",
                             }}
                           >
-                            Go to Website
-                          </Button>
-                        </li>
-                      )}
+                            {business?.websiteService === true && (
+                              <Box
+                                sx={{
+                                  display: "flex",
+                                  alignItems: "end",
+                                  gap: "4px",
+                                }}
+                              >
+                                <Box>
+                                  <Button
+                                    href={`${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}site/${business.slug}`}
+                                    target="_blank"
+                                    sx={{
+                                      pt: "2px",
+                                      pb: "1px",
+                                      textDecoration: "underline",
+                                      fontWeight: "600",
+                                      fontSize: "14px",
+                                      color: "#757FEF",
+                                      backgroundColor: "#F1F2FD",
+                                      textTransform:"capitalize"
+                                    }}
+                                  >
+                                    Go to Website
+                                  </Button>
+                                </Box>
+                                <Box>
+                                  <Image
+                                    src={copyImage}
+                                    width={20}
+                                    height={20}
+                                    alt="ok"
+                                  />
+                                </Box>
+                              </Box>
+                            )}
 
-                      {business?.bookingService === true && (
-                        <li>
-                          <Button
-                            variant="outlined"
-                            href={`${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}booking/${business.slug}`}
-                            target="_blank"
-                            sx={{
-                              pt: "2px",
-                              pb: "1px",
+                            {business?.bookingService === true && (
+                              <Box
+                                sx={{
+                                  display: "flex",
+                                  alignItems: "end",
+                                  gap: "4px",
+                                }}
+                              >
+                                <Box>
+                                  <Button
+                                    href={`${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}booking/${business.slug}`}
+                                    target="_blank"
+                                    sx={{
+                                      pt: "2px",
+                                      pb: "1px",
+                                      textDecoration: "underline",
+                                      fontWeight: "600",
+                                      fontSize: "14px",
+                                      color: "#757FEF",
+                                      backgroundColor: "#F1F2FD",
+                                      textTransform:"capitalize"
+                                    }}
+                                  >
+                                    Go to Booking
+                                  </Button>
+                                </Box>
+                                <Box>
+                                  <Image
+                                    src={copyImage}
+                                    width={20}
+                                    height={20}
+                                    alt="ok"
+                                  />
+                                </Box>
+                              </Box>
+                            )}
+
+                                  
+                            <Box sx={{ display: "flex", alignItems: "end"  , gap: "4px", }}>
+                              <Box>
+                                <Button
+                                  target="_blank"
+                                  sx={{
+                                    pt: "2px",
+                                    pb: "1px",
+                                    textDecoration: "underline",
+                                    fontWeight: "600",
+                                    fontSize: "14px",
+                                    color: "#757FEF",
+                                    backgroundColor: "#F1F2FD",
+                                    textTransform:"capitalize"
+                                  }}
+                                >
+                                  {business.theme || "N/A"}{" "}
+                                </Button>
+                              </Box>
+                              <Box>
+                                <Image
+                                  src={copyImage}
+                                  width={20}
+                                  height={20}
+                                  alt="ok"
+                                />
+                              </Box>
+                            </Box>
+                          </Box>
+                          <li style={{ marginBottom: "20px" }}>
+                            {business.description}Short Description Short
+                            Description Short Description Short Description
+                            Short Description Short Description Short
+                            Description
+                          </li>
+                          <li
+                            style={{
+                              fontSize: "14px",
+                              fontWeight: "500",
+                              color: "#303030",
+                              marginBottom: "5px",
                             }}
                           >
-                            Go to Booking Page
-                          </Button>
-                        </li>
-                      )}
+                            {business.email}
+                          </li>
+                          <li
+                            style={{
+                              fontSize: "14px",
+                              fontWeight: "500",
+                              color: "#303030",
+                              marginBottom: "5px",
+                            }}
+                          >
+                            {business.phone}
+                          </li>
+                          <li
+                            style={{
+                              fontSize: "14px",
+                              fontWeight: "500",
+                              color: "#303030",
+                              marginBottom: "5px",
+                            }}
+                          >
+                            {business.address}
+                          </li>
 
-                      <li>Current Theme: {business.theme || "N/A"}</li>
-
-                      <li>{business.bannerText}</li>
-                      <li>
+                          {/* <li>{business.bannerText}</li> */}
+                          {/* <li>
                         <Image
                           src={business.bannerImg}
                           width={100}
@@ -373,97 +466,89 @@ export default function DashboardPage() {
                             objectFit: "contain",
                           }}
                         />
-                      </li>
-                      <li
+                      </li> */}
+                          {/* <li
                         style={{
                           backgroundColor: business.color,
                           height: "30px",
                           width: "50px",
                         }}
-                      ></li>
-                    </ul>
-                  </Typography>
-                </Box>
+                      ></li> */}
+                        </ul>
+                      </Typography>
+                    </Box>
 
-                <Box sx={{ width: "50%", textAlign: "right" }}>
-                  <Typography variant="p" fontSize={14}>
-                    <div
-                      style={{
-                        listStyle: "none",
-                        marginLeft: "0px",
-                        paddingLeft: "0px",
-                        lineHeight: "35px",
-                      }}
-                    >
-                      <div style={{ height: "100px" }}>
-                        {business?.images?.map((data, key) => (
-                          <Image
-                            key={key}
-                            src={data}
-                            alt={business.name}
-                            width={100}
-                            height={100}
-                            style={{ borderRadius: "10px" }}
-                          />
-                        ))}
+                    <Box sx={{ width: "50%", textAlign: "right" }}>
+                      <Typography variant="p" fontSize={14}>
+                        <div
+                          style={{
+                            listStyle: "none",
+                            marginLeft: "0px",
+                            paddingLeft: "0px",
+                            lineHeight: "35px",
+                          }}
+                        >
+                          <div style={{ height: "100px" }}>
+                            {business?.images?.map((data, key) => (
+                              <Image
+                                key={key}
+                                src={data}
+                                alt={business.name}
+                                width={100}
+                                height={100}
+                                style={{ borderRadius: "10px" }}
+                              />
+                            ))}
 
-                        {business?.images?.map((data, key) => (
-                          <Image
-                            key={key}
-                            src={data}
-                            alt={business.name}
-                            width={100}
-                            height={100}
-                            style={{ borderRadius: "10px", marginLeft: "8px" }}
-                          />
-                        ))}
-                      </div>
-                      <Box sx={{ marginTop: "15px" , display: "flex", justifyContent:"end"}}>
-                        {business.socialLinks?.map((socialLink, index) => (
-                          <div key={index}>
-                            <a
-                              href={socialLink.link}
-                              target="_blank"
-                              className="text-3xl"
-                              style={{
-                                color: "#000",
-                                marginRight: "12px",
-                              }}
-                            >
-                              {socialLink.name === "facebook" ? (
-                                <Facebook style={{fontSize:"30px",}} />
-                              ) : socialLink.name === "instagram" ? (
-                                <Instagram style={{fontSize:"29px",}} />
-                              ) : (
-                                <Twitter />
-                              )}
-                            </a>
-                          </div>
-                        ))}
-                        {/* 
-                        {business.socialLinks &&
-                          business.socialLinks.map((socialLink, index) => (
-                            <span key={index}>
-                              <a
-                                href={socialLink.link}
-                                target="_blank"
-                                rel="noopener noreferrer"
+                            {business?.images?.map((data, key) => (
+                              <Image
+                                key={key}
+                                src={data}
+                                alt={business.name}
+                                width={100}
+                                height={100}
                                 style={{
-                                  marginRight: "12px",
-                                  textTransform: "capitalize",
-                                  color: "#757FEF",
+                                  borderRadius: "10px",
+                                  marginLeft: "8px",
                                 }}
-                              >
-                                {socialLink.name}
-                                
-                              </a>
-                            </span>
-                          ))} */}
-                      </Box>
-                    </div>
-                  </Typography>
-                </Box>
-              </Box>
+                              />
+                            ))}
+                          </div>
+                          <Box
+                            sx={{
+                              marginTop: "15px",
+                              display: "flex",
+                              justifyContent: "end",
+                            }}
+                          >
+                            {business.socialLinks?.map((socialLink, index) => (
+                              <div key={index}>
+                                <a
+                                  href={socialLink.link}
+                                  target="_blank"
+                                  className="text-3xl"
+                                  style={{
+                                    color: "#000",
+                                    marginRight: "12px",
+                                  }}
+                                >
+                                  {socialLink.name === "facebook" ? (
+                                    <Facebook style={{ fontSize: "30px" }} />
+                                  ) : socialLink.name === "instagram" ? (
+                                    <Instagram style={{ fontSize: "29px" }} />
+                                  ) : (
+                                    <Twitter />
+                                  )}
+                                </a>
+                              </div>
+                            ))}
+                          </Box>
+                        </div>
+                      </Typography>
+                    </Box>
+                  </Box>
+                </AccordionDetails>
+              </Accordion>
             </Card>
           )}
 
