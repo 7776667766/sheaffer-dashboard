@@ -345,12 +345,12 @@ const TemplatesPage = () => {
   const nextPage = (id,event) => {
     event.preventDefault();
 
-    console.log("id", id)
+    console.log("frnotend id of packages", id)
     router.push(`/packages/edit-packages/${id}`);
   };
 
   const handleDelete = (id) => {
-    
+    console.log(id,"id for delete")
     dispatch(deletePackageFunApi(id));
   };
 
@@ -542,7 +542,7 @@ const TemplatesPage = () => {
                     padding: 0,
                   }}
                 >
-                  {data.features.map((feature, index) => (
+                  {data?.features?.map((feature, index) => (
                     <li key={index}>{feature.trim()}</li>
                   ))}
                 </ol>

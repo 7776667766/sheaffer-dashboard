@@ -19,12 +19,12 @@ export default function EditServicePage({ id }) {
     if (
       id
     ) {
-      const myService = plan.data.find(
+      const myPackage = plan.data.find(
         (data) => data._id === id 
       );
-      console.log(myService, "myservice");
-      if (myService) {
-        setServiceData(myService);
+      console.log(myPackage, "myPackage");
+      if (myPackage) {
+        setServiceData(myPackage);
         setIsLoading(false);
       } else router.push("/packages/add-package");
     }

@@ -84,7 +84,14 @@ export const editSpecialistFunApi = createAsyncThunk(
   "specialist/editspecialist",
   async ({ data, onSuccess }) => {
     try {
-      const response = await axios.post(editSpecialistApi(data.id), data);
+      const { id, ...restData } = data;
+      console.log(id,"id of editapi")
+
+      if (!data.id) {
+        throw new Error('Invalid id provided for editing package');
+      }
+
+      const response = await axios.post(editSpecialistApi(data.id), restData);
 
       if (response.data.status === "success") {
         toast.success(response.data.message);

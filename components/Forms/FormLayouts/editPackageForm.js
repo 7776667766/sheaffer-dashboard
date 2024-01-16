@@ -28,45 +28,16 @@ const plansList = [
 ];
 
 const AddPackagePage = ({ formData, isEditMode }) => {
-    console.log("formData,isEditmopda",formData,isEditMode)
+  console.log("formData,isEditmopda", formData, isEditMode)
   const router = useRouter();
   const dispatch = useDispatch();
   const { plan } = useSelector((state) => state.plan);
 
-  // const formik = useFormik({
-  //   initialValues: {
-  //     name: "",
-  //     duration: "",
-  //     price: "",
-  //     features: "",
-  //     isFeatured: false,
-  //   },
-  //   validationSchema: Yup.object({
-  //     name: requiredValidation(),
-  //     duration: requiredValidation("duration"),
-  //     price: requiredValidation("Price"),
-  //     features: requiredValidation("Features"),
-  //   }),
-
-  //   onSubmit: (values) => {
-  //     dispatch(
-  //       addPlanFunApi({
-  //         data: {
-  //           ...values,
-  //           features: values.features.split("\n"),
-  //         },
-  //         onSuccess: () => {
-  //           router.push("/packages");
-  //         },
-  //       })
-  //     );
-  //   },
-  // });
-
   const initialValues = isEditMode
     ? {
+      id: formData._id,
       ...formData,
-      // businessId: business?.id,
+
     }
     : {
       name: "",
@@ -74,7 +45,7 @@ const AddPackagePage = ({ formData, isEditMode }) => {
       price: "",
       features: "",
       isFeatured: false,
-      
+
     };
 
   const validation = {
@@ -84,22 +55,10 @@ const AddPackagePage = ({ formData, isEditMode }) => {
     features: requiredValidation("Features"),
   };
 
-  // if (!isEditMode) {
-  //   validation.password = passwordValidation();
-  //   validation.confirmPassword = confirmPasswordValidation();
-  // }
-
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: Yup.object(
       validation
-      //   {
-      //   phone: phoneValidation(),
-      //   email: emailValidation(),
-      //   name: requiredValidation(),
-      //   password: passwordValidation(),
-      //   confirmPassword: confirmPasswordValidation(),
-      // }
     ),
     onSubmit: (values) => {
       if (isEditMode) {
@@ -107,8 +66,7 @@ const AddPackagePage = ({ formData, isEditMode }) => {
           editPackagesFunApi({
             data: values,
             onSuccess: () => {
-              console.log("Edit Plan Success");
-              router.push("/plan/");
+              router.push("/packages/");
             },
           })
         );

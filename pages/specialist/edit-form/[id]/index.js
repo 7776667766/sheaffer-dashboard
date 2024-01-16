@@ -21,7 +21,7 @@ export default function EditServicePage({ id }) {
     
     ) {
       const myspecialist = specialist.find(
-        (id) =>id === id 
+        (item) =>item.id=== id 
       );
       console.log(myspecialist, "mytemplate");
       if (myspecialist) {
