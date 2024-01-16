@@ -4,3 +4,4 @@ export const deleteBookingApi =(id)=>`booking/delete/${id}`
 export const cancelBookingApi =(id)=>`booking/cancel/${id}`
 // complateBookingApi
 export const complateBookingApi =(id)=>`/booking/completed/${id}`
+// export const reseheduledBookingApi =(id)=>`/booking/rescheduled/${id}`

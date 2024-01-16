@@ -335,14 +335,23 @@ const TemplatesPage = () => {
   const { plan } = useSelector((state) => state.plan);
   console.log(plan, "template");
 
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(price);
+  };
+
   useEffect(() => {
     if (plan.dataFatched !== true) {
-      
+
       dispatch(getAllPlanFunApi());
     }
   }, [dispatch, plan.data, plan.dataFatched]);
 
-  const nextPage = (id,event) => {
+  const nextPage = (id, event) => {
     event.preventDefault();
 
     console.log("frnotend id of packages", id)
@@ -350,7 +359,7 @@ const TemplatesPage = () => {
   };
 
   const handleDelete = (id) => {
-    console.log(id,"id for delete")
+    console.log(id, "id for delete")
     dispatch(deletePackageFunApi(id));
   };
 
@@ -364,7 +373,7 @@ const TemplatesPage = () => {
           mb: "15px",
         }}
       >
-      <Box
+        <Box
           sx={{
             display: "flex",
             justifyContent: "space-between",
@@ -406,11 +415,11 @@ const TemplatesPage = () => {
         </Box>
 
         <CustomPaginationTable
-              tableData={plan.data}
+          tableData={plan.data}
           isLoading={plan.isLoading}
           tableHeaderData={
             <>
-            <TableCell
+              <TableCell
                 sx={{
                   borderBottom: "1px solid #F7FAFF",
                   fontSize: "13.5px",
@@ -481,7 +490,7 @@ const TemplatesPage = () => {
 
             </>
           }
-                tableBodyData={(data, index) => (
+          tableBodyData={(data, index) => (
 
             <>
               <TableCell
@@ -527,7 +536,7 @@ const TemplatesPage = () => {
                   pb: "16px",
                 }}
               >
-                {data.price}
+                {formatPrice(data.price)}
               </TableCell>
               <TableCell
                 sx={{
@@ -614,7 +623,7 @@ const TemplatesPage = () => {
                   size="small"
                   color="primary"
                   className="primary"
-                  onClick={(event) => nextPage(data._id,event)}
+                  onClick={(event) => nextPage(data._id, event)}
                 >
                   <DriveFileRenameOutlineIcon fontSize="inherit" />
                 </IconButton>

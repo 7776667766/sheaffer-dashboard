@@ -5,6 +5,7 @@ import {
   FormControl,
   Autocomplete,
   Checkbox,
+  Button,
 } from "@mui/material";
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
@@ -134,7 +135,7 @@ const ServiceForm = ({ formData, isEditMode }) => {
     }
     : {
       name: "",
-      slug:"",
+      slug: "",
       description: "",
       image: "",
       price: "",
@@ -328,6 +329,33 @@ const ServiceForm = ({ formData, isEditMode }) => {
     },
   });
 
+  const handleSelectAllServiceTypes = () => {
+    const firstSelectedTimeSlot = formik.values.timeSlots.find(
+      (slot) => slot.active
+    );
+
+    console.log("First Selected Time Slot:", firstSelectedTimeSlot);
+
+    if (firstSelectedTimeSlot) {
+      formik.setValues((prevValues) => {
+        const updatedTimeSlots = prevValues.timeSlots.map((slot) => ({
+          ...slot,
+          startTime: firstSelectedTimeSlot.startTime,
+          endTime: firstSelectedTimeSlot.endTime,
+          active: true,
+        }));
+
+        console.log("Updated Time Slots:", updatedTimeSlots);
+
+        return {
+          ...prevValues,
+          timeSlots: updatedTimeSlots,
+        };
+      });
+    }
+  };
+
+
   return (
     <>
       <Card
@@ -398,7 +426,7 @@ const ServiceForm = ({ formData, isEditMode }) => {
                   }
                 />
               </Grid>
-            
+
 
               <Grid item xs={12} md={12} lg={6}>
                 <FormControl fullWidth>
@@ -642,6 +670,11 @@ const ServiceForm = ({ formData, isEditMode }) => {
               /> */}
               </Grid>
               <Grid item xs={12}>
+                <Button onClick={handleSelectAllServiceTypes}>
+                  Select all TimeSlot according to First timeSlot
+                </Button>
+
+
                 <Typography
                   as="h5"
                   sx={{ fontWeight: "500", fontSize: "14px", mb: "12px" }}
