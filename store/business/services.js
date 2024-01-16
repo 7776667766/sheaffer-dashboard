@@ -1,6 +1,6 @@
 import axios from "helper/api";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getMyBusiness, registerBusinessApi, addBusinessApi } from "./constrants";
+import { getMyBusiness, registerBusinessApi, addBusinessApi , getallBusinesses  } from "./constrants";
 import toast from "react-hot-toast";
 import axiosImage from "helper/api-image";
 
@@ -119,6 +119,50 @@ export const addBusinessFunApi = createAsyncThunk(
         err = "Please check your internet connection";
       }
       toast.error(err);
+      throw new Error(err);
+    }
+  }
+);
+
+export const getallBussinessesFunApi = createAsyncThunk(
+  "business/getallBussinessess",
+  async ({ onSuccess }) => {
+    try {
+      const response = await axios.get(getallBusinesses);
+      console.log("response in get all Businesses => ", response.data);
+      if (response.data.status === "success") {
+        if (onSuccess) {
+          onSuccess(response.data.data);
+        }
+        return response.data.data;
+      } else {
+        console.log(
+          "Error response all Businesses Api => ",
+          response.data
+        );
+        const err =
+          response?.data?.message ||
+          response?.message ||
+          "Something went wrong!";
+        console.log("err: ", err);
+        if (err !== "Business not found") {
+          toast.error(err);
+        }
+        throw new Error(err);
+      }
+    } catch (error) {
+      console.log("Error in all Businesses", error);
+      let err =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Something went wrong!";
+      if (err === "Network Error") {
+        err = "Please check your internet connection";
+      }
+      if (err !== "Business not found") {
+        toast.error(err);
+      }
+
       throw new Error(err);
     }
   }

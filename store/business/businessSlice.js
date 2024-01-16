@@ -1,4 +1,4 @@
-import { getMyBussinessFunApi, regsiterBusinessFunApi ,addBusinessFunApi } from "./services";
+import { getMyBussinessFunApi, regsiterBusinessFunApi ,addBusinessFunApi, getallBussinessesFunApi } from "./services";
 
 const { createSlice } = require("@reduxjs/toolkit");
 
@@ -55,6 +55,22 @@ const businessSlice = createSlice({
         state.dataFatched = true;
       })
       .addCase(addBusinessFunApi.rejected, (state, action) => {
+        state.isLoading = false;
+        state.business = null;
+        state.error = action.payload;
+        state.dataFatched = true;
+      });
+      builder
+      .addCase(getallBussinessesFunApi.pending, (state, action) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(getallBussinessesFunApi.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.business = action.payload;
+        state.dataFatched = true;
+      })
+      .addCase(getallBussinessesFunApi.rejected, (state, action) => {
         state.isLoading = false;
         state.business = null;
         state.error = action.payload;
