@@ -57,11 +57,19 @@ const planSlice = createSlice({
       .addCase(editPackagesFunApi.fulfilled, (state, action) => {
         console.log("Edit Packages API Fulfilled", action.payload);
         state.plan.isLoading = false;
-        state.plan.data = state.plan.data?.map((ele) =>
-          ele._id === action.payload?.id ? action.payload : ele
-        );
+      
+        const updatedData = action.payload?.data || action.payload;
+      
+        const editedItemIndex = state.plan.data.findIndex((ele) => ele._id === updatedData?.id);
+      
+        if (editedItemIndex !== -1) {
+          state.plan.data[editedItemIndex] = updatedData;
+        }
+      
         state.plan.dataFatched = true;
       })
+      
+      
       
          
       .addCase(editPackagesFunApi.rejected, (state, action) => {
@@ -81,7 +89,9 @@ const planSlice = createSlice({
           (ele) => ele._id !== action.payload
         );
         state.plan.dataFatched = true;
+       
       })
+      
       .addCase(deletePackageFunApi.rejected, (state, action) => {
         state.plan.isLoading = false;
         state.plan.error = action.payload;

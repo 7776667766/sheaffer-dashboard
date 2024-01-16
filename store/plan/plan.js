@@ -92,7 +92,7 @@ export const editPackagesFunApi = createAsyncThunk(
         if (onSuccess) {
           onSuccess();
         }
-        return response.data.data.restData;
+        return response.data.data;
       } else {
         console.log('Error response in edit Packages => ', response.data);
         const err =

@@ -19,6 +19,7 @@ const TemplateForm = ({ formData, isEditMode }) => {
 
   const [avatar1, setavatar1] = useState(null);
   const [avatar2, setavatar2] = useState(null);
+  console.log("avatar2",avatar2)
 
   const dispatch = useDispatch();
   const router = useRouter();
@@ -61,43 +62,43 @@ const TemplateForm = ({ formData, isEditMode }) => {
 
   const handleBookingImageChange = (event) => {
     const file = event.target.files[0];
-
-    if (!file) {
-      setavatar2(null);
-      if (isEditMode) {
-        setProfileImageUrl2(formData?.bookingImage || null);
-      } else {
-        setProfileImageUrl2(null);
-      }
-      return false;
-    } else {
-      const type = file.type.split("/")[0];
-      if (type !== "image") {
-        toast.error("Please select an image");
-        setavatar2(null);
-        event.target.value = null;
-        if (isEditMode) {
-          setProfileImageUrl2(formData?.bookingImage || null);
-        } else {
-          setProfileImageUrl2(null);
-        }
-        return false;
-      } else {
-        setavatar1(file);
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = (e) => {
-          setProfileImageUrl2(e.target.result);
-        };
-      }
-    }
+setavatar2(file)
+    // if (!file) {
+    //   setavatar2(null);
+    //   if (isEditMode) {
+    //     setProfileImageUrl2(formData?.bookingImage || null);
+    //   } else {
+    //     setProfileImageUrl2(null);
+    //   }
+    //   return false;
+    // } else {
+    //   const type = file.type.split("/")[0];
+    //   if (type !== "image") {
+    //     toast.error("Please select an image");
+    //     setavatar2(null);
+    //     event.target.value = null;
+    //     if (isEditMode) {
+    //       setProfileImageUrl2(formData?.bookingImage || null);
+    //     } else {
+    //       setProfileImageUrl2(null);
+    //     }
+    //     return false;
+    //   } else {
+    //     setavatar1(file);
+    //     const reader = new FileReader();
+    //     reader.readAsDataURL(file);
+    //     reader.onload = (e) => {
+    //       setProfileImageUrl2(e.target.result);
+    //     };
+    //   }
+    // }
   };
 
-  useEffect(() => {
-    if (isEditMode) {
-      setProfileImageUrl2(formData?.bookingImage);
-    }
-  }, [formData?.bookingImage, isEditMode]);
+  // useEffect(() => {
+  //   if (isEditMode) {
+  //     setProfileImageUrl2(formData?.bookingImage);
+  //   }
+  // }, [formData?.bookingImage, isEditMode]);
 
   useEffect(() => {
     if (isEditMode) {
@@ -138,6 +139,7 @@ const TemplateForm = ({ formData, isEditMode }) => {
           websiteImage: avatar1,
           bookingImage: avatar2
         };
+        console.log("formData",formData)
         if (isEditMode) {
           dispatch(
             edittemplateFunApi({
@@ -275,7 +277,21 @@ const TemplateForm = ({ formData, isEditMode }) => {
                   display: "block",
                 }}
               >
-                {profileImageUrl2 && (
+               
+                Upload Booking Image
+              </Typography>
+
+              <TextField
+                required
+                fullWidth
+                name="bookingImage"
+                type="file"
+                id="bookingImage"
+          
+                onChange={handleBookingImageChange}
+
+              />
+               {profileImageUrl2 && (
                   <Image
                     src={profileImageUrl2}
                     alt="profile"
@@ -286,19 +302,6 @@ const TemplateForm = ({ formData, isEditMode }) => {
                     height={50}
                   />
                 )}
-                Upload Booking Image
-              </Typography>
-
-              <TextField
-                required
-                fullWidth
-                name="bookingImage"
-                type="file"
-                id="bookingImage"
-                accept="image/*"
-                onChange={handleBookingImageChange}
-
-              />
             </Grid>
 
             <Grid item xs={12} textAlign="left">
