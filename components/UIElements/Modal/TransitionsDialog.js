@@ -13,6 +13,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function TransitionsDialog({
   modelButton,
   submitButtonText,
+  closeButtonText,
   handleSubmit,
   children,
   ...props
@@ -69,7 +70,7 @@ export default function TransitionsDialog({
                 )}
                 <Grid item xs={6}>
                   <Button variant="outlined" fullWidth onClick={handleClose}>
-                    Cancel
+                    {closeButtonText || "Cancel"}
                   </Button>
                 </Grid>
               </Grid>
