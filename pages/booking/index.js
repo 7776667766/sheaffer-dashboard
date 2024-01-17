@@ -28,9 +28,8 @@ import moment from "moment";
 import { CustomPaginationTable } from "@/components/Table/CustomPaginationTable";
 import {
   getMyBussinessFunApi,
-  getBookedTimeSlotFunApi,
 } from "store/business/services";
-import { getallServicesFunApi } from "store/service/services";
+import { getBookedTimeSlotFunApi } from "store/booking/service";
 
 import TransitionsDialog from "@/components/UIElements/Modal/TransitionsDialog";
 import Image from "next/image";
@@ -45,23 +44,17 @@ const BookingPage = () => {
   const [isRescheduleDialogOpen, setIsRescheduleDialogOpen] = useState(false);
 
   const [rescheduleDate, setRescheduleDate] = useState(null);
-  console.log("rescheduleDate", rescheduleDate);
-
-  const dayNumber = new Date(rescheduleDate).getDay();
-  console.log("dayNumber",dayNumber)
 
   const [rescheduleTime, setRescheduleTime] = useState("");
 
   const [timeSlots, setTimeSlots] = useState([]);
+  console.log("TIMESLOTS--->",timeSlots)
 
   const dispatch = useDispatch();
   const { booking } = useSelector((state) => state.booking);
 
-  console.log("booking", booking);
-
   booking?.data?.forEach((bookingItem) => {
     const timeSlot = bookingItem.timeSlot;
-    console.log("timeSlot", timeSlot);
   });
 
   const daysList = [
@@ -74,28 +67,29 @@ const BookingPage = () => {
     "Saturday",
   ];
 
-  const generateTimeSlots = useCallback(async (rescheduleDate) => {
+  const generateTimeSlots = useCallback(async (rescheduleDate, ServiceId) => {
 
     const dayNumber = new Date(rescheduleDate).getDay();
 
     const timeSlotData = [
-      { active: true, startTime: " 08:05 PM", endTime: "11:48 PM" , day: "Monday" },
+      { active: true, startTime: " 08:05 PM", endTime: "11:48 PM", day: "Monday" },
     ]?.find((slot) => slot.day === daysList[dayNumber]);
-
-    console.log("timeSlotData",timeSlotData)
 
     if (timeSlotData?.active.toString() === "true") {
       dispatch(
         getBookedTimeSlotFunApi({
-
+          data: {
             date: rescheduleDate,
-        
+            serviceId: ServiceId
+          }
+
         })
       );
 
       const timeSlots = [];
-      const startDate = new Date(`${date} ${timeSlotData?.startTime}`);
-      const endDate = new Date(`${date} ${timeSlotData?.endTime}`);
+      const startDate = new Date(`${rescheduleDate} ${timeSlotData?.startTime}`);
+      const endDate = new Date(`${rescheduleDate} ${timeSlotData?.endTime}`);
+      console.log(startDate,endDate,"----------123")
       let currentTime = startDate;
       while (currentTime < endDate) {
         const formattedStartTime = currentTime.toLocaleTimeString([], {
@@ -119,9 +113,18 @@ const BookingPage = () => {
       setTimeSlots(timeSlots);
     }
   }, []);
- 
- 
-  generateTimeSlots(rescheduleDate)
+
+
+  const [apiCalled, setApiCalled] = useState(false);
+
+  useEffect(() => {
+    const ServiceId = booking?.data[0]?.service.id;
+
+    if (!apiCalled && rescheduleDate && ServiceId) {
+      generateTimeSlots(rescheduleDate, ServiceId);
+      setApiCalled(true);
+    }
+  }, [rescheduleDate, booking?.data, apiCalled]);
 
   const { business, dataFatched } = useSelector((state) => state.business);
 
@@ -138,26 +141,23 @@ const BookingPage = () => {
     setIsRescheduleDialogOpen(false);
   };
 
-  const handleCancelBooking = (id) => {
-    console.log("id", id);
+  const handleCancelBooking = (id) => {   
     dispatch(cancelBookingFunApi(id));
-    console.log("Cancel Booking");
     setDialogOpen(false);
   };
 
   const handleCompleteBooking = (id) => {
     dispatch(completeBookingFunApi(id));
-    console.log("Complete Booking");
     setDialogOpen(false);
   };
 
   useEffect(() => {
     dispatch(
       rescheduledBookingFunApi({
-        // data:{
-        //   date:date,
-        //   timeSlot:timeSlot
-        // }
+        data:{
+          // date:date,
+          // timeSlot:timeSlot
+        }
       })
     );
   }, [dispatch, booking.data, booking.dataFatched, business?.id, dataFatched]);
@@ -402,14 +402,13 @@ const BookingPage = () => {
               >
                 <span
                   className={`
-                    ${
-                      data.status?.toLowerCase() === "completed"
-                        ? "successBadge"
-                        : data.status?.toLowerCase() === "pending"
+                    ${data.status?.toLowerCase() === "completed"
+                      ? "successBadge"
+                      : data.status?.toLowerCase() === "pending"
                         ? "primaryBadge"
                         : data.status?.toLowerCase() === "cancelled"
-                        ? "dangerBadge"
-                        : ""
+                          ? "dangerBadge"
+                          : ""
                     }
                       `}
                 >
@@ -491,8 +490,8 @@ const BookingPage = () => {
                               }}
                             >
                               <div>
-                              Booking ID : <b>{data.token}</b>
-                                </div>
+                                Booking ID : <b>{data.token}</b>
+                              </div>
                               <div>
                                 <Button style={{ backgroundColor: "#EAEEFD" }}>
                                   {data.status}
@@ -641,7 +640,6 @@ const BookingPage = () => {
                                       orientation=""
                                       ToolbarComponent={DisabledByDefault}
                                       onChange={(value) => {
-                                        console.log(value.$d, "valuesetdate");
                                         setRescheduleDate(value.$d)
                                       }}
                                     />
