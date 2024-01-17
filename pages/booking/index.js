@@ -43,12 +43,15 @@ import { DisabledByDefault } from "@mui/icons-material";
 const BookingPage = () => {
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [isRescheduleDialogOpen, setIsRescheduleDialogOpen] = useState(false);
+
   const [rescheduleDate, setRescheduleDate] = useState(null);
   console.log("rescheduleDate", rescheduleDate);
+
   const dayNumber = new Date(rescheduleDate).getDay();
   console.log("dayNumber",dayNumber)
+
   const [rescheduleTime, setRescheduleTime] = useState("");
-  const [selectedTime, setSelectedTime] = useState("");
+
   const [timeSlots, setTimeSlots] = useState([]);
 
   const dispatch = useDispatch();
@@ -72,19 +75,23 @@ const BookingPage = () => {
   ];
 
   const generateTimeSlots = useCallback(async (rescheduleDate) => {
+
     const dayNumber = new Date(rescheduleDate).getDay();
+
     const timeSlotData = [
       { active: true, startTime: " 08:05 PM", endTime: "11:48 PM" , day: "Monday" },
     ]?.find((slot) => slot.day === daysList[dayNumber]);
+
     console.log("timeSlotData",timeSlotData)
 
-    if (timeSlotData?.active.toString() == "true") {
-      await getBookedTimeSlotFunApi({
-        data: {
-          serviceId: serviceId,
-          date: date,
-        },
-      });
+    if (timeSlotData?.active.toString() === "true") {
+      dispatch(
+        getBookedTimeSlotFunApi({
+
+            date: rescheduleDate,
+        
+        })
+      );
 
       const timeSlots = [];
       const startDate = new Date(`${date} ${timeSlotData?.startTime}`);
@@ -114,7 +121,7 @@ const BookingPage = () => {
   }, []);
  
  
-  generateTimeSlots()
+  generateTimeSlots(rescheduleDate)
 
   const { business, dataFatched } = useSelector((state) => state.business);
 
@@ -483,7 +490,7 @@ const BookingPage = () => {
                                 marginBottom: "10px",
                               }}
                             >
-                              <div>Booking ID : 158952652</div>
+                              <div>{data.business?.token}</div>
                               <div>
                                 <Button style={{ backgroundColor: "#EAEEFD" }}>
                                   {data.status}
