@@ -4,11 +4,12 @@ import {
   getMyBusinessBooking,
   deleteBookingApi,
   cancelBookingApi,
+  getbookedslotsApi,
   complateBookingApi,
   reseheduledBookingApi,
 } from "./constrants";
 import toast from "react-hot-toast";
-// deleteBookingFunApi
+
 export const getMyBusinessBookingFunApi = createAsyncThunk(
   "booking/getMyBusinessBookingFunApi",
   async ({ data }) => {
@@ -153,40 +154,81 @@ export const completeBookingFunApi = createAsyncThunk(
 );
 
 
-// export const rescheduledBookingFunApi = createAsyncThunk(
-//   "booking/resheduledBooking",
-//   async (id, data) => {
-//     console.log("resheduled id and data ", id, data);
-//     try {
-//       const response = await axios.post(reseheduledBookingApi(id,data));
-//       console.log("response in complete Booking => ", response.data);
-//       if (response.data.status === "success") {
-//         toast.success(response.data.message);
-//         return response.data.data;
-//       } else {
-//         console.log(
-//           "Error response in complete booking Api => ",
-//           response.data
-//         );
-//         const err =
-//           response?.data?.message ||
-//           response?.message ||
-//           "Something went wrong!";
-//         console.log("err: ", err);
-//         toast.error(err);
-//         throw new Error(err);
-//       }
-//     } catch (error) {
-//       console.log("Error in complete booking Api ", error);
-//       let err =
-//         error?.response?.data?.message ||
-//         error?.message ||
-//         "Something went wrong!";
-//       if (err === "Network Error") {
-//         err = "Please check your internet connection";
-//       }
-//       toast.error(err);
-//       throw new Error(err);
-//     }
-//   }
-// );
+export const rescheduledBookingFunApi = createAsyncThunk(
+  "booking/resheduledBooking",
+  async (id, data) => {
+    console.log("resheduled id and data ", id, data);
+    try {
+      const response = await axios.post(reseheduledBookingApi(id,data));
+      console.log("response in complete Booking => ", response.data);
+      if (response.data.status === "success") {
+        toast.success(response.data.message);
+        return response.data.data;
+      } else {
+        console.log(
+          "Error response in complete booking Api => ",
+          response.data
+        );
+        const err =
+          response?.data?.message ||
+          response?.message ||
+          "Something went wrong!";
+        console.log("err: ", err);
+        toast.error(err);
+        throw new Error(err);
+      }
+    } catch (error) {
+      console.log("Error in complete booking Api ", error);
+      let err =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Something went wrong!";
+      if (err === "Network Error") {
+        err = "Please check your internet connection";
+      }
+      toast.error(err);
+      throw new Error(err);
+    }
+  }
+);
+
+export const getBookedTimeSlotFunApi = createAsyncThunk(
+  "Booking/getbookedTimeSlot",
+  async ({ data, onSuccess }) => {
+    console.log("getting booked TimeSlot Data", data);
+    try {
+      const response = await axios.post(getbookedslotsApi, data);
+      console.log("response getting booked TimeSlots => ", response.data);
+      if (response.data.status === "success") {
+        toast.success(response.data.message);
+        if (onSuccess) {
+          onSuccess();
+        }
+        return response.data.data;
+      } else {
+        console.log(
+          "Error response in booked TimeSlot Data Api => ",
+          response.data
+        );
+        const err =
+          response?.data?.message ||
+          response?.message ||
+          "Something went wrong!";
+        console.log("err: ", err);
+        toast.error(err);
+        throw new Error(err);
+      }
+    } catch (error) {
+      console.log("Error in  booked TimeSlot Data Api ", error);
+      let err =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Something went wrong!";
+      if (err === "Network Error") {
+        err = "Please check your internet connection";
+      }
+      toast.error(err);
+      throw new Error(err);
+    }
+  }
+);

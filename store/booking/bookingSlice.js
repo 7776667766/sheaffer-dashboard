@@ -3,6 +3,8 @@ import {
   deleteBookingFunApi,
   cancelBookingFunApi,
   completeBookingFunApi,
+  getBookedTimeSlotFunApi,
+  rescheduledBookingFunApi,
 } from "./service";
 
 const { createSlice } = require("@reduxjs/toolkit");
@@ -18,6 +20,7 @@ const bookingSlice = createSlice({
     },
   },
   reducers: {},
+  //All Booking Api
   extraReducers: (builder) => {
     builder
       .addCase(getMyBusinessBookingFunApi.pending, (state, action) => {
@@ -34,6 +37,7 @@ const bookingSlice = createSlice({
         state.booking.error = action.payload;
         state.booking.dataFatched = true;
       });
+      //Delete Booking Api
     builder
       .addCase(deleteBookingFunApi.pending, (state, action) => {
         state.booking.isLoading = true;
@@ -59,12 +63,13 @@ const bookingSlice = createSlice({
         );
         state.booking.dataFatched = true;
       })
-
       .addCase(cancelBookingFunApi.rejected, (state, action) => {
         state.booking.isLoading = false;
         state.booking.error = action.payload;
         state.booking.dataFatched = true;
       });
+
+      //Complete Booking Api
     builder
       .addCase(completeBookingFunApi.pending, (state, action) => {
         state.booking.isLoading = true;
@@ -72,9 +77,6 @@ const bookingSlice = createSlice({
       })
       .addCase(completeBookingFunApi.fulfilled, (state, action) => {
         state.booking.isLoading = false;
-        // state.booking.data = state.booking.data?.filter(
-        //   (ele) => ele.id !== action.payload
-        // );
         state.booking.data = state.booking.data?.map((ele) =>
           ele.id === action.payload.id ? action.payload : ele
         );
@@ -85,6 +87,37 @@ const bookingSlice = createSlice({
         state.booking.error = action.payload;
         state.booking.dataFatched = true;
       });
+
+      //Resheduled Booking Api
+      builder
+      .addCase(rescheduledBookingFunApi.pending, (state, action) => {
+        state.booking.isLoading = true;
+        state.booking.error = null;
+      })
+      .addCase(rescheduledBookingFunApi.fulfilled, (state, action) => {
+        state.booking.isLoading = false;
+        state.booking.data.push(action.payload);
+      })
+      .addCase(rescheduledBookingFunApi.rejected, (state, action) => {
+        state.booking.isLoading = false;
+        state.booking.error = action.payload;
+      });
+
+      //Booked Time Slot Api
+      builder
+      .addCase(getBookedTimeSlotFunApi.pending, (state, action) => {
+        state.booking.isLoading = true;
+        state.booking.error = null;
+      })
+      .addCase(getBookedTimeSlotFunApi.fulfilled, (state, action) => {
+        state.booking.isLoading = false;
+        state.booking.data.push(action.payload);
+      })
+      .addCase(getBookedTimeSlotFunApi.rejected, (state, action) => {
+        state.booking.isLoading = false;
+        state.booking.error = action.payload;
+      });
+
   },
 });
 

@@ -5,6 +5,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  TextField,
   Typography,
 } from "@mui/material";
 import Card from "@mui/material/Card";
@@ -23,31 +24,65 @@ import {
 } from "store/booking/service";
 import moment from "moment";
 import { CustomPaginationTable } from "@/components/Table/CustomPaginationTable";
-import { getMyBussinessFunApi } from "store/business/services";
+import { getMyBussinessFunApi , getBookedTimeSlotFunApi } from "store/business/services";
+import { getallServicesFunApi } from "store/service/services";
+
 import TransitionsDialog from "@/components/UIElements/Modal/TransitionsDialog";
 import Image from "next/image";
 import { Button } from "@mui/base";
 
 const BookingPage = () => {
   const [isDialogOpen, setDialogOpen] = useState(false);
+  const [isRescheduleDialogOpen, setIsRescheduleDialogOpen] = useState(false);
+  const [rescheduleDate, setRescheduleDate] = useState('');
+  const [rescheduleTime, setRescheduleTime] = useState('');
 
   const dispatch = useDispatch();
   const { booking } = useSelector((state) => state.booking);
-  console.log("booking", booking);
-  const { role } = useSelector((state) => state.auth);
-  console.log("role", role);
+  console.log("booking",booking)
+
+  const { service } = useSelector((state) => state.service);
+  console.log("service", service)
+
   const { business, dataFatched } = useSelector((state) => state.business);
-  console.log("business", business?.id);
+
+
+  // useEffect(() => {
+  //   dispatch(getallServicesFunApi());
+  // }, [dispatch]);
+
+  // getMyBussinessFunApi({
+  //   onSuccess: (businessId) => {
+  //     dispatch(
+  //       getMyBusinessBookingFunApi({
+  //         data: {
+  //           businessId: businessId,
+  //         },
+  //       })
+  //     );
+  //   },
+  // })
 
   const handleDelete = (id) => {
     dispatch(deleteBookingFunApi(id));
   };
+
   const handleTooltipClick = () => {
     setDialogOpen(true);
   };
 
+
   const handleDialogClose = () => {
     setDialogOpen(false);
+    setIsRescheduleDialogOpen(false);
+  };
+
+  const handleRescheduleClick = () => {
+    setIsRescheduleDialogOpen(true);
+  };
+
+  const handleRescheduleConfirm = () => {
+    setIsRescheduleDialogOpen(false);
   };
 
   const handleCancelBooking = (id) => {
@@ -303,14 +338,13 @@ const BookingPage = () => {
               >
                 <span
                   className={`
-                    ${
-                      data.status?.toLowerCase() === "completed"
-                        ? "successBadge"
-                        : data.status?.toLowerCase() === "pending"
+                    ${data.status?.toLowerCase() === "completed"
+                      ? "successBadge"
+                      : data.status?.toLowerCase() === "pending"
                         ? "primaryBadge"
                         : data.status?.toLowerCase() === "cancelled"
-                        ? "dangerBadge"
-                        : ""
+                          ? "dangerBadge"
+                          : ""
                     }
                       `}
                 >
@@ -374,7 +408,7 @@ const BookingPage = () => {
                       </IconButton>
                     </Tooltip>
 
-                    <Dialog open={isDialogOpen} onClose={handleDialogClose}>
+                    {/* <Dialog open={isDialogOpen} onClose={handleDialogClose}>
                       <DialogTitle>Edit Booking Details</DialogTitle>
                       <DialogContent>
                         <Typography sx={{ fontSize: 18 }}>
@@ -393,6 +427,61 @@ const BookingPage = () => {
                           color="primary"
                         >
                           Complete Booking
+                        </Button>
+                        <Button
+                       
+                          color="primary"
+                        >
+                          Resheduled Booking
+                        </Button>
+                      </DialogActions>
+                    </Dialog> */}
+
+                    <Dialog open={isDialogOpen} onClose={handleDialogClose}>
+                      <DialogTitle>Edit Booking Details</DialogTitle>
+                      <DialogContent>
+                        <Typography sx={{ fontSize: 18 }}>
+                          Edit the data as needed.
+                        </Typography>
+                      </DialogContent>
+                      <DialogActions>
+                        <Button onClick={() => handleCancelBooking(data.id)} color="secondary">
+                          Cancel Booking
+                        </Button>
+                        <Button onClick={() => handleCompleteBooking(data.id)} color="primary">
+                          Complete Booking
+                        </Button>
+                        <Button onClick={handleRescheduleClick} color="primary">
+                          Reschedule Booking
+                        </Button>
+                      </DialogActions>
+                    </Dialog>
+
+                    {/* Reschedule Dialog */}
+                    <Dialog open={isRescheduleDialogOpen} onClose={handleDialogClose}>
+                      <DialogTitle>Reschedule Booking</DialogTitle>
+                      <DialogContent>
+                        <TextField
+                          label="Date"
+                          type="date"
+                          value={rescheduleDate}
+                          onChange={(e) => setRescheduleDate(e.target.value)}
+                          fullWidth
+                        />
+                        <TextField
+                          label="Time"
+                          type="time"
+                          value={rescheduleTime}
+                          onChange={(e) => setRescheduleTime(e.target.value)}
+                          fullWidth
+                        />
+                      </DialogContent>
+                      <DialogActions>
+                        <Button onClick={handleRescheduleConfirm} color="primary">
+                          Confirm Reschedule
+                        </Button>
+                        <Button onClick={handleDialogClose} color="secondary">
+                          Cancel
                         </Button>
                       </DialogActions>
                     </Dialog>
