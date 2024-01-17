@@ -34,11 +34,15 @@ import { getallServicesFunApi } from "store/service/services";
 import TransitionsDialog from "@/components/UIElements/Modal/TransitionsDialog";
 import Image from "next/image";
 import Button from "@mui/material/Button";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
+import { DisabledByDefault } from "@mui/icons-material";
 
 const BookingPage = () => {
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [isRescheduleDialogOpen, setIsRescheduleDialogOpen] = useState(false);
-  const [rescheduleDate, setRescheduleDate] = useState("");
+  const [rescheduleDate, setRescheduleDate] = useState(null);
   const [rescheduleTime, setRescheduleTime] = useState("");
 
   const dispatch = useDispatch();
@@ -418,6 +422,7 @@ const BookingPage = () => {
                           maxWidth: "100%",
                           borderRadius: "25px",
                         }}
+
                       >
                         <Typography>
                           <Box>
@@ -557,6 +562,7 @@ const BookingPage = () => {
                           </Grid>
                           <Grid item xs={12} sm={6} md={4}>
                             <TransitionsDialog
+                              maxWidth={"md"}
                               modelButton={
                                 <Button
                                   // onClick={() => handleCompleteBooking(data.id)}
@@ -569,26 +575,32 @@ const BookingPage = () => {
                               submitButtonText="Delete"
                               handleSubmit={() => handleDelete(data.id)}
                             >
-                              <div style={{ textAlign: "center" }}>
-                                <TextField
-                                  label="Date"
-                                  type="date"
-                                  value={rescheduleDate}
-                                  onChange={(e) =>
-                                    setRescheduleDate(e.target.value)
-                                  }
-                                  fullWidth
-                                />
-                                <TextField
-                                  label="Time"
-                                  type="time"
-                                  value={rescheduleTime}
-                                  onChange={(e) =>
-                                    setRescheduleTime(e.target.value)
-                                  }
-                                  fullWidth
-                                />
-                              </div>
+                              <Grid container spacing={4}>
+                                <Grid item xs={12} sm={6} md={6}>
+                                  <LocalizationProvider
+                                    dateAdapter={AdapterDayjs}
+                                  >
+                                    <StaticDatePicker
+                                      orientation="landscape"
+                                      onChange={(value) => {
+                                        console.log(value.$d, "valuesetdate");
+                                        // setRescheduleDate(value.$d)
+                                      }}
+                                    />
+                                  </LocalizationProvider>
+                                </Grid>
+                                <Grid item xs={12} sm={6} md={6}>
+                                  <TextField
+                                    label="Time"
+                                    type="time"
+                                    value={rescheduleTime}
+                                    onChange={(e) =>
+                                      setRescheduleTime(e.target.value)
+                                    }
+                                    fullWidth
+                                  />
+                                </Grid>
+                              </Grid>
                             </TransitionsDialog>
                           </Grid>
                           <Grid item xs={12} sm={6} md={4}>
