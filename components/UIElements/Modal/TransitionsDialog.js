@@ -15,6 +15,7 @@ export default function TransitionsDialog({
   submitButtonText,
   closeButtonText,
   handleSubmit,
+  maxWidth,
   children,
   ...props
 }) {
@@ -41,7 +42,7 @@ export default function TransitionsDialog({
         <Dialog
           open={open}
           fullWidth={true}
-          maxWidth={"xs"}
+          maxWidth={maxWidth ||"sm"}
           TransitionComponent={Transition}
           keepMounted
           onClose={handleClose}
