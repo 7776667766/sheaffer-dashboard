@@ -79,13 +79,13 @@ const BookingPage = () => {
     setIsRescheduleDialogOpen(false);
   };
 
-  const handleRescheduleClick = () => {
-    setIsRescheduleDialogOpen(true);
-  };
+  // const handleRescheduleClick = () => {
+  //   setIsRescheduleDialogOpen(true);
+  // };
 
-  const handleRescheduleConfirm = () => {
-    setIsRescheduleDialogOpen(false);
-  };
+  // const handleRescheduleConfirm = () => {
+  //   setIsRescheduleDialogOpen(false);
+  // };
 
   const handleCancelBooking = (id) => {
     console.log("id", id);

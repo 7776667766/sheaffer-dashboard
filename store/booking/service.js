@@ -85,7 +85,7 @@ export const cancelBookingFunApi = createAsyncThunk(
   async (id) => {
     console.log("cancel booking value", id);
     try {
-      const response = await axios.post(reseheduledBookingApi(id));
+      const response = await axios.get(cancelBookingApi(id));
       console.log("response in cancel Booking => ", response.data);
       if (response.data.status === "success") {
         toast.success(response.data.message);
