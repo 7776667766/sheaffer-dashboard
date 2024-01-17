@@ -5,6 +5,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Grid,
   Typography,
 } from "@mui/material";
 import Card from "@mui/material/Card";
@@ -26,7 +27,7 @@ import { CustomPaginationTable } from "@/components/Table/CustomPaginationTable"
 import { getMyBussinessFunApi } from "store/business/services";
 import TransitionsDialog from "@/components/UIElements/Modal/TransitionsDialog";
 import Image from "next/image";
-import { Button } from "@mui/base";
+import Button from "@mui/material/Button";
 
 const BookingPage = () => {
   const [isDialogOpen, setDialogOpen] = useState(false);
@@ -363,37 +364,204 @@ const BookingPage = () => {
                     </Tooltip>
 
                     <Tooltip title="Edit" placement="top">
-                      <IconButton
-                        aria-label="edit"
-                        size="small"
-                        color="primary"
-                        className="primary"
+                      <Button
+                        style={{
+                          backgroundColor: "#E2A248",
+                        }}
                         onClick={handleTooltipClick}
                       >
-                        <DriveFileRenameOutlineIcon fontSize="inherit" />
-                      </IconButton>
+                        Edit
+                      </Button>
                     </Tooltip>
 
                     <Dialog open={isDialogOpen} onClose={handleDialogClose}>
                       <DialogTitle>Edit Booking Details</DialogTitle>
-                      <DialogContent>
-                        <Typography sx={{ fontSize: 18 }}>
-                          Edit the data as needed.
+                      <DialogContent
+                        style={{
+                          width: "570px",
+                          maxWidth: "100%",
+                          borderRadius: "25px",
+                        }}
+                      >
+                        <Typography>
+                          <Box>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                marginBottom: "10px",
+                              }}
+                            >
+                              <div>Booking ID : 158952652</div>
+                              <div>
+                                <Button style={{ backgroundColor: "#EAEEFD" }}>
+                                  {data.status}
+                                </Button>
+                              </div>
+                            </Box>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                backgroundColor: "#EAEEFD",
+                                padding: "10px",
+                              }}
+                            >
+                              <div>Business Name</div>
+                              <div>{data.business?.name}</div>
+                            </Box>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                paddingTop: "10px",
+                                paddingBottom: "10px",
+                              }}
+                            >
+                              <div>Service Name </div>
+                              <div>{data.service?.name || "N/A"}</div>
+                            </Box>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                backgroundColor: "#EAEEFD",
+                                padding: "10px",
+                              }}
+                            >
+                              <div>Date</div>
+                              <div>
+                                {moment(data.date).format("DD MMM  YYYY")}
+                              </div>
+                            </Box>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                paddingTop: "10px",
+                                paddingBottom: "10px",
+                              }}
+                            >
+                              <div>Time Slot</div>
+                              <div>{data.timeSlot}</div>
+                            </Box>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                backgroundColor: "#EAEEFD",
+                                padding: "10px",
+                              }}
+                            >
+                              <div> Price </div>
+                              <div>${data.price}</div>
+                            </Box>
+
+                            <h2>Customer Details</h2>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                backgroundColor: "#EAEEFD",
+                                padding: "10px",
+                              }}
+                            >
+                              <div> Name </div>
+                              <div>DEnly</div>
+                            </Box>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                paddingTop: "10px",
+                                paddingBottom: "10px",
+                              }}
+                            >
+                              <div> Contact No.</div>
+                              <div>+92000000000001</div>
+                            </Box>
+                          </Box>
                         </Typography>
                       </DialogContent>
                       <DialogActions>
-                        <Button
-                          onClick={() => handleCancelBooking(data.id)}
-                          color="secondary"
-                        >
-                          Cancel Booking
-                        </Button>
-                        <Button
-                          onClick={() => handleCompleteBooking(data.id)}
-                          color="primary"
-                        >
-                          Complete Booking
-                        </Button>
+                        <Grid container spacing={2}>
+                          <Grid item xs={12} sm={6} md={4}>
+                            <TransitionsDialog
+                              modelButton={
+                                <Button
+                                  submitButtonText="Delete"
+                                  // onClick={() => handleDelete(data.id)}
+                                  fullWidth
+                                  variant="outlined"
+                                >
+                                  Cancel Booking
+                                </Button>
+                              }
+                              submitButtonText="Delete"
+                              handleSubmit={() => handleDelete(data.id)}
+                            >
+                              <div style={{ textAlign: "center" }}>
+                                <Image
+                                  src="/images/icon/alert.png"
+                                  width={150}
+                                  height={150}
+                                  alt="ok"
+                                />
+
+                                <Typography sx={{ fontSize: 18 }}>
+                                  <b>Are You Sure You Want To Delete ?</b>
+                                  <br />
+                                  <span style={{ fontSize: 14 }}>
+                                    You are deleting this data & this action is
+                                    irreversible
+                                  </span>
+                                </Typography>
+                              </div>
+                            </TransitionsDialog>
+                          </Grid>
+                          <Grid item xs={12} sm={6} md={4}>
+                            <TransitionsDialog
+                              modelButton={
+                                <Button
+                                  // onClick={() => handleCompleteBooking(data.id)}
+                                  fullWidth
+                                  variant="contained"
+                                >
+                                  Reschedule Booking
+                                </Button>
+                              }
+                              submitButtonText="Delete"
+                              handleSubmit={() => handleDelete(data.id)}
+                            >
+                              <div style={{ textAlign: "center" }}>
+                                <Image
+                                  src="/images/icon/alert.png"
+                                  width={150}
+                                  height={150}
+                                  alt="ok"
+                                />
+
+                                <Typography sx={{ fontSize: 18 }}>
+                                  <b>Are You Sure You Want To Delete ?</b>
+                                  <br />
+                                  <span style={{ fontSize: 14 }}>
+                                    You are deleting this data & this action is
+                                    irreversible
+                                  </span>
+                                </Typography>
+                              </div>
+                            </TransitionsDialog>
+                          </Grid>
+                          <Grid item xs={12} sm={6} md={4}>
+                            <Button
+                              onClick={() => handleCompleteBooking(data.id)}
+                              fullWidth
+                              variant="contained"
+                            >
+                              Mark as completed
+                            </Button>
+                          </Grid>
+                        </Grid>
                       </DialogActions>
                     </Dialog>
                   </Box>
