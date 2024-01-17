@@ -311,7 +311,7 @@ export default function DashboardPage() {
                             sx={{
                               display: "flex",
                               alignItems: "center",
-                              gap: "14%",
+                              gap: "10%",
                               marginBottom: "20px",
                             }}
                           >
