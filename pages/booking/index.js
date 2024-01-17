@@ -490,7 +490,9 @@ const BookingPage = () => {
                                 marginBottom: "10px",
                               }}
                             >
-                              <div>{data.business?.token}</div>
+                              <div>
+                              Booking ID : <b>{data.token}</b>
+                                </div>
                               <div>
                                 <Button style={{ backgroundColor: "#EAEEFD" }}>
                                   {data.status}
