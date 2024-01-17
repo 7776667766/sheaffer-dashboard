@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
   Box,
   Dialog,
@@ -22,6 +22,7 @@ import {
   completeBookingFunApi,
   deleteBookingFunApi,
   getMyBusinessBookingFunApi,
+  rescheduledBookingFunApi,
 } from "store/booking/service";
 import moment from "moment";
 import { CustomPaginationTable } from "@/components/Table/CustomPaginationTable";
@@ -43,32 +44,79 @@ const BookingPage = () => {
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [isRescheduleDialogOpen, setIsRescheduleDialogOpen] = useState(false);
   const [rescheduleDate, setRescheduleDate] = useState(null);
+  console.log("rescheduleDate", rescheduleDate);
+  const dayNumber = new Date(rescheduleDate).getDay();
+  console.log("dayNumber",dayNumber)
   const [rescheduleTime, setRescheduleTime] = useState("");
+  const [selectedTime, setSelectedTime] = useState("");
+  const [timeSlots, setTimeSlots] = useState([]);
 
   const dispatch = useDispatch();
   const { booking } = useSelector((state) => state.booking);
+
   console.log("booking", booking);
 
-  const { service } = useSelector((state) => state.service);
-  console.log("service", service);
+  booking?.data?.forEach((bookingItem) => {
+    const timeSlot = bookingItem.timeSlot;
+    console.log("timeSlot", timeSlot);
+  });
+
+  const daysList = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+
+  const generateTimeSlots = useCallback(async (rescheduleDate) => {
+    const dayNumber = new Date(rescheduleDate).getDay();
+    const timeSlotData = [
+      { active: true, startTime: " 08:05 PM", endTime: "11:48 PM" , day: "Monday" },
+    ]?.find((slot) => slot.day === daysList[dayNumber]);
+    console.log("timeSlotData",timeSlotData)
+
+    if (timeSlotData?.active.toString() == "true") {
+      await getBookedTimeSlotFunApi({
+        data: {
+          serviceId: serviceId,
+          date: date,
+        },
+      });
+
+      const timeSlots = [];
+      const startDate = new Date(`${date} ${timeSlotData?.startTime}`);
+      const endDate = new Date(`${date} ${timeSlotData?.endTime}`);
+      let currentTime = startDate;
+      while (currentTime < endDate) {
+        const formattedStartTime = currentTime.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+
+        currentTime.setMinutes(currentTime.getMinutes() + timeInterval);
+        const formattedEndTime = currentTime.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+
+        const formattedTimeSlot = `${formattedStartTime}-${formattedEndTime}`;
+        timeSlots.push({
+          startTime: formattedStartTime,
+          endTime: formattedEndTime,
+          totalTime: formattedTimeSlot,
+        });
+      }
+      setTimeSlots(timeSlots);
+    }
+  }, []);
+ 
+ 
+  generateTimeSlots()
 
   const { business, dataFatched } = useSelector((state) => state.business);
-
-  // useEffect(() => {
-  //   dispatch(getallServicesFunApi());
-  // }, [dispatch]);
-
-  // getMyBussinessFunApi({
-  //   onSuccess: (businessId) => {
-  //     dispatch(
-  //       getMyBusinessBookingFunApi({
-  //         data: {
-  //           businessId: businessId,
-  //         },
-  //       })
-  //     );
-  //   },
-  // })
 
   const handleDelete = (id) => {
     dispatch(deleteBookingFunApi(id));
@@ -83,14 +131,6 @@ const BookingPage = () => {
     setIsRescheduleDialogOpen(false);
   };
 
-  // const handleRescheduleClick = () => {
-  //   setIsRescheduleDialogOpen(true);
-  // };
-
-  // const handleRescheduleConfirm = () => {
-  //   setIsRescheduleDialogOpen(false);
-  // };
-
   const handleCancelBooking = (id) => {
     console.log("id", id);
     dispatch(cancelBookingFunApi(id));
@@ -103,6 +143,17 @@ const BookingPage = () => {
     console.log("Complete Booking");
     setDialogOpen(false);
   };
+
+  useEffect(() => {
+    dispatch(
+      rescheduledBookingFunApi({
+        // data:{
+        //   date:date,
+        //   timeSlot:timeSlot
+        // }
+      })
+    );
+  }, [dispatch, booking.data, booking.dataFatched, business?.id, dataFatched]);
 
   useEffect(() => {
     if (!dataFatched) {
@@ -422,7 +473,6 @@ const BookingPage = () => {
                           maxWidth: "100%",
                           borderRadius: "25px",
                         }}
-
                       >
                         <Typography>
                           <Box>
@@ -564,16 +614,14 @@ const BookingPage = () => {
                             <TransitionsDialog
                               maxWidth={"md"}
                               modelButton={
-                                <Button
-                                  // onClick={() => handleCompleteBooking(data.id)}
-                                  fullWidth
-                                  variant="contained"
-                                >
+                                <Button fullWidth variant="contained">
                                   Reschedule Booking
                                 </Button>
                               }
-                              submitButtonText="Delete"
-                              handleSubmit={() => handleDelete(data.id)}
+                              submitButtonText="reshudele"
+                              handleSubmit={() =>
+                                handleResheduleBooking(data.id)
+                              }
                             >
                               <Grid container spacing={4}>
                                 <Grid item xs={12} sm={6} md={6}>
@@ -581,10 +629,11 @@ const BookingPage = () => {
                                     dateAdapter={AdapterDayjs}
                                   >
                                     <StaticDatePicker
-                                      orientation="landscape"
+                                      orientation=""
+                                      ToolbarComponent={DisabledByDefault}
                                       onChange={(value) => {
                                         console.log(value.$d, "valuesetdate");
-                                        // setRescheduleDate(value.$d)
+                                        setRescheduleDate(value.$d)
                                       }}
                                     />
                                   </LocalizationProvider>
