@@ -26,9 +26,7 @@ import {
 } from "store/booking/service";
 import moment from "moment";
 import { CustomPaginationTable } from "@/components/Table/CustomPaginationTable";
-import {
-  getMyBussinessFunApi,
-} from "store/business/services";
+import { getMyBussinessFunApi } from "store/business/services";
 import { getBookedTimeSlotFunApi } from "store/booking/service";
 
 import TransitionsDialog from "@/components/UIElements/Modal/TransitionsDialog";
@@ -45,8 +43,7 @@ const BookingPage = () => {
 
   const [rescheduleDate, setRescheduleDate] = useState(null);
   const [targetBookingData, setTargetBookingData] = useState(null);
-  console.log("48",targetBookingData)
-
+  console.log("48", targetBookingData);
 
   const [timeSlots, setTimeSlots] = useState([]);
   const [selectedTime, setSelectedTime] = useState([]);
@@ -69,63 +66,76 @@ const BookingPage = () => {
     "Friday",
     "Saturday",
   ];
-  
-  const generateTimeSlots = useCallback(async (rescheduleDate) => {
 
-    const dayNumber = rescheduleDate.getDay();
+  // const activeTimeSlot = targetBookingData?.service?.timeSlots?.find((slot) => slot.day);
+  // console.log("ActiveTimeSlots 74", activeTimeSlot)
 
-    const activeTimeSlot = targetBookingData?.service?.timeSlots?.find((slot) => slot.day == daysList[dayNumber]);
-    console.log("ActiveTimeSlots 79", activeTimeSlot)
-    const isActive = activeTimeSlot?.active.toString() === "true";
-    console.log("isActive:", isActive);
-
-    if (activeTimeSlot?.active.toString() === "true") {
-
-      dispatch(
-        getBookedTimeSlotFunApi({
-          data: {
-            date: rescheduleDate,
-            serviceId: targetBookingData.service.id
-          }
-        })
+  const generateTimeSlots = useCallback(
+    async (rescheduleDate, targetBookingData) => {
+      const dayNumber = rescheduleDate.getDay();
+      console.log("79", targetBookingData);
+      const activeTimeSlot = targetBookingData?.service?.timeSlots?.find(
+        (slot) => slot.day == daysList[dayNumber]
       );
-      const timeSlots = [];
-      const startDateString = `${rescheduleDate.toISOString().split('T')[0]} ${activeTimeSlot?.startTime}`;
-      const startDate = new Date(startDateString);
+      console.log("ActiveTimeSlots 79", activeTimeSlot);
+      const isActive = activeTimeSlot?.active.toString() === "true";
+      console.log("isActive:", isActive);
 
-      const endDateString = `${rescheduleDate.toISOString().split('T')[0]} ${activeTimeSlot?.endTime}`;
-      const endDate = new Date(endDateString)
+      if (activeTimeSlot?.active.toString() === "true") {
+        dispatch(
+          getBookedTimeSlotFunApi({
+            data: {
+              date: rescheduleDate,
+              serviceId: targetBookingData.service.id,
+            },
+          })
+        );
+        const timeSlots = [];
+        const startDateString = `${
+          rescheduleDate.toISOString().split("T")[0]
+        } ${activeTimeSlot?.startTime}`;
+        const startDate = new Date(startDateString);
 
-      let currentTime = startDate;
+        const endDateString = `${rescheduleDate.toISOString().split("T")[0]} ${
+          activeTimeSlot?.endTime
+        }`;
+        const endDate = new Date(endDateString);
 
-      while (currentTime < endDate) {
-        const formattedStartTime = currentTime.toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        });
+        let currentTime = startDate;
 
-        currentTime.setMinutes(currentTime.getMinutes() + targetBookingData.service.timeInterval);
-        const formattedEndTime = currentTime.toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        });
+        while (currentTime < endDate) {
+          const formattedStartTime = currentTime.toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          });
 
-        const formattedTimeSlot = `${formattedStartTime}-${formattedEndTime}`;
-        timeSlots.push({
-          startTime: formattedStartTime,
-          endTime: formattedEndTime,
-          totalTime: formattedTimeSlot,
-        });
+          currentTime.setMinutes(
+            currentTime.getMinutes() + targetBookingData.service.timeInterval
+          );
+          const formattedEndTime = currentTime.toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          });
+
+          const formattedTimeSlot = `${formattedStartTime}-${formattedEndTime}`;
+          timeSlots.push({
+            startTime: formattedStartTime,
+            endTime: formattedEndTime,
+            totalTime: formattedTimeSlot,
+          });
+        }
+        setTimeSlots(timeSlots);
       }
-      setTimeSlots(timeSlots);
-    }
-  }, []);
+    },
+    []
+  );
 
   const [apiCalled, setApiCalled] = useState(false);
 
   useEffect(() => {
     if (!apiCalled && rescheduleDate) {
-      generateTimeSlots(rescheduleDate);
+      console.log("131tttt", targetBookingData);
+      generateTimeSlots(rescheduleDate, targetBookingData);
       setApiCalled(true);
     }
   }, [rescheduleDate, apiCalled]);
@@ -158,14 +168,8 @@ const BookingPage = () => {
     setSelectedTime(event.target.value);
   };
 
-  const renderTimeSlotInputSection = (
-    index,
-    time,
-    close,
-  ) => {
-    const disabled =
-      data[0]?.timeSlot >
-      0;
+  const renderTimeSlotInputSection = (index, time, close) => {
+    const disabled = data[0]?.timeSlot > 0;
     return (
       <div key={index}>
         <input
@@ -173,7 +177,7 @@ const BookingPage = () => {
           id={`time-slot-${index}`}
           name="hosting"
           value={time.totalTime}
-          checked={selectedTime === time.totalTime}   
+          checked={selectedTime === time.totalTime}
           className="hidden peer"
           disabled={disabled}
           onChange={(e) => {
@@ -203,16 +207,17 @@ const BookingPage = () => {
     );
   };
   const handleResheduleBooking = (id) => {
-    console.log("resheduled id", id)
+    console.log("resheduled id", id);
     dispatch(
-      rescheduledBookingFunApi({ id,
+      rescheduledBookingFunApi({
+        id,
         data: {
           date: rescheduleDate,
-          timeSlot: selectedTime  ///selected time slot
-        }
+          timeSlot: selectedTime, ///selected time slot
+        },
       })
-    )
-  }
+    );
+  };
   // useEffect(() => {
   //   dispatch(
   //     // rescheduledBookingFunApi({
@@ -464,13 +469,14 @@ const BookingPage = () => {
               >
                 <span
                   className={`
-                    ${data.status?.toLowerCase() === "completed"
-                      ? "successBadge"
-                      : data.status?.toLowerCase() === "pending"
+                    ${
+                      data.status?.toLowerCase() === "completed"
+                        ? "successBadge"
+                        : data.status?.toLowerCase() === "pending"
                         ? "primaryBadge"
                         : data.status?.toLowerCase() === "cancelled"
-                          ? "dangerBadge"
-                          : ""
+                        ? "dangerBadge"
+                        : ""
                     }
                       `}
                 >
@@ -684,7 +690,11 @@ const BookingPage = () => {
                             <TransitionsDialog
                               maxWidth={"md"}
                               modelButton={
-                                <Button fullWidth variant="contained" onClick={() => setTargetBookingData(data)}>
+                                <Button
+                                  fullWidth
+                                  variant="contained"
+                                  onClick={() => {setTargetBookingData(data); setRescheduleDate('current date')}}
+                                >
                                   Reschedule Booking
                                 </Button>
                               }
@@ -702,7 +712,7 @@ const BookingPage = () => {
                                       orientation=""
                                       ToolbarComponent={DisabledByDefault}
                                       onChange={(value) => {
-                                        setRescheduleDate(value.$d)
+                                        setRescheduleDate(value.$d);
                                       }}
                                     />
                                   </LocalizationProvider>
@@ -715,18 +725,33 @@ const BookingPage = () => {
                                       disabled
                                     />
                                   ) : (
-                                    <div className="grid w-full gap-3 grid-cols-2">
-                                      {timeSlots?.map((time, index) =>
-
+                                    <div
+                                      style={{
+                                        display: "flex",
+                                        flexWrap: "wrap",
+                                        gap: "10px",
+                                        justifyContent: "space-between",
+                                        margin: "24px 0px 12px 0px",
+                                      }}
+                                    >
+                                      {timeSlots?.map((time, index) => (
+                                        <div style={{ border:"1px solid", borderColor: 'grey.500', borderRadius: "5px" , padding:'5px' , width:"100%" }}>
                                         <React.Fragment key={index}>
-                                          {console.log("total time", time.totalTime)}
-                                          {renderTimeSlotInputSection(index, time, close)}
+                                          {console.log(
+                                            "total time",
+                                            time.totalTime
+                                          )}
+                                          {renderTimeSlotInputSection(
+                                            index,
+                                            time,
+                                            close
+                                          )}
                                         </React.Fragment>
-                                      )}
+                                        </div>
+                                      ))}
                                     </div>
                                   )}
                                 </Grid>
-
                               </Grid>
                             </TransitionsDialog>
                           </Grid>
