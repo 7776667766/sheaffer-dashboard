@@ -46,8 +46,7 @@ const BookingPage = () => {
   const [rescheduleDate, setRescheduleDate] = useState(null);
   const [targetBookingData, setTargetBookingData] = useState(null);
   console.log("48",targetBookingData)
-  const activeTimeSlot = targetBookingData?.service?.timeSlots?.find((slot) => slot.day === daysList[dayNumber]);
-  console.log("ActiveTimeSlots 79", activeTimeSlot)
+
 
   const [timeSlots, setTimeSlots] = useState([]);
   const [selectedTime, setSelectedTime] = useState([]);
@@ -70,10 +69,12 @@ const BookingPage = () => {
     "Friday",
     "Saturday",
   ];
+  
   const generateTimeSlots = useCallback(async (rescheduleDate) => {
 
     const dayNumber = rescheduleDate.getDay();
-    const activeTimeSlot = targetBookingData?.timeSlots?.find((slot) => slot.day === daysList[dayNumber]);
+
+    const activeTimeSlot = targetBookingData?.service?.timeSlots?.find((slot) => slot.day == daysList[dayNumber]);
     console.log("ActiveTimeSlots 79", activeTimeSlot)
     const isActive = activeTimeSlot?.active.toString() === "true";
     console.log("isActive:", isActive);
@@ -153,6 +154,9 @@ const BookingPage = () => {
     dispatch(completeBookingFunApi(id));
     setDialogOpen(false);
   };
+  const handleTimeChange = (event) => {
+    setSelectedTime(event.target.value);
+  };
 
   const renderTimeSlotInputSection = (
     index,
@@ -169,7 +173,7 @@ const BookingPage = () => {
           id={`time-slot-${index}`}
           name="hosting"
           value={time.totalTime}
-          // checked={selectedTime === time.totalTime}
+          checked={selectedTime === time.totalTime}   
           className="hidden peer"
           disabled={disabled}
           onChange={(e) => {
@@ -201,10 +205,10 @@ const BookingPage = () => {
   const handleResheduleBooking = (id) => {
     console.log("resheduled id", id)
     dispatch(
-      rescheduledBookingFunApi({
+      rescheduledBookingFunApi({ id,
         data: {
           date: rescheduleDate,
-          timeSlot: timeSlot
+          timeSlot: selectedTime  ///selected time slot
         }
       })
     )
