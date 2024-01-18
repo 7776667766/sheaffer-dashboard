@@ -118,6 +118,28 @@ export default function DashboardPage() {
     setavatar(file);
   };
 
+  const [isLinkCopied, setIsLinkCopied] = useState(false);
+
+  const handleSiteCopyLink = () => {
+    const linkToCopy = `${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}site/${business.slug}`;
+    navigator.clipboard.writeText(linkToCopy);
+    setIsLinkCopied(true);
+
+    setTimeout(() => {
+      setIsLinkCopied(false);
+    }, 2000);
+  };
+
+  const handleCopyLink = () => {
+    const linkToCopy = `${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}booking/${business.slug}`;
+    navigator.clipboard.writeText(linkToCopy);
+    setIsLinkCopied(true);
+
+    setTimeout(() => {
+      setIsLinkCopied(false);
+    }, 2000);
+  };
+
   return (
     <>
       {/* Page title */}
@@ -288,7 +310,7 @@ export default function DashboardPage() {
                     </div>
                   </Typography>
                 </AccordionSummary>
-                <AccordionDetails style={{marginTop: "-24px"}}>
+                <AccordionDetails style={{ marginTop: "-24px" }}>
                   <Box
                     sx={{
                       display: "flex",
@@ -335,7 +357,7 @@ export default function DashboardPage() {
                                       fontSize: "14px",
                                       color: "#757FEF",
                                       backgroundColor: "#F1F2FD",
-                                      textTransform:"capitalize"
+                                      textTransform: "capitalize",
                                     }}
                                   >
                                     Go to Website
@@ -346,7 +368,9 @@ export default function DashboardPage() {
                                     src={copyImage}
                                     width={20}
                                     height={20}
-                                    alt="ok"
+                                    alt="copy"
+                                    onClick={handleSiteCopyLink}
+                                    style={{ cursor: "pointer" }}
                                   />
                                 </Box>
                               </Box>
@@ -372,7 +396,7 @@ export default function DashboardPage() {
                                       fontSize: "14px",
                                       color: "#757FEF",
                                       backgroundColor: "#F1F2FD",
-                                      textTransform:"capitalize"
+                                      textTransform: "capitalize",
                                     }}
                                   >
                                     Go to Booking
@@ -383,14 +407,15 @@ export default function DashboardPage() {
                                     src={copyImage}
                                     width={20}
                                     height={20}
-                                    alt="ok"
+                                    alt="copy"
+                                    onClick={handleCopyLink}
+                                    style={{ cursor: "pointer" }}
                                   />
                                 </Box>
                               </Box>
                             )}
 
-                                  
-                            <Box sx={{ display: "flex", alignItems: "end"  , gap: "4px", }}>
+                            {/* <Box sx={{ display: "flex", alignItems: "end"  , gap: "4px", }}>
                               <Box>
                                 <Button
                                   target="_blank"
@@ -416,13 +441,10 @@ export default function DashboardPage() {
                                   alt="ok"
                                 />
                               </Box>
-                            </Box>
+                            </Box> */}
                           </Box>
                           <li style={{ marginBottom: "20px" }}>
-                            {business.description}Short Description Short
-                            Description Short Description Short Description
-                            Short Description Short Description Short
-                            Description
+                            {business.description}
                           </li>
                           <li
                             style={{
@@ -489,7 +511,7 @@ export default function DashboardPage() {
                           }}
                         >
                           <div style={{ height: "100px" }}>
-                            {business?.images?.map((data, key) => (
+                            {/* {business?.images?.map((data, key) => (
                               <Image
                                 key={key}
                                 src={data}
@@ -498,7 +520,7 @@ export default function DashboardPage() {
                                 height={100}
                                 style={{ borderRadius: "10px" }}
                               />
-                            ))}
+                            ))} */}
 
                             {business?.images?.map((data, key) => (
                               <Image
@@ -528,8 +550,8 @@ export default function DashboardPage() {
                                   target="_blank"
                                   className="text-3xl"
                                   style={{
-                                    color: "#000",
-                                    marginRight: "12px",
+                                    color: "#a8a8a8",
+                                    marginRight: "5px",
                                   }}
                                 >
                                   {socialLink.name === "facebook" ? (
