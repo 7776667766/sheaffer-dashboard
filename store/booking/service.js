@@ -159,14 +159,14 @@ export const rescheduledBookingFunApi = createAsyncThunk(
   async (id, data) => {
     console.log("resheduled id and data ", id, data);
     try {
-      const response = await axios.post(reseheduledBookingApi(id,data));
-      console.log("response in complete Booking => ", response.data);
+      const response = await axios.patch(reseheduledBookingApi(id,data));
+      console.log("response in resheduled booking => ", response.data);
       if (response.data.status === "success") {
         toast.success(response.data.message);
         return response.data.data;
       } else {
         console.log(
-          "Error response in complete booking Api => ",
+          "Error response in resheduled booking Api => ",
           response.data
         );
         const err =
@@ -178,7 +178,7 @@ export const rescheduledBookingFunApi = createAsyncThunk(
         throw new Error(err);
       }
     } catch (error) {
-      console.log("Error in complete booking Api ", error);
+      console.log("Error in resheduled booking Api ", error);
       let err =
         error?.response?.data?.message ||
         error?.message ||

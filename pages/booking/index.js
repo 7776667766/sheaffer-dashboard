@@ -44,18 +44,24 @@ const BookingPage = () => {
   const [isRescheduleDialogOpen, setIsRescheduleDialogOpen] = useState(false);
 
   const [rescheduleDate, setRescheduleDate] = useState(null);
-
   const [rescheduleTime, setRescheduleTime] = useState("");
-
   const [timeSlots, setTimeSlots] = useState([]);
-  console.log("TIMESLOTS--->",timeSlots)
+
 
   const dispatch = useDispatch();
   const { booking } = useSelector((state) => state.booking);
+  console.log("booking", booking)
 
-  booking?.data?.forEach((bookingItem) => {
-    const timeSlot = bookingItem.timeSlot;
-  });
+  const servicesId = booking?.data.map(item => item.service.id);
+  // const timeInterval = booking?.data.map(item => item.service.timeInterval);
+  // const timeSlotsd = booking?.data.map(item => item.service.timeSlots);
+ 
+  const { data } = booking;
+
+  if (data && data.length > 0) {
+    const { timeSlot } = data[0];
+    console.log(timeSlot);
+  }
 
   const daysList = [
     "Sunday",
@@ -66,31 +72,34 @@ const BookingPage = () => {
     "Friday",
     "Saturday",
   ];
+  const generateTimeSlots = useCallback(async (rescheduleDate, ServiceId,  timeSlotsd) => {
+   console.log("76",timeIntervall)
+ 
+    const dayNumber = rescheduleDate.getDay();
+    let timeIntervall 
 
-  const generateTimeSlots = useCallback(async (rescheduleDate, ServiceId) => {
+    const activeTimeSlot = timeSlotsd?.find((slot) => slot.day === daysList[dayNumber]);
+console.log("activetimeSOT",activeTimeSlot)
+  
+    if (activeTimeSlot?.active.toString() === "true") {
 
-    const dayNumber = new Date(rescheduleDate).getDay();
-
-    const timeSlotData = [
-      { active: true, startTime: " 08:05 PM", endTime: "11:48 PM", day: "Monday" },
-    ]?.find((slot) => slot.day === daysList[dayNumber]);
-
-    if (timeSlotData?.active.toString() === "true") {
       dispatch(
         getBookedTimeSlotFunApi({
           data: {
             date: rescheduleDate,
             serviceId: ServiceId
           }
-
         })
       );
-
       const timeSlots = [];
-      const startDate = new Date(`${rescheduleDate} ${timeSlotData?.startTime}`);
-      const endDate = new Date(`${rescheduleDate} ${timeSlotData?.endTime}`);
-      console.log(startDate,endDate,"----------123")
+      const startDateString = `${rescheduleDate.toISOString().split('T')[0]} ${timeSlotData?.startTime}`;
+      const startDate = new Date(startDateString);
+
+      const endDateString = `${rescheduleDate.toISOString().split('T')[0]} ${timeSlotData?.endTime}`;
+      const endDate = new Date(endDateString)
+
       let currentTime = startDate;
+
       while (currentTime < endDate) {
         const formattedStartTime = currentTime.toLocaleTimeString([], {
           hour: "2-digit",
@@ -118,10 +127,15 @@ const BookingPage = () => {
   const [apiCalled, setApiCalled] = useState(false);
 
   useEffect(() => {
-    const ServiceId = booking?.data[0]?.service.id;
 
-    if (!apiCalled && rescheduleDate && ServiceId) {
-      generateTimeSlots(rescheduleDate, ServiceId);
+    const ServiceId = booking?.data[0]?.service.id;
+    const timeIntervall = booking?.data.map(item => item.service.timeInterval);
+    console.log("timeInterval",timeIntervall)
+    const timeSlotsd = booking?.data.map(item => item.service.timeSlots);
+    console.log("timeSlotsd",timeSlotsd)
+
+    if (!apiCalled && rescheduleDate && ServiceId && timeIntervall && timeSlotsd) {
+      generateTimeSlots(rescheduleDate, ServiceId,timeIntervall,timeSlotsd);
       setApiCalled(true);
     }
   }, [rescheduleDate, booking?.data, apiCalled]);
@@ -141,7 +155,7 @@ const BookingPage = () => {
     setIsRescheduleDialogOpen(false);
   };
 
-  const handleCancelBooking = (id) => {   
+  const handleCancelBooking = (id) => {
     dispatch(cancelBookingFunApi(id));
     setDialogOpen(false);
   };
@@ -151,16 +165,72 @@ const BookingPage = () => {
     setDialogOpen(false);
   };
 
-  useEffect(() => {
+  const renderTimeSlotInputSection = (
+
+    index,
+    time,
+    close,
+  ) => {
+    const disabled =
+      data[0]?.timeSlot >
+      0;
+    return (
+      <div key={index}>
+        <input
+          type="radio"
+          id={`time-slot-${index}`}
+          name="hosting"
+          value={time.totalTime}
+          // checked={selectedTime === time.totalTime}
+          className="hidden peer"
+          disabled={disabled}
+          onChange={(e) => {
+            handleTimeChange(e);
+            close();
+          }}
+        />
+        <label
+          htmlFor={`time-slot-${index}`}
+          className={`inline-flex items-center justify-center w-full px-1 py-2 text-gray-500 bg-white border border-gray-200 rounded-lg 
+            ? ""
+            : "cursor-pointer dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+            }  dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:bg-blue-600 peer-checked:text-white hover:text-gray-600  dark:text-gray-400 dark:bg-gray-800 `}
+        >
+          {data[0]?.timeSlot ? (
+            <div>
+              <div className="text-xs font-semibold">{time.totalTime}</div>
+              <div className="text-xs font-semibold text-red-500 ">Booked</div>
+            </div>
+          ) : (
+            <div className="mx-auto text-sm font-semibold">
+              {time.totalTime}
+            </div>
+          )}
+        </label>
+      </div>
+    );
+  };
+  const handleResheduleBooking = (id) => {
+    console.log("resheduled id", id)
     dispatch(
       rescheduledBookingFunApi({
-        data:{
-          // date:date,
-          // timeSlot:timeSlot
+        data: {
+          date: date,
+          timeSlot: timeSlot
         }
       })
-    );
-  }, [dispatch, booking.data, booking.dataFatched, business?.id, dataFatched]);
+    )
+  }
+  // useEffect(() => {
+  //   dispatch(
+  //     // rescheduledBookingFunApi({
+  //     //   data:{
+  //     //     // date:date,
+  //     //     // timeSlot:timeSlot
+  //     //   }
+  //     // })
+  //   );
+  // }, [dispatch, booking.data, booking.dataFatched, business?.id, dataFatched]);
 
   useEffect(() => {
     if (!dataFatched) {
@@ -646,16 +716,25 @@ const BookingPage = () => {
                                   </LocalizationProvider>
                                 </Grid>
                                 <Grid item xs={12} sm={6} md={6}>
-                                  <TextField
-                                    label="Time"
-                                    type="time"
-                                    value={rescheduleTime}
-                                    onChange={(e) =>
-                                      setRescheduleTime(e.target.value)
-                                    }
-                                    fullWidth
-                                  />
+                                  {timeSlots?.length === 0 ? (
+                                    <TextField
+                                      className="w-full"
+                                      label="No time slot available"
+                                      disabled
+                                    />
+                                  ) : (
+                                    <div className="grid w-full gap-3 grid-cols-2">
+                                      {timeSlots?.map((time, index) =>
+
+                                        <React.Fragment key={index}>
+                                          {console.log("total time", time.totalTime)}
+                                          {renderTimeSlotInputSection(index, time, close)}
+                                        </React.Fragment>
+                                      )}
+                                    </div>
+                                  )}
                                 </Grid>
+
                               </Grid>
                             </TransitionsDialog>
                           </Grid>
