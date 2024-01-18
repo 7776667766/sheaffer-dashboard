@@ -44,18 +44,16 @@ const BookingPage = () => {
   const [isRescheduleDialogOpen, setIsRescheduleDialogOpen] = useState(false);
 
   const [rescheduleDate, setRescheduleDate] = useState(null);
-  const [rescheduleTime, setRescheduleTime] = useState("");
-  const [timeSlots, setTimeSlots] = useState([]);
+  const [targetBookingData, setTargetBookingData] = useState(null);
+  console.log("48",targetBookingData)
+  const activeTimeSlot = targetBookingData?.service?.timeSlots?.find((slot) => slot.day === daysList[dayNumber]);
+  console.log("ActiveTimeSlots 79", activeTimeSlot)
 
+  const [timeSlots, setTimeSlots] = useState([]);
+  const [selectedTime, setSelectedTime] = useState([]);
 
   const dispatch = useDispatch();
   const { booking } = useSelector((state) => state.booking);
-  console.log("booking", booking)
-
-  const servicesId = booking?.data.map(item => item.service.id);
-  // const timeInterval = booking?.data.map(item => item.service.timeInterval);
-  // const timeSlotsd = booking?.data.map(item => item.service.timeSlots);
- 
   const { data } = booking;
 
   if (data && data.length > 0) {
@@ -72,30 +70,29 @@ const BookingPage = () => {
     "Friday",
     "Saturday",
   ];
-  const generateTimeSlots = useCallback(async (rescheduleDate, ServiceId,  timeSlotsd) => {
-   console.log("76",timeIntervall)
- 
-    const dayNumber = rescheduleDate.getDay();
-    let timeIntervall 
+  const generateTimeSlots = useCallback(async (rescheduleDate) => {
 
-    const activeTimeSlot = timeSlotsd?.find((slot) => slot.day === daysList[dayNumber]);
-console.log("activetimeSOT",activeTimeSlot)
-  
+    const dayNumber = rescheduleDate.getDay();
+    const activeTimeSlot = targetBookingData?.timeSlots?.find((slot) => slot.day === daysList[dayNumber]);
+    console.log("ActiveTimeSlots 79", activeTimeSlot)
+    const isActive = activeTimeSlot?.active.toString() === "true";
+    console.log("isActive:", isActive);
+
     if (activeTimeSlot?.active.toString() === "true") {
 
       dispatch(
         getBookedTimeSlotFunApi({
           data: {
             date: rescheduleDate,
-            serviceId: ServiceId
+            serviceId: targetBookingData.service.id
           }
         })
       );
       const timeSlots = [];
-      const startDateString = `${rescheduleDate.toISOString().split('T')[0]} ${timeSlotData?.startTime}`;
+      const startDateString = `${rescheduleDate.toISOString().split('T')[0]} ${activeTimeSlot?.startTime}`;
       const startDate = new Date(startDateString);
 
-      const endDateString = `${rescheduleDate.toISOString().split('T')[0]} ${timeSlotData?.endTime}`;
+      const endDateString = `${rescheduleDate.toISOString().split('T')[0]} ${activeTimeSlot?.endTime}`;
       const endDate = new Date(endDateString)
 
       let currentTime = startDate;
@@ -106,7 +103,7 @@ console.log("activetimeSOT",activeTimeSlot)
           minute: "2-digit",
         });
 
-        currentTime.setMinutes(currentTime.getMinutes() + timeInterval);
+        currentTime.setMinutes(currentTime.getMinutes() + targetBookingData.service.timeInterval);
         const formattedEndTime = currentTime.toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
@@ -123,22 +120,14 @@ console.log("activetimeSOT",activeTimeSlot)
     }
   }, []);
 
-
   const [apiCalled, setApiCalled] = useState(false);
 
   useEffect(() => {
-
-    const ServiceId = booking?.data[0]?.service.id;
-    const timeIntervall = booking?.data.map(item => item.service.timeInterval);
-    console.log("timeInterval",timeIntervall)
-    const timeSlotsd = booking?.data.map(item => item.service.timeSlots);
-    console.log("timeSlotsd",timeSlotsd)
-
-    if (!apiCalled && rescheduleDate && ServiceId && timeIntervall && timeSlotsd) {
-      generateTimeSlots(rescheduleDate, ServiceId,timeIntervall,timeSlotsd);
+    if (!apiCalled && rescheduleDate) {
+      generateTimeSlots(rescheduleDate);
       setApiCalled(true);
     }
-  }, [rescheduleDate, booking?.data, apiCalled]);
+  }, [rescheduleDate, apiCalled]);
 
   const { business, dataFatched } = useSelector((state) => state.business);
 
@@ -166,7 +155,6 @@ console.log("activetimeSOT",activeTimeSlot)
   };
 
   const renderTimeSlotInputSection = (
-
     index,
     time,
     close,
@@ -215,7 +203,7 @@ console.log("activetimeSOT",activeTimeSlot)
     dispatch(
       rescheduledBookingFunApi({
         data: {
-          date: date,
+          date: rescheduleDate,
           timeSlot: timeSlot
         }
       })
@@ -678,7 +666,7 @@ console.log("activetimeSOT",activeTimeSlot)
                                 />
 
                                 <Typography sx={{ fontSize: 18 }}>
-                                  <b>Are You Sure You Want To Cance ?</b>
+                                  <b>Are You Sure You Want To Cancel ?</b>
                                   <br />
                                   <span style={{ fontSize: 14 }}>
                                     You are deleting this data & this action is
@@ -692,7 +680,7 @@ console.log("activetimeSOT",activeTimeSlot)
                             <TransitionsDialog
                               maxWidth={"md"}
                               modelButton={
-                                <Button fullWidth variant="contained">
+                                <Button fullWidth variant="contained" onClick={() => setTargetBookingData(data)}>
                                   Reschedule Booking
                                 </Button>
                               }
