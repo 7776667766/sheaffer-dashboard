@@ -54,8 +54,15 @@ export default function DashboardPage() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    slug:"",
+    bannerText:"",
+    address:"",
     description: "",
-    googleId: "",
+    logo:"",
+    googleId:"",
+    phone:"",
+    bookingService:"",
+    websiteService:"",
     color: "",
     theme: "",
     file: null,
@@ -185,7 +192,7 @@ export default function DashboardPage() {
           <li>
             {role === "owner" && (
               <>
-                <Button
+              <div style={{display:"flex",gap:"15px"}}><Button
                   variant="contained"
                   // disabled={business ? true : false}
                   onClick={handleClickOpen}
@@ -198,11 +205,12 @@ export default function DashboardPage() {
                   onClick={handleOpenRequest}
                 >
                   Send Custom Booking Request
-                </Button>
+                </Button></div>
+                
 
-                <Dialog open={open} onClose={handleClose}>
+                <Dialog open={open} onClose={handleClose} >
                   <DialogTitle>
-                    {" "}
+                 
                     Select Your Business
                     <IconButton
                       edge="end"
@@ -213,7 +221,7 @@ export default function DashboardPage() {
                       <CloseIcon />
                     </IconButton>
                   </DialogTitle>
-                  <List sx={{ pt: 0 }}>
+                  <List sx={{ pt: 0 }} >
                     {businessList.map((data, index) => (
                       <ListItem disableGutters key={index}>
                         <ListItemButton onClick={() => handleOpen(data)}>
@@ -236,10 +244,14 @@ export default function DashboardPage() {
                     sx: {
                       width: "700px",
                       height: "500px",
+                      padding:"20px"
                     },
                   }}
+
+                 
+                  
                 >
-                  <DialogTitle>
+                  <DialogTitle style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     Business Form Request
                     <IconButton
                       edge="end"
@@ -251,7 +263,7 @@ export default function DashboardPage() {
                     </IconButton>
                   </DialogTitle>
 
-                  <div sx={{ padding: "16px", margin: "16px" }}>
+                  <div sx={{ padding: "30px", margin: "16px" }}>
                     <Grid item xs={6} md={6} lg={6}>
                       <Typography
                         as="h5"
@@ -295,7 +307,27 @@ export default function DashboardPage() {
                       />
                     </Grid>
 
-
+                    <Grid item xs={6} md={6} lg={6}>
+                      <Typography
+                        as="h5"
+                        sx={{
+                          fontWeight: "500",
+                          fontSize: "14px",
+                          mb: "12px",
+                        }}
+                      >
+                        Slug
+                      </Typography>
+                      <TextField
+                        name="slug"
+                        fullWidth
+                        id="slug"
+                        label="Enter slug"
+                        value={formData.slug}
+                        onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+                      />
+                      
+                    </Grid>
                     <Grid item xs={6} md={6} lg={6}>
                       <Typography
                         as="h5"
@@ -317,6 +349,69 @@ export default function DashboardPage() {
                       />
                     </Grid>
 
+
+
+                    <Grid item xs={6} md={6} lg={6}>
+                      <Typography
+                        as="h5"
+                        sx={{
+                          fontWeight: "500",
+                          fontSize: "14px",
+                          mb: "12px",
+                        }}
+                      >
+                       bannerText
+                      </Typography>
+                      <TextField
+                        name="bannerText"
+                        fullWidth
+                        id="bannerText"
+                        label="Enter BannerText"
+                        value={formData.bannerText} // Set the value to the dynamic description from formData
+                        onChange={(e) => setFormData({ ...formData, bannerText: e.target.value })} // Handle changes and update the formData state
+                      />
+                    </Grid>
+                    <Grid item xs={6} md={6} lg={6}>
+                      <Typography
+                        as="h5"
+                        sx={{
+                          fontWeight: "500",
+                          fontSize: "14px",
+                          mb: "12px",
+                        }}
+                      >
+                       Address
+                      </Typography>
+                      <TextField
+                        name="address"
+                        fullWidth
+                        id="address"
+                        label="Enter Address"
+                        value={formData.address} // Set the value to the dynamic description from formData
+                        onChange={(e) => setFormData({ ...formData, address: e.target.value })} // Handle changes and update the formData state
+                      />
+                    </Grid>
+
+                    <Grid item xs={6} md={6} lg={6}>
+                      <Typography
+                        as="h5"
+                        sx={{
+                          fontWeight: "500",
+                          fontSize: "14px",
+                          mb: "12px",
+                        }}
+                      >
+                       Logo
+                      </Typography>
+                      <TextField
+                        name="Logo"
+                        fullWidth
+                        id="logo"
+                        label="Enter Logo"
+                        value={formData.logo} // Set the value to the dynamic description from formData
+                        onChange={(e) => setFormData({ ...formData, logo: e.target.value })} // Handle changes and update the formData state
+                      />
+                    </Grid>
                     <Grid item xs={6} md={6} lg={6}>
                       <Typography
                         as="h5"
@@ -337,8 +432,67 @@ export default function DashboardPage() {
                         onChange={(e) => setFormData({ ...formData, googleId: e.target.value })} // Handle changes and update the formData state
                       />
                     </Grid>
-
                     <Grid item xs={6} md={6} lg={6}>
+                      <Typography
+                        as="h5"
+                        sx={{
+                          fontWeight: "500",
+                          fontSize: "14px",
+                          mb: "12px",
+                        }}
+                      >
+                        Phone
+                      </Typography>
+                      <TextField
+                        name="Phone"
+                        fullWidth
+                        id="phone"
+                        label="Enter Phone"
+                        value={formData.phone} // Set the value to the dynamic googleId from formData
+                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })} // Handle changes and update the formData state
+                      />
+                    </Grid>
+                    <Grid item xs={6} md={6} lg={6}>
+                      <Typography
+                        as="h5"
+                        sx={{
+                          fontWeight: "500",
+                          fontSize: "14px",
+                          mb: "12px",
+                        }}
+                      >
+                        BookingService
+                      </Typography>
+                      <TextField
+                        name="bookingService"
+                        fullWidth
+                        id="bookingService"
+                        label="Enter BookingService "
+                        value={formData.bookingService} // Set the value to the dynamic googleId from formData
+                        onChange={(e) => setFormData({ ...formData, bookingService: e.target.value })} // Handle changes and update the formData state
+                      />
+                    </Grid>
+                    <Grid item xs={6} md={6} lg={6}>
+                      <Typography
+                        as="h5"
+                        sx={{
+                          fontWeight: "500",
+                          fontSize: "14px",
+                          mb: "12px",
+                        }}
+                      >
+                        WebsiteService
+                      </Typography>
+                      <TextField
+                        name=" websiteService"
+                        fullWidth
+                        id=" websiteService"
+                        label="Enter  WebsiteService"
+                        value={formData.websiteService} // Set the value to the dynamic googleId from formData
+                        onChange={(e) => setFormData({ ...formData, websiteService: e.target.value })} // Handle changes and update the formData state
+                      />
+                    </Grid>
+                    {/* <Grid item xs={6} md={6} lg={6}>
                       <Typography
                         as="h5"
                         sx={{
@@ -357,7 +511,7 @@ export default function DashboardPage() {
                         value={formData.color} // Set the value to the dynamic color from formData
                         onChange={(e) => setFormData({ ...formData, color: e.target.value })} // Handle changes and update the formData state
                       />
-                    </Grid>
+                    </Grid> */}
 
 
                     <Grid item xs={6} md={6} lg={6}>
@@ -380,6 +534,7 @@ export default function DashboardPage() {
                         onChange={(e) => setFormData({ ...formData, theme: e.target.value })} 
                       />
                     </Grid>
+                   
 
                     {/* <Grid item xs={6} md={6} lg={6}>
                       <Box sx={{ display: "flex", alignItems: "end", gap: 1 }}>
@@ -416,7 +571,7 @@ export default function DashboardPage() {
                               mb: "12px",
                             }}
                           >
-                            Upload Logo
+                            File
                           </Typography>
 
                           <TextField
@@ -429,7 +584,7 @@ export default function DashboardPage() {
                       </Box>
                     </Grid>
 
-                    <Grid item xs={12} textAlign="left">
+                    <Grid item xs={12} style={{ textAlign: "center", marginTop: "20px" }} >
                       <LoadingButtonComponent
                         onClick={handleAddRequest}
                         type="submit"
@@ -439,8 +594,8 @@ export default function DashboardPage() {
                         }}
                         value={
                           <>
-                            <SendIcon className="mr-5px" />
-                            Add Request
+                            <SendIcon className="mr-10px" />
+                            Send Request
                           </>
                         }
                       />

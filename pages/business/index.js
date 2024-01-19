@@ -250,24 +250,48 @@ const BusinessPage = () => {
               >
                 {data?.phone}
               </TableCell>
-              <Button
+
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13px",
+                  pt: "16px",
+                  pb: "16px",
+                }}
+              >
+                 <Button
                 component="div"
                 sx={{
                   borderBottom: "1px solid #F7FAFF",
                   fontSize: "13px",
                   pt: "16px",
                   pb: "16px",
+                 
                   cursor: "pointer",
                   "&:hover": {
                     textDecoration: "underline",
                   },
                 }}
+
+                style={{ color: "blue",}}
                 onClick={(event) => handleClick(data?.id, event)}
               >
                 {data?.requestStatus}
               </Button>
+              </TableCell>
+              
+              
+             
 
-              <Tooltip title="Rename" placement="top">
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13px",
+                  pt: "16px",
+                  pb: "16px",
+                }}
+              >
+                <Tooltip title="Rename" placement="top">
                 <IconButton
                   aria-label="edit"
                   size="small"
@@ -278,6 +302,10 @@ const BusinessPage = () => {
                   <DriveFileRenameOutlineIcon fontSize="inherit" />
                 </IconButton>
               </Tooltip>
+              </TableCell>
+              
+              
+           
             </>
           )}
         />
