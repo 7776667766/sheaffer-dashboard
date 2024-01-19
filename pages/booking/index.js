@@ -412,6 +412,8 @@ const BookingPage = () => {
                         ? "primaryBadge"
                         : data.status?.toLowerCase() === "cancelled"
                         ? "dangerBadge"
+                        : data.status?.toLowerCase() === "reseheduled"
+                        ? "secondaryBadge"
                         : ""
                     }
                       `}
@@ -463,20 +465,18 @@ const BookingPage = () => {
                         </div>
                       </TransitionsDialog>
                     </Tooltip> */}
-
-                    <Tooltip title="Edit" placement="top">
-                      <Button
-                        style={{
-                          backgroundColor: "#E2A248",
-                        }}
-                        onClick={() => {
-                          setTargetBookingData(data);
-                          handleTooltipClick();
-                        }}
-                      >
-                        Edit
-                      </Button>
-                    </Tooltip>
+                      <Tooltip title="Edit" placement="top">
+                        <Button
+                          variant="text"
+                          onClick={() => {
+                            setTargetBookingData(data);
+                            handleTooltipClick();
+                          }}
+                          style={{marginRight: "-16px" }}
+                        >
+                          Edit
+                        </Button>
+                      </Tooltip>
 
                     {/* <Dialog open={isDialogOpen} onClose={handleDialogClose}>
                       <DialogTitle>Edit Booking Details</DialogTitle>
@@ -937,7 +937,11 @@ const BookingPage = () => {
                                 setSelectedTime(time.totalTime);
                               }}
                             >
-                              <Typography variant="h6" color="inherit">
+                              <Typography
+                                variant="h6"
+                                color="inherit"
+                                style={{ fontSize: "13px" }}
+                              >
                                 {time.totalTime}
                               </Typography>
                             </Box>
