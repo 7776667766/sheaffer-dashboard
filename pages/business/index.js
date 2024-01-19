@@ -8,7 +8,7 @@ import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutli
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { CustomPaginationTable } from "@/components/Table/CustomPaginationTable";
-import { getMyBussinessFunApi, getallBussinessesFunApi, } from "store/business/services";
+import { addCustomBusinessApprovedFunApi, addCustomBusinessFunApi, getMyBussinessFunApi, getallBussinessesFunApi, } from "store/business/services";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import BusinessForm from "./businessform";
@@ -18,10 +18,15 @@ const BusinessPage = () => {
     const router = useRouter();
     const [isRenameFormOpen, setIsRenameFormOpen] = useState(false);
     const [selectedBusiness, setSelectedBusiness] = useState(null);
+    console.log( "BUSINESS ID",selectedBusiness?.id)
     const [open, setOpen] = useState(false);
     const { role } = useSelector((state) => state.auth);
     const [isRejecting, setIsRejecting] = useState(false);
+    const [rejectReason, setRejectReason] = useState("");
+
     const { business, dataFatched, isLoading } = useSelector((state) => state.business);
+
+    /// ALL BUSINESS API
 
     useEffect(() => {
         if (!dataFatched) {
@@ -30,6 +35,7 @@ const BusinessPage = () => {
         }
     }, [dispatch, dataFatched]);
 
+   
 
     const handleClick = (id) => {
         const selectedBusiness = business.find((item) => item.id === id);
@@ -46,11 +52,30 @@ const BusinessPage = () => {
         setIsRejecting(true);
     };
 
+    ///CUSTOM REJECTED API
+
     const handleRejectConfirm = () => {
-       
+        dispatch(addCustomBusinessFunApi({
+            data: {
+                businessId: selectedBusiness.id,
+                rejectreason: rejectReason
+            },
+        }));
         setIsRejecting(false);
         handleClose();
     };
+
+    ///CUSTOM APPROVED API 
+
+    const handleApproved = () => {
+        dispatch(addCustomBusinessApprovedFunApi({
+            data: {
+                businessId: selectedBusiness.id,
+            },
+        }));
+        handleClose();
+    };
+    
 
 
     const OpenPopUp = (id) => {
@@ -61,6 +86,9 @@ const BusinessPage = () => {
     const handleClosePopup = () => {
         setIsRenameFormOpen(false);
     };
+
+
+
     return (
         <>
             <Card
@@ -187,7 +215,7 @@ const BusinessPage = () => {
                                     pb: "16px",
                                 }}
                             >
-                                {data.name}
+                                {data?.name}
                             </TableCell>
 
                             <TableCell
@@ -197,7 +225,7 @@ const BusinessPage = () => {
                                     pb: "16px",
                                 }}
                             >
-                                {data.address}
+                                {data?.address}
                             </TableCell>
 
                             <TableCell
@@ -208,7 +236,7 @@ const BusinessPage = () => {
                                     pb: "16px",
                                 }}
                             >
-                                {data.email}
+                                {data?.email}
                             </TableCell>
 
 
@@ -220,7 +248,7 @@ const BusinessPage = () => {
                                     pb: "16px",
                                 }}
                             >
-                                {data.phone}
+                                {data?.phone}
                             </TableCell>
                             <Button
                                 component="div"
@@ -235,10 +263,10 @@ const BusinessPage = () => {
                                     },
                                 }}
 
-                                onClick={(event) => handleClick(data.id, event)}
+                                onClick={(event) => handleClick(data?.id, event)}
 
                             >
-                                {data.requestStatus}
+                                {data?.requestStatus}
                             </Button>
 
                             <Tooltip title="Rename" placement="top">
@@ -247,7 +275,7 @@ const BusinessPage = () => {
                                     size="small"
                                     color="primary"
                                     className="primary"
-                                    onClick={(event) => OpenPopUp(data.id, event)}
+                                    onClick={(event) => OpenPopUp(data?.id, event)}
                                 >
                                     <DriveFileRenameOutlineIcon fontSize="inherit" />
 
@@ -269,7 +297,10 @@ const BusinessPage = () => {
                     </div>
 
                     <div style={{ padding: '20px', textAlign: 'center' }}>
-                        <Button variant="contained">
+                        <Button variant="contained"
+                         onClick={handleApproved}
+                        >
+                       
                             Approved
                         </Button>
                         <Button variant="contained"
