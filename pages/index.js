@@ -40,6 +40,7 @@ import { LoadingButtonComponent } from "@/components/UIElements/Buttons/LoadingB
 export default function DashboardPage() {
   const { user, role } = useSelector((state) => state.auth);
   const { business, dataFatched } = useSelector((state) => state.business);
+
   console.log(business, "business information");
 
   const dispatch = useDispatch();
@@ -101,6 +102,19 @@ export default function DashboardPage() {
       image: "",
     },
   ];
+
+  const handleAddRequest = () => {
+    dispatch(
+      regsiterBusinessFunApi({
+        data: {
+          ...formData,
+        },
+        onSuccess: () => {
+          handleClose();
+        },
+      })
+    );
+  };
 
   const handleRegisterBusiness = () => {
     dispatch(
@@ -255,8 +269,10 @@ export default function DashboardPage() {
                         id="name"
                         label="Enter Name"
                         value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })} // Handle changes and update the formData state
                       />
                     </Grid>
+
 
                     <Grid item xs={6} md={6} lg={6}>
                       <Typography
@@ -275,8 +291,10 @@ export default function DashboardPage() {
                         id="email"
                         label="Enter Email"
                         value={formData.email}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       />
                     </Grid>
+
 
                     <Grid item xs={6} md={6} lg={6}>
                       <Typography
@@ -294,7 +312,8 @@ export default function DashboardPage() {
                         fullWidth
                         id="description"
                         label="Enter Description"
-                        value={formData.description}
+                        value={formData.description} // Set the value to the dynamic description from formData
+                        onChange={(e) => setFormData({ ...formData, description: e.target.value })} // Handle changes and update the formData state
                       />
                     </Grid>
 
@@ -314,6 +333,8 @@ export default function DashboardPage() {
                         fullWidth
                         id="googleId"
                         label="Enter Google ID"
+                        value={formData.googleId} // Set the value to the dynamic googleId from formData
+                        onChange={(e) => setFormData({ ...formData, googleId: e.target.value })} // Handle changes and update the formData state
                       />
                     </Grid>
 
@@ -333,9 +354,11 @@ export default function DashboardPage() {
                         fullWidth
                         id="color"
                         label="Enter Color"
-                        value={formData.color}
+                        value={formData.color} // Set the value to the dynamic color from formData
+                        onChange={(e) => setFormData({ ...formData, color: e.target.value })} // Handle changes and update the formData state
                       />
                     </Grid>
+
 
                     <Grid item xs={6} md={6} lg={6}>
                       <Typography
@@ -353,11 +376,12 @@ export default function DashboardPage() {
                         fullWidth
                         id="theme"
                         label="Enter Theme"
-                        value={formData.theme}
+                        value={formData.theme} 
+                        onChange={(e) => setFormData({ ...formData, theme: e.target.value })} 
                       />
                     </Grid>
 
-                    <Grid item xs={6} md={6} lg={6}>
+                    {/* <Grid item xs={6} md={6} lg={6}>
                       <Box sx={{ display: "flex", alignItems: "end", gap: 1 }}>
                         <Box sx={{ flex: 1 }}>
                           <Typography
@@ -379,7 +403,7 @@ export default function DashboardPage() {
                           />
                         </Box>
                       </Box>
-                    </Grid>
+                    </Grid> */}
 
                     <Grid item xs={6} md={6} lg={6}>
                       <Box sx={{ display: "flex", alignItems: "end", gap: 1 }}>
@@ -407,6 +431,7 @@ export default function DashboardPage() {
 
                     <Grid item xs={12} textAlign="left">
                       <LoadingButtonComponent
+                        onClick={handleAddRequest}
                         type="submit"
                         fullWidth={false}
                         sx={{

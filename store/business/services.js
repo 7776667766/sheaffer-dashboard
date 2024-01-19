@@ -1,6 +1,6 @@
 import axios from "helper/api";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getMyBusiness, registerBusinessApi, addBusinessApi , getallBusinesses  } from "./constrants";
+import { getMyBusiness, registerBusinessApi, addBusinessApi , addCustomBusinessApiApproved, getallBusinesses , addCustomBusinessApi  } from "./constrants";
 import toast from "react-hot-toast";
 import axiosImage from "helper/api-image";
 
@@ -167,3 +167,79 @@ export const getallBussinessesFunApi = createAsyncThunk(
     }
   }
 );
+
+export const addCustomBusinessFunApi = createAsyncThunk(
+  "business/customBusiness",
+  async ({ data, onSuccess }) => {
+    console.log("res data", data)
+    try {
+      const response = await axios.post(addCustomBusinessApi, data);
+      console.log("response in create custom business => ", response.data);
+      if (response.data.status === "success") {
+        toast.success("custom Business reject  successfully");
+        if (onSuccess) {
+          onSuccess();
+        }
+        return response.data.data;
+      } else {
+        console.log("Error response in create custom Business reject  Api => ", response.data);
+        const err =
+          response?.data?.message ||
+          response?.message ||
+          "Something went wrong!";
+        console.log("err: ", err);
+        toast.error(err);
+        throw new Error(err);
+      }
+    } catch (error) {
+      console.log("Error in create custom Business reject  Api ", error);
+      let err =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Something went wrong!";
+      if (err === "Network Error") {
+        err = "Please check your internet connection";
+      }
+      toast.error(err);
+      throw new Error(err);
+    }
+  }
+);
+
+export const addCustomBusinessApprovedFunApi = createAsyncThunk(
+  "business/customBusinessApproved",
+  async ({ data, onSuccess }) => {
+    console.log("res data", data)
+    try {
+      const response = await axios.post(addCustomBusinessApiApproved, data);
+      console.log("response to custom business Approved => ", response.data);
+      if (response.data.status === "success") {
+        toast.success("custom business Approved successfully");
+        if (onSuccess) {
+          onSuccess();
+        }
+        return response.data.data;
+      } else {
+        console.log("Error in response to Approved Custom Business successfully Api => ", response.data);
+        const err =
+          response?.data?.message ||
+          response?.message ||
+          "Something went wrong!";
+        console.log("err: ", err);
+        toast.error(err);
+        throw new Error(err);
+      }
+    } catch (error) {
+      console.log("Error in response to Approved Custom Business Api ", error);
+      let err =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Something went wrong!";
+      if (err === "Network Error") {
+        err = "Please check your internet connection";
+      }
+      toast.error(err);
+      throw new Error(err);
+    }
+  }
+)
