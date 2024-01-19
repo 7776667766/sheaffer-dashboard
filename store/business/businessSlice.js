@@ -5,7 +5,7 @@ const { createSlice } = require("@reduxjs/toolkit");
 const businessSlice = createSlice({
   name: "business",
   initialState: {
-    business: null,
+    business: [],
     isLoading: false,
     error: null,
     dataFatched: false,
@@ -82,10 +82,19 @@ const businessSlice = createSlice({
         state.error = null;
       })
       .addCase(addCustomBusinessFunApi.fulfilled, (state, action) => {
+        console.log("85 payload",action.payload)
         state.isLoading = false;
-        state.business = action.payload;
+        state.business = state.business?.map((ele) =>
+        ele.id === action.payload.id ? action.payload : ele
+        );
         state.dataFatched = true;
       })
+      // {
+      //   state.serviceType.isLoading = false;
+      //   state.serviceType.data = state.serviceType.data?.map((ele) =>
+      //     ele.id === action.payload.id ? action.payload : ele
+      //   );
+
       .addCase(addCustomBusinessFunApi.rejected, (state, action) => {
         state.isLoading = false;
         state.business = null;
@@ -100,8 +109,9 @@ const businessSlice = createSlice({
       })
       .addCase(addCustomBusinessApprovedFunApi.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.business = action.payload;
-        state.dataFatched = true;
+        state.business = state.business?.map((ele) =>
+        ele.id === action.payload.id ? action.payload : ele
+        );
       })
       .addCase(addCustomBusinessApprovedFunApi.rejected, (state, action) => {
         state.isLoading = false;

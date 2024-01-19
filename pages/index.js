@@ -89,6 +89,9 @@ export default function DashboardPage() {
       if (!dataFatched) {
         dispatch(getMyBussinessFunApi({}));
       }
+      // if (business && business.requestStatus === "Pending") {
+      //   return router.push("/wait-for-approval");
+      // }
     }
   }, [dispatch, dataFatched, role]);
 
@@ -380,30 +383,6 @@ export default function DashboardPage() {
                         onChange={(e) => setFormData({ ...formData, theme: e.target.value })} 
                       />
                     </Grid>
-
-                    {/* <Grid item xs={6} md={6} lg={6}>
-                      <Box sx={{ display: "flex", alignItems: "end", gap: 1 }}>
-                        <Box sx={{ flex: 1 }}>
-                          <Typography
-                            as="h5"
-                            sx={{
-                              fontWeight: "500",
-                              fontSize: "14px",
-                              mb: "12px",
-                            }}
-                          >
-                            Upload Banner Image
-                          </Typography>
-
-                          <TextField
-                            fullWidth
-                            name="file"
-                            type="file"
-                            id="file"
-                          />
-                        </Box>
-                      </Box>
-                    </Grid> */}
 
                     <Grid item xs={6} md={6} lg={6}>
                       <Box sx={{ display: "flex", alignItems: "end", gap: 1 }}>
