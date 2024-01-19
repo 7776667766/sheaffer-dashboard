@@ -42,21 +42,18 @@ export default function TransitionsDialog({
         <Dialog
           open={open}
           fullWidth={true}
-          maxWidth={maxWidth ||"sm"}
+          maxWidth={maxWidth || "sm"}
           TransitionComponent={Transition}
           keepMounted
           onClose={handleClose}
           aria-describedby="alert-dialog-slide-description"
         >
           <div className="bg-black">
-            {/* <DialogTitle>{""}</DialogTitle> */}
-
             <DialogContent>{children}</DialogContent>
-
             <DialogActions sx={{ paddingTop: 0, padding: 1.5 }}>
-              <Grid spacing={1} justifyContent="center" container>
+              <Grid spacing={1} justifyContent="end" container>
                 {handleSubmit && (
-                  <Grid item xs={6}>
+                  <Grid item xs={maxWidth === "md" ? 3 : 6}>
                     <Button
                       variant="contained"
                       fullWidth
@@ -69,7 +66,7 @@ export default function TransitionsDialog({
                     </Button>
                   </Grid>
                 )}
-                <Grid item xs={6}>
+                <Grid item xs={maxWidth === "md" ? 3 : 6}>
                   <Button variant="outlined" fullWidth onClick={handleClose}>
                     {closeButtonText || "Cancel"}
                   </Button>

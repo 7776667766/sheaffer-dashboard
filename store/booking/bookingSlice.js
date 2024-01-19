@@ -18,6 +18,12 @@ const bookingSlice = createSlice({
       error: null,
       dataFatched: false,
     },
+    // bookedTimeSlots: {
+    //   data: [],
+    //   isLoading: false,
+    //   error: null,
+    //   dataFatched: false,
+    // },
   },
   reducers: {},
   //All Booking Api
@@ -37,7 +43,7 @@ const bookingSlice = createSlice({
         state.booking.error = action.payload;
         state.booking.dataFatched = true;
       });
-      //Delete Booking Api
+    //Delete Booking Api
     builder
       .addCase(deleteBookingFunApi.pending, (state, action) => {
         state.booking.isLoading = true;
@@ -69,7 +75,7 @@ const bookingSlice = createSlice({
         state.booking.dataFatched = true;
       });
 
-      //Complete Booking Api
+    //Complete Booking Api
     builder
       .addCase(completeBookingFunApi.pending, (state, action) => {
         state.booking.isLoading = true;
@@ -88,8 +94,8 @@ const bookingSlice = createSlice({
         state.booking.dataFatched = true;
       });
 
-      //Resheduled Booking Api
-      builder
+    //Resheduled Booking Api
+    builder
       .addCase(rescheduledBookingFunApi.pending, (state, action) => {
         state.booking.isLoading = true;
         state.booking.error = null;
@@ -103,21 +109,20 @@ const bookingSlice = createSlice({
         state.booking.error = action.payload;
       });
 
-      //Booked Time Slot Api
-      builder
-      .addCase(getBookedTimeSlotFunApi.pending, (state, action) => {
-        state.booking.isLoading = true;
-        state.booking.error = null;
-      })
-      .addCase(getBookedTimeSlotFunApi.fulfilled, (state, action) => {
-        state.booking.isLoading = false;
-        state.booking.data.push(action.payload);
-      })
-      .addCase(getBookedTimeSlotFunApi.rejected, (state, action) => {
-        state.booking.isLoading = false;
-        state.booking.error = action.payload;
-      });
-
+    //Booked Time Slot Api
+    // builder
+    //   .addCase(getBookedTimeSlotFunApi.pending, (state, action) => {
+    //     state.bookedTimeSlots.isLoading = true;
+    //     state.bookedTimeSlots.error = null;
+    //   })
+    //   .addCase(getBookedTimeSlotFunApi.fulfilled, (state, action) => {
+    //     state.bookedTimeSlots.isLoading = false;
+    //     state.bookedTimeSlots.data = action.payload;
+    //   })
+    //   .addCase(getBookedTimeSlotFunApi.rejected, (state, action) => {
+    //     state.bookedTimeSlots.isLoading = false;
+    //     state.bookedTimeSlots.error = action.payload;
+    //   });
   },
 });
 

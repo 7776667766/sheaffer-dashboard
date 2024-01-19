@@ -153,16 +153,18 @@ export const completeBookingFunApi = createAsyncThunk(
   }
 );
 
-
 export const rescheduledBookingFunApi = createAsyncThunk(
   "booking/resheduledBooking",
-  async (id, data) => {
-    console.log("resheduled id and data ", id, data);
+  async ({ data, onSuccess }) => {
+    console.log("resheduled id and data ", data);
     try {
-      const response = await axios.patch(reseheduledBookingApi(id,data));
+      const response = await axios.post(reseheduledBookingApi(data.id), data);
       console.log("response in resheduled booking => ", response.data);
       if (response.data.status === "success") {
         toast.success(response.data.message);
+        if (onSuccess) {
+          onSuccess();
+        }
         return response.data.data;
       } else {
         console.log(
@@ -200,11 +202,11 @@ export const getBookedTimeSlotFunApi = createAsyncThunk(
       const response = await axios.post(getbookedslotsApi, data);
       console.log("response getting booked TimeSlots => ", response.data);
       if (response.data.status === "success") {
-        toast.success(response.data.message);
+        // toast.success(response.data.message);
         if (onSuccess) {
-          onSuccess();
+          onSuccess(response.data.data);
         }
-        return response.data.data;
+        // return response.data.data;
       } else {
         console.log(
           "Error response in booked TimeSlot Data Api => ",

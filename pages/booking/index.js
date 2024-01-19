@@ -39,23 +39,15 @@ import { DisabledByDefault } from "@mui/icons-material";
 
 const BookingPage = () => {
   const [isDialogOpen, setDialogOpen] = useState(false);
-  const [isRescheduleDialogOpen, setIsRescheduleDialogOpen] = useState(false);
-
   const [rescheduleDate, setRescheduleDate] = useState(null);
-  const [targetBookingData, setTargetBookingData] = useState(null);
-  console.log("48", targetBookingData);
 
   const [timeSlots, setTimeSlots] = useState([]);
   const [selectedTime, setSelectedTime] = useState([]);
+  const [targetBookingData, setTargetBookingData] = useState(null);
 
   const dispatch = useDispatch();
+  const { business, dataFatched } = useSelector((state) => state.business);
   const { booking } = useSelector((state) => state.booking);
-  const { data } = booking;
-
-  if (data && data.length > 0) {
-    const { timeSlot } = data[0];
-    console.log(timeSlot);
-  }
 
   const daysList = [
     "Sunday",
@@ -67,84 +59,75 @@ const BookingPage = () => {
     "Saturday",
   ];
 
-  // const activeTimeSlot = targetBookingData?.service?.timeSlots?.find((slot) => slot.day);
-  // console.log("ActiveTimeSlots 74", activeTimeSlot)
-
-  const generateTimeSlots = useCallback(
-    async (rescheduleDate, targetBookingData) => {
-      const dayNumber = rescheduleDate.getDay();
-      console.log("79", targetBookingData);
-      const activeTimeSlot = targetBookingData?.service?.timeSlots?.find(
-        (slot) => slot.day == daysList[dayNumber]
+  const generateTimeSlotsByDate = async (bookingDate, selectedBookingData) => {
+    const dayNumber = bookingDate.getDay();
+    const activeTimeSlot = selectedBookingData?.service?.timeSlots?.find(
+      (slot) => slot.day == daysList[dayNumber]
+    );
+    let bookedTimeSlots = [];
+    if (activeTimeSlot?.active === true) {
+      dispatch(
+        getBookedTimeSlotFunApi({
+          data: {
+            date: bookingDate,
+            serviceId: selectedBookingData.service.id,
+          },
+          onSuccess: (data) => {
+            bookedTimeSlots = data;
+          },
+        })
       );
-      console.log("ActiveTimeSlots 79", activeTimeSlot);
-      const isActive = activeTimeSlot?.active.toString() === "true";
-      console.log("isActive:", isActive);
+      const myTimeSlots = [];
+      const startDateString = `${bookingDate.toISOString().split("T")[0]} ${
+        activeTimeSlot?.startTime
+      }`;
+      const startDate = new Date(startDateString);
 
-      if (activeTimeSlot?.active.toString() === "true") {
-        dispatch(
-          getBookedTimeSlotFunApi({
-            data: {
-              date: rescheduleDate,
-              serviceId: targetBookingData.service.id,
-            },
-          })
+      const endDateString = `${bookingDate.toISOString().split("T")[0]} ${
+        activeTimeSlot?.endTime
+      }`;
+      const endDate = new Date(endDateString);
+
+      let currentTime = startDate;
+
+      while (currentTime < endDate) {
+        const formattedStartTime = currentTime.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+
+        currentTime.setMinutes(
+          currentTime.getMinutes() + selectedBookingData.service.timeInterval
         );
-        const timeSlots = [];
-        const startDateString = `${
-          rescheduleDate.toISOString().split("T")[0]
-        } ${activeTimeSlot?.startTime}`;
-        const startDate = new Date(startDateString);
+        const formattedEndTime = currentTime.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
 
-        const endDateString = `${rescheduleDate.toISOString().split("T")[0]} ${
-          activeTimeSlot?.endTime
-        }`;
-        const endDate = new Date(endDateString);
-
-        let currentTime = startDate;
-
-        while (currentTime < endDate) {
-          const formattedStartTime = currentTime.toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          });
-
-          currentTime.setMinutes(
-            currentTime.getMinutes() + targetBookingData.service.timeInterval
+        const formattedTimeSlot = `${formattedStartTime}-${formattedEndTime}`;
+        myTimeSlots.push({
+          startTime: formattedStartTime,
+          endTime: formattedEndTime,
+          totalTime: formattedTimeSlot,
+        });
+        if (bookedTimeSlots?.length > 0) {
+          const bookedTimeSlot = bookedTimeSlots.find(
+            (slot) => slot.timeSlot === formattedTimeSlot
           );
-          const formattedEndTime = currentTime.toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          });
-
-          const formattedTimeSlot = `${formattedStartTime}-${formattedEndTime}`;
-          timeSlots.push({
-            startTime: formattedStartTime,
-            endTime: formattedEndTime,
-            totalTime: formattedTimeSlot,
-          });
+          if (bookedTimeSlot) {
+            myTimeSlots.pop();
+          }
         }
-        setTimeSlots(timeSlots);
       }
-    },
-    []
-  );
-
-  const [apiCalled, setApiCalled] = useState(false);
-
-  useEffect(() => {
-    if (!apiCalled && rescheduleDate) {
-      console.log("131tttt", targetBookingData);
-      generateTimeSlots(rescheduleDate, targetBookingData);
-      setApiCalled(true);
+      setTimeSlots(myTimeSlots);
+    } else {
+      setTimeSlots([]);
     }
-  }, [rescheduleDate, apiCalled]);
-
-  const { business, dataFatched } = useSelector((state) => state.business);
-
-  const handleDelete = (id) => {
-    dispatch(deleteBookingFunApi(id));
   };
+
+  // const handleDelete = (id) => {
+  //   dispatch(deleteBookingFunApi(id));
+  // };
 
   const handleTooltipClick = () => {
     setDialogOpen(true);
@@ -152,7 +135,6 @@ const BookingPage = () => {
 
   const handleDialogClose = () => {
     setDialogOpen(false);
-    setIsRescheduleDialogOpen(false);
   };
 
   const handleCancelBooking = (id) => {
@@ -164,71 +146,25 @@ const BookingPage = () => {
     dispatch(completeBookingFunApi(id));
     setDialogOpen(false);
   };
-  const handleTimeChange = (event) => {
-    setSelectedTime(event.target.value);
-  };
+  // const handleTimeChange = (event) => {
+  //   setSelectedTime(event.target.value);
+  // };
 
-  const renderTimeSlotInputSection = (index, time, close) => {
-    const disabled = data[0]?.timeSlot > 0;
-    return (
-      <div key={index}>
-        <input
-          type="radio"
-          id={`time-slot-${index}`}
-          name="hosting"
-          value={time.totalTime}
-          checked={selectedTime === time.totalTime}
-          className="hidden peer"
-          disabled={disabled}
-          onChange={(e) => {
-            handleTimeChange(e);
-            close();
-          }}
-        />
-        <label
-          htmlFor={`time-slot-${index}`}
-          className={`inline-flex items-center justify-center w-full px-1 py-2 text-gray-500 bg-white border border-gray-200 rounded-lg 
-            ? ""
-            : "cursor-pointer dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-            }  dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:bg-blue-600 peer-checked:text-white hover:text-gray-600  dark:text-gray-400 dark:bg-gray-800 `}
-        >
-          {data[0]?.timeSlot ? (
-            <div>
-              <div className="text-xs font-semibold">{time.totalTime}</div>
-              <div className="text-xs font-semibold text-red-500 ">Booked</div>
-            </div>
-          ) : (
-            <div className="mx-auto text-sm font-semibold">
-              {time.totalTime}
-            </div>
-          )}
-        </label>
-      </div>
-    );
-  };
   const handleResheduleBooking = (id) => {
     console.log("resheduled id", id);
     dispatch(
       rescheduledBookingFunApi({
-        id,
         data: {
-          date: rescheduleDate,
-          timeSlot: selectedTime, ///selected time slot
+          id: id,
+          date: rescheduleDate.$d,
+          timeSlot: selectedTime,
+        },
+        onSuccess: () => {
+          setDialogOpen(false);
         },
       })
     );
   };
-  // useEffect(() => {
-  //   dispatch(
-  //     // rescheduledBookingFunApi({
-  //     //   data:{
-  //     //     // date:date,
-  //     //     // timeSlot:timeSlot
-  //     //   }
-  //     // })
-  //   );
-  // }, [dispatch, booking.data, booking.dataFatched, business?.id, dataFatched]);
-
   useEffect(() => {
     if (!dataFatched) {
       dispatch(
@@ -493,7 +429,7 @@ const BookingPage = () => {
                       display: "inline-block",
                     }}
                   >
-                    <Tooltip title="Delete" placement="top">
+                    {/* <Tooltip title="Delete" placement="top">
                       <TransitionsDialog
                         modelButton={
                           <IconButton
@@ -526,20 +462,23 @@ const BookingPage = () => {
                           </Typography>
                         </div>
                       </TransitionsDialog>
-                    </Tooltip>
+                    </Tooltip> */}
 
                     <Tooltip title="Edit" placement="top">
                       <Button
                         style={{
                           backgroundColor: "#E2A248",
                         }}
-                        onClick={handleTooltipClick}
+                        onClick={() => {
+                          setTargetBookingData(data);
+                          handleTooltipClick();
+                        }}
                       >
                         Edit
                       </Button>
                     </Tooltip>
 
-                    <Dialog open={isDialogOpen} onClose={handleDialogClose}>
+                    {/* <Dialog open={isDialogOpen} onClose={handleDialogClose}>
                       <DialogTitle>Edit Booking Details</DialogTitle>
                       <DialogContent
                         style={{
@@ -634,7 +573,7 @@ const BookingPage = () => {
                               }}
                             >
                               <div> Name </div>
-                              <div>DEnly</div>
+                              <div>{data.name}</div>
                             </Box>
                             <Box
                               sx={{
@@ -645,7 +584,7 @@ const BookingPage = () => {
                               }}
                             >
                               <div> Contact No.</div>
-                              <div>+92000000000001</div>
+                              <div>{data.phone}</div>
                             </Box>
                           </Box>
                         </Typography>
@@ -693,7 +632,11 @@ const BookingPage = () => {
                                 <Button
                                   fullWidth
                                   variant="contained"
-                                  onClick={() => {setTargetBookingData(data); setRescheduleDate('current date')}}
+                                  onClick={() => {
+                                    // setTargetBookingData(data);
+                                    // setRescheduleDate(new Date());
+                                    generateTimeSlotsByDate(new Date(), data);
+                                  }}
                                 >
                                   Reschedule Booking
                                 </Button>
@@ -709,47 +652,55 @@ const BookingPage = () => {
                                     dateAdapter={AdapterDayjs}
                                   >
                                     <StaticDatePicker
-                                      orientation=""
+                                      orientation="landscape"
+                                      disablePast
+                                      showToolbar={false}
+                                      value={rescheduleDate}
                                       ToolbarComponent={DisabledByDefault}
                                       onChange={(value) => {
-                                        setRescheduleDate(value.$d);
+                                        setRescheduleDate(value);
+                                        generateTimeSlotsByDate(value.$d, data);
                                       }}
                                     />
                                   </LocalizationProvider>
                                 </Grid>
                                 <Grid item xs={12} sm={6} md={6}>
                                   {timeSlots?.length === 0 ? (
-                                    <TextField
-                                      className="w-full"
-                                      label="No time slot available"
-                                      disabled
-                                    />
+                                    <>No Time Slot Available</>
                                   ) : (
-                                    <div
-                                      style={{
-                                        display: "flex",
-                                        flexWrap: "wrap",
-                                        gap: "10px",
-                                        justifyContent: "space-between",
-                                        margin: "24px 0px 12px 0px",
-                                      }}
-                                    >
+                                    <Grid container spacing={2}>
                                       {timeSlots?.map((time, index) => (
-                                        <div style={{ border:"1px solid", borderColor: 'grey.500', borderRadius: "5px" , padding:'5px' , width:"100%" }}>
-                                        <React.Fragment key={index}>
-                                          {console.log(
-                                            "total time",
-                                            time.totalTime
-                                          )}
-                                          {renderTimeSlotInputSection(
-                                            index,
-                                            time,
-                                            close
-                                          )}
-                                        </React.Fragment>
-                                        </div>
+                                        <Grid item xs={6} key={index}>
+                                          <Box
+                                            p={1}
+                                            fullWidth
+                                            textAlign={"center"}
+                                            sx={{
+                                              border: "1px solid grey",
+                                              backgroundColor:
+                                                selectedTime === time.totalTime
+                                                  ? "primary.main"
+                                                  : "white",
+                                              color:
+                                                selectedTime === time.totalTime
+                                                  ? "white"
+                                                  : "black",
+                                              cursor: "pointer",
+                                            }}
+                                            onClick={() => {
+                                              setSelectedTime(time.totalTime);
+                                            }}
+                                          >
+                                            <Typography
+                                              variant="h6"
+                                              color="inherit"
+                                            >
+                                              {time.totalTime}
+                                            </Typography>
+                                          </Box>
+                                        </Grid>
                                       ))}
-                                    </div>
+                                    </Grid>
                                   )}
                                 </Grid>
                               </Grid>
@@ -766,7 +717,7 @@ const BookingPage = () => {
                           </Grid>
                         </Grid>
                       </DialogActions>
-                    </Dialog>
+                    </Dialog> */}
                   </Box>
                 ) : (
                   "N/A"
@@ -776,6 +727,240 @@ const BookingPage = () => {
           )}
         />
       </Card>
+
+      <Dialog open={isDialogOpen} onClose={handleDialogClose}>
+        <DialogTitle>Booking Details</DialogTitle>
+        <DialogContent
+          style={{
+            width: "570px",
+            maxWidth: "100%",
+            borderRadius: "25px",
+          }}
+        >
+          <Typography>
+            <Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  marginBottom: "10px",
+                }}
+              >
+                <div>
+                  Booking ID : <b>{targetBookingData?.token}</b>
+                </div>
+                <div>
+                  <Button style={{ backgroundColor: "#EAEEFD" }}>
+                    {targetBookingData?.status}
+                  </Button>
+                </div>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  backgroundColor: "#EAEEFD",
+                  padding: "10px",
+                }}
+              >
+                <div>Business Name</div>
+                <div>{targetBookingData?.name}</div>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  paddingTop: "10px",
+                  paddingBottom: "10px",
+                }}
+              >
+                <div>Service Name </div>
+                <div>{targetBookingData?.name || "N/A"}</div>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  backgroundColor: "#EAEEFD",
+                  padding: "10px",
+                }}
+              >
+                <div>Date</div>
+                <div>
+                  {moment(targetBookingData?.date).format("DD MMM  YYYY")}
+                </div>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  paddingTop: "10px",
+                  paddingBottom: "10px",
+                }}
+              >
+                <div>Time Slot</div>
+                <div>{targetBookingData?.timeSlot}</div>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  backgroundColor: "#EAEEFD",
+                  padding: "10px",
+                }}
+              >
+                <div> Price </div>
+                <div>${targetBookingData?.price}</div>
+              </Box>
+
+              <h2>Customer Details</h2>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  backgroundColor: "#EAEEFD",
+                  padding: "10px",
+                }}
+              >
+                <div> Name </div>
+                <div>{targetBookingData?.name}</div>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  paddingTop: "10px",
+                  paddingBottom: "10px",
+                }}
+              >
+                <div> Contact No.</div>
+                <div>{targetBookingData?.phone}</div>
+              </Box>
+            </Box>
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6} md={4}>
+              <TransitionsDialog
+                modelButton={
+                  <Button
+                    submitButtonText="Cancel"
+                    fullWidth
+                    variant="outlined"
+                  >
+                    Cancel Booking
+                  </Button>
+                }
+                submitButtonText="Cancel Booking"
+                closeButtonText="Close"
+                handleSubmit={() => handleCancelBooking(targetBookingData?.id)}
+              >
+                <div style={{ textAlign: "center" }}>
+                  <Image
+                    src="/images/icon/alert.png"
+                    width={150}
+                    height={150}
+                    alt="ok"
+                  />
+
+                  <Typography sx={{ fontSize: 18 }}>
+                    <b>Are You Sure You Want To Cancel ?</b>
+                    <br />
+                    <span style={{ fontSize: 14 }}>
+                      You are deleting this data & this action is irreversible
+                    </span>
+                  </Typography>
+                </div>
+              </TransitionsDialog>
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <TransitionsDialog
+                maxWidth={"md"}
+                modelButton={
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    onClick={() => {
+                      setRescheduleDate(null);
+                      generateTimeSlotsByDate(new Date(), targetBookingData);
+                    }}
+                  >
+                    Reschedule Booking
+                  </Button>
+                }
+                submitButtonText="reshudele"
+                handleSubmit={() =>
+                  handleResheduleBooking(targetBookingData?.id)
+                }
+              >
+                <Grid container spacing={4}>
+                  <Grid item xs={12} sm={6} md={6}>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <StaticDatePicker
+                        orientation="landscape"
+                        disablePast
+                        showToolbar={false}
+                        value={rescheduleDate}
+                        ToolbarComponent={DisabledByDefault}
+                        onChange={(value) => {
+                          setRescheduleDate(value);
+                          generateTimeSlotsByDate(value.$d, targetBookingData);
+                        }}
+                      />
+                    </LocalizationProvider>
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={6}>
+                    {timeSlots?.length === 0 ? (
+                      <>No Time Slot Available</>
+                    ) : (
+                      <Grid container spacing={2}>
+                        {timeSlots?.map((time, index) => (
+                          <Grid item xs={6} key={index}>
+                            <Box
+                              p={1}
+                              fullWidth
+                              textAlign={"center"}
+                              sx={{
+                                border: "1px solid grey",
+                                backgroundColor:
+                                  selectedTime === time.totalTime
+                                    ? "primary.main"
+                                    : "white",
+                                color:
+                                  selectedTime === time.totalTime
+                                    ? "white"
+                                    : "black",
+                                cursor: "pointer",
+                              }}
+                              onClick={() => {
+                                setSelectedTime(time.totalTime);
+                              }}
+                            >
+                              <Typography variant="h6" color="inherit">
+                                {time.totalTime}
+                              </Typography>
+                            </Box>
+                          </Grid>
+                        ))}
+                      </Grid>
+                    )}
+                  </Grid>
+                </Grid>
+              </TransitionsDialog>
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <Button
+                onClick={() => handleCompleteBooking(targetBookingData?.id)}
+                fullWidth
+                variant="contained"
+              >
+                Mark as completed
+              </Button>
+            </Grid>
+          </Grid>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };
