@@ -55,6 +55,7 @@ const CustomizePage = () => {
       selecttheme: requiredValidation("selecttheme"),
       color: requiredValidation("color"),
     }),
+    enableReinitialize: true,
     onSubmit: (values) => {
       console.log("Form submitted with values:", values);
     },
@@ -138,7 +139,7 @@ const CustomizePage = () => {
                     InputProps={{
                       style: { borderRadius: 8 },
                     }}
-                    defaultValue={business.fontSize}
+                    // defaultValue={business.fontSize}
                     {...formik.getFieldProps("fontsize")}
                     error={formik.touched.fontsize && formik.errors.fontsize}
                     helperText={

@@ -655,7 +655,6 @@ export default function DashboardPage() {
                                 </Box>
                               </Box>
                             )}
-                            
                           </Box>
                           <li style={{ marginBottom: "20px" }}>
                             {business.description}
@@ -760,6 +759,7 @@ export default function DashboardPage() {
                             {business.socialLinks?.map((socialLink, index) => (
                               <div key={index}>
                                 <a
+                                  rel="noreferrer"
                                   href={socialLink.link}
                                   target="_blank"
                                   className="text-3xl"
