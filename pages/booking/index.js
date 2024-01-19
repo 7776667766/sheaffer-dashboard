@@ -45,7 +45,7 @@ const BookingPage = () => {
 
   const [rescheduleDate, setRescheduleDate] = useState(null);
   const [targetBookingData, setTargetBookingData] = useState(null);
-  console.log("48",targetBookingData)
+  console.log("48", targetBookingData)
 
 
   const [timeSlots, setTimeSlots] = useState([]);
@@ -69,9 +69,9 @@ const BookingPage = () => {
     "Friday",
     "Saturday",
   ];
-  
-  const generateTimeSlots = useCallback(async (rescheduleDate) => {
 
+  const generateTimeSlots = useCallback(async (rescheduleDate, targetBookingData) => {
+    console.log("targetBookingData", targetBookingData)
     const dayNumber = rescheduleDate.getDay();
 
     const activeTimeSlot = targetBookingData?.service?.timeSlots?.find((slot) => slot.day == daysList[dayNumber]);
@@ -125,7 +125,7 @@ const BookingPage = () => {
 
   useEffect(() => {
     if (!apiCalled && rescheduleDate) {
-      generateTimeSlots(rescheduleDate);
+      generateTimeSlots(rescheduleDate, targetBookingData);
       setApiCalled(true);
     }
   }, [rescheduleDate, apiCalled]);
@@ -173,7 +173,7 @@ const BookingPage = () => {
           id={`time-slot-${index}`}
           name="hosting"
           value={time.totalTime}
-          checked={selectedTime === time.totalTime}   
+          checked={selectedTime === time.totalTime}
           className="hidden peer"
           disabled={disabled}
           onChange={(e) => {
@@ -205,7 +205,8 @@ const BookingPage = () => {
   const handleResheduleBooking = (id) => {
     console.log("resheduled id", id)
     dispatch(
-      rescheduledBookingFunApi({ id,
+      rescheduledBookingFunApi({
+        id,
         data: {
           date: rescheduleDate,
           timeSlot: selectedTime  ///selected time slot
