@@ -655,34 +655,7 @@ export default function DashboardPage() {
                                 </Box>
                               </Box>
                             )}
-
-                            {/* <Box sx={{ display: "flex", alignItems: "end"  , gap: "4px", }}>
-                              <Box>
-                                <Button
-                                  target="_blank"
-                                  sx={{
-                                    pt: "2px",
-                                    pb: "1px",
-                                    textDecoration: "underline",
-                                    fontWeight: "600",
-                                    fontSize: "14px",
-                                    color: "#757FEF",
-                                    backgroundColor: "#F1F2FD",
-                                    textTransform: "capitalize"
-                                  }}
-                                >
-                                  {business.theme || "N/A"}{" "}
-                                </Button>
-                              </Box>
-                              <Box>
-                                <Image
-                                  src={copyImage}
-                                  width={20}
-                                  height={20}
-                                  alt="ok"
-                                />
-                              </Box>
-                            </Box> */}
+                            
                           </Box>
                           <li style={{ marginBottom: "20px" }}>
                             {business.description}

@@ -83,6 +83,21 @@ export const SidebarData = () => {
       ],
     },
 
+    role === "owner" && {
+      title: "Customize-Theme",
+      path: "/customize-theme/",
+      role: "owner",
+      icon: <LayersIcon />,
+      iconClosed: <KeyboardArrowRightIcon />,
+      iconOpened: <KeyboardArrowDownIcon />,
+      subNav: [
+        {
+          title: "Customize-Theme",
+          path: "/customize-theme/",
+        },
+      ],
+    },
+
     role === "admin" && {
       title: "Business",
       path: "/business/",
