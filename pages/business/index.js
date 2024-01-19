@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Dialog, TextField, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
 import IconButton from "@mui/material/IconButton";
 import TableCell from "@mui/material/TableCell";
@@ -8,7 +8,7 @@ import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutli
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { CustomPaginationTable } from "@/components/Table/CustomPaginationTable";
-import { getMyBussinessFunApi, getallBussinessesFunApi } from "store/business/services";
+import { getMyBussinessFunApi, getallBussinessesFunApi, } from "store/business/services";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import BusinessForm from "./businessform";
@@ -18,10 +18,10 @@ const BusinessPage = () => {
     const router = useRouter();
     const [isRenameFormOpen, setIsRenameFormOpen] = useState(false);
     const [selectedBusiness, setSelectedBusiness] = useState(null);
-
-
+    const [open, setOpen] = useState(false);
+    const { role } = useSelector((state) => state.auth);
+    const [isRejecting, setIsRejecting] = useState(false);
     const { business, dataFatched, isLoading } = useSelector((state) => state.business);
-    console.log("is it alll business", business);
 
     useEffect(() => {
         if (!dataFatched) {
@@ -29,6 +29,29 @@ const BusinessPage = () => {
             }));
         }
     }, [dispatch, dataFatched]);
+
+
+    const handleClick = (id) => {
+        const selectedBusiness = business.find((item) => item.id === id);
+        setSelectedBusiness(selectedBusiness);
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const handleReject = () => {
+        setOpen(true);
+        setIsRejecting(true);
+    };
+
+    const handleRejectConfirm = () => {
+       
+        setIsRejecting(false);
+        handleClose();
+    };
+
 
     const OpenPopUp = (id) => {
         const selectedBusiness = business.find((item) => item.id === id);
@@ -111,14 +134,6 @@ const BusinessPage = () => {
                                 email
                             </TableCell>
 
-                            <TableCell
-                                sx={{
-                                    borderBottom: "1px solid #F7FAFF",
-                                    fontSize: "13.5px",
-                                }}
-                            >
-                                logo
-                            </TableCell>
 
                             <TableCell
                                 sx={{
@@ -128,22 +143,16 @@ const BusinessPage = () => {
                             >
                                 Phone Number
                             </TableCell>
-                            {/* <TableCell
+
+                            <TableCell
                                 sx={{
                                     borderBottom: "1px solid #F7FAFF",
                                     fontSize: "13.5px",
                                 }}
                             >
-                                Banner Image
-                            </TableCell> */}
-                            {/* <TableCell
-                                sx={{
-                                    borderBottom: "1px solid #F7FAFF",
-                                    fontSize: "13.5px",
-                                }}
-                            >
-                                Banner Text
-                            </TableCell> */}
+                                Custom Request
+
+                            </TableCell>
                             <TableCell
                                 sx={{
                                     borderBottom: "1px solid #F7FAFF",
@@ -153,46 +162,6 @@ const BusinessPage = () => {
                                 Action
                             </TableCell>
 
-                            {/* <TableCell
-                                sx={{
-                                    borderBottom: "1px solid #F7FAFF",
-                                    fontSize: "13.5px",
-                                }}
-                            >
-                                Slug
-                            </TableCell> */}
-                            {/* <TableCell
-                                sx={{
-                                    borderBottom: "1px solid #F7FAFF",
-                                    fontSize: "13.5px",
-                                }}
-                            >
-                                websiteService
-                            </TableCell> */}
-                            {/* <TableCell
-                                sx={{
-                                    borderBottom: "1px solid #F7FAFF",
-                                    fontSize: "13.5px",
-                                }}
-                            >
-                                bookingService
-                            </TableCell> */}
-                            {/* <TableCell
-                                sx={{
-                                    borderBottom: "1px solid #F7FAFF",
-                                    fontSize: "13.5px",
-                                }}
-                            >
-                                Verified
-                            </TableCell> */}
-                            {/* <TableCell
-                                sx={{
-                                    borderBottom: "1px solid #F7FAFF",
-                                    fontSize: "13.5px",
-                                }}
-                            >
-                                Payment
-                            </TableCell> */}
                         </>
                     }
                     tableBodyData={(data, index) => (
@@ -241,15 +210,7 @@ const BusinessPage = () => {
                             >
                                 {data.email}
                             </TableCell>
-                            <Image
-                                src={data.logo}
-                                width={100}
-                                height={50}
-                                alt="image"
-                                style={{
-                                    objectFit: "contain",
-                                }}
-                            />
+
 
                             <TableCell
                                 sx={{
@@ -261,6 +222,25 @@ const BusinessPage = () => {
                             >
                                 {data.phone}
                             </TableCell>
+                            <Button
+                                component="div"
+                                sx={{
+                                    borderBottom: "1px solid #F7FAFF",
+                                    fontSize: "13px",
+                                    pt: "16px",
+                                    pb: "16px",
+                                    cursor: "pointer",
+                                    "&:hover": {
+                                        textDecoration: "underline",
+                                    },
+                                }}
+
+                                onClick={(event) => handleClick(data.id, event)}
+
+                            >
+                                {data.requestStatus}
+                            </Button>
+
                             <Tooltip title="Rename" placement="top">
                                 <IconButton
                                     aria-label="edit"
@@ -273,91 +253,50 @@ const BusinessPage = () => {
 
                                 </IconButton>
                             </Tooltip>
-
-                            {/* <Image
-                                src={data.bannerImg}
-                                width={100}
-                                height={50}
-                                alt="bannerImg"
-                                style={{
-                                    objectFit: "contain",
-                                }}
-                            /> */}
-                            {/* <TableCell
-                                sx={{
-                                    borderBottom: "1px solid #F7FAFF",
-                                    fontSize: "13px",
-                                    pt: "16px",
-                                    pb: "16px",
-                                }}
-                                align="center"
-                            >
-                                {data.bannerText}
-                            </TableCell> */}
-                            {/* <TableCell
-                                sx={{
-                                    borderBottom: "1px solid #F7FAFF",
-                                    fontSize: "13px",
-                                    pt: "16px",
-                                    pb: "16px",
-                                }}
-                                align="center"
-                            >
-                                {data.slug}
-                            </TableCell> */}
-
-                            {/* <TableCell
-                                sx={{
-                                    borderBottom: "1px solid #F7FAFF",
-                                    fontSize: "13px",
-                                    pt: "16px",
-                                    pb: "16px",
-                                }}
-                                align="center"
-                            >
-                                {data.websiteService ? 'True' : 'N/A'}
-                            </TableCell> */}
-
-                            {/* <TableCell
-                                align="center"
-                                sx={{
-                                    fontWeight: 500,
-                                    borderBottom: "1px solid #F7FAFF",
-                                    fontSize: "12px",
-                                    padding: "8px 10px",
-                                    textTransform: "capitalize",
-                                }}
-                            >
-                                {data.bookingService ? 'True' : 'N/A'}
-                            </TableCell> */}
-                            {/* 
-                            <TableCell
-                                align="center"
-                                sx={{
-                                    fontWeight: 500,
-                                    borderBottom: "1px solid #F7FAFF",
-                                    fontSize: "12px",
-                                    padding: "8px 10px",
-                                    textTransform: "capitalize",
-                                }}
-                            >
-                                {data.status ? 'pending' : 'N/A'}
-                            </TableCell> */}
-                            {/* <TableCell
-                                align="center"
-                                sx={{
-                                    fontWeight: 500,
-                                    borderBottom: "1px solid #F7FAFF",
-                                    fontSize: "12px",
-                                    padding: "8px 10px",
-                                    textTransform: "capitalize",
-                                }}
-                            >
-                                {data?.payment}
-                            </TableCell> */}
                         </>
                     )}
                 />
+                <Dialog open={open} onClose={handleClose}>
+                    <div style={{ padding: '20px', maxWidth: '400px', textAlign: 'left' }}>
+                        <ul style={{ listStyleType: 'none', padding: 0 }}>
+                            <li><strong>Name:</strong> {selectedBusiness?.name}</li>
+                            <li><strong>Email:</strong> {selectedBusiness?.email}</li>
+                            <li><strong>Slug:</strong> {selectedBusiness?.slug}</li>
+                            <li><strong>Phone:</strong> {selectedBusiness?.phone}</li>
+                            <li><strong>Description:</strong> {selectedBusiness?.description}</li>
+                            <li><strong>BannerText:</strong> {selectedBusiness?.bannerText}</li>
+                        </ul>
+                    </div>
+
+                    <div style={{ padding: '20px', textAlign: 'center' }}>
+                        <Button variant="contained">
+                            Approved
+                        </Button>
+                        <Button variant="contained"
+                            onClick={handleReject}
+                        >
+                            Rejected
+                        </Button>
+                        {isRejecting && (
+                            <div style={{ marginTop: '20px' }}>
+                                <TextField
+                                    label="Reason to Reject"
+                                    variant="outlined"
+                                    onChange={(e) => setRejectReason(e.target.value)}
+                                />
+                                <Button
+                                    variant="contained"
+                                    color="secondary"
+                                    onClick={handleRejectConfirm}
+                                    style={{ marginTop: '10px' }}
+                                >
+                                    Confirm Reject
+                                </Button>
+                            </div>
+                        )}
+                    </div>
+                </Dialog>
+
                 {selectedBusiness && (
                     <BusinessForm
                         open={isRenameFormOpen}

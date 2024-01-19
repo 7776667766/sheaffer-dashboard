@@ -3,6 +3,7 @@ import Grid from "@mui/material/Grid";
 import styles from "@/styles/PageTitle.module.css";
 import Features from "@/components/Dashboard/eCommerce/Features";
 import UserList from "./users";
+import SendIcon from "@mui/icons-material/Send";
 import CloseIcon from "@mui/icons-material/Close";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -34,6 +35,7 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import copyImage from "@/public/images/icon/solar_copy-bold.png";
+import { LoadingButtonComponent } from "@/components/UIElements/Buttons/LoadingButton";
 
 export default function DashboardPage() {
   const { user, role } = useSelector((state) => state.auth);
@@ -44,12 +46,32 @@ export default function DashboardPage() {
   const [slug, setSlug] = useState("");
   const [open, setOpen] = useState(false);
   const [openSecondDialog, setOpenSecondDialog] = useState(false);
+  const [openthirdDialog, setOpenthirdDialog] = useState(false);
   const [selectedBusiness, setSelectedBusiness] = useState(null);
   const [avatar, setavatar] = useState(null);
+  const [openForm, setOpenForm] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    description: "",
+    googleId: "",
+    color: "",
+    theme: "",
+    file: null,
+  });
+
+  const handleOpenRequest = () => {
+    setOpenForm(true);
+  };
+
+  const handleFormClose = () => {
+    setOpenForm(false);
+  };
 
   const handleClickOpen = () => {
     setOpen(true);
   };
+
   const handleOpen = (business) => {
     setSelectedBusiness(business);
     setOpenSecondDialog(true);
@@ -151,11 +173,19 @@ export default function DashboardPage() {
               <>
                 <Button
                   variant="contained"
-                  disabled={business ? true : false}
+                  // disabled={business ? true : false}
                   onClick={handleClickOpen}
                 >
                   Sync Business
                 </Button>
+                <Button
+                  variant="contained"
+                  // disabled={business ? true : false}
+                  onClick={handleOpenRequest}
+                >
+                  Send Custom Booking Request
+                </Button>
+
                 <Dialog open={open} onClose={handleClose}>
                   <DialogTitle>
                     {" "}
@@ -182,6 +212,217 @@ export default function DashboardPage() {
                     ))}
                   </List>
                 </Dialog>
+
+                {/* {FORM FOR REQUEST BUSINESS  } */}
+
+                <Dialog
+                  open={openForm}
+                  onClose={handleFormClose}
+                  PaperProps={{
+                    sx: {
+                      width: "700px",
+                      height: "500px",
+                    },
+                  }}
+                >
+                  <DialogTitle>
+                    Business Form Request
+                    <IconButton
+                      edge="end"
+                      color="inherit"
+                      onClick={handleFormClose}
+                      aria-label="close"
+                    >
+                      <CloseIcon />
+                    </IconButton>
+                  </DialogTitle>
+
+                  <div sx={{ padding: "16px", margin: "16px" }}>
+                    <Grid item xs={6} md={6} lg={6}>
+                      <Typography
+                        as="h5"
+                        sx={{
+                          fontWeight: "500",
+                          fontSize: "14px",
+                          mb: "12px",
+                        }}
+                      >
+                        Name
+                      </Typography>
+                      <TextField
+                        name="name"
+                        fullWidth
+                        id="name"
+                        label="Enter Name"
+                        value={formData.name}
+                      />
+                    </Grid>
+
+                    <Grid item xs={6} md={6} lg={6}>
+                      <Typography
+                        as="h5"
+                        sx={{
+                          fontWeight: "500",
+                          fontSize: "14px",
+                          mb: "12px",
+                        }}
+                      >
+                        Email
+                      </Typography>
+                      <TextField
+                        name="email"
+                        fullWidth
+                        id="email"
+                        label="Enter Email"
+                        value={formData.email}
+                      />
+                    </Grid>
+
+                    <Grid item xs={6} md={6} lg={6}>
+                      <Typography
+                        as="h5"
+                        sx={{
+                          fontWeight: "500",
+                          fontSize: "14px",
+                          mb: "12px",
+                        }}
+                      >
+                        Description
+                      </Typography>
+                      <TextField
+                        name="description"
+                        fullWidth
+                        id="description"
+                        label="Enter Description"
+                        value={formData.description}
+                      />
+                    </Grid>
+
+                    <Grid item xs={6} md={6} lg={6}>
+                      <Typography
+                        as="h5"
+                        sx={{
+                          fontWeight: "500",
+                          fontSize: "14px",
+                          mb: "12px",
+                        }}
+                      >
+                        Google ID
+                      </Typography>
+                      <TextField
+                        name="googleId"
+                        fullWidth
+                        id="googleId"
+                        label="Enter Google ID"
+                      />
+                    </Grid>
+
+                    <Grid item xs={6} md={6} lg={6}>
+                      <Typography
+                        as="h5"
+                        sx={{
+                          fontWeight: "500",
+                          fontSize: "14px",
+                          mb: "12px",
+                        }}
+                      >
+                        Color
+                      </Typography>
+                      <TextField
+                        name="color"
+                        fullWidth
+                        id="color"
+                        label="Enter Color"
+                        value={formData.color}
+                      />
+                    </Grid>
+
+                    <Grid item xs={6} md={6} lg={6}>
+                      <Typography
+                        as="h5"
+                        sx={{
+                          fontWeight: "500",
+                          fontSize: "14px",
+                          mb: "12px",
+                        }}
+                      >
+                        Theme
+                      </Typography>
+                      <TextField
+                        name="theme"
+                        fullWidth
+                        id="theme"
+                        label="Enter Theme"
+                        value={formData.theme}
+                      />
+                    </Grid>
+
+                    <Grid item xs={6} md={6} lg={6}>
+                      <Box sx={{ display: "flex", alignItems: "end", gap: 1 }}>
+                        <Box sx={{ flex: 1 }}>
+                          <Typography
+                            as="h5"
+                            sx={{
+                              fontWeight: "500",
+                              fontSize: "14px",
+                              mb: "12px",
+                            }}
+                          >
+                            Upload Banner Image
+                          </Typography>
+
+                          <TextField
+                            fullWidth
+                            name="file"
+                            type="file"
+                            id="file"
+                          />
+                        </Box>
+                      </Box>
+                    </Grid>
+
+                    <Grid item xs={6} md={6} lg={6}>
+                      <Box sx={{ display: "flex", alignItems: "end", gap: 1 }}>
+                        <Box sx={{ flex: 1 }}>
+                          <Typography
+                            as="h5"
+                            sx={{
+                              fontWeight: "500",
+                              fontSize: "14px",
+                              mb: "12px",
+                            }}
+                          >
+                            Upload Logo
+                          </Typography>
+
+                          <TextField
+                            fullWidth
+                            name="file"
+                            type="file"
+                            id="file"
+                          />
+                        </Box>
+                      </Box>
+                    </Grid>
+
+                    <Grid item xs={12} textAlign="left">
+                      <LoadingButtonComponent
+                        type="submit"
+                        fullWidth={false}
+                        sx={{
+                          paddingX: "10px",
+                        }}
+                        value={
+                          <>
+                            <SendIcon className="mr-5px" />
+                            Add Request
+                          </>
+                        }
+                      />
+                    </Grid>
+                  </div>
+                </Dialog>
+
                 {selectedBusiness && (
                   <Dialog open={openSecondDialog} onClose={handleClose}>
                     <DialogTitle>
@@ -427,7 +668,7 @@ export default function DashboardPage() {
                                     fontSize: "14px",
                                     color: "#757FEF",
                                     backgroundColor: "#F1F2FD",
-                                    textTransform:"capitalize"
+                                    textTransform: "capitalize"
                                   }}
                                 >
                                   {business.theme || "N/A"}{" "}
