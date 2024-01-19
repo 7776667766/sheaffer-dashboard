@@ -256,8 +256,39 @@ const BusinessPage = () => {
                         </>
                     )}
                 />
-                <Dialog open={open} onClose={handleClose}>
-                    <div style={{ padding: '20px', maxWidth: '400px', textAlign: 'left' }}>
+                <Dialog open={open} onClose={handleClose}  fullWidth>
+                <h2 style={{ textAlign: 'center',paddingTop: '10px'}}>Owner Business Details</h2>
+                <div style={{ padding: '10px', textAlign: 'left', display: 'flex',  justifyContent: 'center', alignItems: 'center'  }}>
+  <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+    <tbody>
+      <tr>
+        <td style={{ border: '1px solid #ddd', padding: '10px' }}><strong>Name:</strong></td>
+        <td style={{ border: '1px solid #ddd', padding: '10px' }}>{selectedBusiness?.name}</td>
+      </tr>
+      <tr>
+        <td style={{ border: '1px solid #ddd', padding: '10px' }}><strong>Email:</strong></td>
+        <td style={{ border: '1px solid #ddd', padding: '10px' }}>{selectedBusiness?.email}</td>
+      </tr>
+      <tr>
+        <td style={{ border: '1px solid #ddd', padding: '10px' }}><strong>Slug:</strong></td>
+        <td style={{ border: '1px solid #ddd', padding: '10px' }}>{selectedBusiness?.slug}</td>
+      </tr>
+      <tr>
+        <td style={{ border: '1px solid #ddd', padding: '10px' }}><strong>Phone:</strong></td>
+        <td style={{ border: '1px solid #ddd', padding: '10px' }}>{selectedBusiness?.phone}</td>
+      </tr>
+      <tr>
+        <td style={{ border: '1px solid #ddd', padding: '10px' }}><strong>Description:</strong></td>
+        <td style={{ border: '1px solid #ddd', padding: '10px' }}>{selectedBusiness?.description}</td>
+      </tr>
+      <tr>
+        <td style={{ border: '1px solid #ddd', padding: '10px' }}><strong>BannerText:</strong></td>
+        <td style={{ border: '1px solid #ddd', padding: '10px' }}>{selectedBusiness?.bannerText}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+                    {/* <div style={{ padding: '30px', maxWidth: '500px', textAlign: 'left' }}>
                         <ul style={{ listStyleType: 'none', padding: 0 }}>
                             <li><strong>Name:</strong> {selectedBusiness?.name}</li>
                             <li><strong>Email:</strong> {selectedBusiness?.email}</li>
@@ -266,24 +297,31 @@ const BusinessPage = () => {
                             <li><strong>Description:</strong> {selectedBusiness?.description}</li>
                             <li><strong>BannerText:</strong> {selectedBusiness?.bannerText}</li>
                         </ul>
-                    </div>
+                    </div> */}
 
-                    <div style={{ padding: '20px', textAlign: 'center' }}>
-                        <Button variant="contained">
+                    <div style={{ padding: '10px', textAlign: 'center',display: 'grid', gap: '22px',justifyContent: 'center', paddingBottom: '30px',paddingTop:"10px", }}>
+                        <div style={{display: 'flex ',gap:"15px"}}> <Button variant="contained" >
                             Approved
                         </Button>
                         <Button variant="contained"
                             onClick={handleReject}
                         >
                             Rejected
-                        </Button>
-                        {isRejecting && (
-                            <div style={{ marginTop: '20px' }}>
-                                <TextField
-                                    label="Reason to Reject"
-                                    variant="outlined"
-                                    onChange={(e) => setRejectReason(e.target.value)}
-                                />
+                        </Button></div>
+                       
+
+                        <div style={{paddingBottom:"10px",maxWidth:"100%"}}>   
+                            
+                            {isRejecting && (
+                            <div style={{ marginTop: '0px' ,display: 'grid', gap: '4px'}}>
+                              <TextField
+  label="Reason to Reject"
+  variant="outlined"
+  multiline
+  rows={3}  // Adjust the number of rows as needed
+  style={{ width: '100%', maxWidth: '500px' }}
+  onChange={(e) => setRejectReason(e.target.value)}
+/>
                                 <Button
                                     variant="contained"
                                     color="secondary"
@@ -293,7 +331,9 @@ const BusinessPage = () => {
                                     Confirm Reject
                                 </Button>
                             </div>
-                        )}
+                        )}</div>
+
+                     
                     </div>
                 </Dialog>
 
