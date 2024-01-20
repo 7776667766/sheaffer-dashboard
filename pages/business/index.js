@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Button, Dialog, TextField, Typography } from "@mui/material";
+import { Box, Button, Dialog, TextField, Typography, useMediaQuery } from "@mui/material";
 import Card from "@mui/material/Card";
 import IconButton from "@mui/material/IconButton";
 import TableCell from "@mui/material/TableCell";
@@ -32,6 +32,9 @@ const BusinessPage = () => {
   const { business, dataFatched, isLoading } = useSelector(
     (state) => state.business
   );
+
+
+  const isSmallScreen = useMediaQuery('(max-width:800px)');
 
   /// ALL BUSINESS API
 
@@ -259,7 +262,20 @@ const BusinessPage = () => {
                   pb: "16px",
                 }}
               >
-                 <Button
+                  
+                  <span
+            className={
+                    data?.requestStatus === "Approved" ? "successBadge" : data?.requestStatus==="Rejected" ? "dangerBadge" : "infoBadge"
+                  }
+                  onClick={(event) => handleClick(data?.id, event)}
+
+                  style={{cursor:"pointer"}}
+                >
+ {data?.requestStatus}
+ 
+                  </span>
+                
+                 {/* <Button
                 component="div"
                 sx={{
                   borderBottom: "1px solid #F7FAFF",
@@ -271,13 +287,14 @@ const BusinessPage = () => {
                   "&:hover": {
                     textDecoration: "underline",
                   },
+                  color: data?.requestStatus === "approved" ? "successBadge" : data?.requestStatus === "rejected" ? "red" : "blue",
                 }}
 
                 style={{ color: "blue",}}
                 onClick={(event) => handleClick(data?.id, event)}
               >
                 {data?.requestStatus}
-              </Button>
+              </Button> */}
               </TableCell>
               
               
@@ -309,7 +326,13 @@ const BusinessPage = () => {
             </>
           )}
         />
-        <Dialog open={open} onClose={handleClose} fullWidth>
+        <Dialog open={open} onClose={handleClose}  maxWidth="lg"  PaperProps={{
+                    sx: {
+                      width: "800px",
+                     
+                      padding:"20px"
+                    },
+                  }}>
           <h2 style={{ textAlign: "center", paddingTop: "10px" }}>
             Owner Business Details
           </h2>
@@ -397,7 +420,7 @@ const BusinessPage = () => {
               paddingTop: "10px",
             }}
           >
-            <div style={{ display: "flex ", gap: "15px" }}>
+            <div style={{ display: "flex ", gap: "15px",justifyContent:"center" }}>
               {" "}
               <Button variant="contained">Approved</Button>
               <Button variant="contained" onClick={handleReject}>
@@ -407,23 +430,27 @@ const BusinessPage = () => {
 
             <div style={{ paddingBottom: "10px", maxWidth: "100%" }}>
               {isRejecting && (
-                <div style={{ marginTop: "0px", display: "grid", gap: "4px" }}>
-                  <TextField
+                <div style={{ marginTop: "0px", display: "grid", gap: "4px" ,width:"100%" }}>
+
+                  <div style={{minWidth: isSmallScreen ? "100%" : "600px"}} ><TextField
                     label="Reason to Reject"
                     variant="outlined"
                     multiline
                     rows={3} // Adjust the number of rows as needed
-                    style={{ width: "100%", maxWidth: "500px" }}
+                    style={{ width: "100%" }}
                     onChange={(e) => setRejectReason(e.target.value)}
-                  />
+                  /></div>
+                  <div>
                   <Button
                     variant="contained"
                     color="secondary"
                     onClick={handleRejectConfirm}
-                    style={{ marginTop: "10px" }}
+                    style={{ marginTop: "30px" }}
                   >
                     Confirm Reject
                   </Button>
+                  </div>
+              
                 </div>
               )}
             </div>

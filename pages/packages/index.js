@@ -270,7 +270,8 @@ const TemplatesPage = () => {
                   {data.status ? "Active" : "In Active"}
                 </span>
               </TableCell>
-              <Tooltip title="Remove" placement="top">
+
+<div style={{ display: 'flex',alignItems:"center" ,justifyContent: 'center' ,marginTop:"30px" }}>  <Tooltip title="Remove" placement="top">
                 <TransitionsDialog
                   modelButton={
                     <IconButton
@@ -315,7 +316,9 @@ const TemplatesPage = () => {
                 >
                   <DriveFileRenameOutlineIcon fontSize="inherit" />
                 </IconButton>
-              </Tooltip>
+              </Tooltip></div>
+             
+            
             </>
           )}
         />
