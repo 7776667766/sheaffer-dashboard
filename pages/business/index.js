@@ -37,6 +37,7 @@ const BusinessPage = () => {
   const [isRejecting, setIsRejecting] = useState(false);
   const [rejectReason, setRejectReason] = useState("");
 
+
   const { businessAll } = useSelector((state) => state.business);
   console.log("businessAll", businessAll);
 
@@ -64,6 +65,7 @@ const BusinessPage = () => {
 
   const handleClose = () => {
     setOpen(false);
+    setIsRejecting(false);
   };
 
   const handleReject = () => {
@@ -84,6 +86,8 @@ const BusinessPage = () => {
     );
     setIsRejecting(false);
     handleClose();
+   
+
   };
 
   const handleApproved = () => {
@@ -159,7 +163,7 @@ const BusinessPage = () => {
                   fontSize: "13.5px",
                 }}
               >
-                address
+                Business Name
               </TableCell>
 
               <TableCell
@@ -168,7 +172,7 @@ const BusinessPage = () => {
                   fontSize: "13.5px",
                 }}
               >
-                description
+                Address
               </TableCell>
 
               <TableCell
@@ -177,7 +181,7 @@ const BusinessPage = () => {
                   fontSize: "13.5px",
                 }}
               >
-                email
+                Email
               </TableCell>
 
               <TableCell
@@ -186,7 +190,7 @@ const BusinessPage = () => {
                   fontSize: "13.5px",
                 }}
               >
-                Phone Number
+                Phone
               </TableCell>
 
               <TableCell
@@ -195,7 +199,7 @@ const BusinessPage = () => {
                   fontSize: "13.5px",
                 }}
               >
-                Custom Request
+                Status
               </TableCell>
               <TableCell
                 sx={{
@@ -281,32 +285,13 @@ const BusinessPage = () => {
                       ? "dangerBadge"
                       : "infoBadge"
                   }
-                  onClick={(event) => handleClick(data?.id, event)}
-                  style={{ cursor: "pointer" }}
+                 
+                 
                 >
                   {data?.requestStatus}
                 </span>
 
-                {/* <Button
-                component="div"
-                sx={{
-                  borderBottom: "1px solid #F7FAFF",
-                  fontSize: "13px",
-                  pt: "16px",
-                  pb: "16px",
-                 
-                  cursor: "pointer",
-                  "&:hover": {
-                    textDecoration: "underline",
-                  },
-                  color: data?.requestStatus === "approved" ? "successBadge" : data?.requestStatus === "rejected" ? "red" : "blue",
-                }}
-
-                style={{ color: "blue",}}
-                onClick={(event) => handleClick(data?.id, event)}
-              >
-                {data?.requestStatus}
-              </Button> */}
+               
               </TableCell>
 
               <TableCell
@@ -376,6 +361,15 @@ const BusinessPage = () => {
                 </tr>
                 <tr>
                   <td style={{ border: "1px solid #ddd", padding: "10px" }}>
+                    <strong>Address:</strong>
+                  </td>
+                  <td style={{ border: "1px solid #ddd", padding: "10px" }}>
+                    {selectedBusiness?.address
+}
+                  </td>
+                </tr>
+                <tr>
+                  <td style={{ border: "1px solid #ddd", padding: "10px" }}>
                     <strong>Slug:</strong>
                   </td>
                   <td style={{ border: "1px solid #ddd", padding: "10px" }}>
@@ -406,50 +400,65 @@ const BusinessPage = () => {
                     {selectedBusiness?.bannerText}
                   </td>
                 </tr>
+                <tr>
+                  <td style={{ border: "1px solid #ddd", padding: "10px" }}>
+                    <strong>BannerImage:</strong>
+                  </td>
+                  <td style={{ border: "1px solid #ddd", padding: "10px" }}>
+                    
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
+          {selectedBusiness.requestStatus === "Rejected" ||
+          selectedBusiness.requestStatus === "Approved" ? (
+            ""
+          ) : (
+            <div>
+              {" "}
+              <Box
+                sx={{
+                  display: "flex",
+                  gap: 1,
+                  justifyContent: "center",
+                  marginY: 2,
+                }}
+              >
+                <Button variant="contained  " onClick={handleApproved}>
+                  Approved
+                </Button>
+                <Button variant="contained" onClick={handleReject}>
+                  Rejected
+                </Button>
+              </Box>
+              <Box>
+                {isRejecting &&   (
+                  <div>
+                    <TextField
+                      fullWidth
+                      label="Reason to Reject"
+                      variant="outlined"
+                      multiline
+                      rows={3}
+                      onChange={(e) => setRejectReason(e.target.value)}
+                    />
 
-          <Box
-            sx={{
-              display: "flex",
-              gap: 1,
-              justifyContent: "center",
-              marginY: 2,
-            }}
-          >
-            <Button variant="contained  " onClick={handleApproved}>
-              Approved
-            </Button>
-            <Button variant="contained" onClick={handleReject}>
-              Rejected
-            </Button>
-          </Box>
-          <Box>
-            {isRejecting && (
-              <div>
-                <TextField
-                  fullWidth
-                  label="Reason to Reject"
-                  variant="outlined"
-                  multiline
-                  rows={3}
-                  onChange={(e) => setRejectReason(e.target.value)}
-                />
-
-                <div>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={handleRejectConfirm}
-                    sx={{ marginTop: "30px" }}
-                  >
-                    Confirm Reject
-                  </Button>
-                </div>
-              </div>
-            )}
-          </Box>
+                    <div>
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={handleRejectConfirm}
+                        sx={{ marginTop: "30px" }}
+                      >
+                        Confirm Reject
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </Box>
+            </div>
+          )}
         </Dialog>
 
         {/* {selectedBusiness && (
