@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { Box, Button, Dialog, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Dialog,
+  TextField,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import Card from "@mui/material/Card";
 import IconButton from "@mui/material/IconButton";
 import TableCell from "@mui/material/TableCell";
@@ -23,36 +30,38 @@ const BusinessPage = () => {
   const router = useRouter();
   const [isRenameFormOpen, setIsRenameFormOpen] = useState(false);
   const [selectedBusiness, setSelectedBusiness] = useState([]);
-  console.log("selectedBusiness",selectedBusiness)
+  console.log("selectedBusiness", selectedBusiness);
   // console.log("BUSINESS ID", selectedBusiness?.id);
   const [open, setOpen] = useState(false);
   const { role } = useSelector((state) => state.auth);
   const [isRejecting, setIsRejecting] = useState(false);
   const [rejectReason, setRejectReason] = useState("");
 
-  const { businessAll } = useSelector(
-    (state) => state.business
-  );
-  console.log("businessAll", businessAll)
+  const { businessAll } = useSelector((state) => state.business);
+  console.log("businessAll", businessAll);
 
+  const isSmallScreen = useMediaQuery("(max-width:800px)");
+
+  /// ALL BUSINESS API
 
   useEffect(() => {
     if (businessAll.dataFatched !== true) {
-      dispatch(getallBussinessesFunApi({
-        onSuccess: (response) => {
-          console.log("API Response:", response);
-        },
-      }));
+      dispatch(
+        getallBussinessesFunApi({
+          onSuccess: (response) => {
+            console.log("API Response:", response);
+          },
+        })
+      );
     }
   }, [dispatch, businessAll.dataFatched, businessAll.data]);
-
 
   const handleClick = (id) => {
     const selectedBusiness = businessAll?.data?.find((item) => item.id === id);
     setSelectedBusiness(selectedBusiness);
     setOpen(true);
   };
-  
+
   const handleClose = () => {
     setOpen(false);
   };
@@ -77,8 +86,6 @@ const BusinessPage = () => {
     handleClose();
   };
 
-
-
   const handleApproved = () => {
     dispatch(
       addCustomBusinessApprovedFunApi({
@@ -91,7 +98,7 @@ const BusinessPage = () => {
   };
 
   const OpenPopUp = (id) => {
-    console.log("id",id)
+    console.log("id", id);
     const selectedBusiness = businessAll?.data?.find((item) => item.id === id);
     setSelectedBusiness(selectedBusiness);
     setIsRenameFormOpen(true);
@@ -266,13 +273,41 @@ const BusinessPage = () => {
                   pb: "16px",
                 }}
               >
-                
-                {data?.requestStatus}
+                <span
+                  className={
+                    data?.requestStatus === "Approved"
+                      ? "successBadge"
+                      : data?.requestStatus === "Rejected"
+                      ? "dangerBadge"
+                      : "infoBadge"
+                  }
+                  onClick={(event) => handleClick(data?.id, event)}
+                  style={{ cursor: "pointer" }}
+                >
+                  {data?.requestStatus}
+                </span>
 
+                {/* <Button
+                component="div"
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13px",
+                  pt: "16px",
+                  pb: "16px",
+                 
+                  cursor: "pointer",
+                  "&:hover": {
+                    textDecoration: "underline",
+                  },
+                  color: data?.requestStatus === "approved" ? "successBadge" : data?.requestStatus === "rejected" ? "red" : "blue",
+                }}
+
+                style={{ color: "blue",}}
+                onClick={(event) => handleClick(data?.id, event)}
+              >
+                {data?.requestStatus}
+              </Button> */}
               </TableCell>
-              
-              
-             
 
               <TableCell
                 sx={{
@@ -283,26 +318,34 @@ const BusinessPage = () => {
                 }}
               >
                 <Tooltip title="Rename" placement="top">
-                <IconButton
-                  aria-label="edit"
-                  size="small"
-                  color="primary"
-                  className="primary"
-                onClick={(event) => handleClick(data?.id, event)}
-                >
-                  <DriveFileRenameOutlineIcon fontSize="inherit" />
-                </IconButton>
-              </Tooltip>
+                  <IconButton
+                    aria-label="edit"
+                    size="small"
+                    color="primary"
+                    className="primary"
+                    onClick={(event) => handleClick(data?.id, event)}
+                  >
+                    <DriveFileRenameOutlineIcon fontSize="inherit" />
+                  </IconButton>
+                </Tooltip>
               </TableCell>
-              
-              
-           
             </>
           )}
         />
-        <Dialog open={open} onClose={handleClose} fullWidth>
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          maxWidth="lg"
+          PaperProps={{
+            sx: {
+              width: "800px",
+
+              padding: "20px",
+            },
+          }}
+        >
           <h2 style={{ textAlign: "center", paddingTop: "10px" }}>
-            Owner  Business Details
+            Owner Business Details
           </h2>
           <div
             style={{
@@ -367,51 +410,46 @@ const BusinessPage = () => {
             </table>
           </div>
 
-
-      <div
-            style={{
-              padding: "10px",
-              textAlign: "center",
-              display: "grid",
-              gap: "22px",
+          <Box
+            sx={{
+              display: "flex",
+              gap: 1,
               justifyContent: "center",
-              paddingBottom: "30px",
-              paddingTop: "10px",
+              marginY: 2,
             }}
           >
-            <div style={{ display: "flex ", gap: "15px" }}>
-              {" "}
-              <Button variant="contained  " 
-              onClick={handleApproved}
-              >Approved</Button>
-              <Button variant="contained" onClick={handleReject}>
-                Rejected
-              </Button>
-            </div>
+            <Button variant="contained  " onClick={handleApproved}>
+              Approved
+            </Button>
+            <Button variant="contained" onClick={handleReject}>
+              Rejected
+            </Button>
+          </Box>
+          <Box>
+            {isRejecting && (
+              <div>
+                <TextField
+                  fullWidth
+                  label="Reason to Reject"
+                  variant="outlined"
+                  multiline
+                  rows={3}
+                  onChange={(e) => setRejectReason(e.target.value)}
+                />
 
-            <div style={{ paddingBottom: "10px", maxWidth: "100%" }}>
-              {isRejecting && (
-                <div style={{ marginTop: "0px", display: "grid", gap: "4px" }}>
-                  <TextField
-                    label="Reason to Reject"
-                    variant="outlined"
-                    multiline
-                    rows={3}
-                    style={{ width: "100%", maxWidth: "500px" }}
-                    onChange={(e) => setRejectReason(e.target.value)}
-                  />
+                <div>
                   <Button
                     variant="contained"
                     color="secondary"
                     onClick={handleRejectConfirm}
-                    style={{ marginTop: "10px" }}
+                    sx={{ marginTop: "30px" }}
                   >
                     Confirm Reject
                   </Button>
                 </div>
-              )}
-            </div>
-          </div>
+              </div>
+            )}
+          </Box>
         </Dialog>
 
         {/* {selectedBusiness && (
@@ -423,9 +461,7 @@ const BusinessPage = () => {
         )} */}
       </Card>
     </>
-
-       );
-  
+  );
 };
 
 export default BusinessPage;

@@ -20,6 +20,7 @@ import {
   ListItemText,
   Typography,
   TextField,
+  TextareaAutosize,
 } from "@mui/material";
 import Image from "next/image";
 import Button from "@mui/material/Button";
@@ -54,15 +55,15 @@ export default function DashboardPage() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    slug:"",
-    bannerText:"",
-    address:"",
+    slug: "",
+    bannerText: "",
+    address: "",
     description: "",
-    logo:"",
-    googleId:"",
-    phone:"",
-    bookingService:"",
-    websiteService:"",
+    logo: "",
+    googleId: "",
+    phone: "",
+    bookingService: "",
+    websiteService: "",
     color: "",
     theme: "",
     file: null,
@@ -167,7 +168,7 @@ export default function DashboardPage() {
   const [isLinkCopied, setIsLinkCopied] = useState(false);
 
   const handleSiteCopyLink = () => {
-    const linkToCopy = `${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}site/${business.slug}`;
+    const linkToCopy = `${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}site/${business.data.slug}`;
     navigator.clipboard.writeText(linkToCopy);
     setIsLinkCopied(true);
 
@@ -177,7 +178,7 @@ export default function DashboardPage() {
   };
 
   const handleCopyLink = () => {
-    const linkToCopy = `${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}booking/${business.slug}`;
+    const linkToCopy = `${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}booking/${business.data.slug}`;
     navigator.clipboard.writeText(linkToCopy);
     setIsLinkCopied(true);
 
@@ -195,25 +196,25 @@ export default function DashboardPage() {
           <li>
             {role === "owner" && (
               <>
-              <div style={{display:"flex",gap:"15px"}}><Button
-                  variant="contained"
-                  disabled={business?.data ? true : false}
-                  onClick={handleClickOpen}
-                >
-                  Sync Business
-                </Button>
-                <Button
-                  variant="contained"
-                  // disabled={business ? true : false}
-                  onClick={handleOpenRequest}
-                >
-                  Send Custom Booking Request
-                </Button></div>
-                
+                <div style={{ display: "flex", gap: "15px" }}>
+                  <Button
+                    variant="contained"
+                    disabled={business?.data ? true : false}
+                    onClick={handleClickOpen}
+                  >
+                    Sync Business
+                  </Button>
+                  <Button
+                    variant="contained"
+                    // disabled={business ? true : false}
+                    onClick={handleOpenRequest}
+                  >
+                    Send Custom Booking Request
+                  </Button>
+                </div>
 
-                <Dialog open={open} onClose={handleClose} >
+                <Dialog open={open} onClose={handleClose}>
                   <DialogTitle>
-                 
                     Select Your Business
                     <IconButton
                       edge="end"
@@ -224,7 +225,7 @@ export default function DashboardPage() {
                       <CloseIcon />
                     </IconButton>
                   </DialogTitle>
-                  <List sx={{ pt: 0 }} >
+                  <List sx={{ pt: 0 }}>
                     {businessList.map((data, index) => (
                       <ListItem disableGutters key={index}>
                         <ListItemButton onClick={() => handleOpen(data)}>
@@ -243,15 +244,22 @@ export default function DashboardPage() {
                 <Dialog
                   open={openForm}
                   onClose={handleFormClose}
+                  maxWidth="lg"
                   PaperProps={{
                     sx: {
-                      width: "700px",
+                      width: "800px",
                       height: "500px",
-                      padding:"20px"
+                      padding: "20px",
                     },
-                  }}               
+                  }}
                 >
-                  <DialogTitle style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <DialogTitle
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
                     Business Form Request
                     <IconButton
                       edge="end"
@@ -264,94 +272,117 @@ export default function DashboardPage() {
                   </DialogTitle>
 
                   <div sx={{ padding: "30px", margin: "16px" }}>
-                    <Grid item xs={6} md={6} lg={6}>
-                      <Typography
-                        as="h5"
-                        sx={{
-                          fontWeight: "500",
-                          fontSize: "14px",
-                          mb: "12px",
-                        }}
-                      >
-                        Name
-                      </Typography>
-                      <TextField
-                        name="name"
-                        fullWidth
-                        id="name"
-                        label="Enter Name"
-                        value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })} // Handle changes and update the formData state
-                      />
-                    </Grid>
+                    <Grid container spacing={2} md>
+                      <Grid item xs={12} md={6} lg={6}>
+                        <TextField
+                          name="name"
+                          fullWidth
+                          id="name"
+                          label="Business Name"
+                          value={formData.name}
+                          onChange={(e) =>
+                            setFormData({ ...formData, name: e.target.value })
+                          } // Handle changes and update the formData state
+                        />
+                      </Grid>
 
+                      <Grid item xs={12} md={6} lg={6}>
+                        <TextField
+                          name="email"
+                          fullWidth
+                          id="email"
+                          label="Business Email"
+                          value={formData.email}
+                          onChange={(e) =>
+                            setFormData({ ...formData, email: e.target.value })
+                          }
+                        />
+                      </Grid>
 
-                    <Grid item xs={6} md={6} lg={6}>
-                      <Typography
-                        as="h5"
-                        sx={{
-                          fontWeight: "500",
-                          fontSize: "14px",
-                          mb: "12px",
-                        }}
-                      >
-                        Email
-                      </Typography>
-                      <TextField
-                        name="email"
-                        fullWidth
-                        id="email"
-                        label="Enter Email"
-                        value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      />
-                    </Grid>
+                      <Grid item xs={12} md={6} lg={6}>
+                        <TextField
+                          name="slug"
+                          fullWidth
+                          id="slug"
+                          label="Business slug"
+                          value={formData.slug}
+                          onChange={(e) =>
+                            setFormData({ ...formData, slug: e.target.value })
+                          }
+                        />
+                      </Grid>
+                      <Grid item xs={12} md={6} lg={6}>
+                        <TextField
+                          name="bannerText"
+                          fullWidth
+                          id="bannerText"
+                          label="Enter BannerText"
+                          value={formData.bannerText} // Set the value to the dynamic description from formData
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              bannerText: e.target.value,
+                            })
+                          } // Handle changes and update the formData state
+                        />
+                      </Grid>
+                      <Grid item xs={12} md={12} lg={12}>
+                        <TextField
+                          multiline // Use multiline property to make it a textarea
+                          rows={3}
+                          name="description"
+                          // fullWidth
+                          id="description"
+                          label="Enter Description"
+                          value={formData.description} // Set the value to the dynamic description from formData
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              description: e.target.value,
+                            })
+                          }
+                          style={{
+                            width: "100%",
+                            // border:"0.5px solid gray",
+                            // Add a blue border
+                            color: "blue", // Set text color to blue
+                            // Add padding for better appearance
+                          }}
 
-                    <Grid item xs={6} md={6} lg={6}>
-                      <Typography
-                        as="h5"
-                        sx={{
-                          fontWeight: "500",
-                          fontSize: "14px",
-                          mb: "12px",
-                        }}
-                      >
-                        Slug
-                      </Typography>
-                      <TextField
-                        name="slug"
-                        fullWidth
-                        id="slug"
-                        label="Enter slug"
-                        value={formData.slug}
-                        onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                      />
-                      
-                    </Grid>
-                    <Grid item xs={6} md={6} lg={6}>
-                      <Typography
-                        as="h5"
-                        sx={{
-                          fontWeight: "500",
-                          fontSize: "14px",
-                          mb: "12px",
-                        }}
-                      >
-                        Description
-                      </Typography>
-                      <TextField
-                        name="description"
-                        fullWidth
-                        id="description"
-                        label="Enter Description"
-                        value={formData.description} // Set the value to the dynamic description from formData
-                        onChange={(e) => setFormData({ ...formData, description: e.target.value })} // Handle changes and update the formData state
-                      />
-                    </Grid>
+                          // ate
+                        />
+                      </Grid>
 
+                      <Grid item xs={12} md={12} lg={12}>
+                        <TextField
+                          name="address"
+                          fullWidth
+                          id="address"
+                          label="Enter Address"
+                          value={formData.address} // Set the value to the dynamic description from formData
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              address: e.target.value,
+                            })
+                          } // Handle changes and update the formData state
+                        />
+                      </Grid>
 
+                      <Grid item xs={12} md={6} lg={6}>
+                        <TextField
+                          name="Phone"
+                          fullWidth
+                          id="phone"
+                          label="Enter Phone"
+                          value={formData.phone}
+                          onChange={(e) =>
+                            setFormData({ ...formData, phone: e.target.value })
+                          }
+                        />
+                      </Grid>
 
-                    <Grid item xs={6} md={6} lg={6}>
+                      {/* <Grid item xs={6} md={6} lg={6}>
                       <Typography
                         as="h5"
                         sx={{
@@ -360,161 +391,32 @@ export default function DashboardPage() {
                           mb: "12px",
                         }}
                       >
-                       bannerText
+                        Color
                       </Typography>
                       <TextField
-                        name="bannerText"
+                        name="color"
                         fullWidth
-                        id="bannerText"
-                        label="Enter BannerText"
-                        value={formData.bannerText} // Set the value to the dynamic description from formData
-                        onChange={(e) => setFormData({ ...formData, bannerText: e.target.value })} // Handle changes and update the formData state
+                        id="color"
+                        label="Enter Color"
+                        value={formData.color} // Set the value to the dynamic color from formData
+                        onChange={(e) => setFormData({ ...formData, color: e.target.value })} // Handle changes and update the formData state
                       />
-                    </Grid>
-                    <Grid item xs={6} md={6} lg={6}>
-                      <Typography
-                        as="h5"
-                        sx={{
-                          fontWeight: "500",
-                          fontSize: "14px",
-                          mb: "12px",
-                        }}
-                      >
-                       Address
-                      </Typography>
-                      <TextField
-                        name="address"
-                        fullWidth
-                        id="address"
-                        label="Enter Address"
-                        value={formData.address} // Set the value to the dynamic description from formData
-                        onChange={(e) => setFormData({ ...formData, address: e.target.value })} // Handle changes and update the formData state
-                      />
-                    </Grid>
+                    </Grid> */}
 
-                    <Grid item xs={6} md={6} lg={6}>
-                      <Typography
-                        as="h5"
-                        sx={{
-                          fontWeight: "500",
-                          fontSize: "14px",
-                          mb: "12px",
-                        }}
-                      >
-                       Logo
-                      </Typography>
-                      <TextField
-                        name="Logo"
-                        fullWidth
-                        id="logo"
-                        label="Enter Logo"
-                        value={formData.logo} 
-                        onChange={(e) => setFormData({ ...formData, logo: e.target.value })} // Handle changes and update the formData state
-                      />
-                    </Grid>
-                    <Grid item xs={6} md={6} lg={6}>
-                      <Typography
-                        as="h5"
-                        sx={{
-                          fontWeight: "500",
-                          fontSize: "14px",
-                          mb: "12px",
-                        }}
-                      >
-                        Google ID
-                      </Typography>
-                      <TextField
-                        name="googleId"
-                        fullWidth
-                        id="googleId"
-                        label="Enter Google ID"
-                        value={formData.googleId} 
-                        onChange={(e) => setFormData({ ...formData, googleId: e.target.value })} // Handle changes and update the formData state
-                      />
-                    </Grid>
-                    <Grid item xs={6} md={6} lg={6}>
-                      <Typography
-                        as="h5"
-                        sx={{
-                          fontWeight: "500",
-                          fontSize: "14px",
-                          mb: "12px",
-                        }}
-                      >
-                        Phone
-                      </Typography>
-                      <TextField
-                        name="Phone"
-                        fullWidth
-                        id="phone"
-                        label="Enter Phone"
-                        value={formData.phone} 
-                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })} 
-                      />
-                    </Grid>
-                    <Grid item xs={6} md={6} lg={6}>
-                      <Typography
-                        as="h5"
-                        sx={{
-                          fontWeight: "500",
-                          fontSize: "14px",
-                          mb: "12px",
-                        }}
-                      >
-                        BookingService
-                      </Typography>
-                      <TextField
-                        name="bookingService"
-                        fullWidth
-                        id="bookingService"
-                        label="Enter BookingService "
-                        value={formData.bookingService} 
-                        onChange={(e) => setFormData({ ...formData, bookingService: e.target.value })} 
-                      />
-                    </Grid>
-                    <Grid item xs={6} md={6} lg={6}>
-                      <Typography
-                        as="h5"
-                        sx={{
-                          fontWeight: "500",
-                          fontSize: "14px",
-                          mb: "12px",
-                        }}
-                      >
-                        WebsiteService
-                      </Typography>
-                      <TextField
-                        name=" websiteService"
-                        fullWidth
-                        id=" websiteService"
-                        label="Enter  WebsiteService"
-                        value={formData.websiteService} 
-                        onChange={(e) => setFormData({ ...formData, websiteService: e.target.value })} 
-                      />
-                    </Grid>
-                    <Grid item xs={6} md={6} lg={6}>
-                      <Typography
-                        as="h5"
-                        sx={{
-                          fontWeight: "500",
-                          fontSize: "14px",
-                          mb: "12px",
-                        }}
-                      >
-                        Theme
-                      </Typography>
-                      <TextField
-                        name="theme"
-                        fullWidth
-                        id="theme"
-                        label="Enter Theme"
-                        value={formData.theme} 
-                        onChange={(e) => setFormData({ ...formData, theme: e.target.value })} 
-                      />
-                    </Grid>
-                   
+                      <Grid item xs={12} md={6} lg={6}>
+                        <TextField
+                          name="theme"
+                          fullWidth
+                          id="theme"
+                          label="Enter Theme"
+                          value={formData.theme}
+                          onChange={(e) =>
+                            setFormData({ ...formData, theme: e.target.value })
+                          }
+                        />
+                      </Grid>
 
-                    <Grid item xs={6} md={6} lg={6}>
+                      {/* <Grid item xs={6} md={6} lg={6}>
                       <Box sx={{ display: "flex", alignItems: "end", gap: 1 }}>
                         <Box sx={{ flex: 1 }}>
                           <Typography
@@ -525,7 +427,7 @@ export default function DashboardPage() {
                               mb: "12px",
                             }}
                           >
-                            File
+                            Upload Banner Image
                           </Typography>
 
                           <TextField
@@ -536,23 +438,54 @@ export default function DashboardPage() {
                           />
                         </Box>
                       </Box>
-                    </Grid>
+                    </Grid> */}
 
-                    <Grid item xs={12} style={{ textAlign: "center", marginTop: "20px" }} >
-                      <LoadingButtonComponent
-                        onClick={handleAddRequest}
-                        type="submit"
-                        fullWidth={false}
-                        sx={{
-                          paddingX: "10px",
-                        }}
-                        value={
-                          <>
-                            <SendIcon className="mr-10px" />
-                            Send Request
-                          </>
-                        }
-                      />
+                      <Grid item xs={12} md={12} lg={12}>
+                        <Box
+                          sx={{ display: "flex", alignItems: "end", gap: 1 }}
+                        >
+                          <Box sx={{ flex: 1 }}>
+                            {/* <Typography
+                            as="h5"
+                            sx={{
+                              fontWeight: "500",
+                              fontSize: "14px",
+                              mb: "12px",
+                            }}
+                          >
+                            Logo
+                          </Typography> */}
+
+                            <TextField
+                              fullWidth
+                              name="file"
+                              type="file"
+                              id="file"
+                            />
+                          </Box>
+                        </Box>
+                      </Grid>
+
+                      <Grid
+                        item
+                        xs={12}
+                        style={{ textAlign: "center", marginTop: "20px" }}
+                      >
+                        <LoadingButtonComponent
+                          onClick={handleAddRequest}
+                          type="submit"
+                          fullWidth={false}
+                          sx={{
+                            paddingX: "10px",
+                          }}
+                          value={
+                            <>
+                              <SendIcon className="mr-10px" />
+                              Send Request
+                            </>
+                          }
+                        />
+                      </Grid>
                     </Grid>
                   </div>
                 </Dialog>
@@ -722,7 +655,7 @@ export default function DashboardPage() {
                               >
                                 <Box>
                                   <Button
-                                    href={`${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}site/${business.slug}`}
+                                    href={`${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}site/${business.data.slug}`}
                                     target="_blank"
                                     sx={{
                                       pt: "2px",
@@ -761,7 +694,7 @@ export default function DashboardPage() {
                               >
                                 <Box>
                                   <Button
-                                    href={`${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}booking/${business.slug}`}
+                                    href={`${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}booking/${business.data.slug}`}
                                     target="_blank"
                                     sx={{
                                       pt: "2px",
@@ -873,7 +806,7 @@ export default function DashboardPage() {
                               <Image
                                 key={key}
                                 src={data}
-                                alt={business.name}
+                                alt={business.data.name}
                                 width={100}
                                 height={100}
                                 style={{
@@ -890,28 +823,30 @@ export default function DashboardPage() {
                               justifyContent: "end",
                             }}
                           >
-                            {business.data.socialLinks?.map((socialLink, index) => (
-                              <div key={index}>
-                                <a
-                                  rel="noreferrer"
-                                  href={socialLink.link}
-                                  target="_blank"
-                                  className="text-3xl"
-                                  style={{
-                                    color: "#a8a8a8",
-                                    marginRight: "5px",
-                                  }}
-                                >
-                                  {socialLink.name === "facebook" ? (
-                                    <Facebook style={{ fontSize: "30px" }} />
-                                  ) : socialLink.name === "instagram" ? (
-                                    <Instagram style={{ fontSize: "29px" }} />
-                                  ) : (
-                                    <Twitter />
-                                  )}
-                                </a>
-                              </div>
-                            ))}
+                            {business.data.socialLinks?.map(
+                              (socialLink, index) => (
+                                <div key={index}>
+                                  <a
+                                    rel="noreferrer"
+                                    href={socialLink.link}
+                                    target="_blank"
+                                    className="text-3xl"
+                                    style={{
+                                      color: "#a8a8a8",
+                                      marginRight: "5px",
+                                    }}
+                                  >
+                                    {socialLink.name === "facebook" ? (
+                                      <Facebook style={{ fontSize: "30px" }} />
+                                    ) : socialLink.name === "instagram" ? (
+                                      <Instagram style={{ fontSize: "29px" }} />
+                                    ) : (
+                                      <Twitter />
+                                    )}
+                                  </a>
+                                </div>
+                              )
+                            )}
                           </Box>
                         </div>
                       </Typography>
