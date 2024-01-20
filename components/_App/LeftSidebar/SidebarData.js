@@ -88,14 +88,6 @@ export const SidebarData = () => {
       path: "/customize-theme/",
       role: "owner",
       icon: <LayersIcon />,
-      iconClosed: <KeyboardArrowRightIcon />,
-      iconOpened: <KeyboardArrowDownIcon />,
-      subNav: [
-        {
-          title: "Customize-Theme",
-          path: "/customize-theme/",
-        },
-      ],
     },
 
     role === "admin" && {
@@ -158,7 +150,7 @@ export const SidebarData = () => {
       ],
     },
 
-    (role === "admin") && {
+    role === "admin" && {
       title: "Dummy Data",
       path: "/services/add-dummy-service",
       icon: <LayersIcon />,
@@ -187,7 +179,6 @@ export const SidebarData = () => {
       path: "/reviews/",
       icon: <LayersIcon />,
     },
-
 
     (role === "owner" || role === "admin") && {
       title: "Transaction",

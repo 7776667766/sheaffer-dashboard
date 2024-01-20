@@ -1,11 +1,18 @@
-import { getMyBussinessFunApi, regsiterBusinessFunApi ,addBusinessFunApi, getallBussinessesFunApi, addCustomBusinessFunApi, addCustomBusinessApprovedFunApi } from "./services";
+import {
+  getMyBussinessFunApi,
+  regsiterBusinessFunApi,
+  addBusinessFunApi,
+  getallBussinessesFunApi,
+  addCustomBusinessFunApi,
+  addCustomBusinessApprovedFunApi,
+} from "./services";
 
 const { createSlice } = require("@reduxjs/toolkit");
 
 const businessSlice = createSlice({
   name: "business",
   initialState: {
-    business: [],
+    business: null,
     isLoading: false,
     error: null,
     dataFatched: false,
@@ -44,7 +51,7 @@ const businessSlice = createSlice({
         state.error = action.payload;
         state.dataFatched = true;
       });
-      builder
+    builder
       .addCase(addBusinessFunApi.pending, (state, action) => {
         state.isLoading = true;
         state.error = null;
@@ -60,67 +67,61 @@ const businessSlice = createSlice({
         state.error = action.payload;
         state.dataFatched = true;
       });
-      builder
-      .addCase(getallBussinessesFunApi.pending, (state, action) => {
-        state.isLoading = true;
-        state.error = null;
-      })
-      .addCase(getallBussinessesFunApi.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.business = action.payload;
-        state.dataFatched = true;
-      })
-      .addCase(getallBussinessesFunApi.rejected, (state, action) => {
-        state.isLoading = false;
-        state.business = null;
-        state.error = action.payload;
-        state.dataFatched = true;
-      });
-      builder
-      .addCase(addCustomBusinessFunApi.pending, (state, action) => {
-        state.isLoading = true;
-        state.error = null;
-      })
-      .addCase(addCustomBusinessFunApi.fulfilled, (state, action) => {
-        console.log("85 payload",action.payload)
-        state.isLoading = false;
-        state.business = state.business?.map((ele) =>
-        ele.id === action.payload.id ? action.payload : ele
-        );
-        state.dataFatched = true;
-      })
-      // {
-      //   state.serviceType.isLoading = false;
-      //   state.serviceType.data = state.serviceType.data?.map((ele) =>
-      //     ele.id === action.payload.id ? action.payload : ele
-      //   );
+    // builder
+    //   .addCase(getallBussinessesFunApi.pending, (state, action) => {
+    //     state.isLoading = true;
+    //     state.error = null;
+    //   })
+    //   .addCase(getallBussinessesFunApi.fulfilled, (state, action) => {
+    //     state.isLoading = false;
+    //     state.business = action.payload;
+    //     state.dataFatched = true;
+    //   })
+    //   .addCase(getallBussinessesFunApi.rejected, (state, action) => {
+    //     state.isLoading = false;
+    //     state.business = null;
+    //     state.error = action.payload;
+    //     state.dataFatched = true;
+    //   });
+    // builder
+    //   .addCase(addCustomBusinessFunApi.pending, (state, action) => {
+    //     state.isLoading = true;
+    //     state.error = null;
+    //   })
+    //   .addCase(addCustomBusinessFunApi.fulfilled, (state, action) => {
+    //     console.log("85 payload", action.payload);
+    //     state.isLoading = false;
+    //     state.business = state.business?.map((ele) =>
+    //       ele.id === action.payload.id ? action.payload : ele
+    //     );
+    //     state.dataFatched = true;
+    //   })
 
-      .addCase(addCustomBusinessFunApi.rejected, (state, action) => {
-        state.isLoading = false;
-        state.business = null;
-        state.error = action.payload;
-        state.dataFatched = true;
-      });
+    //   .addCase(addCustomBusinessFunApi.rejected, (state, action) => {
+    //     state.isLoading = false;
+    //     state.business = null;
+    //     state.error = action.payload;
+    //     state.dataFatched = true;
+    //   });
 
-      builder
-      .addCase(addCustomBusinessApprovedFunApi.pending, (state, action) => {
-        state.isLoading = true;
-        state.error = null;
-      })
-      .addCase(addCustomBusinessApprovedFunApi.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.business = state.business?.map((ele) =>
-        ele.id === action.payload.id ? action.payload : ele
-        );
-      })
-      .addCase(addCustomBusinessApprovedFunApi.rejected, (state, action) => {
-        state.isLoading = false;
-        state.business = null;
-        state.error = action.payload;
-        state.dataFatched = true;
-      });
+    // builder
+    //   .addCase(addCustomBusinessApprovedFunApi.pending, (state, action) => {
+    //     state.isLoading = true;
+    //     state.error = null;
+    //   })
+    //   .addCase(addCustomBusinessApprovedFunApi.fulfilled, (state, action) => {
+    //     state.isLoading = false;
+    //     state.business = state.business?.map((ele) =>
+    //       ele.id === action.payload.id ? action.payload : ele
+    //     );
+    //   })
+    //   .addCase(addCustomBusinessApprovedFunApi.rejected, (state, action) => {
+    //     state.isLoading = false;
+    //     state.business = null;
+    //     state.error = action.payload;
+    //     state.dataFatched = true;
+    //   });
   },
-  
 });
 
 export const businessReducer = businessSlice.reducer;
