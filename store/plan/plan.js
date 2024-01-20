@@ -121,10 +121,10 @@ export const editPackagesFunApi = createAsyncThunk(
 export const deletePackageFunApi = createAsyncThunk(
   "packages/deletepackages",
   async (id) => {
-    console.log("delete services type value", id);
+    console.log("delete packages value", id);
     try {
       const response = await axios.get(deletePackageApi(id));
-      console.log("response in delete Service type => ", response.data);
+      console.log("response in delete packages => ", response.data);
       if (response.data.status === "success") {
         toast.success(response.data.message);
         return id;

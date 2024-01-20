@@ -38,7 +38,7 @@ const BusinessForm = () => {
               <>
                 <Button
                   variant="contained"
-                  // disabled={business ? true : false}
+                  disabled={business ? true : false}
                   onClick={handleClickOpen}
                 >
                   Add Dummy Business
@@ -100,6 +100,9 @@ const BusinessForm = () => {
                         <li>bannerText</li>
                         <li>color</li>
                         <li>bannerImg</li>
+                        <li>fontSize</li>
+                        <li>fontFamily</li>
+
                       </ul>
                     </Typography>
                   </Box>
@@ -202,6 +205,8 @@ const BusinessForm = () => {
                             }}
                           />
                         </li>
+                        <li>{business?.fontSize}</li>
+                        <li>{business?.fontFamily}</li>
                       </ul>
                     </Typography>
                   </Box>

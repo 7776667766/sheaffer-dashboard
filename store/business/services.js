@@ -138,7 +138,7 @@ export const getallBussinessesFunApi = createAsyncThunk(
       } else {
         console.log(
           "Error response all Businesses Api => ",
-          response.data
+          response.data.data
         );
         const err =
           response?.data?.message ||
