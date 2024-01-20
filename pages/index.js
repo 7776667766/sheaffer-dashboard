@@ -21,6 +21,7 @@ import {
   Typography,
   TextField,
   TextareaAutosize,
+  DialogContent,
 } from "@mui/material";
 import Image from "next/image";
 import Button from "@mui/material/Button";
@@ -52,6 +53,7 @@ export default function DashboardPage() {
   const [selectedBusiness, setSelectedBusiness] = useState(null);
   const [avatar, setavatar] = useState(null);
   const [openForm, setOpenForm] = useState(false);
+  const [openPending, setOpenPending] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -68,6 +70,23 @@ export default function DashboardPage() {
     theme: "",
     file: null,
   });
+
+  const handleClose = () => {
+    setSelectedBusiness(null);
+    setOpenSecondDialog(false);
+    setOpen(false);
+  };
+
+  useEffect(() => {
+    console.log("useEffect running");
+    if (business?.data) {
+      console.log("requestStatus:", business.data.requestStatus);
+      if (business.data.requestStatus === "pending" || business.data.requestStatus === "rejected") {
+        setOpenPending(true);
+      }
+    }
+  }, [business?.data, handleClose]);
+
 
   const handleOpenRequest = () => {
     setOpenForm(true);
@@ -86,22 +105,15 @@ export default function DashboardPage() {
     setOpenSecondDialog(true);
   };
 
-  const handleClose = () => {
-    setSelectedBusiness(null);
-    setOpenSecondDialog(false);
-    setOpen(false);
-  };
 
   useEffect(() => {
     if (role === "owner" || role === "manager") {
       if (!dataFatched) {
         dispatch(getMyBussinessFunApi({}));
       }
-      // if (business && business.requestStatus === "Pending") {
-      //   return router.push("/wait-for-approval");
-      // }
     }
   }, [dispatch, dataFatched, role]);
+
 
   const businessList = [
     {
@@ -126,6 +138,11 @@ export default function DashboardPage() {
       })
     );
   };
+
+
+  // const handleRequestButtonClick = async () => {
+  //   handleAddRequest();
+  // };
 
   const handleRegisterBusiness = () => {
     dispatch(
@@ -199,14 +216,14 @@ export default function DashboardPage() {
                 <div style={{ display: "flex", gap: "15px" }}>
                   <Button
                     variant="contained"
-                    disabled={business?.data ? true : false}
+                    // disabled={business?.data ? true : false}
                     onClick={handleClickOpen}
                   >
                     Sync Business
                   </Button>
                   <Button
                     variant="contained"
-                    // disabled={business ? true : false}
+                    // disabled={business?.data ? true : false}
                     onClick={handleOpenRequest}
                   >
                     Send Custom Booking Request
@@ -349,7 +366,7 @@ export default function DashboardPage() {
                             // Add padding for better appearance
                           }}
 
-                          // ate
+                        // ate
                         />
                       </Grid>
 
@@ -466,7 +483,7 @@ export default function DashboardPage() {
                         </Box>
                       </Grid>
 
-                      <Grid
+                      {/* <Grid
                         item
                         xs={12}
                         style={{ textAlign: "center", marginTop: "20px" }}
@@ -485,7 +502,43 @@ export default function DashboardPage() {
                             </>
                           }
                         />
+                      </Grid> */}
+                      <Grid item xs={12} style={{ textAlign: "center", marginTop: "20px" }}>
+                        <LoadingButtonComponent
+                          onClick={handleAddRequest}
+                          type="submit"
+                          fullWidth={false}
+                          sx={{
+                            paddingX: "10px",
+                          }}
+                          value={
+                            <>
+                              <SendIcon className="mr-10px" />
+                              Send Request
+                            </>
+                          }
+                        />
                       </Grid>
+
+
+
+                      {/* <Grid item xs={12} style={{ textAlign: "center", marginTop: "20px" }}>
+                        <LoadingButtonComponent
+                          onClick={handleRequestButtonClick}
+                          type="submit"
+                          fullWidth={false}
+                          sx={{
+                            paddingX: "10px",
+                          }}
+                          value={
+                            <>
+                              <SendIcon className="mr-10px" />
+                              Send Request
+                            </>
+                          }
+                        />
+                      </Grid> */}
+
                     </Grid>
                   </div>
                 </Dialog>
@@ -869,12 +922,52 @@ export default function DashboardPage() {
         rowSpacing={1}
         columnSpacing={{ xs: 1, sm: 1, md: 1, lg: 1, xl: 2 }}
       >
+        {/* <Dialog open={openPending} disableEscapeKeyDown={true} disableBackdropClick={true}>
+    <DialogContent>
+        <Typography variant="h6" gutterBottom>
+            {business?.data?.requestStatus === "pending" ? (
+                'Your request is pending. Please wait for approval.'
+            ) : business?.data?.requestStatus === "rejected" ? (
+                `Your request has been rejected. ${business?.data?.rejectreason}.`
+            ) : (
+                'Some default message if requestStatus is neither pending nor rejected'
+            )}
+        </Typography>
+    </DialogContent>
+</Dialog> */}
+
+        <Dialog open={openPending} disableEscapeKeyDown={true} disableBackdropClick={true}>
+          <DialogContent>
+            {business?.data?.requestStatus === "pending" ? (
+              <Typography variant="h6" gutterBottom>
+                Your request is pending. Please wait for approval.
+              </Typography>
+            ) : business?.data?.requestStatus === "rejected" ? (
+              <>
+                <Typography variant="h6" gutterBottom>
+                  Your request has been rejected.
+                </Typography>
+                {business?.data?.rejectReason && (
+                  <Typography variant="body2" color="error">
+                    Reason for rejection: {business?.data?.rejectreason}
+                  </Typography>
+                )}
+              </>
+            ) : (
+              <Typography variant="h6" gutterBottom>
+                Some default message if requestStatus is neither pending nor rejected
+              </Typography>
+            )}
+          </DialogContent>
+        </Dialog>
+
+
         {role === "admin" && (
           <Grid item xs={12} md={12} lg={12} xl={8}>
             <UserList />
           </Grid>
-        )}
 
+        )}
         {/* <Grid item xs={12} md={12} lg={12} xl={4}>
           <BestSellingProducts />
         </Grid> */}

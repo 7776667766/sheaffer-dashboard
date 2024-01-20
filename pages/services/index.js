@@ -47,7 +47,6 @@ const ServicesPage = () => {
   const router = useRouter();
 
   const nextPage = (id) => {
-    // event.preventDefault();
     router.push(`/services/edit-service/${id}`);
   };
 
@@ -96,7 +95,7 @@ const ServicesPage = () => {
             My Services
           </Typography>
 
-          {(role === "owner" || role === "manager" ) && (
+          {(role === "owner" || role === "manager") && (
             <Link href="/services/add-service">
               <Button
                 variant="contained"
@@ -297,8 +296,6 @@ const ServicesPage = () => {
               >
                 {data?.type?.name}
               </TableCell>
-
-
 
               <TableCell
                 sx={{
