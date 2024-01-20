@@ -22,31 +22,37 @@ const BusinessPage = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [isRenameFormOpen, setIsRenameFormOpen] = useState(false);
-  const [selectedBusiness, setSelectedBusiness] = useState(null);
-  console.log("BUSINESS ID", selectedBusiness?.id);
+  const [selectedBusiness, setSelectedBusiness] = useState([]);
+  console.log("selectedBusiness",selectedBusiness)
+  // console.log("BUSINESS ID", selectedBusiness?.id);
   const [open, setOpen] = useState(false);
   const { role } = useSelector((state) => state.auth);
   const [isRejecting, setIsRejecting] = useState(false);
   const [rejectReason, setRejectReason] = useState("");
 
-  const { business, dataFatched, isLoading } = useSelector(
+  const { businessAll } = useSelector(
     (state) => state.business
   );
+  console.log("businessAll", businessAll)
 
-  /// ALL BUSINESS API
 
   useEffect(() => {
-    if (!dataFatched) {
-      dispatch(getallBussinessesFunApi({}));
+    if (businessAll.dataFatched !== true) {
+      dispatch(getallBussinessesFunApi({
+        onSuccess: (response) => {
+          console.log("API Response:", response);
+        },
+      }));
     }
-  }, [dispatch, dataFatched]);
+  }, [dispatch, businessAll.dataFatched, businessAll.data]);
+
 
   const handleClick = (id) => {
-    const selectedBusiness = business.find((item) => item.id === id);
+    const selectedBusiness = businessAll?.data?.find((item) => item.id === id);
     setSelectedBusiness(selectedBusiness);
     setOpen(true);
   };
-
+  
   const handleClose = () => {
     setOpen(false);
   };
@@ -71,7 +77,7 @@ const BusinessPage = () => {
     handleClose();
   };
 
-  ///CUSTOM APPROVED API
+
 
   const handleApproved = () => {
     dispatch(
@@ -85,7 +91,8 @@ const BusinessPage = () => {
   };
 
   const OpenPopUp = (id) => {
-    const selectedBusiness = business.find((item) => item.id === id);
+    console.log("id",id)
+    const selectedBusiness = businessAll?.data?.find((item) => item.id === id);
     setSelectedBusiness(selectedBusiness);
     setIsRenameFormOpen(true);
   };
@@ -126,8 +133,8 @@ const BusinessPage = () => {
         </Box>
 
         <CustomPaginationTable
-          isLoading={isLoading}
-          tableData={business}
+          isLoading={businessAll.isLoading}
+          tableData={businessAll.data}
           tableHeaderData={
             <>
               <TableCell
@@ -259,25 +266,9 @@ const BusinessPage = () => {
                   pb: "16px",
                 }}
               >
-                 <Button
-                component="div"
-                sx={{
-                  borderBottom: "1px solid #F7FAFF",
-                  fontSize: "13px",
-                  pt: "16px",
-                  pb: "16px",
-                 
-                  cursor: "pointer",
-                  "&:hover": {
-                    textDecoration: "underline",
-                  },
-                }}
-
-                style={{ color: "blue",}}
-                onClick={(event) => handleClick(data?.id, event)}
-              >
+                
                 {data?.requestStatus}
-              </Button>
+
               </TableCell>
               
               
@@ -297,7 +288,7 @@ const BusinessPage = () => {
                   size="small"
                   color="primary"
                   className="primary"
-                  onClick={(event) => OpenPopUp(data?.id, event)}
+                onClick={(event) => handleClick(data?.id, event)}
                 >
                   <DriveFileRenameOutlineIcon fontSize="inherit" />
                 </IconButton>
@@ -311,7 +302,7 @@ const BusinessPage = () => {
         />
         <Dialog open={open} onClose={handleClose} fullWidth>
           <h2 style={{ textAlign: "center", paddingTop: "10px" }}>
-            Owner Business Details
+            Owner  Business Details
           </h2>
           <div
             style={{
@@ -375,18 +366,9 @@ const BusinessPage = () => {
               </tbody>
             </table>
           </div>
-          {/* <div style={{ padding: '30px', maxWidth: '500px', textAlign: 'left' }}>
-                        <ul style={{ listStyleType: 'none', padding: 0 }}>
-                            <li><strong>Name:</strong> {selectedBusiness?.name}</li>
-                            <li><strong>Email:</strong> {selectedBusiness?.email}</li>
-                            <li><strong>Slug:</strong> {selectedBusiness?.slug}</li>
-                            <li><strong>Phone:</strong> {selectedBusiness?.phone}</li>
-                            <li><strong>Description:</strong> {selectedBusiness?.description}</li>
-                            <li><strong>BannerText:</strong> {selectedBusiness?.bannerText}</li>
-                        </ul>
-                    </div> */}
 
-          <div
+
+      <div
             style={{
               padding: "10px",
               textAlign: "center",
@@ -399,7 +381,9 @@ const BusinessPage = () => {
           >
             <div style={{ display: "flex ", gap: "15px" }}>
               {" "}
-              <Button variant="contained">Approved</Button>
+              <Button variant="contained  " 
+              onClick={handleApproved}
+              >Approved</Button>
               <Button variant="contained" onClick={handleReject}>
                 Rejected
               </Button>
@@ -412,7 +396,7 @@ const BusinessPage = () => {
                     label="Reason to Reject"
                     variant="outlined"
                     multiline
-                    rows={3} // Adjust the number of rows as needed
+                    rows={3}
                     style={{ width: "100%", maxWidth: "500px" }}
                     onChange={(e) => setRejectReason(e.target.value)}
                   />
@@ -430,16 +414,18 @@ const BusinessPage = () => {
           </div>
         </Dialog>
 
-        {selectedBusiness && (
+        {/* {selectedBusiness && (
           <BusinessForm
             open={isRenameFormOpen}
             onClose={handleClosePopup}
             businessData={selectedBusiness}
           />
-        )}
+        )} */}
       </Card>
     </>
-  );
+
+       );
+  
 };
 
 export default BusinessPage;

@@ -197,7 +197,7 @@ export default function DashboardPage() {
               <>
               <div style={{display:"flex",gap:"15px"}}><Button
                   variant="contained"
-                  // disabled={business ? true : false}
+                  disabled={business?.data ? true : false}
                   onClick={handleClickOpen}
                 >
                   Sync Business
@@ -249,10 +249,7 @@ export default function DashboardPage() {
                       height: "500px",
                       padding:"20px"
                     },
-                  }}
-
-                 
-                  
+                  }}               
                 >
                   <DialogTitle style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     Business Form Request
@@ -411,7 +408,7 @@ export default function DashboardPage() {
                         fullWidth
                         id="logo"
                         label="Enter Logo"
-                        value={formData.logo} // Set the value to the dynamic description from formData
+                        value={formData.logo} 
                         onChange={(e) => setFormData({ ...formData, logo: e.target.value })} // Handle changes and update the formData state
                       />
                     </Grid>
@@ -431,7 +428,7 @@ export default function DashboardPage() {
                         fullWidth
                         id="googleId"
                         label="Enter Google ID"
-                        value={formData.googleId} // Set the value to the dynamic googleId from formData
+                        value={formData.googleId} 
                         onChange={(e) => setFormData({ ...formData, googleId: e.target.value })} // Handle changes and update the formData state
                       />
                     </Grid>
@@ -451,8 +448,8 @@ export default function DashboardPage() {
                         fullWidth
                         id="phone"
                         label="Enter Phone"
-                        value={formData.phone} // Set the value to the dynamic googleId from formData
-                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })} // Handle changes and update the formData state
+                        value={formData.phone} 
+                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })} 
                       />
                     </Grid>
                     <Grid item xs={6} md={6} lg={6}>
@@ -471,8 +468,8 @@ export default function DashboardPage() {
                         fullWidth
                         id="bookingService"
                         label="Enter BookingService "
-                        value={formData.bookingService} // Set the value to the dynamic googleId from formData
-                        onChange={(e) => setFormData({ ...formData, bookingService: e.target.value })} // Handle changes and update the formData state
+                        value={formData.bookingService} 
+                        onChange={(e) => setFormData({ ...formData, bookingService: e.target.value })} 
                       />
                     </Grid>
                     <Grid item xs={6} md={6} lg={6}>
@@ -491,32 +488,10 @@ export default function DashboardPage() {
                         fullWidth
                         id=" websiteService"
                         label="Enter  WebsiteService"
-                        value={formData.websiteService} // Set the value to the dynamic googleId from formData
-                        onChange={(e) => setFormData({ ...formData, websiteService: e.target.value })} // Handle changes and update the formData state
+                        value={formData.websiteService} 
+                        onChange={(e) => setFormData({ ...formData, websiteService: e.target.value })} 
                       />
                     </Grid>
-                    {/* <Grid item xs={6} md={6} lg={6}>
-                      <Typography
-                        as="h5"
-                        sx={{
-                          fontWeight: "500",
-                          fontSize: "14px",
-                          mb: "12px",
-                        }}
-                      >
-                        Color
-                      </Typography>
-                      <TextField
-                        name="color"
-                        fullWidth
-                        id="color"
-                        label="Enter Color"
-                        value={formData.color} // Set the value to the dynamic color from formData
-                        onChange={(e) => setFormData({ ...formData, color: e.target.value })} // Handle changes and update the formData state
-                      />
-                    </Grid> */}
-
-
                     <Grid item xs={6} md={6} lg={6}>
                       <Typography
                         as="h5"
@@ -671,7 +646,7 @@ export default function DashboardPage() {
 
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 2 }}>
         <Grid item xs={12} md={12} lg={12} xl={8}>
-          {business && (
+          {business?.data && (
             <Card
               sx={{
                 boxShadow: "none",
@@ -689,7 +664,7 @@ export default function DashboardPage() {
                   <Typography component="h1" fontWeight="500">
                     <div>
                       <Image
-                        src={business.logo}
+                        src={business?.data.logo}
                         width={100}
                         height={50}
                         alt="Logo"
@@ -705,7 +680,7 @@ export default function DashboardPage() {
                         }}
                       >
                         {" "}
-                        {business?.name}{" "}
+                        {business?.data.name}{" "}
                       </span>
                     </div>
                   </Typography>
@@ -737,7 +712,7 @@ export default function DashboardPage() {
                               marginBottom: "20px",
                             }}
                           >
-                            {business?.websiteService === true && (
+                            {business?.data.websiteService === true && (
                               <Box
                                 sx={{
                                   display: "flex",
@@ -776,7 +751,7 @@ export default function DashboardPage() {
                               </Box>
                             )}
 
-                            {business?.bookingService === true && (
+                            {business?.data.bookingService === true && (
                               <Box
                                 sx={{
                                   display: "flex",
@@ -816,7 +791,7 @@ export default function DashboardPage() {
                             )}
                           </Box>
                           <li style={{ marginBottom: "20px" }}>
-                            {business.description}
+                            {business.data.description}
                           </li>
                           <li
                             style={{
@@ -826,7 +801,7 @@ export default function DashboardPage() {
                               marginBottom: "5px",
                             }}
                           >
-                            {business.email}
+                            {business.data.email}
                           </li>
                           <li
                             style={{
@@ -836,7 +811,7 @@ export default function DashboardPage() {
                               marginBottom: "5px",
                             }}
                           >
-                            {business.phone}
+                            {business.data.phone}
                           </li>
                           <li
                             style={{
@@ -846,7 +821,7 @@ export default function DashboardPage() {
                               marginBottom: "5px",
                             }}
                           >
-                            {business.address}
+                            {business.data.address}
                           </li>
 
                           {/* <li>{business.bannerText}</li> */}
@@ -894,7 +869,7 @@ export default function DashboardPage() {
                               />
                             ))} */}
 
-                            {business?.images?.map((data, key) => (
+                            {business.data?.images?.map((data, key) => (
                               <Image
                                 key={key}
                                 src={data}
@@ -915,7 +890,7 @@ export default function DashboardPage() {
                               justifyContent: "end",
                             }}
                           >
-                            {business.socialLinks?.map((socialLink, index) => (
+                            {business.data.socialLinks?.map((socialLink, index) => (
                               <div key={index}>
                                 <a
                                   rel="noreferrer"

@@ -19,6 +19,15 @@ const TransactionPage = () => {
   const { business } = useSelector((state) => state.business);
   console.log("business", business);
 
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(price);
+  };
+
   useEffect(() => {
     if (card.dataFatched !== true) {
       dispatch(
@@ -231,7 +240,7 @@ const TransactionPage = () => {
                 }}
                 align="center"
               >
-                {data.amount}
+                {formatPrice(data.amount)}
               </TableCell>
 
               <TableCell

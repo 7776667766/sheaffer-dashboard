@@ -72,6 +72,8 @@ const BusinessForm = () => {
       bannerText: "",
       bannerImg: "",
       color: "",
+      fontSize:"",
+      fontFamily:"",
       // theme: "",
       // socialLinks: {
       //   facebook: "",
@@ -88,6 +90,8 @@ const BusinessForm = () => {
       address: requiredValidation("address"),
       bannerText: requiredValidation("bannerText"),
       color: requiredValidation("color"),
+      fontSize: requiredValidation("fontSize"),
+      fontFamily: requiredValidation("fontFamily"),
     }),
     onSubmit: async (values) => {
       try {
@@ -96,9 +100,7 @@ const BusinessForm = () => {
           logo: avatar1,
           bannerImg: avatar2,
         };
-
-        console.log(formData);
-
+        
         dispatch(
           addBusinessFunApi({
             data: formData,
@@ -416,6 +418,58 @@ const BusinessForm = () => {
                   helperText={
                     formik.touched.bannerText && formik.errors.bannerText
                       ? formik.errors.bannerText
+                      : ""
+                  }
+                />
+              </Grid>
+
+              <Grid item xs={12} md={12} lg={6}>
+                <Typography
+                  as="h5"
+                  sx={{
+                    fontWeight: "500",
+                    fontSize: "14px",
+                    mb: "12px",
+                  }}
+                >
+                  font Size
+                </Typography>
+                <TextField
+                  name="Font Size"
+                  fullWidth
+                  id="fontSize"
+                  label="Enter font Size"
+                  {...formik.getFieldProps("fontSize")}
+                  error={formik.touched.fontSize && formik.errors.fontSize}
+                  helperText={
+                    formik.touched.fontSize && formik.errors.fontSize
+                      ? formik.errors.fontSize
+                      : ""
+                  }
+                />
+              </Grid>
+
+              <Grid item xs={12} md={12} lg={6}>
+                <Typography
+                  as="h5"
+                  sx={{
+                    fontWeight: "500",
+                    fontSize: "14px",
+                    mb: "12px",
+                  }}
+                >
+                  font Family
+                </Typography>
+                <TextField
+                  name="Font Size"
+                  fullWidth
+                  id="fontSize"
+                  label="Enter font Family"
+                  {...formik.getFieldProps("fontFamily")}
+                  error={formik.touched.fontFamily && formik.errors.fontFamily}
+                  helperText={
+                    formik.touched.fontFamily && formik.errors.fontFamily
+                      ? formik.errors.fontFamily
                       : ""
                   }
                 />
