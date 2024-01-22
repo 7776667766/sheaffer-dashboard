@@ -4,7 +4,9 @@ import styles from "@/styles/PageTitle.module.css";
 import Features from "@/components/Dashboard/eCommerce/Features";
 import UserList from "./users";
 import SendIcon from "@mui/icons-material/Send";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import CloseIcon from "@mui/icons-material/Close";
+import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Avatar,
@@ -37,6 +39,13 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import copyImage from "@/public/images/icon/solar_copy-bold.png";
 import { LoadingButtonComponent } from "@/components/UIElements/Buttons/LoadingButton";
+import { useFormik } from "formik";
+import {
+  emailValidation,
+  phoneValidation,
+  requiredValidation,
+  slugValidation,
+} from "@/utils/validation";
 
 export default function DashboardPage() {
   const { user, role } = useSelector((state) => state.auth);
@@ -53,22 +62,40 @@ export default function DashboardPage() {
   const [avatar, setavatar] = useState(null);
   const [openForm, setOpenForm] = useState(false);
   const [formData, setFormData] = useState({
+   
+  });
+
+
+  const initialValue={
     name: "",
     email: "",
     slug: "",
     bannerText: "",
     address: "",
     description: "",
+    phone: "",
+    
     logo: "",
     googleId: "",
-    phone: "",
+   
     bookingService: "",
     websiteService: "",
     color: "",
     theme: "",
     file: null,
+  }
+  const formik = useFormik({
+    initialValues: initialValue,
+    validationSchema: Yup.object({
+      name: requiredValidation("Name"),
+      email: emailValidation("Email"),
+      phone: phoneValidation("Phone"),
+      slug: slugValidation("Slug"),
+      bannerText: requiredValidation("Banner Text"),
+      address: requiredValidation("Address"),
+      description: requiredValidation("Description"),
+    }),
   });
-
   const handleOpenRequest = () => {
     setOpenForm(true);
   };
@@ -118,7 +145,7 @@ export default function DashboardPage() {
     dispatch(
       regsiterBusinessFunApi({
         data: {
-          ...formData,
+          ...formik.values,
         },
         onSuccess: () => {
           handleClose();
@@ -256,238 +283,284 @@ export default function DashboardPage() {
                   <DialogTitle
                     style={{
                       display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
+                      marginLeft: "-20px",
+                      // alignItems: "",
+                      // justifyContent: "start",
                     }}
                   >
-                    Business Form Request
-                    <IconButton
+                    Add New Business Detail manually
+                    {/* <IconButton
                       edge="end"
                       color="inherit"
                       onClick={handleFormClose}
                       aria-label="close"
                     >
-                      <CloseIcon />
-                    </IconButton>
+                      {/* <CloseIcon /> */}
+                    {/* </IconButton> */}
                   </DialogTitle>
 
-                  <div sx={{ padding: "30px", margin: "16px" }}>
-                    <Grid container spacing={2} md>
-                      <Grid item xs={12} md={6} lg={6}>
-                        <TextField
-                          name="name"
-                          fullWidth
-                          id="name"
-                          label="Business Name"
-                          value={formData.name}
-                          onChange={(e) =>
-                            setFormData({ ...formData, name: e.target.value })
-                          } // Handle changes and update the formData state
-                        />
-                      </Grid>
-
-                      <Grid item xs={12} md={6} lg={6}>
-                        <TextField
-                          name="email"
-                          fullWidth
-                          id="email"
-                          label="Business Email"
-                          value={formData.email}
-                          onChange={(e) =>
-                            setFormData({ ...formData, email: e.target.value })
-                          }
-                        />
-                      </Grid>
-
-                      <Grid item xs={12} md={6} lg={6}>
-                        <TextField
-                          name="slug"
-                          fullWidth
-                          id="slug"
-                          label="Business slug"
-                          value={formData.slug}
-                          onChange={(e) =>
-                            setFormData({ ...formData, slug: e.target.value })
-                          }
-                        />
-                      </Grid>
-                      <Grid item xs={12} md={6} lg={6}>
-                        <TextField
-                          name="bannerText"
-                          fullWidth
-                          id="bannerText"
-                          label="Enter BannerText"
-                          value={formData.bannerText} // Set the value to the dynamic description from formData
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              bannerText: e.target.value,
-                            })
-                          } // Handle changes and update the formData state
-                        />
-                      </Grid>
-                      <Grid item xs={12} md={12} lg={12}>
-                        <TextField
-                          multiline // Use multiline property to make it a textarea
-                          rows={3}
-                          name="description"
-                          // fullWidth
-                          id="description"
-                          label="Enter Description"
-                          value={formData.description} // Set the value to the dynamic description from formData
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              description: e.target.value,
-                            })
-                          }
-                          style={{
-                            width: "100%",
-                            // border:"0.5px solid gray",
-                            // Add a blue border
-                            color: "blue", // Set text color to blue
-                            // Add padding for better appearance
-                          }}
-
-                          // ate
-                        />
-                      </Grid>
-
-                      <Grid item xs={12} md={12} lg={12}>
-                        <TextField
-                          name="address"
-                          fullWidth
-                          id="address"
-                          label="Enter Address"
-                          value={formData.address} // Set the value to the dynamic description from formData
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              address: e.target.value,
-                            })
-                          } // Handle changes and update the formData state
-                        />
-                      </Grid>
-
-                      <Grid item xs={12} md={6} lg={6}>
-                        <TextField
-                          name="Phone"
-                          fullWidth
-                          id="phone"
-                          label="Enter Phone"
-                          value={formData.phone}
-                          onChange={(e) =>
-                            setFormData({ ...formData, phone: e.target.value })
-                          }
-                        />
-                      </Grid>
-
-                      {/* <Grid item xs={6} md={6} lg={6}>
-                      <Typography
-                        as="h5"
-                        sx={{
-                          fontWeight: "500",
-                          fontSize: "14px",
-                          mb: "12px",
-                        }}
-                      >
-                        Color
-                      </Typography>
-                      <TextField
-                        name="color"
-                        fullWidth
-                        id="color"
-                        label="Enter Color"
-                        value={formData.color} // Set the value to the dynamic color from formData
-                        onChange={(e) => setFormData({ ...formData, color: e.target.value })} // Handle changes and update the formData state
-                      />
-                    </Grid> */}
-
-                      <Grid item xs={12} md={6} lg={6}>
-                        <TextField
-                          name="theme"
-                          fullWidth
-                          id="theme"
-                          label="Enter Theme"
-                          value={formData.theme}
-                          onChange={(e) =>
-                            setFormData({ ...formData, theme: e.target.value })
-                          }
-                        />
-                      </Grid>
-
-                      {/* <Grid item xs={6} md={6} lg={6}>
-                      <Box sx={{ display: "flex", alignItems: "end", gap: 1 }}>
-                        <Box sx={{ flex: 1 }}>
-                          <Typography
-                            as="h5"
-                            sx={{
-                              fontWeight: "500",
-                              fontSize: "14px",
-                              mb: "12px",
-                            }}
-                          >
-                            Upload Banner Image
-                          </Typography>
-
+                  <form onSubmit={formik.handleSubmit}>
+                    <div sx={{ padding: "30px", margin: "16px" }}>
+                      <Grid container spacing={2} md>
+                        <Grid item xs={12} md={6} lg={6}>
+                          {/* <Typography
+      as="h5"
+      sx={{
+        fontWeight: "500",
+        fontSize: "14px",
+        mb: "12px",
+      }}
+    >
+      Enter Business Name
+    </Typography> */}
                           <TextField
+                            name="name"
                             fullWidth
-                            name="file"
-                            type="file"
-                            id="file"
+                            id="name"
+                            label="Business Name"
+                            {...formik.getFieldProps("name")}
+                            error={formik.touched.name && formik.errors.name}
+                            helperText={
+                              formik.touched.name && formik.errors.name
+                                ? formik.errors.name
+                                : ""
+                            }
                           />
-                        </Box>
-                      </Box>
-                    </Grid> */}
+                        </Grid>
 
-                      <Grid item xs={12} md={12} lg={12}>
-                        <Box
-                          sx={{ display: "flex", alignItems: "end", gap: 1 }}
-                        >
-                          <Box sx={{ flex: 1 }}>
-                            {/* <Typography
-                            as="h5"
-                            sx={{
-                              fontWeight: "500",
-                              fontSize: "14px",
-                              mb: "12px",
+                        <Grid item xs={12} md={6} lg={6}>
+                          <TextField
+                            name="email"
+                            fullWidth
+                            id="email"
+                            label="Business Email"
+                            {...formik.getFieldProps("email")}
+                            error={formik.touched.name && formik.errors.email}
+                            helperText={
+                              formik.touched.email && formik.errors.email
+                                ? formik.errors.email
+                                : ""
+                            }
+                          />
+                        </Grid>
+
+                        <Grid item xs={12} md={6} lg={6}>
+                          <TextField
+                            name="slug"
+                            fullWidth
+                            id="slug"
+                            label="Business slug"
+                            {...formik.getFieldProps("slug")}
+                            error={formik.touched.slug && formik.errors.slug}
+                            helperText={
+                              formik.touched.slug && formik.errors.slug
+                                ? formik.errors.slug
+                                : ""
+                            }
+                          />
+                        </Grid>
+                        <Grid item xs={12} md={6} lg={6}>
+                          <TextField
+                            name="bannerText"
+                            fullWidth
+                            id="bannerText"
+                            label="Enter BannerText"
+                            {...formik.getFieldProps("bannerText")}
+                            error={formik.touched.bannerText && formik.errors.bannerText}
+                            helperText={
+                              formik.touched.bannerText && formik.errors.bannerText
+                                ? formik.errors.bannerText
+                                : ""
+                            }
+                          />
+                        </Grid>
+                        <Grid item xs={12} md={6} lg={6}>
+                          <TextField
+                            name="Phone"
+                            fullWidth
+                            id="phone"
+                            label="Enter Phone"
+                            {...formik.getFieldProps("phone")}
+                            error={formik.touched.phone && formik.errors.phone}
+                            helperText={
+                              formik.touched.phone && formik.errors.phone
+                                ? formik.errors.phone
+                                : ""
+                            }
+                          />
+                        </Grid>
+                        <Grid item xs={12} md={6} lg={6}>
+                          <TextField
+                            name="address"
+                            fullWidth
+                            id="address"
+                            label="Enter Address"
+                            {...formik.getFieldProps("address")}
+                            error={formik.touched.address && formik.errors.address}
+                            helperText={
+                              formik.touched.address && formik.errors.address
+                                ? formik.errors.address
+                                : ""
+                            }
+                          />
+                        </Grid>
+                        <Grid item xs={12} md={12} lg={12}>
+                          <TextField
+                            multiline // Use multiline property to make it a textarea
+                            rows={3}
+                            name="description"
+                            // fullWidth
+                            id="description"
+                            label="Enter Description"
+                            {...formik.getFieldProps("description")}
+                            error={formik.touched.description && formik.errors.description}
+                            helperText={
+                              formik.touched.description && formik.errors.description
+                                ? formik.errors.description
+                                : ""
+                            }
+                            style={{
+                              width: "100%",
+                              // border:"0.5px solid gray",
+                              // Add a blue border
+                              color: "blue", // Set text color to blue
+                              // Add padding for better appearance
                             }}
+
+                            // ate
+                          />
+                        </Grid>
+
+                        {/* <Grid item xs={6} md={6} lg={6}>
+  <Typography
+    as="h5"
+    sx={{
+      fontWeight: "500",
+      fontSize: "14px",
+      mb: "12px",
+    }}
+  >
+    Color
+  </Typography>
+  <TextField
+    name="color"
+    fullWidth
+    id="color"
+    label="Enter Color"
+    value={formData.color} // Set the value to the dynamic color from formData
+    onChange={(e) => setFormData({ ...formData, color: e.target.value })} // Handle changes and update the formData state
+  />
+</Grid> */}
+
+                        {/* <Grid item xs={6} md={6} lg={6}>
+  <Box sx={{ display: "flex", alignItems: "end", gap: 1 }}>
+    <Box sx={{ flex: 1 }}>
+      <Typography
+        as="h5"
+        sx={{
+          fontWeight: "500",
+          fontSize: "14px",
+          mb: "12px",
+        }}
+      >
+        Upload Banner Image
+      </Typography>
+
+      <TextField
+        fullWidth
+        name="file"
+        type="file"
+        id="file"
+      />
+    </Box>
+  </Box>
+</Grid> */}
+
+                        <Grid item xs={12} md={12} lg={12}>
+                          <Box
+                            sx={{ display: "flex", alignItems: "end", gap: 1 }}
                           >
-                            Logo
-                          </Typography> */}
-
-                            <TextField
-                              fullWidth
-                              name="file"
-                              type="file"
-                              id="file"
-                            />
+                            <Box sx={{ flex: 1 }}>
+                              {/* <Typography
+        as="h5"
+        sx={{
+          fontWeight: "500",
+          fontSize: "14px",
+          mb: "12px",
+        }}
+      >
+        Logo
+      </Typography> */}
+                            </Box>
                           </Box>
-                        </Box>
-                      </Grid>
+                        </Grid>
 
-                      <Grid
-                        item
-                        xs={12}
-                        style={{ textAlign: "center", marginTop: "20px" }}
-                      >
-                        <LoadingButtonComponent
-                          onClick={handleAddRequest}
-                          type="submit"
-                          fullWidth={false}
-                          sx={{
-                            paddingX: "10px",
-                          }}
-                          value={
-                            <>
-                              <SendIcon className="mr-10px" />
-                              Send Request
-                            </>
-                          }
-                        />
+                        <Grid
+                          container
+                          spacing={2}
+                          direction="row"
+                          justifyContent={{ xs: "center", md: "flex-end" }}
+                          alignItems="center"
+                          style={{ marginTop: "10px" }}
+                        >
+                          <Grid
+                            item
+                            xs={8}
+                            md={3}
+                            lg={3}
+                            order={{ xs: 2, md: 1 }}
+                          >
+                            <Button
+                              variant="outlined"
+                              color="secondary"
+                              style={{ width: "100%" }}
+                              onClick={handleFormClose}
+                            >
+                              Cancel
+                            </Button>
+                          </Grid>
+
+                          <Grid
+                            item
+                            xs={8}
+                            md={3}
+                            lg={3}
+                            order={{ xs: 1, md: 2 }}
+                          >
+                            <Button
+                              variant="contained"
+                              color="primary"
+                              style={{ width: "100%" }}
+                              onClick={handleAddRequest}
+                              // onClick={handleSave}
+                            >
+                              Save
+                            </Button>
+                          </Grid>
+                        </Grid>
+                        {/* <Grid
+    item
+    xs={12}
+    style={{ textAlign: "center", marginTop: "20px" }}
+  >
+    <LoadingButtonComponent
+      onClick={handleAddRequest}
+      type="submit"
+      fullWidth={false}
+      sx={{
+        paddingX: "10px",
+      }}
+      value={
+        <>
+          <SendIcon className="mr-10px" />
+          Send Request
+        </>
+      }
+    />
+  </Grid> */}
                       </Grid>
-                    </Grid>
-                  </div>
+                    </div>
+                  </form>
                 </Dialog>
 
                 {selectedBusiness && (

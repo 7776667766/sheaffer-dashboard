@@ -42,7 +42,7 @@ const businessSlice = createSlice({
       })
       .addCase(getMyBussinessFunApi.rejected, (state, action) => {
         state.business.isLoading = false;
-        state.business = null;
+        state.business.data = null;
         state.business.error = action.payload;
         state.business.dataFatched = true;
       });
