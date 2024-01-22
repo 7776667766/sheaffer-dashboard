@@ -31,7 +31,7 @@ const Specialist = () => {
     if (specialist.specialistFetch !== true) {
       dispatch(
         getspecialistApi({
-          data: business?.id,
+          data: business?.data?.id,
         })
       );
     }
@@ -39,7 +39,7 @@ const Specialist = () => {
     dispatch,
     specialist.specialist,
     specialist.specialistFetch,
-    business?.id,
+    business?.data?.id,
   ]);
 
   const nextPage = (id) => {

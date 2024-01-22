@@ -411,8 +411,8 @@ const BusinessPage = () => {
               </tbody>
             </table>
           </div>
-          {selectedBusiness.requestStatus === "Rejected" ||
-          selectedBusiness.requestStatus === "Approved" ? (
+          {selectedBusiness.requestStatus === "rejected" ||
+          selectedBusiness.requestStatus === "approved" ? (
             ""
           ) : (
             <div>

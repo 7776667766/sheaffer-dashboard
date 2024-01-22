@@ -83,10 +83,10 @@ const BusinessForm = () => {
                         }}
                       >
                         <li>Name</li>
-                        {business?.websiteService === true && (
+                        {business?.data?.websiteService === true && (
                           <li>Website Url</li>
                         )}
-                        {business?.bookingService === true && (
+                        {business?.data?.bookingService === true && (
                           <li>Booking Url</li>
                         )}
 
@@ -116,45 +116,45 @@ const BusinessForm = () => {
                           lineHeight: "35px",
                         }}
                       >
-                        <li>{business?.name}</li>
-                        {business?.websiteService === true && (
+                        <li>{business?.data?.name}</li>
+                        {business?.data?.websiteService === true && (
                           <li>
                             <Button
                               variant="outlined"
-                              href={`${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}site/${business.slug}`}
+                              href={`${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}site/${business?.data?.slug}`}
                               target="_blank"
                               sx={{
                                 pt: "2px",
                                 pb: "1px",
                               }}
                             >
-                              {business.slug}
+                              {business?.data?.slug}
                             </Button>
                           </li>
                         )}
 
-                        {business?.bookingService === true && (
+                        {business?.data?.bookingService === true && (
                           <li>
                             <Button
                               variant="outlined"
-                              href={`${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}booking/${business.slug}`}
+                              href={`${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}booking/${business?.data?.slug}`}
                               target="_blank"
                               sx={{
                                 pt: "2px",
                                 pb: "1px",
                               }}
                             >
-                              {business.slug}
+                              {business?.data?.slug}
                             </Button>
                           </li>
                         )}
 
-                        <li>{business.description}</li>
-                        <li>{business.email}</li>
-                        <li>{business.phone}</li>
+                        <li>{business?.data?.description}</li>
+                        <li>{business?.data?.email}</li>
+                        <li>{business?.data?.phone}</li>
                         <li>
                           <Image
-                            src={business.logo}
+                            src={business?.data?.logo}
                             width={50}
                             height={30}
                             alt="Logo"
@@ -163,10 +163,10 @@ const BusinessForm = () => {
                             }}
                           />
                         </li>
-                        <li>{business.theme || "N/A"}</li>
+                        <li>{business?.data?.theme || "N/A"}</li>
                         <li>
-                          {business.socialLinks &&
-                            business.socialLinks.map((socialLink, index) => (
+                          {business?.data?.socialLinks &&
+                            business.data.socialLinks.map((socialLink, index) => (
                               <span key={index}>
                                 <a
                                   href={socialLink.link}
@@ -177,17 +177,17 @@ const BusinessForm = () => {
                                     textTransform: "capitalize",
                                   }}
                                 >
-                                  {socialLink.name}
+                                  {socialLink?.name}
                                 </a>
                               </span>
                             ))}
                         </li>
-                        <li>{business.address}</li>
+                        <li>{business?.data?.address}</li>
 
-                        <li>{business.bannerText}</li>
+                        <li>{business?.data?.bannerText}</li>
                         <li
                           style={{
-                            backgroundColor: business.color,
+                            backgroundColor: business?.data?.color,
                             height: "30px",
                             width: "50px",
                           }}
@@ -196,7 +196,7 @@ const BusinessForm = () => {
                         </li>
                         <li>
                           <Image
-                            src={business.bannerImg}
+                            src={business?.data?.bannerImg}
                             width={50}
                             height={30}
                             alt="bannerImg"
@@ -205,8 +205,8 @@ const BusinessForm = () => {
                             }}
                           />
                         </li>
-                        <li>{business?.fontSize}</li>
-                        <li>{business?.fontFamily}</li>
+                        <li>{business?.data?.fontSize}</li>
+                        <li>{business?.data?.fontFamily}</li>
                       </ul>
                     </Typography>
                   </Box>

@@ -5,38 +5,154 @@ import Card from "@mui/material/Card";
 import Typography from "@mui/material/Typography";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
+import { getMyBussinessFunApi, getallBussinessesFunApi } from "store/business/services";
+import {
 
-const FeaturesData = [
-  {
-    id: "1",
-    title: "$25,890",
-    subTitle: "Total Sales",
-    image: "/images/graph-icon.png",
-    icon: <TrendingUpIcon />,
-    growthText: "1.3% Up from past week",
-    color: "successColor",
-  },
-  {
-    id: "2",
-    title: "$25,890",
-    subTitle: "Total Orders",
-    image: "/images/work-icon.png",
-    icon: <TrendingUpIcon />,
-    growthText: "1.5% Up from past week",
-    color: "successColor",
-  },
-  {
-    id: "3",
-    title: "183.35M",
-    subTitle: "Total Customers",
-    image: "/images/users-icon.png",
-    icon: <TrendingDownIcon />,
-    growthText: "1.6% Up from past week",
-    color: "dangerColor",
-  },
-];
+  getAllServiceFunApi,
+} from "store/service/services";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { getMyBusinessBookingFunApi } from "store/booking/service";
+
+
+
 
 const Features = () => {
+  const { business } = useSelector((state) => state.business);
+  const { businessAll, dataFatched } = useSelector((state) => state.business);
+  const businessDataArray = businessAll.data;
+  const totalBusinesses = businessDataArray.length;
+  const { service } = useSelector((state) => state.service);
+  const servicesDataArray = service.data;
+  const totalServices = servicesDataArray.length;
+  const { booking } = useSelector((state) => state.booking);
+  const bookingDataArray = booking.data;
+  const totalBookings = bookingDataArray.length;
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (!dataFatched) {
+      dispatch(
+        getallBussinessesFunApi({
+          onSuccess: () => {
+          },
+        })
+      );
+    }
+
+  }, [dispatch, dataFatched]);
+
+  useEffect(() => {
+    if (dataFatched !== true) {
+      dispatch(
+        getMyBussinessFunApi({
+          
+          onSuccess: (businessId) => {
+            dispatch(
+
+              getAllServiceFunApi({
+                businessId: businessId,
+              })
+            );
+          },
+        })
+      );
+    }
+  }, [dispatch, dataFatched]);
+
+  // useEffect(() => {
+  //   if (!dataFatched) {
+  //     dispatch(
+  //       getMyBussinessFunApi({
+  //         onSuccess: () => {
+  //           dispatch(
+  //             getMyBusinessBookingFunApi({
+  //               data: {
+  //                 businessId: business?.data?.id,
+  //               },
+  //             })
+  //           );
+  //         },
+  //       })
+  //     );
+  //   } else {
+  //     if (!booking.dataFatched) {
+  //       dispatch(
+  //         getMyBusinessBookingFunApi({
+  //           data: {
+  //             businessId: business?.data?.id,
+  //           },
+  //         })
+  //       );
+  //     }
+  //   }
+  // }, [dispatch, booking.data, booking.dataFatched, business?.data?.id, dataFatched]);
+
+  useEffect(() => {
+    if (!dataFatched && business?.data?.id) {
+      dispatch(
+        getMyBussinessFunApi({
+          onSuccess: (businessId) => {
+            dispatch(
+              getMyBusinessBookingFunApi({
+                data: {
+                  businessId: businessId,
+                },
+              })
+            );
+          },
+        })
+      );
+    }
+  }, [dispatch, dataFatched, business?.data?.id]);
+  
+  const FeaturesData = [
+    {
+      id: "1",
+      title: `${totalBusinesses}`,
+      subTitle: "Total Businesses",
+      image: "/images/graph-icon.png",
+      // icon: <TrendingUpIcon />,
+      // growthText: "1.3% Up from past week",
+      color: "successColor",
+    },
+    {
+      id: "2",
+      title: `${totalServices}`,
+      subTitle: "Total Services",
+      image: "/images/work-icon.png",
+      // icon: <TrendingUpIcon />,
+      // growthText: "1.5% Up from past week",
+      // color: "successColor",
+    },
+    {
+      id: "3",
+      title: `${totalBookings}`,
+      subTitle: "Total Bookings",
+      image: "/images/users-icon.png",
+      // icon: <TrendingDownIcon />,
+      // growthText: "1.6% Up from past week",
+      // color: "dangerColor",
+    },
+  ];
+
+
+  useEffect(() => {
+    if (!dataFatched) {
+      dispatch(
+        getAllServiceFunApi({
+          onSuccess: () => {
+            console.log("businessIdd");
+          },
+        })
+      );
+    }
+  }, [dispatch, dataFatched]);
+
+
+
+
   return (
     <>
       <Grid

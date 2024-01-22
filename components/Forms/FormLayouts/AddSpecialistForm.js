@@ -33,7 +33,7 @@ const AddSpecialistForm = ({ formData, isEditMode }) => {
 
   const dispatch = useDispatch();
   const { business } = useSelector((state) => state.business);
-  console.log(business?.id)
+  console.log("business Id Data", business.data?.id)
 
 
 
@@ -41,7 +41,7 @@ useEffect(() => {
 
       dispatch(
         getMyBussinessFunApi({
-          data: business?.id,
+          data: business.data?.id,
           onSuccess: () => {
       
           },
@@ -54,12 +54,12 @@ useEffect(() => {
   const initialValues = isEditMode
     ? {
       ...formData,
-      businessId: business?.id,
+      businessId: business?.data?.id,
     }
     : {
       name: "",
       email: "",
-      businessId: business?.id,
+      businessId: business?.data?.id,
 
     };
 

@@ -15,30 +15,39 @@ import { CustomPaginationTable } from "@/components/Table/CustomPaginationTable"
 import Link from "next/link";
 import TransitionsDialog from "@/components/UIElements/Modal/TransitionsDialog";
 import Image from "next/image";
+import { getMyBussinessFunApi } from "store/business/services";
 
 const Manager = () => {
   const dispatch = useDispatch();
   const { managers } = useSelector((state) => state.manager);
-  const { business } = useSelector((state) => state.business);
+  const { business, dataFatched } = useSelector((state) => state.business);
+  console.log("business?.data.id", business?.data?.id)
 
   const router = useRouter();
 
   const nextPage = (id, event) => {
     event.preventDefault();
-   
+
     router.push(`/manager/edit-manager/${id}`);
     console.log()
   };
+
+
+  useEffect(() => {
+    if (!dataFatched) {
+      dispatch(getMyBussinessFunApi({}));
+    }
+  }, [dispatch, dataFatched]);
 
   useEffect(() => {
     if (managers.managerFetch !== true) {
       dispatch(
         getManagerFunApi({
-          data: business?.id,
+          data: business.data?.id,
         })
       );
     }
-  }, [business?.id, dispatch, managers.managerFetch]);
+  }, [business.data?.id, dispatch, managers.managerFetch]);
 
   const handleDelete = (managerId) => {
     console.log(managerId, "note");

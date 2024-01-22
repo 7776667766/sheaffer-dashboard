@@ -1,6 +1,6 @@
 import axios from "helper/api";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getMyBusiness, registerBusinessApi, addBusinessApi , addCustomBusinessApiApproved, getallBusinesses , addCustomBusinessApi  } from "./constrants";
+import { getMyBusiness, registerBusinessApi, addBusinessApi , addCustomBusinessApiApproved, getallBusinesses , addCustomBusinessApi, customizeThemeApi  } from "./constrants";
 import toast from "react-hot-toast";
 import axiosImage from "helper/api-image";
 
@@ -231,6 +231,44 @@ export const addCustomBusinessApprovedFunApi = createAsyncThunk(
       }
     } catch (error) {
       console.log("Error in response to Approved Custom Business Api ", error);
+      let err =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Something went wrong!";
+      if (err === "Network Error") {
+        err = "Please check your internet connection";
+      }
+      toast.error(err);
+      throw new Error(err);
+    }
+  }
+)
+
+export const customizeThemeFunApi = createAsyncThunk(
+  "theme/customizetheme",
+  async ({ data, onSuccess }) => {
+    console.log("res data", data)
+    try {
+      const response = await axios.post(customizeThemeApi, data);
+      console.log("response to update customize Theme => ", response.data);
+      if (response.data.status === "success") {
+        toast.success("custom theme updated successfully");
+        if (onSuccess) {
+          onSuccess();
+        }
+        return response.data.data;
+      } else {
+        console.log("Error in response to update Custom theme Api => ", response.data);
+        const err =
+          response?.data?.message ||
+          response?.message ||
+          "Something went wrong!";
+        console.log("err: ", err);
+        toast.error(err);
+        throw new Error(err);
+      }
+    } catch (error) {
+      console.log("Error in response to update Custom theme Api ", error);
       let err =
         error?.response?.data?.message ||
         error?.message ||

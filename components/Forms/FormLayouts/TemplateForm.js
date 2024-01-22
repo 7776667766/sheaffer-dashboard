@@ -19,7 +19,7 @@ const TemplateForm = ({ formData, isEditMode }) => {
 
   const [avatar1, setavatar1] = useState(null);
   const [avatar2, setavatar2] = useState(null);
-  console.log("avatar2",avatar2)
+  console.log("avatar2", avatar2)
 
   const dispatch = useDispatch();
   const router = useRouter();
@@ -62,43 +62,43 @@ const TemplateForm = ({ formData, isEditMode }) => {
 
   const handleBookingImageChange = (event) => {
     const file = event.target.files[0];
-setavatar2(file)
-    // if (!file) {
-    //   setavatar2(null);
-    //   if (isEditMode) {
-    //     setProfileImageUrl2(formData?.bookingImage || null);
-    //   } else {
-    //     setProfileImageUrl2(null);
-    //   }
-    //   return false;
-    // } else {
-    //   const type = file.type.split("/")[0];
-    //   if (type !== "image") {
-    //     toast.error("Please select an image");
-    //     setavatar2(null);
-    //     event.target.value = null;
-    //     if (isEditMode) {
-    //       setProfileImageUrl2(formData?.bookingImage || null);
-    //     } else {
-    //       setProfileImageUrl2(null);
-    //     }
-    //     return false;
-    //   } else {
-    //     setavatar1(file);
-    //     const reader = new FileReader();
-    //     reader.readAsDataURL(file);
-    //     reader.onload = (e) => {
-    //       setProfileImageUrl2(e.target.result);
-    //     };
-    //   }
-    // }
+    setavatar2(file)
+    if (!file) {
+      setavatar2(null);
+      if (isEditMode) {
+        setProfileImageUrl2(formData?.bookingImage || null);
+      } else {
+        setProfileImageUrl2(null);
+      }
+      return false;
+    } else {
+      const type = file.type.split("/")[0];
+      if (type !== "image") {
+        toast.error("Please select an image");
+        setavatar2(null);
+        event.target.value = null;
+        if (isEditMode) {
+          setProfileImageUrl2(formData?.bookingImage || null);
+        } else {
+          setProfileImageUrl2(null);
+        }
+        return false;
+      } else {
+        setavatar2(file);
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (e) => {
+          setProfileImageUrl2(e.target.result);
+        };
+      }
+    }
   };
 
-  // useEffect(() => {
-  //   if (isEditMode) {
-  //     setProfileImageUrl2(formData?.bookingImage);
-  //   }
-  // }, [formData?.bookingImage, isEditMode]);
+  useEffect(() => {
+    if (isEditMode) {
+      setProfileImageUrl2(formData?.bookingImage);
+    }
+  }, [formData?.bookingImage, isEditMode]);
 
   useEffect(() => {
     if (isEditMode) {
@@ -139,7 +139,7 @@ setavatar2(file)
           websiteImage: avatar1,
           bookingImage: avatar2
         };
-        console.log("formData",formData)
+        console.log("formData", formData)
         if (isEditMode) {
           dispatch(
             edittemplateFunApi({
@@ -232,7 +232,7 @@ setavatar2(file)
                 }}
               />
             </Grid>
-            <Grid item xs={12} md={12} lg={6}>
+            {/* <Grid item xs={12} md={12} lg={6}>
               <Typography
                 component="label"
                 sx={{
@@ -256,6 +256,43 @@ setavatar2(file)
 
               />
               {profileImageUrl1 && (
+                <Image
+                  src={profileImageUrl1}
+                  alt="profile"
+                  style={{
+                    border: "1px solid #e0e0e0",
+                  }}
+                  width={50}
+                  height={50}
+                />
+              )}
+
+            </Grid> */}
+            <Grid item xs={12} md={12} lg={6}>
+              <Box sx={{ display: "flex", alignItems: "end", gap: 1 }}>
+                <Box sx={{ flex: 1 }}>
+                  <Typography
+                    as="h5"
+                    sx={{
+                      fontWeight: "500",
+                      fontSize: "14px",
+                      mb: "12px",
+                    }}
+                  >
+                    Upload Booking Image
+                  </Typography>
+
+                  <TextField
+                    required
+                    fullWidth
+                    name="websiteImage"
+                    type="file"
+                    onChange={handleWebsiteImageChange}
+                    id="websiteImage"
+
+                  />
+                </Box>
+                {profileImageUrl1 && (
                   <Image
                     src={profileImageUrl1}
                     alt="profile"
@@ -266,8 +303,9 @@ setavatar2(file)
                     height={50}
                   />
                 )}
+              </Box>
             </Grid>
-            <Grid item xs={12} md={12} lg={6}>
+            {/* <Grid item xs={12} md={12} lg={6}>
               <Typography
                 component="label"
                 sx={{
@@ -277,7 +315,7 @@ setavatar2(file)
                   display: "block",
                 }}
               >
-               
+
                 Upload Booking Image
               </Typography>
 
@@ -287,11 +325,48 @@ setavatar2(file)
                 name="bookingImage"
                 type="file"
                 id="bookingImage"
-          
+
                 onChange={handleBookingImageChange}
 
               />
-               {profileImageUrl2 && (
+              {profileImageUrl2 && (
+                <Image
+                  src={profileImageUrl2}
+                  alt="profile"
+                  style={{
+                    border: "1px solid #e0e0e0",
+                  }}
+                  width={50}
+                  height={50}
+                />
+              )}
+            </Grid> */}
+            <Grid item xs={12} md={12} lg={6}>
+              <Box sx={{ display: "flex", alignItems: "end", gap: 1 }}>
+                <Box sx={{ flex: 1 }}>
+                  <Typography
+                    as="h5"
+                    sx={{
+                      fontWeight: "500",
+                      fontSize: "14px",
+                      mb: "12px",
+                    }}
+                  >
+                    Upload Booking Image
+                  </Typography>
+
+                  <TextField
+                    required
+                    fullWidth
+                    name="bookingImage"
+                    type="file"
+                    id="bookingImage"
+
+                    onChange={handleBookingImageChange}
+
+                  />
+                </Box>
+                {profileImageUrl2 && (
                   <Image
                     src={profileImageUrl2}
                     alt="profile"
@@ -302,6 +377,7 @@ setavatar2(file)
                     height={50}
                   />
                 )}
+              </Box>
             </Grid>
 
             <Grid item xs={12} textAlign="left">

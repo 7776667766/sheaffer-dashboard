@@ -76,6 +76,8 @@ export default function DashboardPage() {
     setOpenSecondDialog(false);
     setOpen(false);
   };
+  const isOwner = role === 'owner';
+
 
   useEffect(() => {
     console.log("useEffect running");
@@ -138,11 +140,6 @@ export default function DashboardPage() {
       })
     );
   };
-
-
-  // const handleRequestButtonClick = async () => {
-  //   handleAddRequest();
-  // };
 
   const handleRegisterBusiness = () => {
     dispatch(
@@ -216,14 +213,14 @@ export default function DashboardPage() {
                 <div style={{ display: "flex", gap: "15px" }}>
                   <Button
                     variant="contained"
-                    // disabled={business?.data ? true : false}
+                    disabled={business?.data ? true : false}
                     onClick={handleClickOpen}
                   >
                     Sync Business
                   </Button>
                   <Button
                     variant="contained"
-                    // disabled={business?.data ? true : false}
+                    disabled={business?.data ? true : false}
                     onClick={handleOpenRequest}
                   >
                     Send Custom Booking Request
@@ -936,31 +933,32 @@ export default function DashboardPage() {
     </DialogContent>
 </Dialog> */}
 
-        <Dialog open={openPending} disableEscapeKeyDown={true} disableBackdropClick={true}>
-          <DialogContent>
-            {business?.data?.requestStatus === "pending" ? (
+{isOwner && (
+      <Dialog open={openPending} disableEscapeKeyDown={true} disableBackdropClick={true}>
+        <DialogContent>
+          {business?.data?.requestStatus === "pending" ? (
+            <Typography variant="h6" gutterBottom>
+              Your request is pending. Please wait for approval.
+            </Typography>
+          ) : business?.data?.requestStatus === "rejected" ? (
+            <>
               <Typography variant="h6" gutterBottom>
-                Your request is pending. Please wait for approval.
+                Your request has been rejected.
               </Typography>
-            ) : business?.data?.requestStatus === "rejected" ? (
-              <>
-                <Typography variant="h6" gutterBottom>
-                  Your request has been rejected.
+              {business?.data?.rejectReason && (
+                <Typography variant="body2" color="error">
+                  Reason for rejection: {business?.data?.rejectreason}
                 </Typography>
-                {business?.data?.rejectReason && (
-                  <Typography variant="body2" color="error">
-                    Reason for rejection: {business?.data?.rejectreason}
-                  </Typography>
-                )}
-              </>
-            ) : (
-              <Typography variant="h6" gutterBottom>
-                Some default message if requestStatus is neither pending nor rejected
-              </Typography>
-            )}
-          </DialogContent>
-        </Dialog>
-
+              )}
+            </>
+          ) : (
+            <Typography variant="h6" gutterBottom>
+              Some default message if requestStatus is neither pending nor rejected
+            </Typography>
+          )}
+        </DialogContent>
+      </Dialog>
+    )}
 
         {role === "admin" && (
           <Grid item xs={12} md={12} lg={12} xl={8}>

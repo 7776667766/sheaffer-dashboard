@@ -4,11 +4,34 @@ import { Box, Grid, MenuItem, TextField } from "@mui/material";
 import { useFormik } from "formik";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { customizeThemeFunApi, getMyBussinessFunApi } from "store/business/services";
 import * as Yup from "yup";
+import SendIcon from "@mui/icons-material/Send";
+import { useRouter } from "next/router";
+
 
 export const CustomizeThemeForm = ({ formData, isEditMode }) => {
+  const router = useRouter();
   const [banner, setBanner] = useState(null);
+  const [selectedFontFamily, setSelectedFontFamily] = useState(null);
+  const [selectedTheme, setSelectedTheme] = useState(null);
+  console.log(selectedFontFamily, selectedTheme)
+
   const [bannerImageUrl, setBannerImageUrl] = useState(null);
+
+  const { business, dataFatched } = useSelector((state) => state.business);
+  console.log(business?.data, "business1234");
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (!dataFatched) {
+      dispatch(getMyBussinessFunApi({}));
+    }
+  }, [dispatch, dataFatched]);
+
+
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -61,6 +84,22 @@ export const CustomizeThemeForm = ({ formData, isEditMode }) => {
 
     onSubmit: (values) => {
       console.log("Form submitted with values:", values);
+      dispatch(
+        customizeThemeFunApi({
+          data: {
+            businessId: business?.data?.id,
+            bannerText: values.bannerText,
+            fontSize: values.fontSize,
+            fontFamily: values.fontFamily,
+            theme: values.theme,
+            color: values.color
+          },
+          onSuccess: () => {
+            console.log("Add Service Success");
+            router.push("/")
+          },
+        })
+      );
       if (banner === null && !isEditMode) {
         toast.error("Please select an image");
         return;
@@ -188,7 +227,26 @@ export const CustomizeThemeForm = ({ formData, isEditMode }) => {
         </Grid>
       </Box>
 
-      <LoadingButtonComponent value="Update Theme" isLoading={false} />
+      <LoadingButtonComponent
+        type="submit"
+        fullWidth={false}
+        sx={{
+          paddingX: "30px",
+        }}
+
+        value={
+          <>
+            <SendIcon
+              sx={{
+                position: "relative",
+                top: "-2px",
+              }}
+              className="mr-5px"
+            />{" "}
+           Update theme
+          </>
+        }
+      />
     </Box>
   );
 };

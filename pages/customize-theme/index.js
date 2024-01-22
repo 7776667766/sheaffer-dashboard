@@ -6,7 +6,7 @@ import { CustomizeThemeForm } from "@/components/Forms/FormLayouts/CustomizeThem
 
 const CustomizePage = () => {
   const { business, dataFatched } = useSelector((state) => state.business);
-  console.log(business, "business1234");
+  console.log(business?.data, "business1234");
   const [dataInitalized, setDataInitalized] = useState(false);
   const dispatch = useDispatch();
   const [initialData, setInitialData] = useState({
@@ -24,20 +24,23 @@ const CustomizePage = () => {
     }
   }, [dispatch, dataFatched]);
 
+
+  
+
   useEffect(() => {
-    if (business && !dataInitalized) {
+    if (business?.data && !dataInitalized) {
       setInitialData({
-        bannerText: business?.bannerText || "",
-        bannerImg: business?.bannerImg || "",
-        fontSize: business?.fontsize || 16,
-        fontFamily: business?.fontfamily || "",
-        theme: business?.theme || "",
-        color: business?.color || "",
+        bannerText: business.data?.bannerText || "",
+        bannerImg: business.data?.bannerImg || "",
+        fontSize: business?.data?.fontsize || 16,
+        fontFamily: business?.data?.fontfamily || "",
+        theme: business?.data?.theme || "",
+        color: business?.data?.color || "",
         businessId: business?.id || "",
       });
       setDataInitalized(true);
     }
-  }, [business, dataInitalized]);
+  }, [business?.data, dataInitalized]);
 
   return (
     <>

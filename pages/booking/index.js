@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import {
   Box,
   Dialog,
@@ -47,7 +47,9 @@ const BookingPage = () => {
 
   const dispatch = useDispatch();
   const { business, dataFatched } = useSelector((state) => state.business);
+  console.log("business  data", business)
   const { booking } = useSelector((state) => state.booking);
+  console.log("booking", booking)
 
   const daysList = [
     "Sunday",
@@ -78,14 +80,12 @@ const BookingPage = () => {
         })
       );
       const myTimeSlots = [];
-      const startDateString = `${bookingDate.toISOString().split("T")[0]} ${
-        activeTimeSlot?.startTime
-      }`;
+      const startDateString = `${bookingDate.toISOString().split("T")[0]} ${activeTimeSlot?.startTime
+        }`;
       const startDate = new Date(startDateString);
 
-      const endDateString = `${bookingDate.toISOString().split("T")[0]} ${
-        activeTimeSlot?.endTime
-      }`;
+      const endDateString = `${bookingDate.toISOString().split("T")[0]} ${activeTimeSlot?.endTime
+        }`;
       const endDate = new Date(endDateString);
 
       let currentTime = startDate;
@@ -125,10 +125,6 @@ const BookingPage = () => {
     }
   };
 
-  // const handleDelete = (id) => {
-  //   dispatch(deleteBookingFunApi(id));
-  // };
-
   const handleTooltipClick = () => {
     setDialogOpen(true);
   };
@@ -166,7 +162,7 @@ const BookingPage = () => {
     );
   };
   useEffect(() => {
-    if (!dataFatched) {
+    if (!dataFatched && business?.data?.id) {
       dispatch(
         getMyBussinessFunApi({
           onSuccess: (businessId) => {
@@ -180,18 +176,9 @@ const BookingPage = () => {
           },
         })
       );
-    } else {
-      if (!booking.dataFatched) {
-        dispatch(
-          getMyBusinessBookingFunApi({
-            data: {
-              businessId: business.id,
-            },
-          })
-        );
-      }
     }
-  }, [dispatch, booking.data, booking.dataFatched, business?.id, dataFatched]);
+  }, [dispatch, dataFatched, business?.data?.id]);
+
   return (
     <>
       <Card
@@ -405,16 +392,15 @@ const BookingPage = () => {
               >
                 <span
                   className={`
-                    ${
-                      data.status?.toLowerCase() === "completed"
-                        ? "successBadge"
-                        : data.status?.toLowerCase() === "pending"
+                    ${data.status?.toLowerCase() === "completed"
+                      ? "successBadge"
+                      : data.status?.toLowerCase() === "pending"
                         ? "primaryBadge"
                         : data.status?.toLowerCase() === "cancelled"
-                        ? "dangerBadge"
-                        : data.status?.toLowerCase() === "reseheduled"
-                        ? "secondaryBadge"
-                        : ""
+                          ? "dangerBadge"
+                          : data.status?.toLowerCase() === "reseheduled"
+                            ? "secondaryBadge"
+                            : ""
                     }
                       `}
                 >
@@ -465,18 +451,18 @@ const BookingPage = () => {
                         </div>
                       </TransitionsDialog>
                     </Tooltip> */}
-                      <Tooltip title="Edit" placement="top">
-                        <Button
-                          variant="text"
-                          onClick={() => {
-                            setTargetBookingData(data);
-                            handleTooltipClick();
-                          }}
-                          style={{marginRight: "-16px" }}
-                        >
-                          Edit
-                        </Button>
-                      </Tooltip>
+                    <Tooltip title="Edit" placement="top">
+                      <Button
+                        variant="text"
+                        onClick={() => {
+                          setTargetBookingData(data);
+                          handleTooltipClick();
+                        }}
+                        style={{ marginRight: "-16px" }}
+                      >
+                        Edit
+                      </Button>
+                    </Tooltip>
 
                     {/* <Dialog open={isDialogOpen} onClose={handleDialogClose}>
                       <DialogTitle>Edit Booking Details</DialogTitle>

@@ -5,6 +5,7 @@ import {
   getallBussinessesFunApi,
   addCustomBusinessFunApi,
   addCustomBusinessApprovedFunApi,
+  customizeThemeFunApi,
 } from "./services";
 
 const { createSlice } = require("@reduxjs/toolkit");
@@ -42,7 +43,7 @@ const businessSlice = createSlice({
       })
       .addCase(getMyBussinessFunApi.rejected, (state, action) => {
         state.business.isLoading = false;
-        state.business = null;
+        state.business.data = null;
         state.business.error = action.payload;
         state.business.dataFatched = true;
       });
@@ -133,6 +134,28 @@ const businessSlice = createSlice({
       })
 
       .addCase(addCustomBusinessApprovedFunApi.rejected, (state, action) => {
+        state.businessAll.isLoading = false;
+        state.businessAll.business = null;
+        state.businessAll.error = action.payload;
+        state.businessAll.dataFatched = true;
+      });
+
+      //cutom theme api
+      builder
+      .addCase(customizeThemeFunApi.pending, (state, action) => {
+        state.businessAll.isLoading = true;
+        state.businessAll.error = null;
+      })
+      .addCase(customizeThemeFunApi.fulfilled, (state, action) => {
+        console.log("85 payload", action.payload);
+        state.businessAll.isLoading = false;
+        state.businessAll.data = state.businessAll.data?.map((ele) =>
+          ele.id === action.payload.id ? action.payload : ele
+        );
+        state.businessAll.dataFatched = true;
+      })
+
+      .addCase(customizeThemeFunApi.rejected, (state, action) => {
         state.businessAll.isLoading = false;
         state.businessAll.business = null;
         state.businessAll.error = action.payload;

@@ -58,11 +58,11 @@ const ServicesPage = () => {
     if (service.dataFatched !== true && dataFatched === true) {
       dispatch(
         getAllServiceFunApi({
-          businessId: business?.id,
+          businessId: business?.data?.id,
         })
       );
     }
-  }, [dispatch, service.data, service.dataFatched, business?.id, dataFatched]);
+  }, [dispatch, service.data, service.dataFatched, business?.data?.id, dataFatched]);
 
   return (
     <>

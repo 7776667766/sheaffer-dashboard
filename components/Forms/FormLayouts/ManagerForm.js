@@ -23,11 +23,12 @@ const ManagerForm = ({ formData, isEditMode }) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const { business } = useSelector((state) => state.business);
+  console.log("business?.data.id",business?.data?.id)
 
   const initialValues = isEditMode
     ? {
         ...formData,
-        businessId: business?.id,
+        businessId: business?.data?.id,
       }
     : {
         name: "",
@@ -35,7 +36,7 @@ const ManagerForm = ({ formData, isEditMode }) => {
         phone: "",
         password: "",
         confirmPassword: "",
-        businessId: business?.id,
+        businessId: business?.data?.id,
       };
 
   const validation = {

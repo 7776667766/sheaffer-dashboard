@@ -24,6 +24,7 @@ import { getServicesTypeFunApi } from "store/service/services";
 import toast from "react-hot-toast";
 import Image from "next/image";
 import { LoadingButtonComponent } from "@/components/UIElements/Buttons/LoadingButton";
+import { getMyBussinessFunApi } from "store/business/services";
 
 const ServiceForm = ({ formData, isEditMode }) => {
   const [selectedSpecialist, setSelectedSpecialist] = useState(null);
@@ -33,8 +34,22 @@ const ServiceForm = ({ formData, isEditMode }) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const { business } = useSelector((state) => state.business);
+  console.log("business Data services form", business?.data?.id)
   const { specialist } = useSelector((state) => state.specialist);
   const { serviceType, service } = useSelector((state) => state.service);
+
+  useEffect(() => {
+
+    dispatch(
+      getMyBussinessFunApi({
+        data: business.data?.id,
+        onSuccess: () => {
+    
+        },
+      })
+    );
+  
+},[])
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -87,7 +102,7 @@ const ServiceForm = ({ formData, isEditMode }) => {
       typeId: formData?.type?.id,
       specialistId: formData?.specialist?.id,
       timeInterval: formData?.timeInterval || "",
-      businessId: business?.id,
+      businessId: business?.data?.id,
       timeSlots: formData?.timeSlots || [
         {
           day: "Monday",
@@ -142,7 +157,7 @@ const ServiceForm = ({ formData, isEditMode }) => {
       typeId: "",
       specialistId: "",
       timeInterval: "",
-      businessId: business?.id,
+      businessId: business?.data?.id,
       timeSlots: [
         {
           day: "Monday",
@@ -193,7 +208,7 @@ const ServiceForm = ({ formData, isEditMode }) => {
     if (!specialist.specialistFetch) {
       dispatch(
         getspecialistApi({
-          data: business?.id,
+          data: business?.data?.id,
           onSuccess: (specialistList) => {
             if (isEditMode) {
               const selected = specialistList?.find(
@@ -206,7 +221,7 @@ const ServiceForm = ({ formData, isEditMode }) => {
       );
     }
   }, [
-    business?.id,
+    business?.data?.id,
     dispatch,
     formData?.specialist?.id,
 
