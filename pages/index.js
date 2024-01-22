@@ -647,8 +647,8 @@ export default function DashboardPage() {
                   aria-controls="panel1a-content"
                   id="panel1a-header"
                 >
-                  <Typography component="h1" fontWeight="500">
-                    <div>
+                  <Typography component="h1" fontWeight="500" style={{ display: 'flex', alignItems: 'center' }}>
+                    <div >
                       <Image
                         src={business?.data.logo}
                         width={100}
