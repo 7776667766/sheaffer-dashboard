@@ -102,7 +102,9 @@ const bookingSlice = createSlice({
       })
       .addCase(rescheduledBookingFunApi.fulfilled, (state, action) => {
         state.booking.isLoading = false;
-        state.booking.data.push(action.payload);
+        state.booking.data = state.booking.data?.map((ele) =>
+        ele.id === action.payload.id ? action.payload : ele
+      );
       })
       .addCase(rescheduledBookingFunApi.rejected, (state, action) => {
         state.booking.isLoading = false;
