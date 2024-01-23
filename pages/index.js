@@ -237,14 +237,14 @@ export default function DashboardPage() {
                 <div style={{ display: "flex", gap: "15px" }}>
                   <Button
                     variant="contained"
-                    disabled={business?.data ? true : false}
+                    // disabled={business?.data ? true : false}
                     onClick={handleClickOpen}
                   >
                     Sync Business
                   </Button>
                   <Button
                     variant="contained"
-                    disabled={business?.data ? true : false}
+                    // disabled={business?.data ? true : false}
                     onClick={handleOpenRequest}
                   >
                     Send Custom Booking Request
@@ -983,25 +983,7 @@ export default function DashboardPage() {
                             {business.data.address}
                           </li>
 
-                          {/* <li>{business.bannerText}</li> */}
-                          {/* <li>
-                        <Image
-                          src={business.bannerImg}
-                          width={100}
-                          height={50}
-                          alt="bannerImg"
-                          style={{
-                            objectFit: "contain",
-                          }}
-                        />
-                      </li> */}
-                          {/* <li
-                        style={{
-                          backgroundColor: business.color,
-                          height: "30px",
-                          width: "50px",
-                        }}
-                      ></li> */}
+          
                         </ul>
                       </Typography>
                     </Box>
@@ -1017,16 +999,7 @@ export default function DashboardPage() {
                           }}
                         >
                           <div style={{ height: "100px" }}>
-                            {/* {business?.images?.map((data, key) => (
-                              <Image
-                                key={key}
-                                src={data}
-                                alt={business.name}
-                                width={100}
-                                height={100}
-                                style={{ borderRadius: "10px" }}
-                              />
-                            ))} */}
+                      
 
                             {business.data?.images?.map((data, key) => (
                               <Image

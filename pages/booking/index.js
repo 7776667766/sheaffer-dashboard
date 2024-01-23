@@ -142,9 +142,6 @@ const BookingPage = () => {
     dispatch(completeBookingFunApi(id));
     setDialogOpen(false);
   };
-  // const handleTimeChange = (event) => {
-  //   setSelectedTime(event.target.value);
-  // };
 
   const handleResheduleBooking = (id) => {
     console.log("resheduled id", id);

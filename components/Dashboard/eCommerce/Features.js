@@ -93,11 +93,11 @@ const Features = () => {
     if (!dataFatched && business?.data?.id) {
       dispatch(
         getMyBussinessFunApi({
-          onSuccess: (businessId) => {
+          onSuccess: () => {
             dispatch(
               getMyBusinessBookingFunApi({
                 data: {
-                  businessId: businessId,
+                  businessId:  business?.data?.id,
                 },
               })
             );
