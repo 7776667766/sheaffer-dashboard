@@ -9,6 +9,9 @@ import {
   AccordionDetails,
   AccordionSummary,
 } from "@mui/material";
+
+import copyImage from "@/public/images/icon/solar_copy-bold.png";
+import ContentCopyTwoToneIcon from "@mui/icons-material/ContentCopyTwoTone";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useDispatch, useSelector } from "react-redux";
 import { addBusinessFunApi } from "store/business/services";
@@ -57,7 +60,7 @@ const BusinessForm = () => {
           </li>
         </ul>
       </div>
-      <Accordion sx={{ border: "none", borderRadius: "15px" }}>
+      <Accordion sx={{ borderRadius: "15px", marginTop: "20px" }}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel-content"
@@ -65,14 +68,14 @@ const BusinessForm = () => {
           sx={{ border: "none" }}
         >
           <Box sx={{ display: "flex", alignItems: "center" }}>
-            {/* {business?.data.logo && (
+            {business?.data?.logo && (
               <Image
                 src={business?.data.logo}
                 alt="Logo"
                 width={50} // Set the width as per your requirement
                 height={50} // Set the height as per your requirement
               />
-            )} */}
+            )}
             <Typography
               variant="h4"
               sx={{ fontSize: 15, fontWeight: 700, color: "black" }}
@@ -90,12 +93,8 @@ const BusinessForm = () => {
               p: "25px 20px 15px",
             }}
           >
-            <Grid
-              container
-              rowSpacing={1}
-              columnSpacing={{ xs: 1, sm: 2, md: 2 }}
-            >
-              <Grid item xs={12} md={12} lg={12} xl={8}>
+            <Grid container spacing={1} columnSpacing={{ xs: 1, sm: 2, md: 2 }}>
+              <Grid item xs={12} md={8} lg={8} xl={8}>
                 {business && (
                   <Card
                     sx={{
@@ -108,15 +107,19 @@ const BusinessForm = () => {
                     <Grid container spacing={1}>
                       <Grid item xs={12} md={6}>
                         <Box sx={{ display: "flex", gap: "10px" }}>
-                          {business?.data?.websiteService === true && (
+                          {/* {business?.data?.websiteService === true && (
                             <Typography variant="h6">Website Url</Typography>
-                          )}
+                          )} */}
                           {business?.data?.websiteService === true && (
                             <Button
                               variant="outlined"
                               href={`${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}site/${business?.data.slug}`}
                               target="_blank"
                               sx={{
+                                background: "rgba(117, 127, 239, 0.10)",
+
+                                border: "none",
+                                textDecoration: "underline",
                                 pt: "2px",
                                 pb: "1px",
                               }}
@@ -124,68 +127,64 @@ const BusinessForm = () => {
                               {business?.data.slug}
                             </Button>
                           )}
+
+                          <Image
+                            src={copyImage}
+                            alt="Main Image Description"
+                            width={20}
+                            height={20}
+                          />
                         </Box>
                       </Grid>
                       <Grid item xs={12} md={6}>
-                        {business?.data?.bookingService === true && (
-                          <Box>
+                        <Box sx={{ display: "flex", gap: "10px" }}>
+                          {/* {business?.data?.bookingService === true && (
                             <Typography variant="h6">Booking Url</Typography>
-                            {/* Add your booking URL components here */}
-                          </Box>
-                        )}
-                        {business?.data?.bookingService === true && (
-                          <li>
+                          )} */}
+                          {business?.data?.bookingService === true && (
                             <Button
                               variant="outlined"
                               href={`${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}booking/${business?.data.slug}`}
                               target="_blank"
                               sx={{
+                                background: "rgba(117, 127, 239, 0.10)",
+
+                                border: "none",
+                                textDecoration: "underline",
                                 pt: "2px",
                                 pb: "1px",
                               }}
                             >
                               {business?.data?.slug}
                             </Button>
-                          </li>
-                        )}
+                          )}
+                          <Image
+                            src={copyImage} // The path to your image in the public directory
+                            alt="Main Image Description"
+                            width={20} // Set the desired width
+                            height={20} // Set the desired height
+                          />
+                        </Box>
                       </Grid>
                     </Grid>
 
                     <Box
                       sx={{
-                        display: "flex",
-                        justifyContent: "left",
                         mb: "15px",
                       }}
                     >
-                      <Box>
-                        <Typography
-                          variant="h4"
-                          sx={{ fontSize: 15, fontWeight: 700, mb: "5px" }}
-                        >
-                          <ul
-                            style={{
-                              listStyle: "none",
-                              lineHeight: "35px",
-                              paddingLeft: "0px",
-                            }}
-                          >
-                            <li>Description</li>
-                            <li>Email</li>
-                            <li>Phone</li>
-                            {/* <li>Logo</li> */}
-                            <li>Theme</li>
-                            <li>Social icons</li>
-                            <li>Address</li>
-                            <li>bannerText</li>
-                            <li>color</li>
-                            <li>bannerImg</li>
-                            <li>fontSize</li>
-                            <li>fontFamily</li>
-                          </ul>
-                        </Typography>
+                      <Box sx={{ marginTop: "10px" }}>
+                        {business?.data?.description}
                       </Box>
-
+                      <Box sx={{ marginTop: "10px", display: "block" }}>
+                        <Box>{business?.data?.email}</Box>
+                        <Box>{business?.data?.phone}</Box>
+                        <Box>{business?.data?.address}</Box>
+                        <Box>{business?.data?.theme || "N/A"}</Box>
+                        <Box>{business?.data?.bannerText}</Box>
+                        <Box> {business?.data?.color}</Box>
+                        <Box> {business?.data?.bannerImg}</Box>
+                      </Box>
                       <Box>
                         <Typography variant="p" fontSize={14}>
                           <ul
@@ -195,71 +194,11 @@ const BusinessForm = () => {
                               lineHeight: "35px",
                             }}
                           >
-                            {/* <li>{business?.name}</li> */}
-                            {business?.data?.websiteService === true && (
-                              <li>
-                                <Button
-                                  variant="outlined"
-                                  href={`${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}site/${business?.data.slug}`}
-                                  target="_blank"
-                                  sx={{
-                                    pt: "2px",
-                                    pb: "1px",
-                                  }}
-                                >
-                                  {business?.data.slug}
-                                </Button>
-                              </li>
-                            )}
-
-                            <li>{business?.data?.description}</li>
-                            <li>{business?.data?.email}</li>
-                            <li>{business?.data?.phone}</li>
+                           
+                           
+                           
                             <li>
                               {/* <Image
-                            src={business.logo}
-                            width={50}
-                            height={30}
-                            alt="Logo"
-                            style={{
-                              objectFit: "contain",
-                            }}
-                          /> */}
-                            </li>
-                            <li>{business?.data?.theme || "N/A"}</li>
-                            <li>
-                              {business?.data?.socialLinks &&
-                                business.data?.socialLinks.map(
-                                  (socialLink, index) => (
-                                    <a
-                                      key={index}
-                                      href={socialLink.link}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      style={{
-                                        marginRight: "12px",
-                                        textTransform: "capitalize",
-                                      }}
-                                    >
-                                      {socialLink.name}
-                                    </a>
-                                  )
-                                )}
-                            </li>
-                            <li>{business?.data?.address}</li>
-
-                            <li>{business?.data?.bannerText}</li>
-                            <li
-                              style={{
-                                backgroundColor: business.color,
-                                height: "30px",
-                                width: "50px",
-                              }}
-                            >
-                              {business?.data?.color}
-                            </li>
-                            <li>
-                              <Image
                                 src={business?.data?.bannerImg}
                                 width={50}
                                 height={30}
@@ -267,7 +206,7 @@ const BusinessForm = () => {
                                 style={{
                                   objectFit: "contain",
                                 }}
-                              />
+                              /> */}
                             </li>
                             <li>{business?.data?.fontSize}</li>
                             <li>{business?.data?.fontFamily}</li>
@@ -278,6 +217,8 @@ const BusinessForm = () => {
                   </Card>
                 )}
               </Grid>
+
+              <Grid item xs={12} md={4} lg={4} xl={4}></Grid>
             </Grid>
           </Card>
         </AccordionDetails>
