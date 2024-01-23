@@ -167,7 +167,7 @@ const Features = () => {
               sx={{
                 boxShadow: "none",
                 borderRadius: "10px",
-                p: "25px 20px",
+                p: "15px 30px",
                 mb: "15px",
               }}
             >
