@@ -652,11 +652,11 @@ export const SidebarData = () => {
       icon: <AccountCircle />,
     },
 
-    {
-      title: "Notification",
-      path: "/notification/",
-      icon: <NotificationsNoneIcon />,
-    },
+    // {
+    //   title: "Notification",
+    //   path: "/notification/",
+    //   icon: <NotificationsNoneIcon />,
+    // },
     {
       title: "Settings",
       path: "/settings/account/",

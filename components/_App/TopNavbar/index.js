@@ -47,7 +47,7 @@ const TopNavbar = ({ toogleActive }) => {
               {/* <Email /> */}
 
               {/* Notification */}
-              <Notification />
+              {/* <Notification /> */}
 
               {/* Profile */}
               <Profile />

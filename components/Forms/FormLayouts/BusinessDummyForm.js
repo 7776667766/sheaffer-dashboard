@@ -8,7 +8,10 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Tooltip,
 } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import BrokenImageIcon from "@mui/icons-material/BrokenImage";
 
 import copyImage from "@/public/images/icon/solar_copy-bold.png";
 import ContentCopyTwoToneIcon from "@mui/icons-material/ContentCopyTwoTone";
@@ -60,22 +63,36 @@ const BusinessForm = () => {
           </li>
         </ul>
       </div>
-      <Accordion sx={{ borderRadius: "15px", marginTop: "20px" }}>
+      <Accordion sx={{ borderRadius: "15px", marginTop: "20px",position:"unset",boxShadow:"none" }}
+      
+      defaultExpanded={true}
+      >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel-content"
           id="panel-header"
           sx={{ border: "none" }}
         >
-          <Box sx={{ display: "flex", alignItems: "center" }}>
-            {business?.data?.logo && (
-              <Image
-                src={business?.data.logo}
-                alt="Logo"
-                width={50} // Set the width as per your requirement
-                height={50} // Set the height as per your requirement
-              />
-            )}
+          <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <Box
+              sx={{
+                width: "60px",
+                height: "50px",
+                borderRadius: "10px",
+                overflow: "hidden",
+                border: "1px solid gray",
+              }}
+            >
+              {business?.data?.logo && (
+                <Image
+                  src={business?.data.logo}
+                  alt="Logo"
+                  width={50} // Set the width as per your requirement
+                  height={50} // Set the height as per your requirement
+                />
+              )}
+            </Box>
+
             <Typography
               variant="h4"
               sx={{ fontSize: 15, fontWeight: 700, color: "black" }}
@@ -105,7 +122,7 @@ const BusinessForm = () => {
                     }}
                   >
                     <Grid container spacing={1}>
-                      <Grid item xs={12} md={6}>
+                      <Grid item xs={12} md={5}>
                         <Box sx={{ display: "flex", gap: "10px" }}>
                           {/* {business?.data?.websiteService === true && (
                             <Typography variant="h6">Website Url</Typography>
@@ -127,13 +144,17 @@ const BusinessForm = () => {
                               {business?.data.slug}
                             </Button>
                           )}
-
-                          <Image
-                            src={copyImage}
-                            alt="Main Image Description"
-                            width={20}
-                            height={20}
-                          />
+                          <Tooltip title="Copy" arrow  sx={{cursor:"pointer"}}>
+                            <Image
+                              src={copyImage}
+                              alt="Main Image Description"
+                              width={20}
+                              height={20}
+                              title="Copy Image"
+                              sx={{ cursor: 'pointer' }} 
+                              
+                            />
+                          </Tooltip>
                         </Box>
                       </Grid>
                       <Grid item xs={12} md={6}>
@@ -158,12 +179,18 @@ const BusinessForm = () => {
                               {business?.data?.slug}
                             </Button>
                           )}
-                          <Image
-                            src={copyImage} // The path to your image in the public directory
-                            alt="Main Image Description"
-                            width={20} // Set the desired width
-                            height={20} // Set the desired height
-                          />
+                          <Tooltip title="Copy" arrow>
+                            <Image
+                             sx={{ cursor: 'pointer' }} 
+                              src={copyImage}
+
+                              alt="Main Image Description"
+                              width={20}
+                              height={20}
+                              title="Copy Image"
+
+                            />
+                          </Tooltip>
                         </Box>
                       </Grid>
                     </Grid>
@@ -182,43 +209,87 @@ const BusinessForm = () => {
                         <Box>{business?.data?.address}</Box>
                         <Box>{business?.data?.theme || "N/A"}</Box>
                         <Box>{business?.data?.bannerText}</Box>
-                        <Box> {business?.data?.color}</Box>
-                        <Box> {business?.data?.bannerImg}</Box>
+                        <Box
+                          sx={{
+                            backgroundColor: business?.data?.color,
+                            width: "50px", // Set your desired width
+                            height: "20px",
+                            borderRadius: "5px", // Set your desired height
+                          }}
+                        >
+                          {" "}
+                        </Box>
                       </Box>
-                      <Box>
-                        <Typography variant="p" fontSize={14}>
-                          <ul
-                            style={{
-                              listStyle: "none",
-                              marginLeft: "35px",
-                              lineHeight: "35px",
-                            }}
-                          >
-                           
-                           
-                           
-                            <li>
-                              {/* <Image
-                                src={business?.data?.bannerImg}
-                                width={50}
-                                height={30}
-                                alt="bannerImg"
-                                style={{
-                                  objectFit: "contain",
-                                }}
-                              /> */}
-                            </li>
-                            <li>{business?.data?.fontSize}</li>
-                            <li>{business?.data?.fontFamily}</li>
-                          </ul>
-                        </Typography>
-                      </Box>
+                      <Box></Box>
                     </Box>
                   </Card>
                 )}
               </Grid>
 
-              <Grid item xs={12} md={4} lg={4} xl={4}></Grid>
+              <Grid
+                item
+                xs={12}
+                md={4}
+                lg={4}
+                xl={4}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "end",
+                }}
+              >
+                <Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      width: "150px", // Set your desired width
+                      height: "100px", // Set your desired height
+                      border: "1px solid #ccc", // Border style
+                      borderRadius: "8px", // Border radius
+                      overflow: "hidden",
+                      marginTop: "-70px", // Hide overflow content
+                    }}
+                  >
+                    {business?.data?.bannerImg ? (
+                      <Image
+                        src={business.data.bannerImg}
+                        alt="Banner Image"
+                        width={70}
+                        height={70}
+                      />
+                    ) : (
+                      <IconButton color="primary">
+                        <BrokenImageIcon />
+                      </IconButton>
+                    )}
+                  </Box>
+                  <Box sx={{ marginTop: "20px" }}>
+                    {" "}
+                    {business?.data?.socialLinks &&
+                    business.data.socialLinks.length > 0 ? (
+                      business.data.socialLinks.map((socialLink, index) => (
+                        <a
+                          key={index}
+                          href={socialLink.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{
+                            marginRight: "12px",
+                            textTransform: "capitalize",
+                            marginTop: "30px",
+                          }}
+                        >
+                          {socialLink.name}
+                        </a>
+                      ))
+                    ) : (
+                      <span>No social links available</span>
+                    )}
+                  </Box>
+                </Box>
+              </Grid>
             </Grid>
           </Card>
         </AccordionDetails>

@@ -7,6 +7,7 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
+import { Table, TableBody, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import Card from "@mui/material/Card";
 import IconButton from "@mui/material/IconButton";
 import TableCell from "@mui/material/TableCell";
@@ -36,7 +37,6 @@ const BusinessPage = () => {
   const { role } = useSelector((state) => state.auth);
   const [isRejecting, setIsRejecting] = useState(false);
   const [rejectReason, setRejectReason] = useState("");
-
 
   const { businessAll } = useSelector((state) => state.business);
   console.log("businessAll", businessAll);
@@ -86,8 +86,6 @@ const BusinessPage = () => {
     );
     setIsRejecting(false);
     handleClose();
-   
-
   };
 
   const handleApproved = () => {
@@ -279,19 +277,15 @@ const BusinessPage = () => {
               >
                 <span
                   className={
-                    data?.requestStatus === "Approved"
+                    data?.requestStatus === "approved"
                       ? "successBadge"
-                      : data?.requestStatus === "Rejected"
+                      : data?.requestStatus === "rejected"
                       ? "dangerBadge"
                       : "infoBadge"
                   }
-                 
-                 
                 >
                   {data?.requestStatus}
                 </span>
-
-               
               </TableCell>
 
               <TableCell
@@ -341,82 +335,92 @@ const BusinessPage = () => {
               alignItems: "center",
             }}
           >
-            <table style={{ width: "100%", borderCollapse: "collapse" }}>
-              <tbody>
-                <tr>
-                  <td style={{ border: "1px solid #ddd", padding: "10px" }}>
-                    <strong>Name:</strong>
-                  </td>
-                  <td style={{ border: "1px solid #ddd", padding: "10px" }}>
-                    {selectedBusiness?.name}
-                  </td>
-                </tr>
-                <tr>
-                  <td style={{ border: "1px solid #ddd", padding: "10px" }}>
-                    <strong>Email:</strong>
-                  </td>
-                  <td style={{ border: "1px solid #ddd", padding: "10px" }}>
-                    {selectedBusiness?.email}
-                  </td>
-                </tr>
-                <tr>
-                  <td style={{ border: "1px solid #ddd", padding: "10px" }}>
-                    <strong>Address:</strong>
-                  </td>
-                  <td style={{ border: "1px solid #ddd", padding: "10px" }}>
-                    {selectedBusiness?.address
-}
-                  </td>
-                </tr>
-                <tr>
-                  <td style={{ border: "1px solid #ddd", padding: "10px" }}>
-                    <strong>Slug:</strong>
-                  </td>
-                  <td style={{ border: "1px solid #ddd", padding: "10px" }}>
-                    {selectedBusiness?.slug}
-                  </td>
-                </tr>
-                <tr>
-                  <td style={{ border: "1px solid #ddd", padding: "10px" }}>
-                    <strong>Phone:</strong>
-                  </td>
-                  <td style={{ border: "1px solid #ddd", padding: "10px" }}>
-                    {selectedBusiness?.phone}
-                  </td>
-                </tr>
-                <tr>
-                  <td style={{ border: "1px solid #ddd", padding: "10px" }}>
-                    <strong>Description:</strong>
-                  </td>
-                  <td style={{ border: "1px solid #ddd", padding: "10px" }}>
-                    {selectedBusiness?.description}
-                  </td>
-                </tr>
-                <tr>
-                  <td style={{ border: "1px solid #ddd", padding: "10px" }}>
-                    <strong>BannerText:</strong>
-                  </td>
-                  <td style={{ border: "1px solid #ddd", padding: "10px" }}>
-                    {selectedBusiness?.bannerText}
-                  </td>
-                </tr>
-                <tr>
-                  <td style={{ border: "1px solid #ddd", padding: "10px" }}>
-                    <strong>BannerImage:</strong>
-                  </td>
-                  <td style={{ border: "1px solid #ddd", padding: "10px" }}>
-                    
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+
+<TableContainer component={Paper} style={{ width: '100%' }}>
+  <Table style={{ borderCollapse: 'collapse' }}>
+    <TableBody>
+      <TableRow>
+        <TableCell style={{ border: '1px solid #ddd', padding: '10px' }}>
+          <strong>Name:</strong>
+        </TableCell>
+        <TableCell style={{ border: '1px solid #ddd', padding: '10px' }}>
+          {selectedBusiness?.name}
+        </TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell style={{ border: '1px solid #ddd', padding: '10px' }}>
+          <strong>Email:</strong>
+        </TableCell>
+        <TableCell style={{ border: '1px solid #ddd', padding: '10px' }}>
+          {selectedBusiness?.email}
+        </TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell style={{ border: '1px solid #ddd', padding: '10px' }}>
+          <strong>Address:</strong>
+        </TableCell>
+        <TableCell style={{ border: '1px solid #ddd', padding: '10px' }}>
+          {selectedBusiness?.address}
+        </TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell style={{ border: '1px solid #ddd', padding: '10px' }}>
+          <strong>Slug:</strong>
+        </TableCell>
+        <TableCell style={{ border: '1px solid #ddd', padding: '10px' }}>
+          {selectedBusiness?.slug}
+        </TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell style={{ border: '1px solid #ddd', padding: '10px' }}>
+          <strong>Phone:</strong>
+        </TableCell>
+        <TableCell style={{ border: '1px solid #ddd', padding: '10px' }}>
+          {selectedBusiness?.phone}
+        </TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell style={{ border: '1px solid #ddd', padding: '10px' }}>
+          <strong>Description:</strong>
+        </TableCell>
+        <TableCell style={{ border: '1px solid #ddd', padding: '10px' }}>
+          {selectedBusiness?.description}
+        </TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell style={{ border: '1px solid #ddd', padding: '10px' }}>
+          <strong>BannerText:</strong>
+        </TableCell>
+        <TableCell style={{ border: '1px solid #ddd', padding: '10px' }}>
+          {selectedBusiness?.bannerText}
+        </TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell style={{ border: '1px solid #ddd', padding: '10px' }}>
+          <strong>BannerImage:</strong>
+        </TableCell>
+        <TableCell style={{ border: '1px solid #ddd', padding: '10px' }}>
+          {selectedBusiness?.bannerImg ? (
+            <Image
+              src={selectedBusiness.bannerImg}
+              alt="Banner Image"
+              width={10}
+              height={10}
+            />
+          ) : (
+            "No Image"
+          )}
+        </TableCell>
+      </TableRow>
+      
+    </TableBody>
+  </Table>
+</TableContainer>
+        
           </div>
           {selectedBusiness.requestStatus === "rejected" ||
-          selectedBusiness.requestStatus === "approved" ? (
-            ""
-          ) : (
-            <div>
-              {" "}
+          selectedBusiness.requestStatus === "approved" ? null : (
+            <Box>
               <Box
                 sx={{
                   display: "flex",
@@ -433,8 +437,8 @@ const BusinessPage = () => {
                 </Button>
               </Box>
               <Box>
-                {isRejecting &&   (
-                  <div>
+                {isRejecting && (
+                  <Box>
                     <TextField
                       fullWidth
                       label="Reason to Reject"
@@ -454,10 +458,10 @@ const BusinessPage = () => {
                         Confirm Reject
                       </Button>
                     </div>
-                  </div>
+                  </Box>
                 )}
               </Box>
-            </div>
+            </Box>
           )}
         </Dialog>
 
