@@ -47,9 +47,9 @@ const BookingPage = () => {
 
   const dispatch = useDispatch();
   const { business, dataFatched } = useSelector((state) => state.business);
-  console.log("business  data", business)
+  console.log("business  data", business);
   const { booking } = useSelector((state) => state.booking);
-  console.log("booking", booking)
+  console.log("booking", booking);
 
   const daysList = [
     "Sunday",
@@ -80,12 +80,14 @@ const BookingPage = () => {
         })
       );
       const myTimeSlots = [];
-      const startDateString = `${bookingDate.toISOString().split("T")[0]} ${activeTimeSlot?.startTime
-        }`;
+      const startDateString = `${bookingDate.toISOString().split("T")[0]} ${
+        activeTimeSlot?.startTime
+      }`;
       const startDate = new Date(startDateString);
 
-      const endDateString = `${bookingDate.toISOString().split("T")[0]} ${activeTimeSlot?.endTime
-        }`;
+      const endDateString = `${bookingDate.toISOString().split("T")[0]} ${
+        activeTimeSlot?.endTime
+      }`;
       const endDate = new Date(endDateString);
 
       let currentTime = startDate;
@@ -389,15 +391,16 @@ const BookingPage = () => {
               >
                 <span
                   className={`
-                    ${data.status?.toLowerCase() === "completed"
-                      ? "successBadge"
-                      : data.status?.toLowerCase() === "pending"
+                    ${
+                      data.status?.toLowerCase() === "completed"
+                        ? "successBadge"
+                        : data.status?.toLowerCase() === "pending"
                         ? "primaryBadge"
                         : data.status?.toLowerCase() === "cancelled"
-                          ? "dangerBadge"
-                          : data.status?.toLowerCase() === "reseheduled"
-                            ? "secondaryBadge"
-                            : ""
+                        ? "dangerBadge"
+                        : data.status?.toLowerCase() === "reseheduled"
+                        ? "secondaryBadge"
+                        : ""
                     }
                       `}
                 >
@@ -877,61 +880,99 @@ const BookingPage = () => {
                   handleResheduleBooking(targetBookingData?.id)
                 }
               >
+                <Box>
+                  <Typography sx={{ fontSize: 20 }}>
+                    Reschedule Booking
+                  </Typography>
+                </Box>
                 <Grid container spacing={4}>
-                  <Grid item xs={12} sm={6} md={6}>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <StaticDatePicker
-                        orientation="landscape"
-                        disablePast
-                        showToolbar={false}
-                        value={rescheduleDate}
-                        ToolbarComponent={DisabledByDefault}
-                        onChange={(value) => {
-                          setRescheduleDate(value);
-                          generateTimeSlotsByDate(value.$d, targetBookingData);
-                        }}
-                      />
-                    </LocalizationProvider>
+                  <Grid item xs={12} sm={6} md={6} sx={{ paddingTop: "20px" }}>
+                    <Typography sx={{ fontSize: 16, marginTop: "10px" }}>
+                      Pick Date
+                    </Typography>
+
+                    <Box
+                      sx={{
+                        border: "1px solid rgba(223, 223, 223, 0.50)",
+                        borderRadius: "8px",
+                        marginTop: "10px",
+                      }}
+                    >
+                      <LocalizationProvider
+                        dateAdapter={AdapterDayjs}
+                        sx={{ border: "1px solid gray" }}
+                      >
+                        <StaticDatePicker
+                          orientation="landscape"
+                          disablePast
+                          showToolbar={false}
+                          value={rescheduleDate}
+                          ToolbarComponent={DisabledByDefault}
+                          onChange={(value) => {
+                            setRescheduleDate(value);
+                            generateTimeSlotsByDate(
+                              value.$d,
+                              targetBookingData
+                            );
+                          }}
+                        />
+                      </LocalizationProvider>
+                    </Box>
                   </Grid>
                   <Grid item xs={12} sm={6} md={6}>
-                    {timeSlots?.length === 0 ? (
-                      <>No Time Slot Available</>
-                    ) : (
-                      <Grid container spacing={2}>
-                        {timeSlots?.map((time, index) => (
-                          <Grid item xs={6} key={index}>
-                            <Box
-                              p={1}
-                              fullWidth
-                              textAlign={"center"}
-                              sx={{
-                                border: "1px solid grey",
-                                backgroundColor:
-                                  selectedTime === time.totalTime
-                                    ? "primary.main"
-                                    : "white",
-                                color:
-                                  selectedTime === time.totalTime
-                                    ? "white"
-                                    : "black",
-                                cursor: "pointer",
-                              }}
-                              onClick={() => {
-                                setSelectedTime(time.totalTime);
-                              }}
-                            >
-                              <Typography
-                                variant="h6"
-                                color="inherit"
-                                style={{ fontSize: "13px" }}
+                    <Typography sx={{ fontSize: 16, marginTop: "10px" }}>
+                      Pick Time
+                    </Typography>
+
+                    <Box
+                      sx={{
+                        border: "1px solid rgba(223, 223, 223, 0.50)",
+                        borderRadius: "8px",
+                        marginTop: "10px",
+                        padding: "10px",
+                        height:"385px"
+                      }}
+                    >
+                      {" "}
+                      {timeSlots?.length === 0 ? (
+                        <>No Time Slot Available</>
+                      ) : (
+                        <Grid container spacing={2} sx={{ marginTop: "5px" }}>
+                          {timeSlots?.map((time, index) => (
+                            <Grid item xs={6} key={index}>
+                              <Box
+                                p={1}
+                                fullWidth
+                                textAlign={"center"}
+                                sx={{
+                                  border: "1px solid grey",
+                                  backgroundColor:
+                                    selectedTime === time.totalTime
+                                      ? "primary.main"
+                                      : "white",
+                                  color:
+                                    selectedTime === time.totalTime
+                                      ? "white"
+                                      : "black",
+                                  cursor: "pointer",
+                                }}
+                                onClick={() => {
+                                  setSelectedTime(time.totalTime);
+                                }}
                               >
-                                {time.totalTime}
-                              </Typography>
-                            </Box>
-                          </Grid>
-                        ))}
-                      </Grid>
-                    )}
+                                <Typography
+                                  variant="h6"
+                                  color="inherit"
+                                  style={{ fontSize: "13px" }}
+                                >
+                                  {time.totalTime}
+                                </Typography>
+                              </Box>
+                            </Grid>
+                          ))}
+                        </Grid>
+                      )}
+                    </Box>
                   </Grid>
                 </Grid>
               </TransitionsDialog>

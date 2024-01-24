@@ -73,12 +73,13 @@ const BusinessForm = () => {
           id="panel-header"
           sx={{ border: "none" }}
         >
-          <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: "10px",paddingLeft:"10px" }}>
             <Box
               sx={{
                 width: "60px",
                 height: "50px",
                 borderRadius: "10px",
+               
                 overflow: "hidden",
                 border: "1px solid gray",
               }}
@@ -107,7 +108,7 @@ const BusinessForm = () => {
               boxShadow: "none",
               border: "none",
               borderRadius: "10px",
-              p: "25px 20px 15px",
+              p: "0 0px 15px",
             }}
           >
             <Grid container spacing={1} columnSpacing={{ xs: 1, sm: 2, md: 2 }}>
@@ -116,8 +117,8 @@ const BusinessForm = () => {
                   <Card
                     sx={{
                       boxShadow: "none",
-                      borderRadius: "10px",
-                      p: "0px 20px",
+                      borderRadius: "5px",
+                      p: "0px 10px",
                       mb: "15px",
                     }}
                   >

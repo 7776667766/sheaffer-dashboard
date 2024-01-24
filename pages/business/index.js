@@ -7,7 +7,16 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import { Table, TableBody, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import { styled } from "@mui/material/styles";
+import { tableCellClasses } from "@mui/material/TableCell";
+import {
+  Table,
+  TableBody,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from "@mui/material";
 import Card from "@mui/material/Card";
 import IconButton from "@mui/material/IconButton";
 import TableCell from "@mui/material/TableCell";
@@ -23,6 +32,7 @@ import {
   getallBussinessesFunApi,
 } from "store/business/services";
 import Image from "next/image";
+import closeIcon from "@/public/images/icon/carbon_close.png";
 import { useRouter } from "next/router";
 import BusinessForm from "./businessform";
 
@@ -44,6 +54,27 @@ const BusinessPage = () => {
   const isSmallScreen = useMediaQuery("(max-width:800px)");
 
   /// ALL BUSINESS API
+
+  const businessImages = selectedBusiness?.images || [];
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+  }));
+
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    "&:nth-of-type(odd)": {
+      backgroundColor: theme.palette.action.hover,
+    },
+    // hide last border
+    "&:last-child td, &:last-child th": {
+      border: 0,
+    },
+  }));
 
   useEffect(() => {
     if (businessAll.dataFatched !== true) {
@@ -318,15 +349,35 @@ const BusinessPage = () => {
           PaperProps={{
             sx: {
               width: "800px",
-
+              borderRadius: "30px",
               padding: "20px",
             },
           }}
         >
-          <h2 style={{ textAlign: "center", paddingTop: "10px" }}>
-            Owner Business Details
-          </h2>
-          <div
+          <Box sx={{ display: "flex", justifyContent: "end" }}>
+            <Button onClick={handleClose}>
+              {" "}
+              <Image src={closeIcon} width={30} height={30} alt="dndn" />
+            </Button>
+          </Box>
+
+          <h2 style={{ textAlign: "start" }}>Owner Business Details</h2>
+
+          <Box sx={{ marginLeft: "10px" }}>
+            {" "}
+            {businessImages.map((image, index) => (
+              <Image
+                key={index}
+                src={image}
+                width={150}
+                height={100}
+                alt={`Image ${index + 1}`}
+                //  onClick={() => handleImageClick(image)}
+                //  style={{ margin: '8px', maxWidth: '100%', height: 'auto' }}
+              />
+            ))}
+          </Box>
+          <Box
             style={{
               padding: "10px",
               textAlign: "left",
@@ -335,71 +386,161 @@ const BusinessPage = () => {
               alignItems: "center",
             }}
           >
-
-<TableContainer component={Paper} style={{ width: '100%' }}>
-  <Table style={{ borderCollapse: 'collapse' }}>
-    <TableBody>
-      <TableRow>
-        <TableCell style={{ border: '1px solid #ddd', padding: '10px' }}>
-          <strong>Name:</strong>
-        </TableCell>
-        <TableCell style={{ border: '1px solid #ddd', padding: '10px' }}>
-          {selectedBusiness?.name}
-        </TableCell>
-      </TableRow>
-      <TableRow>
-        <TableCell style={{ border: '1px solid #ddd', padding: '10px' }}>
-          <strong>Email:</strong>
-        </TableCell>
-        <TableCell style={{ border: '1px solid #ddd', padding: '10px' }}>
-          {selectedBusiness?.email}
-        </TableCell>
-      </TableRow>
-      <TableRow>
-        <TableCell style={{ border: '1px solid #ddd', padding: '10px' }}>
-          <strong>Address:</strong>
-        </TableCell>
-        <TableCell style={{ border: '1px solid #ddd', padding: '10px' }}>
-          {selectedBusiness?.address}
-        </TableCell>
-      </TableRow>
-      <TableRow>
-        <TableCell style={{ border: '1px solid #ddd', padding: '10px' }}>
-          <strong>Slug:</strong>
-        </TableCell>
-        <TableCell style={{ border: '1px solid #ddd', padding: '10px' }}>
-          {selectedBusiness?.slug}
-        </TableCell>
-      </TableRow>
-      <TableRow>
-        <TableCell style={{ border: '1px solid #ddd', padding: '10px' }}>
-          <strong>Phone:</strong>
-        </TableCell>
-        <TableCell style={{ border: '1px solid #ddd', padding: '10px' }}>
-          {selectedBusiness?.phone}
-        </TableCell>
-      </TableRow>
-      <TableRow>
-        <TableCell style={{ border: '1px solid #ddd', padding: '10px' }}>
-          <strong>Description:</strong>
-        </TableCell>
-        <TableCell style={{ border: '1px solid #ddd', padding: '10px' }}>
-          {selectedBusiness?.description}
-        </TableCell>
-      </TableRow>
-      <TableRow>
-        <TableCell style={{ border: '1px solid #ddd', padding: '10px' }}>
-          <strong>BannerText:</strong>
-        </TableCell>
-        <TableCell style={{ border: '1px solid #ddd', padding: '10px' }}>
-          {selectedBusiness?.bannerText}
-        </TableCell>
-      </TableRow>
-      <TableRow>
-        <TableCell style={{ border: '1px solid #ddd', padding: '10px' }}>
+            <TableContainer component={Paper} style={{ width: "100%" }}>
+              <Table style={{ borderCollapse: "collapse" }}>
+                <TableBody>
+                  <StyledTableRow>
+                    <StyledTableCell
+                      style={{
+                        border: "1px solid #ddd",
+                        padding: "10px",
+                        borderRight: "none",
+                      }}
+                    >
+                      <strong>Business Name</strong>
+                    </StyledTableCell>
+                    <StyledTableCell
+                      style={{
+                        border: "1px solid #ddd",
+                        padding: "10px",
+                        borderLeft: "none",
+                        textAlign: "end",
+                      }}
+                    >
+                      {selectedBusiness?.name}
+                    </StyledTableCell>
+                  </StyledTableRow>
+                  <StyledTableRow>
+                    <StyledTableCell
+                      style={{
+                        border: "1px solid #ddd",
+                        padding: "10px",
+                        borderRight: "none",
+                      }}
+                    >
+                      <strong>Email:</strong>
+                    </StyledTableCell>
+                    <StyledTableCell
+                      style={{
+                        border: "1px solid #ddd",
+                        padding: "10px",
+                        borderLeft: "none",
+                        textAlign: "end",
+                      }}
+                    >
+                      {selectedBusiness?.email}
+                    </StyledTableCell>
+                  </StyledTableRow>
+                  <StyledTableRow>
+                    <StyledTableCell
+                      style={{
+                        border: "1px solid #ddd",
+                        padding: "10px",
+                        borderRight: "none",
+                      }}
+                    >
+                      <strong>Address:</strong>
+                    </StyledTableCell>
+                    <StyledTableCell
+                      style={{
+                        border: "1px solid #ddd",
+                        padding: "10px",
+                        borderLeft: "none",
+                        textAlign: "end",
+                      }}
+                    >
+                      {selectedBusiness?.address}
+                    </StyledTableCell>
+                  </StyledTableRow>
+                  <StyledTableRow>
+                    <StyledTableCell
+                      style={{
+                        border: "1px solid #ddd",
+                        padding: "10px",
+                        borderRight: "none",
+                      }}
+                    >
+                      <strong>Slug:</strong>
+                    </StyledTableCell>
+                    <StyledTableCell
+                      style={{
+                        border: "1px solid #ddd",
+                        padding: "10px",
+                        borderLeft: "none",
+                        textAlign: "end",
+                      }}
+                    >
+                      {selectedBusiness?.slug}
+                    </StyledTableCell>
+                  </StyledTableRow>
+                  <StyledTableRow>
+                    <StyledTableCell
+                      style={{
+                        border: "1px solid #ddd",
+                        padding: "10px",
+                        borderRight: "none",
+                      }}
+                    >
+                      <strong>Phone:</strong>
+                    </StyledTableCell>
+                    <StyledTableCell
+                      style={{
+                        border: "1px solid #ddd",
+                        padding: "10px",
+                        borderLeft: "none",
+                        textAlign: "end",
+                      }}
+                    >
+                      {selectedBusiness?.phone}
+                    </StyledTableCell>
+                  </StyledTableRow>
+                  <StyledTableRow>
+                    <StyledTableCell
+                      style={{
+                        border: "1px solid #ddd",
+                        padding: "10px",
+                        borderRight: "none",
+                      }}
+                    >
+                      <strong>Description:</strong>
+                    </StyledTableCell>
+                    <StyledTableCell
+                      style={{
+                        border: "1px solid #ddd",
+                        padding: "10px",
+                        borderLeft: "none",
+                        textAlign: "end",
+                      }}
+                    >
+                      {selectedBusiness?.description}
+                    </StyledTableCell>
+                  </StyledTableRow>
+                  <StyledTableRow>
+                    <StyledTableCell
+                      style={{
+                        border: "1px solid #ddd",
+                        padding: "10px",
+                        borderRight: "none",
+                      }}
+                    >
+                      <strong>BannerText:</strong>
+                    </StyledTableCell>
+                    <StyledTableCell
+                      style={{
+                        border: "1px solid #ddd",
+                        padding: "10px",
+                        borderLeft: "none",
+                        textAlign: "end",
+                      }}
+                    >
+                      {selectedBusiness?.bannerText}
+                    </StyledTableCell>
+                  </StyledTableRow>
+                  {/* <StyledTableRow>
+        <StyledTableCell style={{ border: '1px solid #ddd', padding: '10px' }}>
           <strong>BannerImage:</strong>
-        </TableCell>
-        <TableCell style={{ border: '1px solid #ddd', padding: '10px' }}>
+        </StyledTableCell>
+        <StyledTableCell style={{ border: '1px solid #ddd', padding: '10px' }}>
           {selectedBusiness?.bannerImg ? (
             <Image
               src={selectedBusiness.bannerImg}
@@ -410,30 +551,42 @@ const BusinessPage = () => {
           ) : (
             "No Image"
           )}
-        </TableCell>
-      </TableRow>
-      
-    </TableBody>
-  </Table>
-</TableContainer>
-        
-          </div>
+        </StyledTableCell>
+      </StyledTableRow> */}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Box>
           {selectedBusiness.requestStatus === "rejected" ||
           selectedBusiness.requestStatus === "approved" ? null : (
             <Box>
               <Box
                 sx={{
                   display: "flex",
-                  gap: 1,
-                  justifyContent: "center",
+                  gap: "15px",
+                  justifyContent: "end",
                   marginY: 2,
                 }}
               >
-                <Button variant="contained  " onClick={handleApproved}>
-                  Approved
-                </Button>
-                <Button variant="contained" onClick={handleReject}>
+                <Button
+                  variant="contained "
+                  onClick={handleReject}
+                  sx={{
+                    backgroundColor: "white", // Set the background color
+                    color: "#F00",
+                    width: "173px",
+                    padding: "10px 26px", // Set the text color
+                    border: "2px solid #F00", // Add a red border
+                  }}
+                >
                   Rejected
+                </Button>
+                <Button
+                  variant="contained"
+                  onClick={handleApproved}
+                  sx={{ width: "173px", padding: "10px 26px" }}
+                >
+                  Approved
                 </Button>
               </Box>
               <Box>

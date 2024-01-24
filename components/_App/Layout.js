@@ -38,7 +38,7 @@
 //         if (router.pathname.includes("/authentication")) {
 //           router.push("/");
 //         }
-//         if (business && business.requestStatus === "Pending") {
+//         if ( && business.requestStatus === "Pending") {
 //           router.push("/please-wait-for-approval");
 //         }
 //       } else {
@@ -216,7 +216,7 @@ const Layout = ({ children }) => {
     <>
       <Head>
         <title>
-          Admash - Material Design React Next Admin Dashboard Template
+          MakelyPro - Material Design React Next Admin Dashboard Template
         </title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>

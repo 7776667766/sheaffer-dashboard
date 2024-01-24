@@ -6,6 +6,7 @@ import UserList from "./users";
 import SendIcon from "@mui/icons-material/Send";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import CloseIcon from "@mui/icons-material/Close";
+
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -39,6 +40,7 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import copyImage from "@/public/images/icon/solar_copy-bold.png";
+import Expired1 from "@/public/images/expired1.png";
 import { LoadingButtonComponent } from "@/components/UIElements/Buttons/LoadingButton";
 import { useFormik } from "formik";
 import {
@@ -466,8 +468,6 @@ export default function DashboardPage() {
                           </Box>
                         </Grid>
 
-                     
-
                         {/* <Grid
                           item
                           xs={12}
@@ -488,24 +488,56 @@ export default function DashboardPage() {
                             }
                           />
                         </Grid> */}
-                 
                       </Grid>
-                      <Grid  container spacing={1}   item xs={12} md={12} lg={12}   justifyContent="flex-end" alignItems="flex-end" sx={{gap:"15px",marginTop:"10px"}} >
-                      <Grid item xs={12} md={3} lg={3} order={{ xs: 2, md: 2 }} >
-    <Box>
-      <Button type="button" color="primary" sx={{ border: "1px solid #ddd", width: "100%", }}  onClick={handleFormClose}>
-        Cancel
-      </Button>
-    </Box>
-  </Grid>
-  <Grid item xs={12} md={3} lg={3} order={{ xs: 1, md: 2 }}>
-    <Box>
-      <Button type="button" variant="contained" color="primary" onClick={handleAddRequest} sx={{width:"100%"}}>
-        Save
-      </Button>
-    </Box>
-  </Grid>
-                     </Grid>
+                      <Grid
+                        container
+                        spacing={1}
+                        item
+                        xs={12}
+                        md={12}
+                        lg={12}
+                        justifyContent="flex-end"
+                        alignItems="flex-end"
+                        sx={{ gap: "15px", marginTop: "10px" }}
+                      >
+                        <Grid
+                          item
+                          xs={12}
+                          md={3}
+                          lg={3}
+                          order={{ xs: 2, md: 2 }}
+                        >
+                          <Box>
+                            <Button
+                              type="button"
+                              color="primary"
+                              sx={{ border: "1px solid #ddd", width: "100%" }}
+                              onClick={handleFormClose}
+                            >
+                              Cancel
+                            </Button>
+                          </Box>
+                        </Grid>
+                        <Grid
+                          item
+                          xs={12}
+                          md={3}
+                          lg={3}
+                          order={{ xs: 1, md: 2 }}
+                        >
+                          <Box>
+                            <Button
+                              type="button"
+                              variant="contained"
+                              color="primary"
+                              onClick={handleAddRequest}
+                              sx={{ width: "100%" }}
+                            >
+                              Save
+                            </Button>
+                          </Box>
+                        </Grid>
+                      </Grid>
                     </div>
                   </form>
                 </Dialog>
@@ -780,8 +812,6 @@ export default function DashboardPage() {
                           >
                             {business.data.address}
                           </li>
-
-          
                         </ul>
                       </Typography>
                     </Box>
@@ -797,8 +827,6 @@ export default function DashboardPage() {
                           }}
                         >
                           <div style={{ height: "100px" }}>
-                      
-
                             {business.data?.images?.map((data, key) => (
                               <Image
                                 key={key}
@@ -888,9 +916,26 @@ export default function DashboardPage() {
           >
             <DialogContent>
               {business?.data?.requestStatus === "pending" ? (
-                <Typography variant="h6" gutterBottom>
-                  Your request is pending. Please wait for approval.
-                </Typography>
+                <Box>
+                  <Box sx={{ display: "flex", justifyContent: "center" }}>
+                    {" "}
+                    <Image
+                      src={Expired1}
+                      alt="dkkd"
+                      width={170}
+                      height={170}
+                      sx={{ textAlign: "center" }}
+                    />
+                  </Box>
+
+                  <Typography
+                    variant="h6"
+                    gutterBottom
+                    sx={{ marginTop: "10px" }}
+                  >
+                    Your request is pending. Please wait for approval.
+                  </Typography>
+                </Box>
               ) : business?.data?.requestStatus === "rejected" ? (
                 <>
                   <Typography variant="h6" gutterBottom>
