@@ -7,6 +7,7 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
+
 import { styled } from "@mui/material/styles";
 import { tableCellClasses } from "@mui/material/TableCell";
 import {
@@ -17,6 +18,7 @@ import {
   TableRow,
   Paper,
 } from "@mui/material";
+import InfoIcon from "@mui/icons-material/Info";
 import Card from "@mui/material/Card";
 import IconButton from "@mui/material/IconButton";
 import TableCell from "@mui/material/TableCell";
@@ -32,6 +34,8 @@ import {
   getallBussinessesFunApi,
 } from "store/business/services";
 import Image from "next/image";
+
+import AlertIcon from "@/public/images/icon/alert.svg";
 import closeIcon from "@/public/images/icon/carbon_close.png";
 import { useRouter } from "next/router";
 import BusinessForm from "./businessform";
@@ -44,6 +48,7 @@ const BusinessPage = () => {
   console.log("selectedBusiness", selectedBusiness);
   // console.log("BUSINESS ID", selectedBusiness?.id);
   const [open, setOpen] = useState(false);
+  const [open2, setOpen2] = useState(false);
   const { role } = useSelector((state) => state.auth);
   const [isRejecting, setIsRejecting] = useState(false);
   const [rejectReason, setRejectReason] = useState("");
@@ -68,7 +73,7 @@ const BusinessPage = () => {
 
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
     "&:nth-of-type(odd)": {
-      backgroundColor: theme.palette.action.hover,
+      backgroundColor: "#EAEEFD",
     },
     // hide last border
     "&:last-child td, &:last-child th": {
@@ -98,9 +103,14 @@ const BusinessPage = () => {
     setOpen(false);
     setIsRejecting(false);
   };
+  const handleElimenate = () => {
+    setOpen2(false);
+  };
 
   const handleReject = () => {
-    setOpen(true);
+    setOpen(false);
+
+    setOpen2(true);
     setIsRejecting(true);
   };
 
@@ -308,9 +318,9 @@ const BusinessPage = () => {
               >
                 <span
                   className={
-                    data?.requestStatus === "approved"
+                    data?.requestStatus === "Approved"
                       ? "successBadge"
-                      : data?.requestStatus === "rejected"
+                      : data?.requestStatus === "Rejected"
                       ? "dangerBadge"
                       : "infoBadge"
                   }
@@ -335,7 +345,13 @@ const BusinessPage = () => {
                     className="primary"
                     onClick={(event) => handleClick(data?.id, event)}
                   >
-                    <DriveFileRenameOutlineIcon fontSize="inherit" />
+                    {data?.requestStatus === "Approved" ? (
+                      <InfoIcon />
+                    ) : data?.requestStatus === "Rejected" ? (
+                      <InfoIcon />
+                    ) : (
+                      <DriveFileRenameOutlineIcon fontSize="inherit" />
+                    )}
                   </IconButton>
                 </Tooltip>
               </TableCell>
@@ -345,37 +361,55 @@ const BusinessPage = () => {
         <Dialog
           open={open}
           onClose={handleClose}
-          maxWidth="lg"
+          maxWidth="sm"
           PaperProps={{
             sx: {
               width: "800px",
-              borderRadius: "30px",
-              padding: "20px",
+              borderRadius: "25px",
+              padding: "15px",
             },
           }}
         >
-          <Box sx={{ display: "flex", justifyContent: "end" }}>
-            <Button onClick={handleClose}>
-              {" "}
-              <Image src={closeIcon} width={30} height={30} alt="dndn" />
-            </Button>
-          </Box>
+          {selectedBusiness.requestStatus === "Rejected" ||
+          selectedBusiness.requestStatus === "Approved" ? (
+            <Box sx={{ display: "flex", justifyContent: "end" }}>
+              <Button onClick={handleClose}>
+                <Image src={closeIcon} width={30} height={30} alt="dndn" />
+              </Button>
+            </Box>
+          ) : (
+            ""
+          )}
 
-          <h2 style={{ textAlign: "start" }}>Owner Business Details</h2>
+          <Typography
+            variant="h6"
+            sx={{ textAlign: "start", marginLeft: "10px" }}
+          >
+            Owner Business Details
+          </Typography>
 
-          <Box sx={{ marginLeft: "10px" }}>
-            {" "}
-            {businessImages.map((image, index) => (
+          <Box
+            sx={{
+              marginLeft: "10px",
+              display: "flex",
+              justifyContent: "end",
+              paddingRight: "10px",
+            }}
+          >
+            {selectedBusiness?.bannerImg && (
               <Image
-                key={index}
-                src={image}
-                width={150}
-                height={100}
-                alt={`Image ${index + 1}`}
+                // key={index}
+                src={selectedBusiness?.bannerImg}
+                width={80}
+                height={80}
+                alt={`Image`}
                 //  onClick={() => handleImageClick(image)}
-                //  style={{ margin: '8px', maxWidth: '100%', height: 'auto' }}
+                style={{ borderRadius: "50%" }}
               />
-            ))}
+            )}
+            {/* {businessImages.map((image, index) => ( */}
+
+            {/* // ))} */}
           </Box>
           <Box
             style={{
@@ -386,24 +420,27 @@ const BusinessPage = () => {
               alignItems: "center",
             }}
           >
-            <TableContainer component={Paper} style={{ width: "100%" }}>
-              <Table style={{ borderCollapse: "collapse" }}>
+            <TableContainer
+              component={Paper}
+              style={{ width: "100%", boxShadow: "none" }}
+            >
+              <Table>
                 <TableBody>
                   <StyledTableRow>
                     <StyledTableCell
                       style={{
-                        border: "1px solid #ddd",
+                        // border: "1px solid #ddd",
                         padding: "10px",
-                        borderRight: "none",
+                        border: "none",
                       }}
                     >
                       <strong>Business Name</strong>
                     </StyledTableCell>
                     <StyledTableCell
                       style={{
-                        border: "1px solid #ddd",
+                        // border: "1px solid #ddd",
                         padding: "10px",
-                        borderLeft: "none",
+                        border: "none",
                         textAlign: "end",
                       }}
                     >
@@ -413,18 +450,18 @@ const BusinessPage = () => {
                   <StyledTableRow>
                     <StyledTableCell
                       style={{
-                        border: "1px solid #ddd",
+                        // border: "1px solid #ddd",
                         padding: "10px",
-                        borderRight: "none",
+                        border: "none",
                       }}
                     >
                       <strong>Email:</strong>
                     </StyledTableCell>
                     <StyledTableCell
                       style={{
-                        border: "1px solid #ddd",
+                        // border: "1px solid #ddd",
                         padding: "10px",
-                        borderLeft: "none",
+                        border: "none",
                         textAlign: "end",
                       }}
                     >
@@ -434,18 +471,18 @@ const BusinessPage = () => {
                   <StyledTableRow>
                     <StyledTableCell
                       style={{
-                        border: "1px solid #ddd",
+                        // border: "1px solid #ddd",
                         padding: "10px",
-                        borderRight: "none",
+                        border: "none",
                       }}
                     >
                       <strong>Address:</strong>
                     </StyledTableCell>
                     <StyledTableCell
                       style={{
-                        border: "1px solid #ddd",
+                        // border: "1px solid #ddd",
                         padding: "10px",
-                        borderLeft: "none",
+                        border: "none",
                         textAlign: "end",
                       }}
                     >
@@ -455,18 +492,18 @@ const BusinessPage = () => {
                   <StyledTableRow>
                     <StyledTableCell
                       style={{
-                        border: "1px solid #ddd",
+                        // border: "1px solid #ddd",
                         padding: "10px",
-                        borderRight: "none",
+                        border: "none",
                       }}
                     >
                       <strong>Slug:</strong>
                     </StyledTableCell>
                     <StyledTableCell
                       style={{
-                        border: "1px solid #ddd",
+                        // border: "1px solid #ddd",
                         padding: "10px",
-                        borderLeft: "none",
+                        border: "none",
                         textAlign: "end",
                       }}
                     >
@@ -476,18 +513,18 @@ const BusinessPage = () => {
                   <StyledTableRow>
                     <StyledTableCell
                       style={{
-                        border: "1px solid #ddd",
+                        // border: "1px solid #ddd",
                         padding: "10px",
-                        borderRight: "none",
+                        border: "none",
                       }}
                     >
                       <strong>Phone:</strong>
                     </StyledTableCell>
                     <StyledTableCell
                       style={{
-                        border: "1px solid #ddd",
+                        // border: "1px solid #ddd",
                         padding: "10px",
-                        borderLeft: "none",
+                        border: "none",
                         textAlign: "end",
                       }}
                     >
@@ -497,18 +534,18 @@ const BusinessPage = () => {
                   <StyledTableRow>
                     <StyledTableCell
                       style={{
-                        border: "1px solid #ddd",
+                        // border: "1px solid #ddd",
                         padding: "10px",
-                        borderRight: "none",
+                        border: "none",
                       }}
                     >
                       <strong>Description:</strong>
                     </StyledTableCell>
                     <StyledTableCell
                       style={{
-                        border: "1px solid #ddd",
+                        // border: "1px solid #ddd",
                         padding: "10px",
-                        borderLeft: "none",
+                        border: "none",
                         textAlign: "end",
                       }}
                     >
@@ -518,18 +555,18 @@ const BusinessPage = () => {
                   <StyledTableRow>
                     <StyledTableCell
                       style={{
-                        border: "1px solid #ddd",
+                        // border: "1px solid #ddd",
                         padding: "10px",
-                        borderRight: "none",
+                        border: "none",
                       }}
                     >
                       <strong>BannerText:</strong>
                     </StyledTableCell>
                     <StyledTableCell
                       style={{
-                        border: "1px solid #ddd",
+                        // border: "1px solid #ddd",
                         padding: "10px",
-                        borderLeft: "none",
+                        border: "none",
                         textAlign: "end",
                       }}
                     >
@@ -557,17 +594,31 @@ const BusinessPage = () => {
               </Table>
             </TableContainer>
           </Box>
-          {selectedBusiness.requestStatus === "rejected" ||
-          selectedBusiness.requestStatus === "approved" ? null : (
+          {selectedBusiness.requestStatus === "Rejected" ||
+          selectedBusiness.requestStatus === "Approved" ? null : (
             <Box>
               <Box
                 sx={{
                   display: "flex",
                   gap: "15px",
-                  justifyContent: "end",
+                  justifyContent: "center",
                   marginY: 2,
                 }}
               >
+                <Button
+                  variant="contained "
+                  onClick={handleClose}
+                  sx={{
+                    backgroundColor: "white", // Set the background color
+                    color: "#707070",
+                    width: "173px",
+                    padding: "8px 20px",
+                    borderRadius: "8px", // Set the text color
+                    border: "2px solid #707070", // Add a red border
+                  }}
+                >
+                  Close
+                </Button>
                 <Button
                   variant="contained "
                   onClick={handleReject}
@@ -575,21 +626,91 @@ const BusinessPage = () => {
                     backgroundColor: "white", // Set the background color
                     color: "#F00",
                     width: "173px",
-                    padding: "10px 26px", // Set the text color
+                    borderRadius: "8px",
+                    padding: "8px 20px", // Set the text color
                     border: "2px solid #F00", // Add a red border
                   }}
                 >
-                  Rejected
+                  Reject
                 </Button>
                 <Button
                   variant="contained"
                   onClick={handleApproved}
-                  sx={{ width: "173px", padding: "10px 26px" }}
+                  sx={{
+                    width: "173px",
+                    padding: "8px 20px",
+                    borderRadius: "8px",
+                  }}
                 >
-                  Approved
+                  Approve
                 </Button>
               </Box>
-              <Box>
+            </Box>
+          )}
+        </Dialog>
+        <Box>
+          {isRejecting && (
+            <Dialog
+              open={open2}
+              onClose={handleClose}
+              maxWidth="sm"
+              PaperProps={{
+                sx: {
+                  width: "800px",
+                  borderRadius: "10x",
+                  padding: "20px",
+                },
+              }}
+            >
+              <TextField
+                fullWidth
+                label="Reason to Reject"
+                variant="outlined"
+                multiline
+                rows={3}
+                onChange={(e) => setRejectReason(e.target.value)}
+              />
+
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: "20px",
+                  marginTop: "20px",
+                }}
+              >
+                <Button
+                  variant="contained "
+                  onClick={handleElimenate}
+                  sx={{
+                    backgroundColor: "white", // Set the background color
+                    color: "#707070",
+                    width: "173px",
+                    padding: "8px 20px",
+                    borderRadius: "8px", // Set the text color
+                    border: "2px solid #707070", // Add a red border
+                  }}
+                >
+                  Close
+                </Button>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={handleRejectConfirm}
+                  sx={{
+                    width: "173px",
+                    padding: "8px 20px",
+                    borderRadius: "8px",
+                  }}
+                >
+                  Confirm Reject
+                </Button>
+              </Box>
+            </Dialog>
+          )}
+        </Box>
+        {/* <Box>
                 {isRejecting && (
                   <Box>
                     <TextField
@@ -601,23 +722,19 @@ const BusinessPage = () => {
                       onChange={(e) => setRejectReason(e.target.value)}
                     />
 
-                    <div>
+                    <Box sx={{textAlign:"center"}}>
                       <Button
                         variant="contained"
                         color="secondary"
                         onClick={handleRejectConfirm}
-                        sx={{ marginTop: "30px" }}
+                        sx={{ marginTop: "30px",marginBottom:"10px" }}
                       >
                         Confirm Reject
                       </Button>
-                    </div>
+                    </Box>
                   </Box>
                 )}
-              </Box>
-            </Box>
-          )}
-        </Dialog>
-
+              </Box> */}
         {/* {selectedBusiness && (
           <BusinessForm
             open={isRenameFormOpen}
