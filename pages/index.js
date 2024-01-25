@@ -217,14 +217,14 @@ export default function DashboardPage() {
     }, 2000);
   };
 
-  const handleCopyLink = () => {
+  const handleBookingLink = () => {
     const linkToCopy = `${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}booking/${business.data.slug}`;
     navigator.clipboard.writeText(linkToCopy);
     setIsLinkCopied(true);
 
     setTimeout(() => {
       setIsLinkCopied(false);
-    }, 2000);
+    }, 1000);
   };
 
   return (
@@ -724,6 +724,21 @@ export default function DashboardPage() {
                                     style={{ cursor: "pointer" }}
                                   />
                                 </Box>
+                                {isLinkCopied && (
+                                  <div
+                                    style={{
+                                      position: "relative",
+                                      top: "-2px",
+                                      right: "26px",
+                                      padding: "3px",
+                                      background: "#F1F2FD",
+                                      borderRadius: "3px",
+                                      color: "#000",
+                                    }}
+                                  >
+                                    Copied!
+                                  </div>
+                                )}
                               </Box>
                             )}
 
@@ -759,10 +774,25 @@ export default function DashboardPage() {
                                     width={20}
                                     height={20}
                                     alt="copy"
-                                    onClick={handleCopyLink}
+                                    onClick={handleBookingLink}
                                     style={{ cursor: "pointer" }}
                                   />
                                 </Box>
+                                {isLinkCopied && (
+                                  <div
+                                    style={{
+                                      position: "relative",
+                                      top: "-2px",
+                                      right: "26px",
+                                      padding: "3px",
+                                      background: "#F1F2FD",
+                                      borderRadius: "3px",
+                                      color: "#000",
+                                    }}
+                                  >
+                                    Copied!
+                                  </div>
+                                )}
                               </Box>
                             )}
                           </Box>
