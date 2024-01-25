@@ -7,12 +7,13 @@ import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
 import { getMyBussinessFunApi, getallBussinessesFunApi } from "store/business/services";
 import {
-
   getAllServiceFunApi,
 } from "store/service/services";
+
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getMyBusinessBookingFunApi } from "store/booking/service";
+import { getAllUsersFunApi } from "store/admin/services";
 
 
 
@@ -22,15 +23,32 @@ const Features = () => {
   const { businessAll, dataFatched } = useSelector((state) => state.business);
   const businessDataArray = businessAll.data;
   const totalBusinesses = businessDataArray.length;
+  const { user, role } = useSelector((state) => state.auth);
+  console.log("user",user)
+  const userDataArray = user.data;
+  const totalUsers = userDataArray?.length;
+  console.log("totalUsers",totalUsers)
+
+
+
+
   const { service } = useSelector((state) => state.service);
   const servicesDataArray = service.data;
-  const totalServices = servicesDataArray.length;
+  const totalServices = servicesDataArray?.length;
   const { booking } = useSelector((state) => state.booking);
   const bookingDataArray = booking.data;
   const totalBookings = bookingDataArray.length;
 
   const dispatch = useDispatch()
 
+  useEffect(() => {
+      dispatch(
+        getAllUsersFunApi({
+        })
+      );
+  }, [dispatch, dataFatched]);
+
+  
   useEffect(() => {
     if (!dataFatched) {
       dispatch(

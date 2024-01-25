@@ -54,28 +54,28 @@ export default function RedirectPage() {
 
 // Next.js page file (e.g., pages/[token].js)
 
-function developmentModeFunctions() {
-  // Functions for development mode
-  console.log("This is development mode");
+// function developmentModeFunctions() {
+//   // Functions for development mode
+//   console.log("This is development mode");
 
-  return {
-    getStaticPaths: async () => {
-      // Your development mode logic
-      return { paths: [], fallback: false };
-    },
-    getStaticProps: async ({ params }) => {
-      // Your development mode logic
-      const token = params.token;
-      console.log("token", params);
+//   return {
+//     getStaticPaths: async () => {
+//       // Your development mode logic
+//       return { paths: [], fallback: false };
+//     },
+//     getStaticProps: async ({ params }) => {
+//       // Your development mode logic
+//       const token = params.token;
+//       console.log("token", params);
 
-      return {
-        props: {
-          token,
-        },
-      };
-    },
-  };
-}
+//       return {
+//         props: {
+//           token,
+//         },
+//       };
+//     },
+//   };
+// }
 
 // Conditionally export the functions based on the environment
 export const { getStaticPaths, getStaticProps } =

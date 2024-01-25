@@ -54,6 +54,7 @@ export default function DashboardPage() {
   const { user, role } = useSelector((state) => state.auth);
   const { business, dataFatched } = useSelector((state) => state.business);
 
+
   console.log(business, "business information");
 
   const dispatch = useDispatch();
@@ -75,8 +76,7 @@ export default function DashboardPage() {
     address: "",
     description: "",
     phone: "",
-
-    logo: "",
+        logo: "",
     googleId: "",
 
     bookingService: "",
@@ -374,7 +374,7 @@ export default function DashboardPage() {
                             }
                             helperText={
                               formik.touched.bannerText &&
-                              formik.errors.bannerText
+                                formik.errors.bannerText
                                 ? formik.errors.bannerText
                                 : ""
                             }
@@ -415,19 +415,6 @@ export default function DashboardPage() {
                           />
                         </Grid>
 
-                        {/* <Grid item xs={6} md={6} lg={6}>
-  <Typography
-    as="h5"
-    sx={{
-      fontWeight: "500",
-      fontSize: "14px",
-      mb: "12px",
-    }}
-  >
-    Color
-  </Typography>
-  
-</Grid> */}
 
                         <Grid item xs={12} md={12} lg={12}>
                           <TextField
@@ -444,7 +431,7 @@ export default function DashboardPage() {
                             }
                             helperText={
                               formik.touched.description &&
-                              formik.errors.description
+                                formik.errors.description
                                 ? formik.errors.description
                                 : ""
                             }
@@ -456,7 +443,7 @@ export default function DashboardPage() {
                               // Add padding for better appearance
                             }}
 
-                            // ate
+                          // ate
                           />
                         </Grid>
 
