@@ -3,8 +3,6 @@ import Grid from "@mui/material/Grid";
 import styles from "@/styles/PageTitle.module.css";
 import Features from "@/components/Dashboard/eCommerce/Features";
 import UserList from "./users";
-import SendIcon from "@mui/icons-material/Send";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import CloseIcon from "@mui/icons-material/Close";
 
 import * as Yup from "yup";
@@ -41,7 +39,6 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import copyImage from "@/public/images/icon/solar_copy-bold.png";
 import Expired1 from "@/public/images/expired1.png";
-import { LoadingButtonComponent } from "@/components/UIElements/Buttons/LoadingButton";
 import { useFormik } from "formik";
 import {
   emailValidation,
@@ -52,8 +49,8 @@ import {
 
 export default function DashboardPage() {
   const { user, role } = useSelector((state) => state.auth);
+  console.log("user",user)
   const { business, dataFatched } = useSelector((state) => state.business);
-
 
   console.log(business, "business information");
 
@@ -239,14 +236,14 @@ export default function DashboardPage() {
                 <div style={{ display: "flex", gap: "15px" }}>
                   <Button
                     variant="contained"
-                    // disabled={business?.data ? true : false}
+                    disabled={business?.data ? true : false}
                     onClick={handleClickOpen}
                   >
                     Sync Business
                   </Button>
                   <Button
                     variant="contained"
-                    // disabled={business?.data ? true : false}
+                    disabled={business?.data ? true : false}
                     onClick={handleOpenRequest}
                   >
                     Send Custom Booking Request

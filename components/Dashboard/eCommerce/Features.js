@@ -3,52 +3,53 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import Typography from "@mui/material/Typography";
-import TrendingUpIcon from "@mui/icons-material/TrendingUp";
-import TrendingDownIcon from "@mui/icons-material/TrendingDown";
 import { getMyBussinessFunApi, getallBussinessesFunApi } from "store/business/services";
 import {
-  getAllServiceFunApi,
+  getAllServiceFunApi, getServicesTypeFunApi,
 } from "store/service/services";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getMyBusinessBookingFunApi } from "store/booking/service";
 import { getAllUsersFunApi } from "store/admin/services";
-
-
-
+import { getMyCardFunApi } from "store/card/card";
 
 const Features = () => {
   const { business } = useSelector((state) => state.business);
   const { businessAll, dataFatched } = useSelector((state) => state.business);
   const businessDataArray = businessAll.data;
   const totalBusinesses = businessDataArray.length;
-  const { user, role } = useSelector((state) => state.auth);
-  console.log("user",user)
-  const userDataArray = user.data;
+  const { allUsers } = useSelector((state) => state.admin);
+  const userDataArray = allUsers?.data;
   const totalUsers = userDataArray?.length;
-  console.log("totalUsers",totalUsers)
-
-
-
-
   const { service } = useSelector((state) => state.service);
   const servicesDataArray = service.data;
   const totalServices = servicesDataArray?.length;
   const { booking } = useSelector((state) => state.booking);
   const bookingDataArray = booking.data;
   const totalBookings = bookingDataArray.length;
+  const { role } = useSelector((state) => state.auth);
+  const { serviceType } = useSelector((state) => state.service);
+  const serviceDataArray = serviceType.data;
+  const totalServiceTypes = serviceDataArray.length;
+  const { card } = useSelector((state) => state.card);
+   const cardDataArray = card.data;
+  const totalCardTypes = cardDataArray.length;
 
   const dispatch = useDispatch()
 
   useEffect(() => {
-      dispatch(
-        getAllUsersFunApi({
-        })
-      );
-  }, [dispatch, dataFatched]);
+    if (!allUsers.dataFatched) {
+      dispatch(getAllUsersFunApi());
+    }
+  }, [allUsers.dataFatched, dispatch]);
 
-  
+  useEffect(() => {
+    if (serviceType.dataFatched !== true) {
+      dispatch(getServicesTypeFunApi());
+    }
+  }, [dispatch, serviceType.dataFatched, serviceType.serviceFetch]);
+
   useEffect(() => {
     if (!dataFatched) {
       dispatch(
@@ -65,7 +66,7 @@ const Features = () => {
     if (dataFatched !== true) {
       dispatch(
         getMyBussinessFunApi({
-          
+
           onSuccess: (businessId) => {
             dispatch(
 
@@ -79,34 +80,6 @@ const Features = () => {
     }
   }, [dispatch, dataFatched]);
 
-  // useEffect(() => {
-  //   if (!dataFatched) {
-  //     dispatch(
-  //       getMyBussinessFunApi({
-  //         onSuccess: () => {
-  //           dispatch(
-  //             getMyBusinessBookingFunApi({
-  //               data: {
-  //                 businessId: business?.data?.id,
-  //               },
-  //             })
-  //           );
-  //         },
-  //       })
-  //     );
-  //   } else {
-  //     if (!booking.dataFatched) {
-  //       dispatch(
-  //         getMyBusinessBookingFunApi({
-  //           data: {
-  //             businessId: business?.data?.id,
-  //           },
-  //         })
-  //       );
-  //     }
-  //   }
-  // }, [dispatch, booking.data, booking.dataFatched, business?.data?.id, dataFatched]);
-
   useEffect(() => {
     if (!dataFatched && business?.data?.id) {
       dispatch(
@@ -115,7 +88,7 @@ const Features = () => {
             dispatch(
               getMyBusinessBookingFunApi({
                 data: {
-                  businessId:  business?.data?.id,
+                  businessId: business?.data?.id,
                 },
               })
             );
@@ -124,37 +97,40 @@ const Features = () => {
       );
     }
   }, [dispatch, dataFatched, business?.data?.id]);
-  
+
+  useEffect(() => {
+    if (card.dataFatched !== true) {
+      dispatch(
+        getMyCardFunApi({
+          data: {
+            businessId: business?.data?.id,
+          },
+        })
+      );
+    }
+  }, [dispatch, card.data, card.dataFatched, business?.id]);
+
   const FeaturesData = [
     {
       id: "1",
-      title: `${totalBusinesses}`,
-      subTitle: "Total Businesses",
+      title: role === "admin" ? `${totalUsers}` : `${totalBusinesses}`,
+      subTitle: role === "admin" ? "Total Users" : "Total Businesses",
       image: "/images/graph-icon.png",
-      // icon: <TrendingUpIcon />,
-      // growthText: "1.3% Up from past week",
       color: "successColor",
     },
     {
       id: "2",
-      title: `${totalServices}`,
-      subTitle: "Total Services",
+      title: role === "admin" ? `${totalServiceTypes}` : `${totalServices}`,
+      subTitle: role === "admin" ? "Total Service Types" : "Total Services",
       image: "/images/work-icon.png",
-      // icon: <TrendingUpIcon />,
-      // growthText: "1.5% Up from past week",
-      // color: "successColor",
     },
     {
       id: "3",
-      title: `${totalBookings}`,
-      subTitle: "Total Bookings",
+      title: role === "admin" ? `${totalCardTypes}` :`${totalBookings}`,
+      subTitle: role === "admin" ? "All Transactions" : "Total Bookings",
       image: "/images/users-icon.png",
-      // icon: <TrendingDownIcon />,
-      // growthText: "1.6% Up from past week",
-      // color: "dangerColor",
     },
   ];
-
 
   useEffect(() => {
     if (!dataFatched) {
@@ -167,9 +143,6 @@ const Features = () => {
       );
     }
   }, [dispatch, dataFatched]);
-
-
-
 
   return (
     <>
@@ -196,6 +169,7 @@ const Features = () => {
                   alignItems: "center",
                   mb: "15px",
                 }}
+                
               >
                 <Box>
                   <Typography

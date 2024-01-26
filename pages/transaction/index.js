@@ -8,7 +8,6 @@ import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutli
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getMyCardFunApi } from "store/card/card";
-import moment from "moment";
 import { CustomPaginationTable } from "@/components/Table/CustomPaginationTable";
 
 const TransactionPage = () => {
