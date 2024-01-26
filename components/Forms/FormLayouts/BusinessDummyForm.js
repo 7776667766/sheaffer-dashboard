@@ -44,6 +44,28 @@ const BusinessForm = () => {
   const handleClickOpen = () => {
     router.push("/dummy-business/add");
   };
+
+  const [isLinkCopied, setIsLinkCopied] = useState(false);
+  const [isBookingLinkCopied, setIsBookingLinkCopied] = useState(false);
+  const handleSiteCopyLink = () => {
+    const linkToCopy = `${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}site/${business.data.slug}`;
+    navigator.clipboard.writeText(linkToCopy);
+    setIsLinkCopied(true);
+
+    setTimeout(() => {
+      setIsLinkCopied(false);
+    }, 2000);
+  };
+
+  const handleBookingLink = () => {
+    const linkToCopy = `${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}booking/${business.data.slug}`;
+    navigator.clipboard.writeText(linkToCopy);
+    setIsBookingLinkCopied(true);
+
+    setTimeout(() => {
+      setIsBookingLinkCopied(false);
+    }, 1000);
+  };
   return (
     <>
       <div>
@@ -129,23 +151,55 @@ const BusinessForm = () => {
                             <Typography variant="h6">Website Url</Typography>
                           )} */}
                           {business?.data?.websiteService === true && (
-                            <Button
-                              variant="outlined"
-                              href={`${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}site/${business?.data.slug}`}
-                              target="_blank"
-                              sx={{
-                                background: "rgba(117, 127, 239, 0.10)",
 
-                                border: "none",
-                                textDecoration: "underline",
-                                pt: "2px",
-                                pb: "1px",
-                              }}
-                            >
-                              {business?.data.slug}
-                            </Button>
+                            <Box sx={{display:"flex",alignItems:"center"}}>   <Button
+                            variant="outlined"
+                            href={`${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}site/${business?.data.slug}`}
+                            target="_blank"
+                            sx={{
+                              background: "rgba(117, 127, 239, 0.10)",
+
+                              border: "none",
+                              textDecoration: "underline",
+                              pt: "2px",
+                              pb: "1px",
+                            }}
+                          >Go to Website 
+                          </Button>
+                          
+
+                          <Box >
+                                  <Image
+                                    src={copyImage}
+                                    width={20}
+                                    height={20}
+                                    alt="copy"
+                                    onClick={handleSiteCopyLink}
+                                    style={{ cursor: "pointer",marginLeft:"5px",marginTop:"4px" }}
+                                  />
+                                </Box>
+                                {isLinkCopied &&
+                                  business?.data.websiteService === true && (
+                                    <div
+                                      style={{
+                                        position: "relative",
+                                        top: "-2px",
+                                        right: "26px",
+                                        padding: "3px",
+                                        background: "#F1F2FD",
+                                        borderRadius: "3px",
+                                        color: "#000",
+                                        marginLeft:"7px"
+                                      }}
+                                    >
+                                      Copied!
+                                    </div>
+                                  )}
+                              
+                          </Box>
+                         
                           )}
-                          <Tooltip title="Copy" arrow  sx={{cursor:"pointer"}}>
+                          {/* <Tooltip title="Copy" arrow  sx={{cursor:"pointer"}}>
                             <Image
                               src={copyImage}
                               alt="Main Image Description"
@@ -155,7 +209,7 @@ const BusinessForm = () => {
                               sx={{ cursor: 'pointer' }} 
                               
                             />
-                          </Tooltip>
+                          </Tooltip> */}
                         </Box>
                       </Grid>
                       <Grid item xs={12} md={6}>
@@ -164,7 +218,9 @@ const BusinessForm = () => {
                             <Typography variant="h6">Booking Url</Typography>
                           )} */}
                           {business?.data?.bookingService === true && (
-                            <Button
+
+
+<Box sx={{display:"flex"}}> <Button
                               variant="outlined"
                               href={`${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}booking/${business?.data.slug}`}
                               target="_blank"
@@ -177,21 +233,43 @@ const BusinessForm = () => {
                                 pb: "1px",
                               }}
                             >
-                              {business?.data?.slug}
+                             Go to Booking
                             </Button>
-                          )}
-                          <Tooltip title="Copy" arrow>
-                            <Image
-                             sx={{ cursor: 'pointer' }} 
-                              src={copyImage}
 
-                              alt="Main Image Description"
+                            <Box sx={{display:"flex"}}>
+                              
+                            <Image
+                              src={copyImage}
                               width={20}
                               height={20}
-                              title="Copy Image"
-
+                              alt="copy"
+                              onClick={handleBookingLink}
+                              style={{ cursor: "pointer",marginLeft:"5px",marginTop:"4px" }}
                             />
-                          </Tooltip>
+                          </Box>
+                          {isBookingLinkCopied &&
+                             business?.data.bookingService  === true && (
+                               <div
+                                 style={{
+                                   position: "relative",
+                                   top: "-2px",
+                                   right: "26px",
+                                   padding: "3px",
+                                   background: "#F1F2FD",
+                                   borderRadius: "3px",
+                                   color: "#000",
+                                   marginLeft:"7px"
+                                 }}
+                               >
+                                 Copied!
+                               </div>
+                             )}
+                          </Box>
+                             
+                           
+                        
+                          )}
+                          
                         </Box>
                       </Grid>
                     </Grid>
