@@ -73,7 +73,7 @@ export default function DashboardPage() {
     address: "",
     description: "",
     phone: "",
-        logo: "",
+    logo: "",
     googleId: "",
 
     bookingService: "",
@@ -203,7 +203,7 @@ export default function DashboardPage() {
   };
 
   const [isLinkCopied, setIsLinkCopied] = useState(false);
-
+  const [isBookingLinkCopied, setIsBookingLinkCopied] = useState(false);
   const handleSiteCopyLink = () => {
     const linkToCopy = `${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}site/${business.data.slug}`;
     navigator.clipboard.writeText(linkToCopy);
@@ -217,10 +217,10 @@ export default function DashboardPage() {
   const handleBookingLink = () => {
     const linkToCopy = `${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}booking/${business.data.slug}`;
     navigator.clipboard.writeText(linkToCopy);
-    setIsLinkCopied(true);
+    setIsBookingLinkCopied(true);
 
     setTimeout(() => {
-      setIsLinkCopied(false);
+      setIsBookingLinkCopied(false);
     }, 1000);
   };
 
@@ -371,7 +371,7 @@ export default function DashboardPage() {
                             }
                             helperText={
                               formik.touched.bannerText &&
-                                formik.errors.bannerText
+                              formik.errors.bannerText
                                 ? formik.errors.bannerText
                                 : ""
                             }
@@ -412,7 +412,6 @@ export default function DashboardPage() {
                           />
                         </Grid>
 
-
                         <Grid item xs={12} md={12} lg={12}>
                           <TextField
                             multiline // Use multiline property to make it a textarea
@@ -428,7 +427,7 @@ export default function DashboardPage() {
                             }
                             helperText={
                               formik.touched.description &&
-                                formik.errors.description
+                              formik.errors.description
                                 ? formik.errors.description
                                 : ""
                             }
@@ -440,7 +439,7 @@ export default function DashboardPage() {
                               // Add padding for better appearance
                             }}
 
-                          // ate
+                            // ate
                           />
                         </Grid>
 
@@ -630,12 +629,11 @@ export default function DashboardPage() {
                   aria-controls="panel1a-content"
                   id="panel1a-header"
                 >
-                  <Typography
-                    component="h1"
-                    fontWeight="500"
-                    style={{ display: "flex", alignItems: "center" }}
-                  >
-                    <div>
+                  <Typography component="h1" fontWeight="500" style={{                        display: "flex",
+                        alignItems: "center",}}>
+                    <Box
+                     
+                    >
                       <Image
                         src={business?.data.logo}
                         width={100}
@@ -655,7 +653,7 @@ export default function DashboardPage() {
                         {" "}
                         {business?.data.name}{" "}
                       </span>
-                    </div>
+                    </Box>
                   </Typography>
                 </AccordionSummary>
                 <AccordionDetails style={{ marginTop: "-24px" }}>
@@ -721,21 +719,22 @@ export default function DashboardPage() {
                                     style={{ cursor: "pointer" }}
                                   />
                                 </Box>
-                                {isLinkCopied && (
-                                  <div
-                                    style={{
-                                      position: "relative",
-                                      top: "-2px",
-                                      right: "26px",
-                                      padding: "3px",
-                                      background: "#F1F2FD",
-                                      borderRadius: "3px",
-                                      color: "#000",
-                                    }}
-                                  >
-                                    Copied!
-                                  </div>
-                                )}
+                                {isLinkCopied &&
+                                  business?.data.websiteService === true && (
+                                    <div
+                                      style={{
+                                        position: "relative",
+                                        top: "-2px",
+                                        right: "26px",
+                                        padding: "3px",
+                                        background: "#F1F2FD",
+                                        borderRadius: "3px",
+                                        color: "#000",
+                                      }}
+                                    >
+                                      Copied!
+                                    </div>
+                                  )}
                               </Box>
                             )}
 
@@ -775,7 +774,7 @@ export default function DashboardPage() {
                                     style={{ cursor: "pointer" }}
                                   />
                                 </Box>
-                                {isLinkCopied && (
+                                {isBookingLinkCopied && (
                                   <div
                                     style={{
                                       position: "relative",
