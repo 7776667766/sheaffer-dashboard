@@ -1,6 +1,5 @@
-
-import React, { useEffect } from "react";
-import { Box, IconButton, Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Box, IconButton, Switch, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
 import TableCell from "@mui/material/TableCell";
 import Button from "@mui/material/Button";
@@ -21,7 +20,11 @@ const TemplatesPage = () => {
   const router = useRouter();
 
   const { plan } = useSelector((state) => state.plan);
-  console.log(plan, "plan");
+  console.log(plan.data, "plan");
+  // plan.data.forEach((value, index) => {
+  //   console.log(`Value at index ${index}:`, value.isFeatured);
+  // });
+  
 
   const formatPrice = (price) => {
     return new Intl.NumberFormat("en-US", {
@@ -34,7 +37,6 @@ const TemplatesPage = () => {
 
   useEffect(() => {
     if (plan.dataFatched !== true) {
-
       dispatch(getAllPlanFunApi());
     }
   }, [dispatch, plan.data, plan.dataFatched]);
@@ -42,13 +44,23 @@ const TemplatesPage = () => {
   const nextPage = (id, event) => {
     event.preventDefault();
 
-    console.log("frnotend id of packages", id)
+    console.log("frnotend id of packages", id);
     router.push(`/packages/edit-packages/${id}`);
   };
 
   const handleDelete = (id) => {
-    console.log(id, "id for delete")
+    console.log(id, "id for delete");
     dispatch(deletePackageFunApi(id));
+  };
+  // const [dataa, setData] = useState(plan.isFetched);
+  const [detail, setDetal] = useState();
+  // console.log("data 57",Data)
+  
+  const handleToggle = () => {
+ 
+    
+    console.log("Toggle value:", detail);
+   
   };
 
   return (
@@ -164,6 +176,15 @@ const TemplatesPage = () => {
                   textAlign: "end",
                 }}
               >
+                Toggle
+              </TableCell>
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13.5px",
+                  textAlign: "end",
+                }}
+              >
                 Status
               </TableCell>
               <TableCell
@@ -175,11 +196,9 @@ const TemplatesPage = () => {
               >
                 Action
               </TableCell>
-
             </>
           }
           tableBodyData={(data, index) => (
-
             <>
               <TableCell
                 sx={{
@@ -255,6 +274,23 @@ const TemplatesPage = () => {
                 {data.isFeatured ? "True" : "False"}
               </TableCell>
               <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  pt: "16px",
+                  pb: "16px",
+                }}
+              >
+                <Switch
+                  
+                  checked={data?.isFeatured}
+                 
+                  onChange={() => handleToggle(setDetal(!data.isFeatured))}
+
+                  inputProps={{ "aria-label": "toggle isFeatured" }}
+                />
+                {/* <Typography>{`Switch is ${detail? 'On' : 'Off'}`}</Typography> */}
+              </TableCell>
+              <TableCell
                 align="right"
                 style={{
                   fontWeight: 500,
@@ -271,54 +307,61 @@ const TemplatesPage = () => {
                 </span>
               </TableCell>
 
-<div style={{ display: 'flex',alignItems:"center" ,justifyContent: 'center' ,marginTop:"30px" }}>  <Tooltip title="Remove" placement="top">
-                <TransitionsDialog
-                  modelButton={
-                    <IconButton
-                      aria-label="remove"
-                      size="small"
-                      color="danger"
-                      className="danger"
-                    >
-                      <DeleteIcon fontSize="inherit" />
-                    </IconButton>
-                  }
-                  submitButtonText="Delete"
-                  handleSubmit={() => handleDelete(data._id)}
-                >
-                  <div style={{ textAlign: "center" }}>
-                    <Image
-                      src="/images/icon/alert.png"
-                      width={150}
-                      height={150}
-                      alt="ok"
-                    />
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  marginTop: "30px",
+                }}
+              >
+                {" "}
+                <Tooltip title="Remove" placement="top">
+                  <TransitionsDialog
+                    modelButton={
+                      <IconButton
+                        aria-label="remove"
+                        size="small"
+                        color="danger"
+                        className="danger"
+                      >
+                        <DeleteIcon fontSize="inherit" />
+                      </IconButton>
+                    }
+                    submitButtonText="Delete"
+                    handleSubmit={() => handleDelete(data._id)}
+                  >
+                    <div style={{ textAlign: "center" }}>
+                      <Image
+                        src="/images/icon/alert.png"
+                        width={150}
+                        height={150}
+                        alt="ok"
+                      />
 
-                    <Typography sx={{ fontSize: 18 }}>
-                      <b>Are You Sure You Want To Delete ?</b>
-                      <br />
-                      <span style={{ fontSize: 14 }}>
-                        You are deleting this data & this action is
-                        irreversible
-                      </span>
-                    </Typography>
-                  </div>
-                </TransitionsDialog>
-              </Tooltip>
-
-              <Tooltip title="Rename" placement="top">
-                <IconButton
-                  aria-label="edit"
-                  size="small"
-                  color="primary"
-                  className="primary"
-                  onClick={(event) => nextPage(data._id, event)}
-                >
-                  <DriveFileRenameOutlineIcon fontSize="inherit" />
-                </IconButton>
-              </Tooltip></div>
-             
-            
+                      <Typography sx={{ fontSize: 18 }}>
+                        <b>Are You Sure You Want To Delete ?</b>
+                        <br />
+                        <span style={{ fontSize: 14 }}>
+                          You are deleting this data & this action is
+                          irreversible
+                        </span>
+                      </Typography>
+                    </div>
+                  </TransitionsDialog>
+                </Tooltip>
+                <Tooltip title="Rename" placement="top">
+                  <IconButton
+                    aria-label="edit"
+                    size="small"
+                    color="primary"
+                    className="primary"
+                    onClick={(event) => nextPage(data._id, event)}
+                  >
+                    <DriveFileRenameOutlineIcon fontSize="inherit" />
+                  </IconButton>
+                </Tooltip>
+              </div>
             </>
           )}
         />
@@ -328,4 +371,3 @@ const TemplatesPage = () => {
 };
 
 export default TemplatesPage;
-
