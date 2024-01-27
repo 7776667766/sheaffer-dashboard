@@ -10,10 +10,10 @@ import * as Yup from "yup";
 import SendIcon from "@mui/icons-material/Send";
 import { useRouter } from "next/router";
 
-
 export const CustomizeThemeForm = ({ formData, isEditMode }) => {
   const router = useRouter();
   const [banner, setBanner] = useState(null);
+  console.log("bannerImg",banner)
   const [selectedFontFamily, setSelectedFontFamily] = useState(null);
   const [selectedTheme, setSelectedTheme] = useState(null);
   console.log(selectedFontFamily, selectedTheme)
@@ -30,8 +30,6 @@ export const CustomizeThemeForm = ({ formData, isEditMode }) => {
       dispatch(getMyBussinessFunApi({}));
     }
   }, [dispatch, dataFatched]);
-
-
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -87,8 +85,9 @@ export const CustomizeThemeForm = ({ formData, isEditMode }) => {
       dispatch(
         customizeThemeFunApi({
           data: {
-            businessId: business?.data?.id,
+            businessId: business?.data.id,
             bannerText: values.bannerText,
+            bannerImg: banner,
             fontSize: values.fontSize,
             fontFamily: values.fontFamily,
             theme: values.theme,
@@ -243,7 +242,7 @@ export const CustomizeThemeForm = ({ formData, isEditMode }) => {
               }}
               className="mr-5px"
             />{" "}
-           Update theme
+            Update theme
           </>
         }
       />

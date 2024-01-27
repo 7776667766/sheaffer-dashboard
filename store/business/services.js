@@ -249,7 +249,7 @@ export const customizeThemeFunApi = createAsyncThunk(
   async ({ data, onSuccess }) => {
     console.log("res data", data)
     try {
-      const response = await axios.post(customizeThemeApi, data);
+      const response = await axiosImage.post(customizeThemeApi, data);
       console.log("response to update customize Theme => ", response.data);
       if (response.data.status === "success") {
         toast.success("custom theme updated successfully");
