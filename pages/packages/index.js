@@ -20,11 +20,10 @@ const TemplatesPage = () => {
   const router = useRouter();
 
   const { plan } = useSelector((state) => state.plan);
-  console.log(plan.data, "plan");
+  console.log(plan, "plan");
   // plan.data.forEach((value, index) => {
   //   console.log(`Value at index ${index}:`, value.isFeatured);
   // });
-  
 
   const formatPrice = (price) => {
     return new Intl.NumberFormat("en-US", {
@@ -53,14 +52,29 @@ const TemplatesPage = () => {
     dispatch(deletePackageFunApi(id));
   };
   // const [dataa, setData] = useState(plan.isFetched);
-  const [detail, setDetal] = useState();
-  // console.log("data 57",Data)
-  
+  // const [detail, setDetal] = useState();
+  // // console.log("data 57",Data)
+
+  // const handleToggle = () => {
+
+  //   console.log("Toggle value:", detail);
+
+  // };
+  const [dataa, setData] = useState({
+    isFeatured: false, // or true, depending on your initial state
+  });
+  // useEffect(() => {
+  //   console.log('New State:', dataa.isFeatured);
+  // }, [dataa.isFeatured]);
   const handleToggle = () => {
- 
-    
-    console.log("Toggle value:", detail);
-   
+    setData((prevData) => {
+      const newIsFeatured = !prevData.isFeatured;
+      console.log("New State:", newIsFeatured);
+      return {
+        ...prevData,
+        isFeatured: newIsFeatured,
+      };
+    });
   };
 
   return (
@@ -271,7 +285,7 @@ const TemplatesPage = () => {
                   pb: "16px",
                 }}
               >
-                {data.isFeatured ? "True" : "False"}
+                {dataa.isFeatured ? "True" : "False"}
               </TableCell>
               <TableCell
                 sx={{
@@ -281,13 +295,18 @@ const TemplatesPage = () => {
                 }}
               >
                 <Switch
+                  checked={data.isFeatured}
+                  onChange={handleToggle}
+                  inputProps={{ "aria-label": "controlled" }}
+                />
+                {/* <Switch
                   
                   checked={data?.isFeatured}
                  
                   onChange={() => handleToggle(setDetal(!data.isFeatured))}
 
                   inputProps={{ "aria-label": "toggle isFeatured" }}
-                />
+                /> */}
                 {/* <Typography>{`Switch is ${detail? 'On' : 'Off'}`}</Typography> */}
               </TableCell>
               <TableCell
