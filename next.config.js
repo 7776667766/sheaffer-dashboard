@@ -41,7 +41,7 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   images: {
-
+    unoptimized: true
   },
   
   i18n: {
