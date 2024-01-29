@@ -21,6 +21,21 @@ const TemplatesPage = () => {
 
   const { plan } = useSelector((state) => state.plan);
   console.log(plan, "plan");
+
+  const [specificElement, setSpecificElement] = useState(null);
+
+  // Function to get specific featured element using filter
+  // const getSpecificFeaturedElement = () => {
+  //   const featuredElement = plan.data.find((item) => item.isFeatured);
+  //   if (featuredElement) {
+  //     const isFeaturedValue = featuredElement.isFeatured;
+  //     setSpecificElement(featuredElement);
+  //     console.log('isFeatured value:', isFeaturedValue);
+  //   } else {
+  //     console.error('Featured element not found');
+  //   }
+  // };
+
   // plan.data.forEach((value, index) => {
   //   console.log(`Value at index ${index}:`, value.isFeatured);
   // });
@@ -51,32 +66,62 @@ const TemplatesPage = () => {
     console.log(id, "id for delete");
     dispatch(deletePackageFunApi(id));
   };
-  // const [dataa, setData] = useState(plan.isFetched);
-  // const [detail, setDetal] = useState();
-  // // console.log("data 57",Data)
 
-  // const handleToggle = () => {
+  const [planitem, setPlanitem] = useState({});
 
-  //   console.log("Toggle value:", detail);
-
-  // };
-  const [dataa, setData] = useState({
-    isFeatured: false, // or true, depending on your initial state
-  });
-  // useEffect(() => {
-  //   console.log('New State:', dataa.isFeatured);
-  // }, [dataa.isFeatured]);
-  const handleToggle = () => {
-    setData((prevData) => {
-      const newIsFeatured = !prevData.isFeatured;
-      console.log("New State:", newIsFeatured);
-      return {
-        ...prevData,
-        isFeatured: newIsFeatured,
+  const [toggledButtons, setToggledButtons] = useState({});
+  const handleToggle = (buttonId) => {
+    setToggledButtons((prevToggledButtons) => {
+      const newToggledButtons = {
+        ...prevToggledButtons,
+        [buttonId]: !prevToggledButtons[buttonId],
       };
+
+      // Find the item in plan.data corresponding to the buttonId
+      const updatedPlanData = plan.data.map((item) => {
+        if (item.isFeatured === buttonId) {
+          // Assuming each item has an 'id' property
+          // Update the isFeatured property based on the button toggle
+          return {
+            ...item,
+            isFeatured: !item.isFeatured,
+          };
+        }
+        console.log("item is", item.isFeatured);
+        return item.isFeatured;
+      });
+
+      console.log("buttonId:", buttonId);
+
+      
+      // console.log('prevToggledButtons:', prevToggledButtons);
+      // console.log('updatedPlanData:', updatedPlanData);
+      // Update the state with the modified plan.data
+      setPlanitem((prevPlan) => ({
+        ...prevPlan,
+        data: updatedPlanData,
+      }));
+
+      // Call getSpecificFeaturedElement when a button is toggled
+      // getSpecificFeaturedElement();
+
+      return newToggledButtons;
     });
   };
 
+  const [dataa, setData] = useState();
+
+  // const handleToggle = () => {
+  //   // setData((prevData) => ({
+  //   //   ...prevData,
+  //   //   [uniqueId]: {
+  //   //     ...prevData[uniqueId],
+  //   //     isFeatured: !prevData[uniqueId]?.isFeatured || true,
+  //   //   },
+  //   // }));
+
+  // console.log("data is ",dataa)
+  // };
   return (
     <>
       <Card
@@ -285,7 +330,7 @@ const TemplatesPage = () => {
                   pb: "16px",
                 }}
               >
-                {dataa.isFeatured ? "True" : "False"}
+                {data.isFeatured ? "True" : "False"}
               </TableCell>
               <TableCell
                 sx={{
@@ -294,19 +339,19 @@ const TemplatesPage = () => {
                   pb: "16px",
                 }}
               >
-                <Switch
-                  checked={data.isFeatured}
-                  onChange={handleToggle}
-                  inputProps={{ "aria-label": "controlled" }}
-                />
                 {/* <Switch
-                  
-                  checked={data?.isFeatured}
-                 
-                  onChange={() => handleToggle(setDetal(!data.isFeatured))}
-
-                  inputProps={{ "aria-label": "toggle isFeatured" }}
+                  checked={isPrivate}
+                  onChange={handleStatus}
+                  inputProps={{ "aria-label": "switch" }}
+                  // value={data.isFeatured}
                 /> */}
+                <Switch
+                  key={data.id}
+                  checked={toggledButtons.isFeatured}
+                  onChange={() => handleToggle(data.isFeatured)}
+                  inputProps={{ "aria-label": "toggle isFeatured" }}
+                  // style={{ background:data.isFeatured? 'green' : 'red' }}
+                />
                 {/* <Typography>{`Switch is ${detail? 'On' : 'Off'}`}</Typography> */}
               </TableCell>
               <TableCell
