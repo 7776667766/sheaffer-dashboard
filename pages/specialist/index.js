@@ -18,7 +18,6 @@ import Link from "next/link";
 import TransitionsDialog from "@/components/UIElements/Modal/TransitionsDialog";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { deletetemplateFunApi } from "store/template/services";
 
 const Specialist = () => {
   const dispatch = useDispatch();
@@ -44,7 +43,7 @@ const Specialist = () => {
 
   const nextPage = (id) => {
     console.log("id", id);
-    router.push(`/specialist/edit-form/${id}`);
+    router.push('/specialist/edit-form/[id]',`/specialist/edit-form/${id}`);
   };
 
   const handleDelete = (id) => {

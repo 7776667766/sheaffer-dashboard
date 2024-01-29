@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import Link from "next/link";
+// import Link from "next/link";
 import styles from "@/styles/PageTitle.module.css";
 import { useSelector } from "react-redux";
-import TemplateForm from "@/components/Forms/FormLayouts/TemplateForm";
 import AddSpecialistForm from "@/components/Forms/FormLayouts/AddSpecialistForm";
 
 export default function EditServicePage({ id }) {
@@ -43,9 +42,9 @@ export default function EditServicePage({ id }) {
       <div className={styles.pageTitle}>
         <h1>Edit specialist</h1>
         <ul>
-          <li>
+          {/* <li>
             <Link href="/">Dashboard</Link>
-          </li>
+          </li> */}
           <li>specialist</li>
         </ul>
       </div>
