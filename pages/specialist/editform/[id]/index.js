@@ -8,32 +8,22 @@ import AddSpecialistForm from "@/components/Forms/FormLayouts/AddSpecialistForm"
 export default function EditServicePage({ id }) {
   const router = useRouter();
   const { specialist } = useSelector((state) => state.specialist);
-  console.log("specialist",specialist)
+  console.log("specialist", specialist);
 
   const [tempData, settempData] = useState();
   const [isLoading, setIsLoading] = useState(true);
   console.log("my Getting id", id);
 
   useEffect(() => {
-    if (
-      id
-    
-    ) {
-      const myspecialist = specialist.find(
-        (item) =>item.id=== id 
-      );
+    if (id) {
+      const myspecialist = specialist.find((item) => item.id === id);
       console.log(myspecialist, "mytemplate");
       if (myspecialist) {
         settempData(myspecialist);
         setIsLoading(false);
       } else router.push("/specialist/addSpecialist");
     }
-  }, [
-    id,
-
-    router,
-    specialist.data,
-  ]);
+  }, [id, router, specialist.data]);
   if (router.isFallback) {
     return <div>Loading Fallback ...</div>;
   }
