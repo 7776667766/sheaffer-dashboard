@@ -26,7 +26,7 @@ export default function EditServicePage({ id }) {
       if (myspecialist) {
         settempData(myspecialist);
         setIsLoading(false);
-      } else router.push("/specialist/add-specialist");
+      } else router.push("/specialist/addSpecialist");
     }
   }, [
     id,
