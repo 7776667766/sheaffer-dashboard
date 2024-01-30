@@ -167,7 +167,7 @@ const Features = () => {
                   display: "flex",
                   justifyContent: "space-between",
                   alignItems: "center",
-                  mb: "15px",
+                  // mb: "px",
                 }}
                 
               >
