@@ -7,6 +7,7 @@ import AddPackagePage  from "@/components/Forms/FormLayouts/editPackageForm";
 
 export default function AddService() {
   return (
+    
     <>
       {/* Page title */}
       <div className={styles.pageTitle}>

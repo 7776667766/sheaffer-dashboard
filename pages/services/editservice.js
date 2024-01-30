@@ -5,13 +5,18 @@ import styles from "@/styles/PageTitle.module.css";
 import { useSelector } from "react-redux";
 import ServiceForm from "@/components/Forms/FormLayouts/ServiceForm";
 
-export default function EditServicePage({ id }) {
+export default function EditServicePage() {
   const router = useRouter();
-  const { service } = useSelector((state) => state.service);
+  const { id } = router.query;
 
+  const { service } = useSelector((state) => state.service);
   const [serviceData, setServiceData] = useState();
   const [isLoading, setIsLoading] = useState(true);
   console.log("my Getting id", id);
+  
+  useEffect(() => {
+    console.log('ID:', id);
+}, [id]);
 
   useEffect(() => {
     if (
@@ -56,11 +61,3 @@ export default function EditServicePage({ id }) {
   );
 }
 
-export async function getServerSideProps({ params }) {
-  const { id } = params;
-  return {
-    props: {
-      id,
-    },
-  };
-}

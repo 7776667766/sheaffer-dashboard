@@ -47,8 +47,10 @@ const ServicesPage = () => {
   const router = useRouter();
 
   const nextPage = (id) => {
-    router.push(`/services/edit-service/${id}`);
+    router.push(`/services/editservice?id=${id}`);
   };
+  // router.push(`/specialist/editform?id=${id}`);
+
 
   const handleDelete = (id) => {
     dispatch(deleteServiceFunApi(id));
