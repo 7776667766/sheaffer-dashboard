@@ -97,6 +97,13 @@ export const SidebarData = () => {
       icon: <LayersIcon />,
     },
 
+    role === "admin" && {
+      title: "Contact Us",
+      path: "/contact-us/",
+      role: "owner",
+      icon: <LayersIcon />,
+    },
+
     role === "owner" && {
       title: "Specialist",
       path: "/specialist/",
