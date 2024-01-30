@@ -22,23 +22,7 @@ const TemplatesPage = () => {
   const { plan } = useSelector((state) => state.plan);
   console.log(plan, "plan");
 
-  const [specificElement, setSpecificElement] = useState(null);
 
-  // Function to get specific featured element using filter
-  // const getSpecificFeaturedElement = () => {
-  //   const featuredElement = plan.data.find((item) => item.isFeatured);
-  //   if (featuredElement) {
-  //     const isFeaturedValue = featuredElement.isFeatured;
-  //     setSpecificElement(featuredElement);
-  //     console.log('isFeatured value:', isFeaturedValue);
-  //   } else {
-  //     console.error('Featured element not found');
-  //   }
-  // };
-
-  // plan.data.forEach((value, index) => {
-  //   console.log(`Value at index ${index}:`, value.isFeatured);
-  // });
 
   const formatPrice = (price) => {
     return new Intl.NumberFormat("en-US", {
@@ -68,7 +52,7 @@ const TemplatesPage = () => {
   };
 
   const [planitem, setPlanitem] = useState({});
-
+console.log("planitem",planitem)
   const [toggledButtons, setToggledButtons] = useState({});
   const handleToggle = (buttonId) => {
     setToggledButtons((prevToggledButtons) => {
@@ -92,14 +76,13 @@ const TemplatesPage = () => {
       });
 
       console.log("buttonId:", buttonId);
-
-      
+console.log('updatedPlanData:', updatedPlanData);
       // console.log('prevToggledButtons:', prevToggledButtons);
-      // console.log('updatedPlanData:', updatedPlanData);
+      
       // Update the state with the modified plan.data
       setPlanitem((prevPlan) => ({
         ...prevPlan,
-        data: updatedPlanData,
+        data: updatedPlanData.filter((item) => item._id === buttonId) || prevPlan.data,
       }));
 
       // Call getSpecificFeaturedElement when a button is toggled
