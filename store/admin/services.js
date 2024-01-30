@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getAllUsersApi } from "./constraints";
+import { getAllUsersApi ,contactusApi} from "./constraints";
 import toast from "react-hot-toast";
 import axios from "helper/api";
 
@@ -23,6 +23,39 @@ export const getAllUsersFunApi = createAsyncThunk(
       }
     } catch (error) {
       console.log("Error in get all users Api ", error);
+      let err =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Something went wrong!";
+      if (err === "Network Error") {
+        err = "Please check your internet connection";
+      }
+      toast.error(err);
+      throw new Error(err);
+    }
+  }
+);
+
+export const getAllContactFunApi = createAsyncThunk(
+  "auth/getAllContact",
+  async () => {
+    try {
+      const response = await axios.get(contactusApi);
+      console.log("response in contact us Api => ", response.data);
+      if (response.data.status === "success") {
+        return response.data.data;
+      } else {
+        console.log("Error response in login Api => ", response.data);
+        const err =
+          response?.data?.message ||
+          response?.message ||
+          "Something went wrong!";
+        console.log("err: ", err);
+        toast.error(err);
+        throw new Error(err);
+      }
+    } catch (error) {
+      console.log("Error in get all contacts Api ", error);
       let err =
         error?.response?.data?.message ||
         error?.message ||
