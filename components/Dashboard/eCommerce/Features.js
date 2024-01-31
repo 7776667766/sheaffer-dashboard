@@ -17,6 +17,7 @@ import { getMyCardFunApi } from "store/card/card";
 const Features = () => {
   const { business } = useSelector((state) => state.business);
   const { businessAll, dataFatched } = useSelector((state) => state.business);
+  console.log("business All ",businessAll)
   const businessDataArray = businessAll.data;
   const totalBusinesses = businessDataArray.length;
   const { allUsers } = useSelector((state) => state.admin);
@@ -35,7 +36,7 @@ const Features = () => {
   const { card } = useSelector((state) => state.card);
    const cardDataArray = card.data;
   const totalCardTypes = cardDataArray.length;
-
+  
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -137,7 +138,7 @@ const Features = () => {
       dispatch(
         getAllServiceFunApi({
           onSuccess: () => {
-            console.log("businessIdd");
+            console.log("businessId");
           },
         })
       );
