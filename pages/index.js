@@ -12,7 +12,7 @@ import {
   Box,
   Card,
   Dialog,
-  CardContent, 
+  CardContent,
   DialogTitle,
   List,
   IconButton,
@@ -74,7 +74,14 @@ export default function DashboardPage() {
   const [formData, setFormData] = useState({});
   const [otherBusinessData, setotherBusinessData] = useState(false);
   const [otherBusiness, setOtherBusiness] = useState(null);
-  console.log(otherBusiness)
+  
+  const [selectedBusienssId, setselectedBusienssId] = useState(null);
+  console.log(selectedBusienssId)
+
+  const handleDropdownChange = (event) => {
+    const selectedValue = event.target.value;
+    setselectedBusienssId(selectedValue);
+  };
 
   useEffect(() => {
     if (!dataFatched && business?.data?.id) {
@@ -161,8 +168,6 @@ export default function DashboardPage() {
   const handleClickOpen = () => {
     setOpen(true);
   };
-
-
 
   const handleBusinessOpen = (business) => {
     setOpenthirdDialog(true);
@@ -321,27 +326,23 @@ export default function DashboardPage() {
                     <Typography variant="h6" gutterBottom>
                       Select a Business
                     </Typography>
+                    <div>
+                      <label htmlFor="business-select">Select Business: </label>
+                      <select
+                        id="business-select"
+                        value={selectedBusienssId}
+                        onChange={handleDropdownChange}
+                      >
+                        <option value="">Select an option...</option>
+                        {businessAll?.data?.map((business) => (
+                          <option key={business.id} value={business.id}>
+                            {business.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
 
-                    <Select
-                      labelId="business-select-label"
-                      id="business-select"
-                      label="Select Business"
-
-                    >
-                      {businessAll?.data?.map((business) => (
-                        <MenuItem key={business.id} value={business.id}>
-                          <Card>
-                            <CardContent>
-                              <Typography>
-                                {business.name}
-                              </Typography>
-                            </CardContent>
-                          </Card>
-                        </MenuItem>
-                      ))}
-                    </Select>
                   </FormControl>
-
                   <Button
                     variant="contained"
                     // disabled={business?.data ? true : false}
@@ -363,15 +364,7 @@ export default function DashboardPage() {
                   >
                     Add other Business
                   </Button>
-                  {/* <Select
-                    // value={selectedOption}
-                    // onChange={handleDropdownChange}
-                  >
-                    <MenuItem value="">Select Option</MenuItem>
-                    <MenuItem value="option1">Option 1</MenuItem>
-                    <MenuItem value="option2">Option 2</MenuItem>
-                    <MenuItem value="option3">Option 3</MenuItem>
-                  </Select> */}
+
                 </div>
 
                 <Dialog open={open} onClose={handleClose}>
