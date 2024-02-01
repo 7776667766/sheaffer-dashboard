@@ -6,6 +6,7 @@ import {
   addCustomBusinessFunApi,
   addCustomBusinessApprovedFunApi,
   customizeThemeFunApi,
+  getMultipleBussinessesFunApi,
 } from "./services";
 
 const { createSlice } = require("@reduxjs/toolkit");
@@ -161,6 +162,27 @@ const businessSlice = createSlice({
         state.businessAll.error = action.payload;
         state.businessAll.dataFatched = true;
       });
+
+      builder
+      .addCase(getMultipleBussinessesFunApi.pending, (state, action) => {
+        state.businessAll.isLoading = true;
+        state.businessAll.error = null;
+      })
+      .addCase(getMultipleBussinessesFunApi.fulfilled, (state, action) => {
+        state.businessAll.isLoading = false;
+        state.businessAll.dataFatched = true;
+        state.businessAll.data = action.payload;
+        console.log(state.businessAll.data, "action.payload response all");
+      })
+
+      .addCase(getMultipleBussinessesFunApi.rejected, (state, action) => {
+        state.businessAll.isLoading = false;
+        state.businessAll.data = null;
+        state.businessAll.error = action.payload;
+        state.businessAll.dataFatched = true;
+      });
+
+
   },
 });
 
