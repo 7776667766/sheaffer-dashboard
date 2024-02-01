@@ -24,11 +24,13 @@ import {
   TextField,
   TextareaAutosize,
   DialogContent,
-  MenuItem,
-  FormControl,
-  InputLabel,
   Menu,
 } from "@mui/material";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import InputLabel from "@mui/material/InputLabel";
+
 import Image from "next/image";
 import Button from "@mui/material/Button";
 import {
@@ -51,17 +53,16 @@ import {
   requiredValidation,
   slugValidation,
 } from "@/utils/validation";
-import { Select } from "@mui/base";
 import { getMyBusinessBookingFunApi } from "store/booking/service";
 
 export default function DashboardPage() {
   const { user, role } = useSelector((state) => state.auth);
-  console.log("user", user)
+  console.log("user", user);
   const { business, dataFatched } = useSelector((state) => state.business);
 
   console.log(business, "business information");
   const { businessAll } = useSelector((state) => state.business);
-  console.log("business All ", businessAll)
+  console.log("business All ", businessAll);
 
   const dispatch = useDispatch();
   const [slug, setSlug] = useState("");
@@ -75,25 +76,15 @@ export default function DashboardPage() {
   const [formData, setFormData] = useState({});
   const [otherBusinessData, setotherBusinessData] = useState(false);
   const [otherBusiness, setOtherBusiness] = useState(null);
-  
+
   const [selectedBusienssId, setselectedBusienssId] = useState(null);
-  console.log(selectedBusienssId)
+  console.log(selectedBusienssId);
 
   const handleDropdownChange = (event) => {
     const selectedValue = event.target.value;
     setselectedBusienssId(selectedValue);
   };
-  const [anchorEl, setAnchorEl] = useState(null);
 
-  // Function to handle opening the dropdown
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  // Function to handle closing the dropdown
-  const handleClosee = () => {
-    setAnchorEl(null);
-  };
   useEffect(() => {
     if (!dataFatched && business?.data?.id) {
       dispatch(
@@ -111,7 +102,6 @@ export default function DashboardPage() {
       );
     }
   }, [dispatch, dataFatched, business?.data?.id]);
-
 
   const initialValue = {
     name: "",
@@ -145,7 +135,7 @@ export default function DashboardPage() {
   const handleClose = () => {
     setSelectedBusiness(null);
     setOpenSecondDialog(false);
-    setOpenthirdDialog(false)
+    setOpenthirdDialog(false);
     setOpen(false);
   };
   const isOwner = role === "owner";
@@ -173,7 +163,7 @@ export default function DashboardPage() {
 
   const handleFormClose = () => {
     setOpenForm(false);
-    setotherBusinessData(false)
+    setotherBusinessData(false);
   };
 
   const handleClickOpen = () => {
@@ -182,13 +172,14 @@ export default function DashboardPage() {
 
   const handleBusinessOpen = (business) => {
     setOpenthirdDialog(true);
-    setOtherBusiness(business)
+    setOtherBusiness(business);
+    setotherBusinessData(false);
   };
 
-  const handleOpen = (business) => {
-    setSelectedBusiness(business);
-    setOpenSecondDialog(true);
-  };
+  // const handleOpen = (business) => {
+  //   setSelectedBusiness(business);
+  //   setOpenSecondDialog(true);
+  // };
 
   useEffect(() => {
     if (role === "owner" || role === "manager") {
@@ -204,6 +195,10 @@ export default function DashboardPage() {
       image: "",
     },
   ];
+
+  const handleBusinessClick = (businessData) => {
+    console.log(``);
+  };
 
   const businessList = [
     {
@@ -333,56 +328,46 @@ export default function DashboardPage() {
             {role === "owner" && (
               <>
                 <div style={{ display: "flex", gap: "15px" }}>
-                <FormControl sx={{  minWidth: 120 }}>
-        <InputLabel id="demo-simple-select-helper-label"> Select a Business</InputLabel>
-        <Select
-         variant="outlined" 
-          labelId="demo-simple-select-helper-label"
-          id="demo-simple-select-helper"
-          // value={age}
-          label="Age"
-          // onChange={handleChange}
-          style={{backgroundColor:"white",height:"40px",width:"200px",borderRadius:"5px",border:"1px solid #757FEF"}}
-          MenuProps={{
-            PaperProps: {
-              style: {
-                maxHeight: "600px", // Adjust the maxHeight as needed
-                overflowY: 'auto',
-              },
-            },
-          }}
-        >
-           {/* <MenuItem value="">Select an option...</MenuItem> */}
-                        {businessAll?.data?.map((business) => (
-                          <MenuItem   key={business.id} value={business.id} sx={{overflowY: 'auto',backgroundColor:"white",maxHeight:"500px",overFlowY:"hidden"}} >
-                            {business.name}
-                          </MenuItem>
-                        ))}
-        </Select>
-        {/* <FormHelperText>With label + helper text</FormHelperText> */}
-      </FormControl>
-                  {/* <FormControl variant="outlined" >
-                    <Typography variant="h6" gutterBottom>
-                      Select a Business
-                    </Typography>
-                    <div>
-                      <label htmlFor="business-select">Select Business: </label>
-                      
-                      <select
-                        id="business-select"
-                        value={selectedBusienssId}
-                        onChange={handleDropdownChange}
-                      >
-                        <option value="">Select an option...</option>
-                        {businessAll?.data?.map((business) => (
-                          <option key={business.id} value={business.id}>
-                            {business.name}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      paddingBottom: "0px",
+                    }}
+                  >
+                    <Box>
+                      <FormControl sx={{ minWidth: 120 }} size="small">
+                        <InputLabel
+                          id="demo-select-small"
+                          sx={{ fontSize: "14px" }}
+                        >
+                          Business
+                        </InputLabel>
+                        <Select
+                          labelId="demo-select-small"
+                          id="demo-select-small"
+                          value={selectedBusienssId}
+                          label="Select"
+                          onChange={handleDropdownChange}
+                          sx={{
+                            fontSize: "14px",
+                            variant: "outlined",
+                            width: "150px",
+                            padding: "0",
+                          }}
+                          className="select"
+                        >
+                          {businessAll?.data?.map((business) => (
+                            <MenuItem key={business.id} value={business.id}>
+                              {business.name}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  </Box>
 
-                  </FormControl> */}
                   <Button
                     variant="contained"
                     // disabled={business?.data ? true : false}
@@ -404,7 +389,6 @@ export default function DashboardPage() {
                   >
                     Add other Business
                   </Button>
-
                 </div>
 
                 <Dialog open={open} onClose={handleClose}>
@@ -422,7 +406,9 @@ export default function DashboardPage() {
                   <List sx={{ pt: 0 }}>
                     {businessList.map((data, index) => (
                       <ListItem disableGutters key={index}>
-                        <ListItemButton onClick={() => businessList(data)}>
+                        <ListItemButton
+                          onClick={() => handleBusinessClick(data)}
+                        >
                           <ListItemAvatar>
                             <Avatar />
                           </ListItemAvatar>
@@ -528,7 +514,7 @@ export default function DashboardPage() {
                             }
                             helperText={
                               formik.touched.bannerText &&
-                                formik.errors.bannerText
+                              formik.errors.bannerText
                                 ? formik.errors.bannerText
                                 : ""
                             }
@@ -584,7 +570,7 @@ export default function DashboardPage() {
                             }
                             helperText={
                               formik.touched.description &&
-                                formik.errors.description
+                              formik.errors.description
                                 ? formik.errors.description
                                 : ""
                             }
@@ -596,7 +582,7 @@ export default function DashboardPage() {
                               // Add padding for better appearance
                             }}
 
-                          // ate
+                            // ate
                           />
                         </Grid>
 
@@ -686,7 +672,7 @@ export default function DashboardPage() {
                 <Dialog
                   open={otherBusinessData}
                   onClose={handleFormClose}
-                  maxWidth="lg"
+                  maxWidth="sm"
                   PaperProps={{
                     sx: {
                       width: "800px",
@@ -695,22 +681,23 @@ export default function DashboardPage() {
                     },
                   }}
                 >
-                  <DialogTitle>
+                  <DialogTitle open={open} onClose={handleFormClose}>
                     Select Your Business
                     <IconButton
                       edge="end"
                       color="inherit"
-                      onClick={handleClose}
+                      onClick={handleFormClose}
                       aria-label="close"
                     >
                       <CloseIcon />
                     </IconButton>
-
                   </DialogTitle>
                   <List sx={{ pt: 0 }}>
                     {otherbusinessList.map((data, index) => (
                       <ListItem disableGutters key={index}>
-                        <ListItemButton onClick={() => handleBusinessOpen(data)}>
+                        <ListItemButton
+                          onClick={() => handleBusinessOpen(data)}
+                        >
                           <ListItemAvatar>
                             <Avatar />
                           </ListItemAvatar>
@@ -906,13 +893,15 @@ export default function DashboardPage() {
                   aria-controls="panel1a-content"
                   id="panel1a-header"
                 >
-                  <Typography component="h1" fontWeight="500" style={{
-                    display: "flex",
-                    alignItems: "center",
-                  }}>
-                    <Box
-
-                    >
+                  <Typography
+                    component="h1"
+                    fontWeight="500"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Box>
                       <Image
                         src={business?.data.logo}
                         width={100}
@@ -1186,8 +1175,6 @@ export default function DashboardPage() {
         rowSpacing={1}
         columnSpacing={{ xs: 1, sm: 1, md: 1, lg: 1, xl: 2 }}
       >
-
-
         {isOwner && (
           <Dialog
             open={openPending}
