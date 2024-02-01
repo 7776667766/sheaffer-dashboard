@@ -101,7 +101,6 @@ export default function DashboardPage() {
     }
   }, [dispatch, dataFatched, business?.data?.id]);
 
-
   const initialValue = {
     name: "",
     email: "",
@@ -172,11 +171,6 @@ export default function DashboardPage() {
   const handleBusinessOpen = (business) => {
     setOpenthirdDialog(true);
     setOtherBusiness(business)
-  };
-
-  const handleOpen = (business) => {
-    setSelectedBusiness(business);
-    setOpenSecondDialog(true);
   };
 
   useEffect(() => {
