@@ -169,6 +169,8 @@ const businessSlice = createSlice({
         state.businessAll.error = null;
       })
       .addCase(getMultipleBussinessesFunApi.fulfilled, (state, action) => {
+        console.log(action.payload, "action.payload response all");
+
         state.businessAll.isLoading = false;
         state.businessAll.dataFatched = true;
         state.businessAll.data = action.payload;

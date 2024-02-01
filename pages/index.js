@@ -57,10 +57,7 @@ export default function DashboardPage() {
   const { user, role } = useSelector((state) => state.auth);
   console.log("user", user)
   const { business, dataFatched } = useSelector((state) => state.business);
-
-  console.log(business, "business information");
   const { businessAll } = useSelector((state) => state.business);
-  console.log("business All ", businessAll)
 
   const dispatch = useDispatch();
   const [slug, setSlug] = useState("");
@@ -74,13 +71,23 @@ export default function DashboardPage() {
   const [formData, setFormData] = useState({});
   const [otherBusinessData, setotherBusinessData] = useState(false);
   const [otherBusiness, setOtherBusiness] = useState(null);
-  
+
   const [selectedBusienssId, setselectedBusienssId] = useState(null);
   console.log(selectedBusienssId)
 
   const handleDropdownChange = (event) => {
     const selectedValue = event.target.value;
-    setselectedBusienssId(selectedValue);
+   console.log("selectedValue",selectedValue)
+    dispatch(
+      getMyBussinessFunApi({
+        data: {
+          businessId: selectedValue
+        },
+        onSuccess: () => {
+        },
+      })
+    );
+    
   };
 
   useEffect(() => {
@@ -164,8 +171,11 @@ export default function DashboardPage() {
     setotherBusinessData(false)
   };
 
-  const handleClickOpen = () => {
+  const handleClickOpen = (business) => {
     setOpen(true);
+    setOpenSecondDialog(true)
+    setSelectedBusiness(business)
+
   };
 
   const handleBusinessOpen = (business) => {
@@ -374,9 +384,9 @@ export default function DashboardPage() {
                     </IconButton>
                   </DialogTitle>
                   <List sx={{ pt: 0 }}>
-                    {businessList.map((data, index) => (
+                    {businessList?.map((data, index) => (
                       <ListItem disableGutters key={index}>
-                        <ListItemButton onClick={() => businessList(data)}>
+                        <ListItemButton onClick={() => handleBusinessOpen(data)}>
                           <ListItemAvatar>
                             <Avatar />
                           </ListItemAvatar>

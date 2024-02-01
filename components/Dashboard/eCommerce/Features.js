@@ -3,7 +3,7 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import Typography from "@mui/material/Typography";
-import { getMyBussinessFunApi, getallBussinessesFunApi } from "store/business/services";
+import { getMyBussinessFunApi, getMultipleBussinessesFunApi } from "store/business/services";
 import {
   getAllServiceFunApi, getServicesTypeFunApi,
 } from "store/service/services";
@@ -18,8 +18,8 @@ const Features = () => {
   const { business } = useSelector((state) => state.business);
   const { businessAll, dataFatched } = useSelector((state) => state.business);
   console.log("business All ",businessAll)
-  const businessDataArray = businessAll.data;
-  const totalBusinesses = businessDataArray.length;
+  const businessDataArray = businessAll?.data;
+  const totalBusinesses = businessDataArray?.length;
   const { allUsers } = useSelector((state) => state.admin);
   const userDataArray = allUsers?.data;
   const totalUsers = userDataArray?.length;
@@ -54,7 +54,7 @@ const Features = () => {
   useEffect(() => {
     if (!dataFatched) {
       dispatch(
-        getallBussinessesFunApi({
+        getMultipleBussinessesFunApi({
           onSuccess: () => {
           },
         })
@@ -67,10 +67,8 @@ const Features = () => {
     if (dataFatched !== true) {
       dispatch(
         getMyBussinessFunApi({
-
           onSuccess: (businessId) => {
             dispatch(
-
               getAllServiceFunApi({
                 businessId: businessId,
               })
