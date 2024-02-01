@@ -11,6 +11,8 @@ import TableContainer from "@mui/material/TableContainer";
 import TableFooter from "@mui/material/TableFooter";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
 import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
 import FirstPageIcon from "@mui/icons-material/FirstPage";
@@ -34,7 +36,8 @@ import Link from 'next/link';
 import { styled } from '@mui/material/styles';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
-import CloseIcon from '@mui/icons-material/Close'; 
+import CloseIcon from '@mui/icons-material/Close';
+import { getAllContactFunApi } from "store/admin/services";
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
@@ -215,15 +218,24 @@ const rows = [
     "React, Next.js & Sass",
     "140"
   ),
- 
+
 ].sort((a, b) => (a.name < b.name ? -1 : 1));
 
 export default function MembersList() {
-  // Table
+
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const dispatch = useDispatch()
+  const { allUsers } = useSelector((state) => state.admin);
+  console.log("allUsers", allUsers)
 
-  // Avoid a layout jump when reaching the last page with empty rows.
+  useEffect(() => {
+    if (!allUsers.dataFatched) {
+      dispatch(getAllContactFunApi());
+    }
+  }, [allUsers.dataFatched, dispatch]);
+
+
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
@@ -235,13 +247,9 @@ export default function MembersList() {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
- 
-  // Create new user modal
+
   const [open, setOpen] = React.useState(false);
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
   const handleClose = () => {
     setOpen(false);
   };
@@ -254,21 +262,9 @@ export default function MembersList() {
       password: data.get("password"),
     });
   };
-  // End Add Task Modal
 
   return (
     <>
-      {/* Page title */}
-      {/* <div className={styles.pageTitle}>
-        <h1>Member List</h1>
-        <ul>
-          <li>
-            <Link href="/">Dashboard</Link>
-          </li>
-          <li>Member List</li>
-        </ul>
-      </div> */}
-
       <Card
         sx={{
           boxShadow: "none",
@@ -297,25 +293,6 @@ export default function MembersList() {
           >
             Users List
           </Typography>
-
-          {/* <Button
-            onClick={handleClickOpen}
-            variant="contained"
-            sx={{
-              textTransform: "capitalize",
-              borderRadius: "8px",
-              fontWeight: "500",
-              fontSize: "13px",
-              padding: "12px 20px",
-              color: "#fff !important",
-            }}
-          >
-            <AddIcon
-              sx={{ position: "relative", top: "-1px" }}
-              className='mr-5px'
-            />{" "}
-            Create New User
-          </Button> */}
         </Box>
 
         <TableContainer
@@ -324,8 +301,8 @@ export default function MembersList() {
             boxShadow: "none",
           }}
         >
-          <Table 
-            sx={{ minWidth: 850 }} 
+          <Table
+            sx={{ minWidth: 850 }}
             aria-label="custom pagination table"
             className="dark-table"
           >
@@ -350,73 +327,71 @@ export default function MembersList() {
                 >
                   Message
                 </TableCell>
-
-                
               </TableRow>
             </TableHead>
 
             <TableBody>
               {(rowsPerPage > 0
-                ? rows.slice(
-                    page * rowsPerPage,
-                    page * rowsPerPage + rowsPerPage
-                  )
-                : rows
-              ).map((row) => (
-                <TableRow key={row.name}>
-                  <TableCell
-                    style={{
-                      borderBottom: "1px solid #F7FAFF",
-                      paddingTop: "13px",
-                      paddingBottom: "13px",
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Box
-                      className=""
+                ? allUsers.data.slice(
+                  page * rowsPerPage,
+                  page * rowsPerPage + rowsPerPage
+                )
+                :
+                allUsers.data).map((row) => (
+                  <TableRow key={row.name}>
+                    <TableCell
+                      style={{
+                        borderBottom: "1px solid #F7FAFF",
+                        paddingTop: "13px",
+                        paddingBottom: "13px",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
                     >
-                      <Box>
-                        <Typography
-                          as="h5"
-                          sx={{
-                            fontWeight: "500",
-                            fontSize: "13.5px",
-                          }}
-                        >
-                          {row.name}
-                        </Typography>
+                      <Box
+                        className=""
+                      >
+                        <Box>
+                          <Typography
+                            as="h5"
+                            sx={{
+                              fontWeight: "500",
+                              fontSize: "13.5px",
+                            }}
+                          >
+                            {row.name}
+                          </Typography>
 
+                        </Box>
                       </Box>
-                    </Box>
-                  </TableCell>
+                    </TableCell>
 
-                  <TableCell
-                    align="center"
-                    style={{
-                      borderBottom: "1px solid #F7FAFF",
-                      fontSize: "13px",
-                      paddingTop: "13px",
-                      paddingBottom: "13px",
-                    }}
-                  >
-                    {row.email}
-                  </TableCell>
+                    <TableCell
+                      align="center"
+                      style={{
+                        borderBottom: "1px solid #F7FAFF",
+                        fontSize: "13px",
+                        paddingTop: "13px",
+                        paddingBottom: "13px",
+                      }}
+                    >
+                      {row.email}
+                    </TableCell>
 
-                  <TableCell
-                    align="center"
-                    style={{
-                      borderBottom: "1px solid #F7FAFF",
-                      fontSize: "13px",
-                      paddingTop: "13px",
-                      paddingBottom: "13px",
-                    }}
-                  >
-                    {row.message}
-                  </TableCell>
+                    <TableCell
+                      align="center"
+                      style={{
+                        borderBottom: "1px solid #F7FAFF",
+                        fontSize: "13px",
+                        paddingTop: "13px",
+                        paddingBottom: "13px",
+                      }}
+                    >
+                      {row.message}
+                    </TableCell>
 
-                </TableRow>
-              ))}
+                  </TableRow>
+                ))}
 
               {emptyRows > 0 && (
                 <TableRow style={{ height: 53 * emptyRows }}>
@@ -514,7 +489,7 @@ export default function MembersList() {
                   >
                     Image
                   </Typography>
-                  
+
                   <TextField
                     autoComplete="image"
                     name="image"

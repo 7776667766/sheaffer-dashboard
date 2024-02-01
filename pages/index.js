@@ -12,6 +12,7 @@ import {
   Box,
   Card,
   Dialog,
+  CardContent,
   DialogTitle,
   List,
   IconButton,
@@ -23,6 +24,9 @@ import {
   TextField,
   TextareaAutosize,
   DialogContent,
+  MenuItem,
+  FormControl,
+  InputLabel,
 } from "@mui/material";
 import Image from "next/image";
 import Button from "@mui/material/Button";
@@ -46,13 +50,17 @@ import {
   requiredValidation,
   slugValidation,
 } from "@/utils/validation";
+import { Select } from "@mui/base";
+import { getMyBusinessBookingFunApi } from "store/booking/service";
 
 export default function DashboardPage() {
   const { user, role } = useSelector((state) => state.auth);
-  console.log("user",user)
+  console.log("user", user)
   const { business, dataFatched } = useSelector((state) => state.business);
 
   console.log(business, "business information");
+  const { businessAll } = useSelector((state) => state.business);
+  console.log("business All ", businessAll)
 
   const dispatch = useDispatch();
   const [slug, setSlug] = useState("");
@@ -64,6 +72,35 @@ export default function DashboardPage() {
   const [openForm, setOpenForm] = useState(false);
   const [openPending, setOpenPending] = useState(false);
   const [formData, setFormData] = useState({});
+  const [otherBusinessData, setotherBusinessData] = useState(false);
+  const [otherBusiness, setOtherBusiness] = useState(null);
+  
+  const [selectedBusienssId, setselectedBusienssId] = useState(null);
+  console.log(selectedBusienssId)
+
+  const handleDropdownChange = (event) => {
+    const selectedValue = event.target.value;
+    setselectedBusienssId(selectedValue);
+  };
+
+  useEffect(() => {
+    if (!dataFatched && business?.data?.id) {
+      dispatch(
+        getMyBussinessFunApi({
+          onSuccess: () => {
+            dispatch(
+              getMyBusinessBookingFunApi({
+                data: {
+                  businessId: business?.data?.id,
+                },
+              })
+            );
+          },
+        })
+      );
+    }
+  }, [dispatch, dataFatched, business?.data?.id]);
+
 
   const initialValue = {
     name: "",
@@ -75,7 +112,6 @@ export default function DashboardPage() {
     phone: "",
     logo: "",
     googleId: "",
-
     bookingService: "",
     websiteService: "",
     color: "",
@@ -98,6 +134,7 @@ export default function DashboardPage() {
   const handleClose = () => {
     setSelectedBusiness(null);
     setOpenSecondDialog(false);
+    setOpenthirdDialog(false)
     setOpen(false);
   };
   const isOwner = role === "owner";
@@ -119,12 +156,22 @@ export default function DashboardPage() {
     setOpenForm(true);
   };
 
+  const handleOthersClickOpen = () => {
+    setotherBusinessData(true);
+  };
+
   const handleFormClose = () => {
     setOpenForm(false);
+    setotherBusinessData(false)
   };
 
   const handleClickOpen = () => {
     setOpen(true);
+  };
+
+  const handleBusinessOpen = (business) => {
+    setOpenthirdDialog(true);
+    setOtherBusiness(business)
   };
 
   const handleOpen = (business) => {
@@ -139,6 +186,13 @@ export default function DashboardPage() {
       }
     }
   }, [dispatch, dataFatched, role]);
+
+  const otherbusinessList = [
+    {
+      title: "Register Business",
+      image: "",
+    },
+  ];
 
   const businessList = [
     {
@@ -159,6 +213,40 @@ export default function DashboardPage() {
         },
         onSuccess: () => {
           handleClose();
+        },
+      })
+    );
+  };
+
+  const handleRegisterBusinessandTheme = () => {
+    dispatch(
+      regsiterBusinessFunApi({
+        data: {
+          name: `${user.name} Business`,
+          email: user.email,
+          phone: user.phone,
+          slug: slug,
+          logo: avatar,
+          description: "My business description goes here ...",
+          address: "Address goes here ...",
+          googleId: "1234567890",
+          socialLinks: [
+            {
+              name: "facebook",
+              link: "https://www.facebook.com/",
+            },
+            {
+              name: "instagram",
+              link: "https://www.instagram.com/",
+            },
+          ],
+          images: [
+            "https://resortcabanas.com/wp-content/uploads/Learn-to-Differentiate-Your-Spa-Business_Outdoor-Cabanas_39138676_m.jpg",
+          ],
+        },
+
+        onSuccess: () => {
+          window.location.href = `${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}templates`;
         },
       })
     );
@@ -234,20 +322,49 @@ export default function DashboardPage() {
             {role === "owner" && (
               <>
                 <div style={{ display: "flex", gap: "15px" }}>
+                  <FormControl variant="outlined" >
+                    <Typography variant="h6" gutterBottom>
+                      Select a Business
+                    </Typography>
+                    <div>
+                      <label htmlFor="business-select">Select Business: </label>
+                      <select
+                        id="business-select"
+                        value={selectedBusienssId}
+                        onChange={handleDropdownChange}
+                      >
+                        <option value="">Select an option...</option>
+                        {businessAll?.data?.map((business) => (
+                          <option key={business.id} value={business.id}>
+                            {business.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                  </FormControl>
                   <Button
                     variant="contained"
-                    disabled={business?.data ? true : false}
+                    // disabled={business?.data ? true : false}
                     onClick={handleClickOpen}
                   >
                     Sync Business
                   </Button>
                   <Button
                     variant="contained"
-                    disabled={business?.data ? true : false}
+                    // disabled={business?.data ? true : false}
                     onClick={handleOpenRequest}
                   >
                     Send Custom Booking Request
                   </Button>
+                  <Button
+                    variant="contained"
+                    // disabled={business?.data ? true : false}
+                    onClick={handleOthersClickOpen}
+                  >
+                    Add other Business
+                  </Button>
+
                 </div>
 
                 <Dialog open={open} onClose={handleClose}>
@@ -265,7 +382,7 @@ export default function DashboardPage() {
                   <List sx={{ pt: 0 }}>
                     {businessList.map((data, index) => (
                       <ListItem disableGutters key={index}>
-                        <ListItemButton onClick={() => handleOpen(data)}>
+                        <ListItemButton onClick={() => businessList(data)}>
                           <ListItemAvatar>
                             <Avatar />
                           </ListItemAvatar>
@@ -371,7 +488,7 @@ export default function DashboardPage() {
                             }
                             helperText={
                               formik.touched.bannerText &&
-                              formik.errors.bannerText
+                                formik.errors.bannerText
                                 ? formik.errors.bannerText
                                 : ""
                             }
@@ -427,7 +544,7 @@ export default function DashboardPage() {
                             }
                             helperText={
                               formik.touched.description &&
-                              formik.errors.description
+                                formik.errors.description
                                 ? formik.errors.description
                                 : ""
                             }
@@ -439,7 +556,7 @@ export default function DashboardPage() {
                               // Add padding for better appearance
                             }}
 
-                            // ate
+                          // ate
                           />
                         </Grid>
 
@@ -524,6 +641,126 @@ export default function DashboardPage() {
                     </div>
                   </form>
                 </Dialog>
+                {/* other business form */}
+
+                <Dialog
+                  open={otherBusinessData}
+                  onClose={handleFormClose}
+                  maxWidth="lg"
+                  PaperProps={{
+                    sx: {
+                      width: "800px",
+                      height: "500px",
+                      padding: "20px",
+                    },
+                  }}
+                >
+                  <DialogTitle>
+                    Select Your Business
+                    <IconButton
+                      edge="end"
+                      color="inherit"
+                      onClick={handleClose}
+                      aria-label="close"
+                    >
+                      <CloseIcon />
+                    </IconButton>
+
+                  </DialogTitle>
+                  <List sx={{ pt: 0 }}>
+                    {otherbusinessList.map((data, index) => (
+                      <ListItem disableGutters key={index}>
+                        <ListItemButton onClick={() => handleBusinessOpen(data)}>
+                          <ListItemAvatar>
+                            <Avatar />
+                          </ListItemAvatar>
+                          <ListItemText primary={data.title} />
+                        </ListItemButton>
+                      </ListItem>
+                    ))}
+                  </List>
+                </Dialog>
+                {otherBusiness && (
+                  <Dialog open={openthirdDialog} onClose={handleClose}>
+                    <DialogTitle>
+                      Enter Business
+                      <IconButton
+                        edge="end"
+                        color="inherit"
+                        onClick={handleClose}
+                        aria-label="close"
+                      >
+                        <CloseIcon />
+                      </IconButton>
+                    </DialogTitle>
+                    <Grid container spacing={3} paddingX={3} paddingBottom={3}>
+                      <Grid item xs={12}>
+                        <Typography
+                          as="h5"
+                          sx={{
+                            fontWeight: "500",
+                            fontSize: "14px",
+                            mb: "12px",
+                          }}
+                        >
+                          Business Slug
+                        </Typography>
+                        <TextField
+                          label="Slug"
+                          name="slug"
+                          onChange={(e) => setSlug(e.target.value)}
+                          fullWidth
+                          InputProps={{
+                            style: {
+                              borderRadius: "5px",
+                              padding: "5px",
+                            },
+                          }}
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Box sx={{ flex: 1 }}>
+                          <Typography
+                            as="h5"
+                            sx={{
+                              fontWeight: "500",
+                              fontSize: "14px",
+                              mb: "12px",
+                            }}
+                          >
+                            Upload Logo
+                          </Typography>
+
+                          <TextField
+                            fullWidth
+                            name="logo"
+                            type="file"
+                            id="logo"
+                            accept="image/*"
+                            onChange={handleFileChange}
+                          />
+                        </Box>
+                      </Grid>
+
+                      <Grid
+                        item
+                        xs={12}
+                        style={{
+                          marginRight: "12px",
+                          textTransform: "capitalize",
+                        }}
+                      >
+                        <Button
+                          onClick={handleRegisterBusinessandTheme}
+                          variant="contained"
+                          color="primary"
+                        >
+                          Register Business and Select Theme
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </Dialog>
+                )}
 
                 {selectedBusiness && (
                   <Dialog open={openSecondDialog} onClose={handleClose}>
@@ -629,10 +866,12 @@ export default function DashboardPage() {
                   aria-controls="panel1a-content"
                   id="panel1a-header"
                 >
-                  <Typography component="h1" fontWeight="500" style={{                        display: "flex",
-                        alignItems: "center",}}>
+                  <Typography component="h1" fontWeight="500" style={{
+                    display: "flex",
+                    alignItems: "center",
+                  }}>
                     <Box
-                     
+
                     >
                       <Image
                         src={business?.data.logo}
@@ -907,19 +1146,7 @@ export default function DashboardPage() {
         rowSpacing={1}
         columnSpacing={{ xs: 1, sm: 1, md: 1, lg: 1, xl: 2 }}
       >
-        {/* <Dialog open={openPending} disableEscapeKeyDown={true} disableBackdropClick={true}>
-    <DialogContent>
-        <Typography variant="h6" gutterBottom>
-            {business?.data?.requestStatus === "pending" ? (
-                'Your request is pending. Please wait for approval.'
-            ) : business?.data?.requestStatus === "rejected" ? (
-                `Your request has been rejected. ${business?.data?.rejectreason}.`
-            ) : (
-                'Some default message if requestStatus is neither pending nor rejected'
-            )}
-        </Typography>
-    </DialogContent>
-</Dialog> */}
+
 
         {isOwner && (
           <Dialog
