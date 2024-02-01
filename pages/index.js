@@ -27,6 +27,7 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
+  Menu,
 } from "@mui/material";
 import Image from "next/image";
 import Button from "@mui/material/Button";
@@ -82,7 +83,17 @@ export default function DashboardPage() {
     const selectedValue = event.target.value;
     setselectedBusienssId(selectedValue);
   };
+  const [anchorEl, setAnchorEl] = useState(null);
 
+  // Function to handle opening the dropdown
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  // Function to handle closing the dropdown
+  const handleClosee = () => {
+    setAnchorEl(null);
+  };
   useEffect(() => {
     if (!dataFatched && business?.data?.id) {
       dispatch(
@@ -322,12 +333,41 @@ export default function DashboardPage() {
             {role === "owner" && (
               <>
                 <div style={{ display: "flex", gap: "15px" }}>
-                  <FormControl variant="outlined" >
+                <FormControl sx={{  minWidth: 120 }}>
+        <InputLabel id="demo-simple-select-helper-label"> Select a Business</InputLabel>
+        <Select
+         variant="outlined" 
+          labelId="demo-simple-select-helper-label"
+          id="demo-simple-select-helper"
+          // value={age}
+          label="Age"
+          // onChange={handleChange}
+          style={{backgroundColor:"white",height:"40px",width:"200px",borderRadius:"5px",border:"1px solid #757FEF"}}
+          MenuProps={{
+            PaperProps: {
+              style: {
+                maxHeight: "600px", // Adjust the maxHeight as needed
+                overflowY: 'auto',
+              },
+            },
+          }}
+        >
+           {/* <MenuItem value="">Select an option...</MenuItem> */}
+                        {businessAll?.data?.map((business) => (
+                          <MenuItem   key={business.id} value={business.id} sx={{overflowY: 'auto',backgroundColor:"white",maxHeight:"500px",overFlowY:"hidden"}} >
+                            {business.name}
+                          </MenuItem>
+                        ))}
+        </Select>
+        {/* <FormHelperText>With label + helper text</FormHelperText> */}
+      </FormControl>
+                  {/* <FormControl variant="outlined" >
                     <Typography variant="h6" gutterBottom>
                       Select a Business
                     </Typography>
                     <div>
                       <label htmlFor="business-select">Select Business: </label>
+                      
                       <select
                         id="business-select"
                         value={selectedBusienssId}
@@ -342,7 +382,7 @@ export default function DashboardPage() {
                       </select>
                     </div>
 
-                  </FormControl>
+                  </FormControl> */}
                   <Button
                     variant="contained"
                     // disabled={business?.data ? true : false}
