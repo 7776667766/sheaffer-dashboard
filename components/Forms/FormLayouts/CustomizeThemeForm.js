@@ -5,25 +5,32 @@ import { useFormik } from "formik";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { customizeThemeFunApi, getMyBussinessFunApi } from "store/business/services";
+import {
+  customizeThemeFunApi,
+  getMyBussinessFunApi,
+} from "store/business/services";
 import * as Yup from "yup";
 import SendIcon from "@mui/icons-material/Send";
 import { useRouter } from "next/router";
+import { getAllTemplateFunApi } from "store/template/services";
 
 export const CustomizeThemeForm = ({ formData, isEditMode }) => {
   const router = useRouter();
   const [banner, setBanner] = useState(null);
-  console.log("bannerImg",banner)
+  console.log("bannerImg", banner);
   const [selectedFontFamily, setSelectedFontFamily] = useState(null);
+  const [selectedFontSize, setSelectedFontSize] = useState(null);
   const [selectedTheme, setSelectedTheme] = useState(null);
-  console.log(selectedFontFamily, selectedTheme)
+  console.log(selectedFontFamily, selectedTheme);
 
   const [bannerImageUrl, setBannerImageUrl] = useState(null);
 
   const { business, dataFatched } = useSelector((state) => state.business);
   console.log(business?.data, "business1234");
+  const { template } = useSelector((state) => state.template);
+  console.log(template, "template?.data");
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (!dataFatched) {
@@ -91,11 +98,11 @@ export const CustomizeThemeForm = ({ formData, isEditMode }) => {
             fontSize: values.fontSize,
             fontFamily: values.fontFamily,
             theme: values.theme,
-            color: values.color
+            color: values.color,
           },
           onSuccess: () => {
             console.log("Add Service Success");
-            router.push("/")
+            router.push("/");
           },
         })
       );
@@ -105,6 +112,11 @@ export const CustomizeThemeForm = ({ formData, isEditMode }) => {
       }
     },
   });
+
+  useEffect(() => {
+    dispatch(getAllTemplateFunApi());
+  }, []);
+
   return (
     <Box component="form" noValidate onSubmit={formik.handleSubmit}>
       <Box sx={{ mb: "10px" }}>
@@ -154,8 +166,10 @@ export const CustomizeThemeForm = ({ formData, isEditMode }) => {
           <Grid item xs={6}>
             <TextField
               fullWidth
-              type="number"
+              type="tel"
               label="Font Size"
+              
+              onChange={(e) => setSelectedFontSize(e.target.value)}
               {...formik.getFieldProps("fontSize")}
               error={formik.touched.fontSize && formik.errors.fontSize}
               helperText={
@@ -164,6 +178,15 @@ export const CustomizeThemeForm = ({ formData, isEditMode }) => {
                   : ""
               }
             />
+
+            <MenuItem value="16">16px</MenuItem>
+            <MenuItem value="24">24px</MenuItem>
+            <MenuItem value="36">36px</MenuItem>
+            <MenuItem value="48">48px</MenuItem>
+            <MenuItem value="60">60px</MenuItem>
+            <MenuItem value="72">72px</MenuItem>
+            <MenuItem value="84">84px</MenuItem>
+            <MenuItem value="96">96px</MenuItem>
           </Grid>
 
           <Grid item xs={6}>
@@ -181,10 +204,12 @@ export const CustomizeThemeForm = ({ formData, isEditMode }) => {
                   : ""
               }
             >
-              <MenuItem value="Small">Small</MenuItem>
-              <MenuItem value="Medium">Medium</MenuItem>
-              <MenuItem value="Large">Large</MenuItem>
-              <MenuItem value="ExtraLarge">Extra Large</MenuItem>
+              <MenuItem value="Poppins">Poppins</MenuItem>
+              <MenuItem value="Montserrat">Montserrat</MenuItem>
+              <MenuItem value="GreatVibes">Great Vibes</MenuItem>
+              <MenuItem value="playFair">Playfair Display</MenuItem>
+              <MenuItem value="Mulish">Mulish</MenuItem>
+              <MenuItem value="Quicksand">Quicksand</MenuItem>
             </TextField>
           </Grid>
 
@@ -203,10 +228,12 @@ export const CustomizeThemeForm = ({ formData, isEditMode }) => {
                   : ""
               }
             >
-              <MenuItem value="Small">Theme-1</MenuItem>
-              <MenuItem value="Medium">Theme-2</MenuItem>
-              <MenuItem value="Large">Theme-3</MenuItem>
-              <MenuItem value="ExtraLarge">Theme-4</MenuItem>
+              {template &&
+                template.map((template) => (
+                  <MenuItem key={template.id} value={template.id}>
+                    {template.name}
+                  </MenuItem>
+                ))}
             </TextField>
           </Grid>
           <Grid item xs={6}>
@@ -232,7 +259,6 @@ export const CustomizeThemeForm = ({ formData, isEditMode }) => {
         sx={{
           paddingX: "30px",
         }}
-
         value={
           <>
             <SendIcon
