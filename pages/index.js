@@ -61,6 +61,7 @@ export default function DashboardPage() {
   const { business, dataFatched } = useSelector((state) => state.business);
   const { businessAll } = useSelector((state) => state.business);
   console.log("business All ", businessAll);
+  console.log("only busness ", business);
 
   const dispatch = useDispatch();
   const [slug, setSlug] = useState("");
@@ -76,10 +77,12 @@ export default function DashboardPage() {
   const [otherBusiness, setOtherBusiness] = useState(null);
 
   const [selectedBusienssId, setselectedBusienssId] = useState(null);
+
   console.log(selectedBusienssId);
 
   const handleDropdownChange = (event) => {
     const selectedValue = event.target.value;
+    setselectedBusienssId(selectedValue);
     console.log("selectedValue", selectedValue);
     dispatch(
       getMyBussinessFunApi({
@@ -370,28 +373,37 @@ export default function DashboardPage() {
                       </FormControl>
                     </Box>
                   </Box>
-
-                  <Button
-                    variant="contained"
-                    // disabled={business?.data ? true : false}
-                    onClick={handleClickOpen}
-                  >
-                    Sync Business
-                  </Button>
-                  <Button
-                    variant="contained"
-                    // disabled={business?.data ? true : false}
-                    onClick={handleOpenRequest}
-                  >
-                    Send Custom Booking Request
-                  </Button>
-                  <Button
-                    variant="contained"
-                    // disabled={business?.data ? true : false}
-                    onClick={handleOthersClickOpen}
-                  >
-                    Add other Business
-                  </Button>
+                  {business.data ? (
+                    ""
+                  ) : (
+                    <Button
+                      variant="contained"
+                      disabled={business?.data ? true : false}
+                      onClick={handleClickOpen}
+                    >
+                      Sync Business
+                    </Button>
+                  )}
+                  {!business.data &&<Button
+                      variant="contained"
+                      disabled={business?.data ? true : false}
+                      onClick={handleOpenRequest}
+                    >
+                      Send Custom Booking Request
+                    </Button> 
+                    
+                  }
+                  {business.data ? (
+                    <Button
+                      variant="contained"
+                      // disabled={business?.data ? true : false}
+                      onClick={handleOthersClickOpen}
+                    >
+                      Add other Business
+                    </Button>
+                  ) : (
+                    ""
+                  )}
                 </div>
 
                 <Dialog open={open} onClose={handleClose}>
