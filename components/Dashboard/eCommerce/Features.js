@@ -65,35 +65,35 @@ const Features = () => {
 
   useEffect(() => {
     if (dataFatched !== true) {
-      dispatch(
-        getMyBussinessFunApi({
-          onSuccess: (businessId) => {
-            dispatch(
-              getAllServiceFunApi({
-                businessId: businessId,
-              })
-            );
-          },
-        })
-      );
+      // dispatch(
+      //   getMyBussinessFunApi({
+      //     onSuccess: (businessId) => {
+      //       dispatch(
+      //         getAllServiceFunApi({
+      //           businessId: businessId,
+      //         })
+      //       );
+      //     },
+      //   })
+      // );
     }
   }, [dispatch, dataFatched]);
 
   useEffect(() => {
     if (!dataFatched && business?.data?.id) {
-      dispatch(
-        getMyBussinessFunApi({
-          onSuccess: () => {
-            dispatch(
-              getMyBusinessBookingFunApi({
-                data: {
-                  businessId: business?.data?.id,
-                },
-              })
-            );
-          },
-        })
-      );
+      // dispatch(
+      //   getMyBussinessFunApi({
+      //     onSuccess: () => {
+      //       dispatch(
+      //         getMyBusinessBookingFunApi({
+      //           data: {
+      //             businessId: business?.data?.id,
+      //           },
+      //         })
+      //       );
+      //     },
+      //   })
+      // );
     }
   }, [dispatch, dataFatched, business?.data?.id]);
 

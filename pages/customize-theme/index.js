@@ -18,11 +18,39 @@ const CustomizePage = () => {
     businessId: "",
   });
 
+  // useEffect(() => {
+  //   const selectedBusinessId = localStorage.getItem('selectedBusinessId');
+
+  //   if (selectedBusinessId) {
+  //     dispatch(getMyBussinessFunApi({ data: { businessId: selectedBusinessId } }));
+  //   } else {
+  //     if (!dataFatched) {
+  //       dispatch(getMyBussinessFunApi({}));
+  //     }
+  //   }
+  // }, [dispatch, dataFatched]);
+
+
+  // useEffect(() => {
+  //   if (!dataFatched) {
+  //     dispatch(getMyBussinessFunApi({}));
+  //   }
+  // }, [dispatch, dataFatched]);
+
   useEffect(() => {
-    if (!dataFatched) {
-      dispatch(getMyBussinessFunApi({}));
+    const selectedBusinessId = localStorage.getItem('selectedBusinessId');
+    console.log("selectedBusinessId",selectedBusinessId)
+
+    if (selectedBusinessId) {
+      dispatch(getMyBussinessFunApi({ data: { businessId: selectedBusinessId } }));
+    } else {
+      if (!dataFatched) {
+        dispatch(getMyBussinessFunApi({}));
+      }
     }
   }, [dispatch, dataFatched]);
+
+
 
   useEffect(() => {
     if (business?.data && !dataInitalized) {

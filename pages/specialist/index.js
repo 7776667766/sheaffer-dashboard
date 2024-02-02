@@ -23,8 +23,10 @@ const Specialist = () => {
   const dispatch = useDispatch();
   const { specialist, isLoading } = useSelector((state) => state.specialist);
   const { business } = useSelector((state) => state.business);
+  console.log("business data of specialist", business)
 
   const router = useRouter();
+
 
   useEffect(() => {
     if (specialist.specialistFetch !== true) {
@@ -81,7 +83,7 @@ const Specialist = () => {
             My Specialist
           </Typography>
 
-          <Link href={"/specialist/add-specialist"}>
+          <Link href={"/specialist/addSpecialist"}>
             <Button
               variant="contained"
               sx={{

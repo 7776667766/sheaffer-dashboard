@@ -32,12 +32,32 @@ const Manager = () => {
     console.log()
   };
 
+//   dispatch(
+//     getMyBussinessFunApi({
+//         data: {
+//             businessId: selectedValue,
+//         },
+//         onSuccess: () => {},
+//     })
+// );
 
+  // useEffect(() => {
+  //   if (!dataFatched) {
+  //     dispatch(getMyBussinessFunApi({}));
+  //   }
+  // }, [dispatch, dataFatched]);
   useEffect(() => {
-    if (!dataFatched) {
-      dispatch(getMyBussinessFunApi({}));
+    const selectedBusinessId = localStorage.getItem('selectedBusinessId');
+
+    if (selectedBusinessId) {
+      dispatch(getMyBussinessFunApi({ data: { businessId: selectedBusinessId } }));
+    } else {
+      if (!dataFatched) {
+        dispatch(getMyBussinessFunApi({}));
+      }
     }
   }, [dispatch, dataFatched]);
+
 
   useEffect(() => {
     if (managers.managerFetch !== true) {

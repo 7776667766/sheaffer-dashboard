@@ -76,38 +76,42 @@ export default function DashboardPage() {
   const [otherBusiness, setOtherBusiness] = useState(null);
 
   const [selectedBusienssId, setselectedBusienssId] = useState(null);
-  console.log(selectedBusienssId);
 
   const handleDropdownChange = (event) => {
     const selectedValue = event.target.value;
-    console.log("selectedValue", selectedValue);
-    dispatch(
-      getMyBussinessFunApi({
-        data: {
-          businessId: selectedValue,
-        },
-        onSuccess: () => {},
-      })
-    );
-  };
+    console.log("selectedValue83", selectedValue);
 
-  useEffect(() => {
-    if (!dataFatched && business?.data?.id) {
-      dispatch(
+    const businessIdString = String(selectedValue);
+    localStorage.setItem('selectedBusinessId', JSON.stringify(businessIdString));
+
+    dispatch(
         getMyBussinessFunApi({
-          onSuccess: () => {
-            dispatch(
-              getMyBusinessBookingFunApi({
-                data: {
-                  businessId: business?.data?.id,
-                },
-              })
-            );
-          },
+            data: {
+                businessId: selectedValue,
+            },
+            onSuccess: () => {},
         })
-      );
-    }
-  }, [dispatch, dataFatched, business?.data?.id]);
+    );
+};
+
+
+  // useEffect(() => {
+  //   if (!dataFatched && business?.data?.id) {
+  //     dispatch(
+  //       getMyBussinessFunApi({
+  //         onSuccess: () => {
+  //           dispatch(
+  //             getMyBusinessBookingFunApi({
+  //               data: {
+  //                 businessId: business?.data?.id,
+  //               },
+  //             })
+  //           );
+  //         },
+  //       })
+  //     );
+  //   }
+  // }, [dispatch, dataFatched, business?.data?.id]);
 
   const initialValue = {
     name: "",
@@ -184,13 +188,15 @@ export default function DashboardPage() {
     setotherBusinessData(false);
   };
 
-  useEffect(() => {
-    if (role === "owner" || role === "manager") {
-      if (!dataFatched) {
-        dispatch(getMyBussinessFunApi({}));
-      }
-    }
-  }, [dispatch, dataFatched, role]);
+  // useEffect(() => {
+  //   if (role === "owner" || role === "manager") {
+  //     if (!dataFatched) {
+  //       dispatch(getMyBussinessFunApi({
+
+  //       }));
+  //     }
+  //   }
+  // }, [dispatch, dataFatched, role]);
 
   const otherbusinessList = [
     {

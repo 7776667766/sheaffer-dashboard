@@ -160,23 +160,45 @@ const BookingPage = () => {
       })
     );
   };
+
   useEffect(() => {
-    if (!dataFatched && business?.data?.id) {
+    if (!dataFatched && business?.data?.id ) {
+      const selectedBusinessId = localStorage.getItem('selectedBusinessId');
+      console.log("selectedBusinessId167",selectedBusinessId)
       dispatch(
         getMyBussinessFunApi({
+          data: selectedBusinessId,
           onSuccess: (businessId) => {
             dispatch(
               getMyBusinessBookingFunApi({
                 data: {
                   businessId: businessId,
-                },
+                }, 
               })
             );
           },
         })
       );
     }
-  }, [dispatch, dataFatched, business?.data?.id]);
+  }, [dispatch, dataFatched, business?.data?.id]); 
+
+  // useEffect(() => {
+  //   if (!dataFatched && business?.data?.id) {
+  //     dispatch(
+  //       getMyBussinessFunApi({
+  //         onSuccess: (businessId) => {
+  //           dispatch(
+  //             getMyBusinessBookingFunApi({
+  //               data: {
+  //                 businessId: businessId,
+  //               },
+  //             })
+  //           );
+  //         },
+  //       })
+  //     );
+  //   }
+  // }, [dispatch, dataFatched, business?.data?.id]);
 
   return (
     <>

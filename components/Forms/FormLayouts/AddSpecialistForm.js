@@ -32,24 +32,40 @@ const AddSpecialistForm = ({ formData, isEditMode }) => {
   console.log("formData", formData)
 
   const dispatch = useDispatch();
-  const { business } = useSelector((state) => state.business);
+  const { business,dataFatched } = useSelector((state) => state.business);
   console.log("business Id Data", business.data?.id)
 
-
+// useEffect(() => {
+//       dispatch(
+//         getMyBussinessFunApi({
+//           data: business.data?.id,
+//           onSuccess: () => {
+      
+//           },
+//         })
+//       );
+//   },[])
 
 useEffect(() => {
-
+  // if (!dataFatched) {
+  //   dispatch(getMyBussinessFunApi({
+          
+  //   }));
+  // } else {
+    const selectedBusinessId = localStorage.getItem('selectedBusinessId');
+    if (selectedBusinessId) {
       dispatch(
         getMyBussinessFunApi({
-          data: business.data?.id,
+          data: selectedBusinessId,
           onSuccess: () => {
-      
           },
         })
       );
-    
-  },[])
-
+  //   } else {
+  //     console.log('Selected business ID not found in local storage');
+  //   }
+  }
+}, [dispatch, dataFatched]); 
 
   const initialValues = isEditMode
     ? {
@@ -60,7 +76,6 @@ useEffect(() => {
       name: "",
       email: "",
       businessId: business?.data?.id,
-
     };
 
   const validation = {
