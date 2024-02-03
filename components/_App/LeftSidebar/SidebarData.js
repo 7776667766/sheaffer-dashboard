@@ -5,7 +5,6 @@ import GridViewIcon from "@mui/icons-material/GridView";
 import LayersIcon from "@mui/icons-material/Layers";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import LockIcon from "@mui/icons-material/Lock";
 import SettingsIcon from "@mui/icons-material/Settings";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
@@ -13,7 +12,6 @@ import AddchartIcon from "@mui/icons-material/Addchart";
 import CopyAllIcon from "@mui/icons-material/CopyAll";
 import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
 import ViewQuiltIcon from "@mui/icons-material/ViewQuilt";
-import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import { AccountCircle } from "@mui/icons-material";
 import { useSelector } from "react-redux";
 
@@ -118,7 +116,7 @@ export const SidebarData = () => {
         },
         {
           title: "Add Specialist",
-          path: "/specialist/add-specialist/",
+          path: "/specialist/addSpecialist/",
         },
       ],
     },
@@ -658,12 +656,6 @@ export const SidebarData = () => {
       role: "admin",
       icon: <AccountCircle />,
     },
-
-    // {
-    //   title: "Notification",
-    //   path: "/notification/",
-    //   icon: <NotificationsNoneIcon />,
-    // },
     {
       title: "Settings",
       path: "/settings/account/",

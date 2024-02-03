@@ -12,7 +12,6 @@ import {
   Box,
   Card,
   Dialog,
-  CardContent,
   DialogTitle,
   List,
   IconButton,
@@ -597,13 +596,8 @@ export default function DashboardPage() {
                             }
                             style={{
                               width: "100%",
-                              // border:"0.5px solid gray",
-                              // Add a blue border
-                              color: "blue", // Set text color to blue
-                              // Add padding for better appearance
+                              color: "blue",
                             }}
-
-                            // ate
                           />
                         </Grid>
 

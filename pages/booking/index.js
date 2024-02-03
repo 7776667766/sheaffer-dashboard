@@ -47,7 +47,7 @@ const BookingPage = () => {
 
   const dispatch = useDispatch();
   const { business, dataFatched } = useSelector((state) => state.business);
-  console.log("business 50  data", business);
+  console.log("business 50 data", business);
   const { booking } = useSelector((state) => state.booking);
   console.log("booking", booking);
 
@@ -199,6 +199,16 @@ const BookingPage = () => {
   //     );
   //   }
   // }, [dispatch, dataFatched, business?.data?.id]);
+
+   useEffect(() => {     
+            dispatch(
+              getMyBusinessBookingFunApi({
+                data: {
+                  businessId: business?.data?.id
+                },
+              })
+            );
+  }, [dispatch, business?.data?.id]);
 
   return (
     <>

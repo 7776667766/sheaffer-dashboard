@@ -16,6 +16,7 @@ import { getMyCardFunApi } from "store/card/card";
 
 const Features = () => {
   const { business } = useSelector((state) => state.business);
+  console.log("business19",business)
   const { businessAll, dataFatched } = useSelector((state) => state.business);
   console.log("business All ",businessAll)
   const businessDataArray = businessAll?.data;
@@ -63,21 +64,15 @@ const Features = () => {
 
   }, [dispatch, dataFatched]);
 
-  useEffect(() => {
-    if (dataFatched !== true) {
-      // dispatch(
-      //   getMyBussinessFunApi({
-      //     onSuccess: (businessId) => {
-      //       dispatch(
-      //         getAllServiceFunApi({
-      //           businessId: businessId,
-      //         })
-      //       );
-      //     },
-      //   })
-      // );
-    }
-  }, [dispatch, dataFatched]);
+  useEffect(() => {     
+    dispatch(
+      getMyBusinessBookingFunApi({
+        data: {
+          businessId: business?.data?.id
+        },
+      })
+    );
+}, [dispatch, business?.data?.id]);
 
   useEffect(() => {
     if (!dataFatched && business?.data?.id) {
@@ -120,13 +115,13 @@ const Features = () => {
     {
       id: "2",
       title: role === "admin" ? `${totalServiceTypes}` : `${totalServices}`,
-      subTitle: role === "admin" ? "Total Service Types" : "Total Services",
+      subTitle: role === "admin" ? "Total Service Types" : "Business Services",
       image: "/images/work-icon.png",
     },
     {
       id: "3",
       title: role === "admin" ? `${totalCardTypes}` :`${totalBookings}`,
-      subTitle: role === "admin" ? "All Transactions" : "Total Bookings",
+      subTitle: role === "admin" ? "All Transactions" : "Business Bookings",
       image: "/images/users-icon.png",
     },
   ];

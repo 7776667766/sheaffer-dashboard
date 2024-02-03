@@ -53,12 +53,10 @@ const BusinessPage = () => {
   const [isRejecting, setIsRejecting] = useState(false);
   const [rejectReason, setRejectReason] = useState("");
 
-  const { businessAll } = useSelector((state) => state.business);
+  const { businessAll,dataFatched } = useSelector((state) => state.business);
   console.log("businessAll", businessAll);
 
   const isSmallScreen = useMediaQuery("(max-width:800px)");
-
-  /// ALL BUSINESS API
 
   const businessImages = selectedBusiness?.images || [];
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -81,17 +79,42 @@ const BusinessPage = () => {
     },
   }));
 
+  // useEffect(() => {
+  //   console.log("85")
+  //    if (!businessAll.dataFatched ) {
+  //     dispatch(
+  //       getallBussinessesFunApi({
+  //         onSuccess: (response) => {
+  //           console.log("API Response:", response);
+  //         },
+  //       })
+  //     );
+  //   }
+  // }, [dispatch, businessAll.dataFatched, businessAll.data]);
+
   useEffect(() => {
-    if (businessAll.dataFatched !== true) {
-      dispatch(
-        getallBussinessesFunApi({
-          onSuccess: (response) => {
-            console.log("API Response:", response);
-          },
-        })
-      );
-    }
-  }, [dispatch, businessAll.dataFatched, businessAll.data]);
+    console.log("Effect triggered");
+    dispatch(
+      getallBussinessesFunApi({
+        onSuccess: (response) => {
+          console.log("API Response:", response);
+        },
+      })
+    );
+  }, [dispatch]);
+  
+  
+  // useEffect(() => {
+  //   if (businessAll.dataFatched !== true) {
+  //     dispatch(
+  //       getallBussinessesFunApi({
+  //         onSuccess: (response) => {
+  //           console.log("API Response:", response);
+  //         },
+  //       })
+  //     );
+  //   }
+  // }, [dispatch, businessAll.dataFatched, businessAll.data]);
 
   const handleClick = (id) => {
     const selectedBusiness = businessAll?.data?.find((item) => item.id === id);
