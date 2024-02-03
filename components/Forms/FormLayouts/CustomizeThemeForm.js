@@ -25,11 +25,13 @@ export const CustomizeThemeForm = ({ formData, isEditMode }) => {
 
   const dispatch = useDispatch()
 
-  useEffect(() => {
-    if (!dataFatched) {
-      dispatch(getMyBussinessFunApi({}));
-    }
-  }, [dispatch, dataFatched]);
+  // useEffect(() => {
+  //   if (!dataFatched) {
+  //     dispatch(getMyBussinessFunApi({
+
+  //     }));
+  //   }
+  // }, [dispatch, dataFatched]);
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];

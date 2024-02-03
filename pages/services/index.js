@@ -26,23 +26,43 @@ const ServicesPage = () => {
   const { service } = useSelector((state) => state.service);
   console.log(service)
   const { business, dataFatched } = useSelector((state) => state.business);
+  console.log("business29",business)
   const { role } = useSelector((state) => state.auth);
 
+  // useEffect(() => {
+  //   if (dataFatched !== true) {
+  //     dispatch(
+  //       getMyBussinessFunApi({
+
+  //         onSuccess: (businessId) => {
+  //           dispatch(
+  //             getAllServiceFunApi({
+  //               businessId: businessId,
+  //             })
+  //           );
+  //         },
+  //       })
+  //     );
+  //   }
+  // }, [dispatch, dataFatched]);
+
   useEffect(() => {
-    if (dataFatched !== true) {
-      dispatch(
-        getMyBussinessFunApi({
-          onSuccess: (businessId) => {
-            dispatch(
-              getAllServiceFunApi({
-                businessId: businessId,
-              })
-            );
-          },
-        })
-      );
+    if (!dataFatched) {
+      const selectedBusinessId = localStorage.getItem('selectedBusinessId');
+      console.log("selectedBusinessId", selectedBusinessId)
+      dispatch(getMyBussinessFunApi({
+        data: { businessId: selectedBusinessId },
+        onSuccess: (businessId) => {
+          dispatch(
+            getAllServiceFunApi({
+              businessId: businessId,
+            })
+          );
+        },
+      }));
     }
   }, [dispatch, dataFatched]);
+
 
   const router = useRouter();
 

@@ -46,26 +46,26 @@ const AddSpecialistForm = ({ formData, isEditMode }) => {
 //       );
 //   },[])
 
-useEffect(() => {
-  // if (!dataFatched) {
-  //   dispatch(getMyBussinessFunApi({
+// useEffect(() => {
+//   // if (!dataFatched) {
+//   //   dispatch(getMyBussinessFunApi({
           
-  //   }));
-  // } else {
-    const selectedBusinessId = localStorage.getItem('selectedBusinessId');
-    if (selectedBusinessId) {
-      dispatch(
-        getMyBussinessFunApi({
-          data: selectedBusinessId,
-          onSuccess: () => {
-          },
-        })
-      );
-  //   } else {
-  //     console.log('Selected business ID not found in local storage');
-  //   }
-  }
-}, [dispatch, dataFatched]); 
+//   //   }));
+//   // } else {
+//     const selectedBusinessId = localStorage.getItem('selectedBusinessId');
+//     if (selectedBusinessId) {
+//       dispatch(
+//         getMyBussinessFunApi({
+//           data: selectedBusinessId,
+//           onSuccess: () => {
+//           },
+//         })
+//       );
+//   //   } else {
+//   //     console.log('Selected business ID not found in local storage');
+//   //   }
+//   }
+// }, [dispatch, dataFatched]); 
 
   const initialValues = isEditMode
     ? {

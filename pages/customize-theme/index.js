@@ -31,24 +31,29 @@ const CustomizePage = () => {
   // }, [dispatch, dataFatched]);
 
 
-  // useEffect(() => {
-  //   if (!dataFatched) {
-  //     dispatch(getMyBussinessFunApi({}));
-  //   }
-  // }, [dispatch, dataFatched]);
-
   useEffect(() => {
-    const selectedBusinessId = localStorage.getItem('selectedBusinessId');
-    console.log("selectedBusinessId",selectedBusinessId)
-
-    if (selectedBusinessId) {
-      dispatch(getMyBussinessFunApi({ data: { businessId: selectedBusinessId } }));
-    } else {
-      if (!dataFatched) {
-        dispatch(getMyBussinessFunApi({}));
-      }
+    if (!dataFatched) {
+      const selectedBusinessId = localStorage.getItem('selectedBusinessId');
+      console.log("selectedBusinessId", selectedBusinessId)
+      dispatch(getMyBussinessFunApi({
+        data: { businessId: selectedBusinessId },
+        onSuccess: () => {},
+      }));
     }
   }, [dispatch, dataFatched]);
+
+  // useEffect(() => {
+  //   const selectedBusinessId = localStorage.getItem('selectedBusinessId');
+  //   console.log("selectedBusinessId",selectedBusinessId)
+
+  //   if (selectedBusinessId) {
+  //     dispatch(getMyBussinessFunApi({ data: { businessId: selectedBusinessId } }));
+  //   } else {
+  //     if (!dataFatched) {
+  //       dispatch(getMyBussinessFunApi({}));
+  //     }
+  //   }
+  // }, [dispatch, dataFatched]);
 
 
 

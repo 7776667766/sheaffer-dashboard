@@ -47,7 +47,7 @@ const BookingPage = () => {
 
   const dispatch = useDispatch();
   const { business, dataFatched } = useSelector((state) => state.business);
-  console.log("business  data", business);
+  console.log("business 50  data", business);
   const { booking } = useSelector((state) => state.booking);
   console.log("booking", booking);
 
@@ -161,26 +161,26 @@ const BookingPage = () => {
     );
   };
 
-  useEffect(() => {
-    if (!dataFatched && business?.data?.id ) {
-      const selectedBusinessId = localStorage.getItem('selectedBusinessId');
-      console.log("selectedBusinessId167",selectedBusinessId)
-      dispatch(
-        getMyBussinessFunApi({
-          data: selectedBusinessId,
-          onSuccess: (businessId) => {
-            dispatch(
-              getMyBusinessBookingFunApi({
-                data: {
-                  businessId: businessId,
-                }, 
-              })
-            );
-          },
-        })
-      );
-    }
-  }, [dispatch, dataFatched, business?.data?.id]); 
+  // useEffect(() => {
+  //   if (!dataFatched && business?.data?.id ) {
+  //     const selectedBusinessId = localStorage.getItem('selectedBusinessId');
+  //     console.log("selectedBusinessId167",selectedBusinessId)
+  //     dispatch(
+  //       getMyBussinessFunApi({
+  //         data: selectedBusinessId,
+  //         onSuccess: (businessId) => {
+  //           dispatch(
+  //             getMyBusinessBookingFunApi({
+  //               data: {
+  //                 businessId: businessId,
+  //               }, 
+  //             })
+  //           );
+  //         },
+  //       })
+  //     );
+  //   }
+  // }, [dispatch, dataFatched, business?.data?.id]); 
 
   // useEffect(() => {
   //   if (!dataFatched && business?.data?.id) {

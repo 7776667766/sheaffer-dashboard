@@ -51,23 +51,23 @@ const ServiceForm = ({ formData, isEditMode }) => {
   
 // },[])
 
-useEffect(() => {
-  const selectedBusinessId = localStorage.getItem('selectedBusinessId');
+// useEffect(() => {
+//   const selectedBusinessId = localStorage.getItem('selectedBusinessId');
 
-  if (selectedBusinessId) {
-    dispatch(
-      getMyBussinessFunApi({
-        data: selectedBusinessId,
-        onSuccess: () => {
-        },
-      })
-    );
-  } else {
-    console.log('Selected business ID not found in local storage');
-  }
-}, []); 
+//   if (selectedBusinessId) {
+//     dispatch(
+//       getMyBussinessFunApi({
+//         data: selectedBusinessId,
+//         onSuccess: () => {
+//         },
+//       })
+//     );
+//   } else {
+//     console.log('Selected business ID not found in local storage');
+//   }
+// }, []); 
 
-useEffect(()=>{},[])
+// useEffect(()=>{},[])
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
