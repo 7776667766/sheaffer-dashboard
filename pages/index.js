@@ -79,6 +79,7 @@ export default function DashboardPage() {
 
   const handleDropdownChange = (event) => {
     const selectedValue = event.target.value;
+    setSelectedBusiness(selectedValue)
     console.log("selectedValue83", selectedValue);
 
     const businessIdString = String(selectedValue);
@@ -358,7 +359,7 @@ export default function DashboardPage() {
                         <Select
                           labelId="demo-select-small"
                           id="demo-select-small"
-                          value={selectedBusienssId}
+                          value={selectedBusiness}
                           label="Select"
                           onChange={handleDropdownChange}
                           sx={{

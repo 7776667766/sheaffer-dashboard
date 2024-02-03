@@ -19,7 +19,7 @@ export const CustomizeThemeForm = ({ formData, isEditMode }) => {
   const [banner, setBanner] = useState(null);
   console.log("bannerImg", banner);
   const [selectedFontFamily, setSelectedFontFamily] = useState(null);
-  const [selectedFontSize, setSelectedFontSize] = useState(null);
+  const [selectedFontSize, setSelectedFontSize] = useState("");
   const [selectedTheme, setSelectedTheme] = useState(null);
   console.log(selectedFontFamily, selectedTheme);
 
@@ -168,9 +168,8 @@ export const CustomizeThemeForm = ({ formData, isEditMode }) => {
           <Grid item xs={6}>
             <TextField
               fullWidth
-              type="tel"
+              select
               label="Font Size"
-              
               onChange={(e) => setSelectedFontSize(e.target.value)}
               {...formik.getFieldProps("fontSize")}
               error={formik.touched.fontSize && formik.errors.fontSize}
@@ -179,8 +178,7 @@ export const CustomizeThemeForm = ({ formData, isEditMode }) => {
                   ? formik.errors.fontSize
                   : ""
               }
-            />
-
+            >
             <MenuItem value="16">16px</MenuItem>
             <MenuItem value="24">24px</MenuItem>
             <MenuItem value="36">36px</MenuItem>
@@ -189,6 +187,7 @@ export const CustomizeThemeForm = ({ formData, isEditMode }) => {
             <MenuItem value="72">72px</MenuItem>
             <MenuItem value="84">84px</MenuItem>
             <MenuItem value="96">96px</MenuItem>
+            </TextField>
           </Grid>
 
           <Grid item xs={6}>

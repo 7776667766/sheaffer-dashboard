@@ -56,7 +56,6 @@ const CustomizePage = () => {
   // }, [dispatch, dataFatched]);
 
 
-
   useEffect(() => {
     if (business?.data && !dataInitalized) {
       setInitialData({
