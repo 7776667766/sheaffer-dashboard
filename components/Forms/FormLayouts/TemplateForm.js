@@ -279,7 +279,7 @@ const TemplateForm = ({ formData, isEditMode }) => {
                       mb: "12px",
                     }}
                   >
-                    Upload Booking Image
+                    Upload Website Image
                   </Typography>
 
                   <TextField

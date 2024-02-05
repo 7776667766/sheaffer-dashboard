@@ -39,7 +39,7 @@ const VerifyOtpForm = () => {
           data: {
             phone: myPhone,
             otp: value,
-            forLogin: router.query.verify !== undefined,
+            forLogin: router.query.verify !== undefined,  
           },
           onSuccess: () => {
             if (router.query.data != undefined) {

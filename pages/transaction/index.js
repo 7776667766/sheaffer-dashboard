@@ -133,6 +133,9 @@ const TransactionPage = () => {
                 sx={{
                   borderBottom: "1px solid #F7FAFF",
                   fontSize: "13.5px",
+                  paddingRight:" 0px",
+                  paddingLeft: "0px",
+                  textAlign: "end",
                 }}
               >
                 Card No.
