@@ -82,7 +82,8 @@ export const getspecialistApi = createAsyncThunk(
 
 export const editSpecialistFunApi = createAsyncThunk(
   "specialist/editspecialist",
-  async ({ data, onSuccess }) => {
+  async ({ data, onSuccess }) => {          
+    console.log(data,"data")
     try {
       const { id, ...restData } = data;
       console.log(id,"id of editapi")
@@ -144,7 +145,7 @@ export const deleteSpecialistFunApi = createAsyncThunk(
         const err =
           response?.data?.message ||
           response?.message ||
-          "Something went wrong!";
+          "Something went wrong!"; 
         console.log("err: ", err);
         toast.error(err);
         throw new Error(err);

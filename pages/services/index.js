@@ -24,7 +24,7 @@ import { useRouter } from "next/router";
 const ServicesPage = () => {
   const dispatch = useDispatch();
   const { service } = useSelector((state) => state.service);
-  console.log(service)
+  console.log("service27",service)
   const { business, dataFatched } = useSelector((state) => state.business);
   console.log("business29",business)
   const { role } = useSelector((state) => state.auth);
@@ -52,10 +52,10 @@ const ServicesPage = () => {
       console.log("selectedBusinessId", selectedBusinessId)
       dispatch(getMyBussinessFunApi({
         data: { businessId: selectedBusinessId },
-        onSuccess: (businessId) => {
+        onSuccess: () => {
           dispatch(
             getAllServiceFunApi({
-              businessId: businessId,
+              businessId: business?.data?.id,
             })
           );
         },
@@ -76,15 +76,15 @@ const ServicesPage = () => {
     dispatch(deleteServiceFunApi(id));
   };
 
-  useEffect(() => {
-    if (service.dataFatched !== true && dataFatched === true) {
-      dispatch(
-        getAllServiceFunApi({
-          businessId: business?.data?.id,
-        })
-      );
-    }
-  }, [dispatch, service.data, service.dataFatched, business?.data?.id, dataFatched]);
+  // useEffect(() => {
+  //   if (service.dataFatched !== true && dataFatched === true) {
+  //     dispatch(
+  //       getAllServiceFunApi({
+  //         businessId: business?.data?.id,
+  //       })
+  //     );
+  //   }
+  // }, [dispatch, service.data, service.dataFatched, business?.data?.id, dataFatched]);
 
   return (
     <>

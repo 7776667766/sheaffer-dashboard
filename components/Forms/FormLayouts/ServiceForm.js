@@ -10,7 +10,6 @@ import {
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
-import TextareaAutosize from "@mui/material/TextareaAutosize";
 import SendIcon from "@mui/icons-material/Send";
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
@@ -33,22 +32,20 @@ const ServiceForm = ({ formData, isEditMode }) => {
   const [profileImageUrl, setProfileImageUrl] = useState(null);
   const dispatch = useDispatch();
   const router = useRouter();
-  const { business,dataFatched } = useSelector((state) => state.business);
+  const { business , dataFatched } = useSelector((state) => state.business);
   console.log("business Data services form", business?.data?.id)
   const { specialist } = useSelector((state) => state.specialist);
   const { serviceType, service } = useSelector((state) => state.service);
+  console.log("serviceType40",serviceType.data)
 
 //   useEffect(() => {
-
 //     dispatch(
 //       getMyBussinessFunApi({
 //         data: business.data?.id,
 //         onSuccess: () => {
-    
 //         },
 //       })
-//     );
-  
+//     ); 
 // },[])
 
 // useEffect(() => {
@@ -366,7 +363,6 @@ const ServiceForm = ({ formData, isEditMode }) => {
     const firstSelectedTimeSlot = formik.values.timeSlots.find(
       (slot) => slot.active
     );
-
     console.log("First Selected Time Slot:", firstSelectedTimeSlot);
 
     if (firstSelectedTimeSlot) {
@@ -377,7 +373,6 @@ const ServiceForm = ({ formData, isEditMode }) => {
           endTime: firstSelectedTimeSlot.endTime,
           active: true,
         }));
-
         console.log("Updated Time Slots:", updatedTimeSlots);
 
         return {
@@ -387,7 +382,6 @@ const ServiceForm = ({ formData, isEditMode }) => {
       });
     }
   };
-
 
   return (
     <>
@@ -459,7 +453,6 @@ const ServiceForm = ({ formData, isEditMode }) => {
                   }
                 />
               </Grid>
-
 
               <Grid item xs={12} md={12} lg={6}>
                 <FormControl fullWidth>
@@ -670,43 +663,12 @@ const ServiceForm = ({ formData, isEditMode }) => {
                       ? formik.errors.description
                       : ""
                   }
-                />
-
-                {/* <RichTextEditor
-                id="description"
-                // value={}
-                onChange={() => {
-                  console.log(
-                    "rte.current.getContent()",
-                    rte.current.getContent()
-                  );
-
-                  formik.setFieldValue("description", rte.current.getContent());
-                }}
-                {...formik.getFieldProps("description")}
-                error={
-                  formik.touched.description && formik.errors.description
-                    ? true
-                    : false
-                }
-                helperText={
-                  formik.touched.description && formik.errors.description
-                    ? formik.errors.description
-                    : ""
-                }
-                controls={[
-                  ["bold", "italic", "underline", "link", "image"],
-                  ["unorderedList", "h1", "h2", "h3", "h4", "h5", "h6"],
-                  ["sup", "sub"],
-                  ["alignLeft", "alignCenter", "alignRight"],
-                ]}
-              /> */}
-              </Grid>
+                />  
+              </Grid>       
               <Grid item xs={12}>
                 <Button onClick={handleSelectAllServiceTypes}>
                   Select all TimeSlot according to First timeSlot
                 </Button>
-
 
                 <Typography
                   as="h5"

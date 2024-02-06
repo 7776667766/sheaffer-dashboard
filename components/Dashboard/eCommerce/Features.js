@@ -16,9 +16,7 @@ import { getMyCardFunApi } from "store/card/card";
 
 const Features = () => {
   const { business } = useSelector((state) => state.business);
-  console.log("business19",business)
   const { businessAll, dataFatched } = useSelector((state) => state.business);
-  console.log("business All ",businessAll)
   const businessDataArray = businessAll?.data;
   const totalBusinesses = businessDataArray?.length;
   const { allUsers } = useSelector((state) => state.admin);
@@ -52,6 +50,31 @@ const Features = () => {
     }
   }, [dispatch, serviceType.dataFatched, serviceType.serviceFetch]);
 
+  // useEffect(() => {
+  //   if (!dataFatched) {
+  //     const selectedBusinessId = localStorage.getItem('selectedBusinessId');
+  //     console.log("selectedBusinessId", selectedBusinessId)
+  //     dispatch(getMyBussinessFunApi({
+  //       data: { businessId: selectedBusinessId },
+  //       onSuccess: () => {
+  //         dispatch(
+  //           getAllServiceFunApi({
+  //             businessId: business?.data?.id,
+  //           })
+  //         );
+  //       },
+  //     }));
+  //   }
+  // }, [dispatch, dataFatched]);
+
+  useEffect(() => {     
+    dispatch(
+      getAllServiceFunApi({
+          businessId: business?.data?.id
+      })
+    );
+}, [dispatch, business?.data?.id]);
+
   useEffect(() => {
     if (!dataFatched) {
       dispatch(
@@ -61,7 +84,6 @@ const Features = () => {
         })
       );
     }
-
   }, [dispatch, dataFatched]);
 
   useEffect(() => {     
@@ -125,18 +147,6 @@ const Features = () => {
       image: "/images/users-icon.png",
     },
   ];
-
-  useEffect(() => {
-    if (!dataFatched) {
-      dispatch(
-        getAllServiceFunApi({
-          onSuccess: () => {
-            console.log("businessId");
-          },
-        })
-      );
-    }
-  }, [dispatch, dataFatched]);
 
   return (
     <>
