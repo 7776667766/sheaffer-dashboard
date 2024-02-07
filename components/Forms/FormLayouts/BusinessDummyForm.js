@@ -85,9 +85,9 @@ const BusinessForm = () => {
           </li>
         </ul>
       </div>
-      <Accordion sx={{ borderRadius: "15px", marginTop: "20px",position:"unset",boxShadow:"none" }}
-      
-      defaultExpanded={true}
+      <Accordion sx={{ borderRadius: "15px", marginTop: "20px", position: "unset", boxShadow: "none" }}
+
+        defaultExpanded={true}
       >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -95,13 +95,13 @@ const BusinessForm = () => {
           id="panel-header"
           sx={{ border: "none" }}
         >
-          <Box sx={{ display: "flex", alignItems: "center", gap: "10px",paddingLeft:"10px" }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: "10px", paddingLeft: "10px" }}>
             <Box
               sx={{
                 width: "60px",
                 height: "50px",
                 borderRadius: "10px",
-               
+
                 overflow: "hidden",
                 border: "1px solid gray",
               }}
@@ -110,8 +110,8 @@ const BusinessForm = () => {
                 <Image
                   src={business?.data.logo}
                   alt="Logo"
-                  width={50} // Set the width as per your requirement
-                  height={50} // Set the height as per your requirement
+                  width={50}
+                  height={50}
                 />
               )}
             </Box>
@@ -152,75 +152,60 @@ const BusinessForm = () => {
                           )} */}
                           {business?.data?.websiteService === true && (
 
-                            <Box sx={{display:"flex",alignItems:"center"}}>   <Button
-                            variant="outlined"
-                            href={`${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}site/${business?.data.slug}`}
-                            target="_blank"
-                            sx={{
-                              background: "rgba(117, 127, 239, 0.10)",
+                            <Box sx={{ display: "flex", alignItems: "center" }}>   <Button
+                              variant="outlined"
+                              href={`${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}site/${business?.data.slug}`}
+                              target="_blank"
+                              sx={{
+                                background: "rgba(117, 127, 239, 0.10)",
 
-                              border: "none",
-                              textDecoration: "underline",
-                              pt: "2px",
-                              pb: "1px",
-                            }}
-                          >Go to Website 
-                          </Button>
-                          
+                                border: "none",
+                                textDecoration: "underline",
+                                pt: "2px",
+                                pb: "1px",
+                              }}
+                            >Go to Website
+                            </Button>
 
-                          <Box >
-                                  <Image
-                                    src={copyImage}
-                                    width={20}
-                                    height={20}
-                                    alt="copy"
-                                    onClick={handleSiteCopyLink}
-                                    style={{ cursor: "pointer",marginLeft:"5px",marginTop:"4px" }}
-                                  />
-                                </Box>
-                                {isLinkCopied &&
-                                  business?.data.websiteService === true && (
-                                    <div
-                                      style={{
-                                        position: "relative",
-                                        top: "-2px",
-                                        right: "26px",
-                                        padding: "3px",
-                                        background: "#F1F2FD",
-                                        borderRadius: "3px",
-                                        color: "#000",
-                                        marginLeft:"7px"
-                                      }}
-                                    >
-                                      Copied!
-                                    </div>
-                                  )}
-                              
-                          </Box>
-                         
+
+                              <Box >
+                                <Image
+                                  src={copyImage}
+                                  width={20}
+                                  height={20}
+                                  alt="copy"
+                                  onClick={handleSiteCopyLink}
+                                  style={{ cursor: "pointer", marginLeft: "5px", marginTop: "4px" }}
+                                />
+                              </Box>
+                              {isLinkCopied &&
+                                business?.data.websiteService === true && (
+                                  <div
+                                    style={{
+                                      position: "relative",
+                                      top: "-2px",
+                                      right: "26px",
+                                      padding: "3px",
+                                      background: "#F1F2FD",
+                                      borderRadius: "3px",
+                                      color: "#000",
+                                      marginLeft: "7px"
+                                    }}
+                                  >
+                                    Copied!
+                                  </div>
+                                )}
+
+                            </Box>
+
                           )}
-                          {/* <Tooltip title="Copy" arrow  sx={{cursor:"pointer"}}>
-                            <Image
-                              src={copyImage}
-                              alt="Main Image Description"
-                              width={20}
-                              height={20}
-                              title="Copy Image"
-                              sx={{ cursor: 'pointer' }} 
-                              
-                            />
-                          </Tooltip> */}
+
                         </Box>
                       </Grid>
                       <Grid item xs={12} md={6}>
                         <Box sx={{ display: "flex", gap: "10px" }}>
-                          {/* {business?.data?.bookingService === true && (
-                            <Typography variant="h6">Booking Url</Typography>
-                          )} */}
                           {business?.data?.bookingService === true && (
-
-
-<Box sx={{display:"flex"}}> <Button
+                            <Box sx={{ display: "flex" }}> <Button
                               variant="outlined"
                               href={`${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}booking/${business?.data.slug}`}
                               target="_blank"
@@ -233,43 +218,40 @@ const BusinessForm = () => {
                                 pb: "1px",
                               }}
                             >
-                             Go to Booking
+                              Go to Booking
                             </Button>
 
-                            <Box sx={{display:"flex"}}>
-                              
-                            <Image
-                              src={copyImage}
-                              width={20}
-                              height={20}
-                              alt="copy"
-                              onClick={handleBookingLink}
-                              style={{ cursor: "pointer",marginLeft:"5px",marginTop:"4px" }}
-                            />
-                          </Box>
-                          {isBookingLinkCopied &&
-                             business?.data.bookingService  === true && (
-                               <div
-                                 style={{
-                                   position: "relative",
-                                   top: "-2px",
-                                   right: "26px",
-                                   padding: "3px",
-                                   background: "#F1F2FD",
-                                   borderRadius: "3px",
-                                   color: "#000",
-                                   marginLeft:"7px"
-                                 }}
-                               >
-                                 Copied!
-                               </div>
-                             )}
-                          </Box>
-                             
-                           
-                        
+                              <Box sx={{ display: "flex" }}>
+
+                                <Image
+                                  src={copyImage}
+                                  width={20}
+                                  height={20}
+                                  alt="copy"
+                                  onClick={handleBookingLink}
+                                  style={{ cursor: "pointer", marginLeft: "5px", marginTop: "4px" }}
+                                />
+                              </Box>
+                              {isBookingLinkCopied &&
+                                business?.data.bookingService === true && (
+                                  <div
+                                    style={{
+                                      position: "relative",
+                                      top: "-2px",
+                                      right: "26px",
+                                      padding: "3px",
+                                      background: "#F1F2FD",
+                                      borderRadius: "3px",
+                                      color: "#000",
+                                      marginLeft: "7px"
+                                    }}
+                                  >
+                                    Copied!
+                                  </div>
+                                )}
+                            </Box>
                           )}
-                          
+
                         </Box>
                       </Grid>
                     </Grid>
@@ -291,9 +273,9 @@ const BusinessForm = () => {
                         <Box
                           sx={{
                             backgroundColor: business?.data?.color,
-                            width: "50px", // Set your desired width
+                            width: "50px", 
                             height: "20px",
-                            borderRadius: "5px", // Set your desired height
+                            borderRadius: "5px", 
                           }}
                         >
                           {" "}
@@ -323,12 +305,12 @@ const BusinessForm = () => {
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      width: "150px", // Set your desired width
-                      height: "100px", // Set your desired height
-                      border: "1px solid #ccc", // Border style
-                      borderRadius: "8px", // Border radius
+                      width: "150px", 
+                      height: "100px",
+                      border: "1px solid #ccc", 
+                      borderRadius: "8px", 
                       overflow: "hidden",
-                      marginTop: "-70px", // Hide overflow content
+                      marginTop: "-70px", 
                     }}
                   >
                     {business?.data?.bannerImg ? (
@@ -347,7 +329,7 @@ const BusinessForm = () => {
                   <Box sx={{ marginTop: "20px" }}>
                     {" "}
                     {business?.data?.socialLinks &&
-                    business.data.socialLinks.length > 0 ? (
+                      business.data.socialLinks.length > 0 ? (
                       business.data.socialLinks.map((socialLink, index) => (
                         <a
                           key={index}

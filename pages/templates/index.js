@@ -124,6 +124,15 @@ const TemplatesPage = () => {
                   fontSize: "13.5px",
                 }}
               >
+                Description
+              </TableCell>
+
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13.5px",
+                }}
+              >
                 Website
               </TableCell>
               <TableCell
@@ -179,6 +188,17 @@ const TemplatesPage = () => {
                 }}
               >
                 {data.slug}
+              </TableCell>
+
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13px",
+                  pt: "16px",
+                  pb: "16px",
+                }}
+              >
+                {data.description}
               </TableCell>
               <TableCell
                 sx={{

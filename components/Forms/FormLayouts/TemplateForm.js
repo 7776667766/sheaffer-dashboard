@@ -110,6 +110,7 @@ const TemplateForm = ({ formData, isEditMode }) => {
     ? {
       name: formData?.name || "",
       slug: formData?.slug || "",
+      description: formData?.description || "",
       websiteImage: formData?.websiteImage || "",
       bookingImage: formData?.bookingImage || "",
       id: formData?.id || "",
@@ -118,6 +119,7 @@ const TemplateForm = ({ formData, isEditMode }) => {
       name: "",
       websiteImage: "",
       bookingImage: "",
+      description:"",
       slug: "",
     };
 
@@ -126,6 +128,7 @@ const TemplateForm = ({ formData, isEditMode }) => {
     validationSchema: Yup.object().shape({
       name: requiredValidation(" Name"),
       slug: slugValidation("Slug"),
+      description: requiredValidation("Description")
     }),
 
     onSubmit: async (values) => {
@@ -232,42 +235,35 @@ const TemplateForm = ({ formData, isEditMode }) => {
                 }}
               />
             </Grid>
-            {/* <Grid item xs={12} md={12} lg={6}>
+
+            <Grid item xs={12} md={12} lg={6}>
               <Typography
-                component="label"
+                as="h5"
                 sx={{
                   fontWeight: "500",
                   fontSize: "14px",
-                  mb: "10px",
-                  display: "block",
+                  mb: "12px",
                 }}
               >
-
-                Upload Website Image
+                Description
               </Typography>
-
               <TextField
-                required
+                autoComplete="description"
                 fullWidth
-                name="websiteImage"
-                type="file"
-                onChange={handleWebsiteImageChange}
-                id="websiteImage"
-
+                label="Enter Description"
+                {...formik.getFieldProps("description")}
+                error={formik.touched.description && formik.errors.description ? true : false}
+                helperText={
+                  formik.touched.description && formik.errors.description
+                    ? formik.errors.description
+                    : ""
+                }
+                InputProps={{
+                  style: { borderRadius: 8 },
+                }}
               />
-              {profileImageUrl1 && (
-                <Image
-                  src={profileImageUrl1}
-                  alt="profile"
-                  style={{
-                    border: "1px solid #e0e0e0",
-                  }}
-                  width={50}
-                  height={50}
-                />
-              )}
-
-            </Grid> */}
+            </Grid>
+            
             <Grid item xs={12} md={12} lg={6}>
               <Box sx={{ display: "flex", alignItems: "end", gap: 1 }}>
                 <Box sx={{ flex: 1 }}>
@@ -305,42 +301,7 @@ const TemplateForm = ({ formData, isEditMode }) => {
                 )}
               </Box>
             </Grid>
-            {/* <Grid item xs={12} md={12} lg={6}>
-              <Typography
-                component="label"
-                sx={{
-                  fontWeight: "500",
-                  fontSize: "14px",
-                  mb: "10px",
-                  display: "block",
-                }}
-              >
-
-                Upload Booking Image
-              </Typography>
-
-              <TextField
-                required
-                fullWidth
-                name="bookingImage"
-                type="file"
-                id="bookingImage"
-
-                onChange={handleBookingImageChange}
-
-              />
-              {profileImageUrl2 && (
-                <Image
-                  src={profileImageUrl2}
-                  alt="profile"
-                  style={{
-                    border: "1px solid #e0e0e0",
-                  }}
-                  width={50}
-                  height={50}
-                />
-              )}
-            </Grid> */}
+        
             <Grid item xs={12} md={12} lg={6}>
               <Box sx={{ display: "flex", alignItems: "end", gap: 1 }}>
                 <Box sx={{ flex: 1 }}>
