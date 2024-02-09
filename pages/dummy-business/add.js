@@ -22,7 +22,7 @@ import SendIcon from "@mui/icons-material/Send";
 import { ColorPicker } from "@mantine/core";
 
 const BusinessForm = () => {
-  const { role } = useSelector((state) => state.auth);
+  const { role } = useSelector((state) => state.auth);       
   const { business, dataFatched, isLoading } = useSelector(
     (state) => state.business
   );
@@ -74,12 +74,6 @@ const BusinessForm = () => {
       color: "",
       fontSize:"",
       fontFamily:"",
-      // theme: "",
-      // socialLinks: {
-      //   facebook: "",
-      //   twitter: "",
-      //   instagram: "",
-      // },
     },
     validationSchema: Yup.object({
       name: requiredValidation("name required"),
@@ -121,40 +115,6 @@ const BusinessForm = () => {
       [field]: value,
     }));
   };
-
-  // const handleSubmit = () => {
-  //   dispatch(
-  //     addBusinessFunApi({
-  //       data: {
-  //         name: businessData.name,
-  //         email: businessData.email,
-  //         phone: businessData.phone,
-  //         slug: businessData.slug,
-  //         logo: avatar1,
-  //         description: businessData.description,
-  //         address: businessData.address,
-  //         bannerText: businessData.bannerText,
-  //         bannerImg: avatar2,
-  //         color: businessData.color,
-  //         googleId: "1234567890",
-  //         socialLinks: [
-  //           {
-  //             name: "facebook",
-  //             link: "https://www.facebook.com/",
-  //           },
-  //           {
-  //             name: "instagram",
-  //             link: "https://www.instagram.com/",
-  //           },
-  //         ],
-  //       },
-  //       onSuccess: () => {
-  //         router.push("/services/add-dummy-business/");
-  //       },
-  //     })
-  //   );
-  // };
-
   return (
     <>
       <h1>Add Dummy Business</h1>
@@ -399,7 +359,7 @@ const BusinessForm = () => {
                   sx={{
                     fontWeight: "500",
                     fontSize: "14px",
-                    mb: "12px",
+                     mb: "12px",
                   }}
                 >
                   bannerText

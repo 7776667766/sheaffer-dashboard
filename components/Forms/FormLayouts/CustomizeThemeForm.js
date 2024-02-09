@@ -150,7 +150,7 @@ export const CustomizeThemeForm = ({ formData, isEditMode }) => {
                   accept="image/*"
                   onChange={handleFileChange}
                 />
-              </Box>
+              </Box> 
               {bannerImageUrl && (
                 <Image
                   src={bannerImageUrl}

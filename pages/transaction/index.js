@@ -32,12 +32,12 @@ const TransactionPage = () => {
       dispatch(
         getMyCardFunApi({
           data: {
-            businessId: business?.id,
+            businessId: business?.data?.id,
           },
         })
       );
     }
-  }, [dispatch, card.data, card.dataFatched, business?.id]);
+  }, [dispatch, card.data, card.dataFatched, business?.data?.id]);
 
   return (
     <>

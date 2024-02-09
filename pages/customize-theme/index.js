@@ -29,8 +29,7 @@ const CustomizePage = () => {
   //     }
   //   }
   // }, [dispatch, dataFatched]);
-
-
+                                                                                                                                                    
   useEffect(() => {
     if (!dataFatched) {
       const selectedBusinessId = localStorage.getItem('selectedBusinessId');
@@ -54,7 +53,6 @@ const CustomizePage = () => {
   //     }
   //   }
   // }, [dispatch, dataFatched]);
-
 
   useEffect(() => {
     if (business?.data && !dataInitalized) {
