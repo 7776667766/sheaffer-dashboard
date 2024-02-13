@@ -31,36 +31,36 @@ export const SidebarData = () => {
       iconClosed: <KeyboardArrowRightIcon />,
       iconOpened: <KeyboardArrowDownIcon />,
 
-      subNav: localServer && [
-        {
-          title: "eCommerce",
-          path: "/ecommerce/",
-        },
-        {
-          title: "Analytics",
-          path: "/analytics/",
-        },
-        {
-          title: "Project Management",
-          path: "/project-management/",
-        },
-        {
-          title: "LMS Courses",
-          path: "/lms-courses/",
-        },
-        {
-          title: "Crypto",
-          path: "/crypto/",
-        },
-        {
-          title: "Help/Support Desk",
-          path: "/help-desk/",
-        },
-        {
-          title: "SaaS App",
-          path: "/saas-app/",
-        },
-      ],
+      // subNav: localServer && [
+      //   {
+      //     title: "eCommerce",
+      //     path: "/ecommerce/",
+      //   },
+      //   {
+      //     title: "Analytics",
+      //     path: "/analytics/",
+      //   },
+      //   {
+      //     title: "Project Management",
+      //     path: "/project-management/",
+      //   },
+      //   {
+      //     title: "LMS Courses",
+      //     path: "/lms-courses/",
+      //   },
+      //   {
+      //     title: "Crypto",
+      //     path: "/crypto/",
+      //   },
+      //   {
+      //     title: "Help/Support Desk",
+      //     path: "/help-desk/",
+      //   },
+      //   {
+      //     title: "SaaS App",
+      //     path: "/saas-app/",
+      //   },
+      // ],
     },
     role === "owner" && {
       title: "Manager",
