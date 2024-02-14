@@ -4,7 +4,6 @@ import styles from "@/styles/PageTitle.module.css";
 import Features from "@/components/Dashboard/eCommerce/Features";
 import UserList from "./users";
 import CloseIcon from "@mui/icons-material/Close";
-
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -21,9 +20,7 @@ import {
   ListItemText,
   Typography,
   TextField,
-  TextareaAutosize,
   DialogContent,
-  Menu,
 } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -52,7 +49,7 @@ import {
   requiredValidation,
   slugValidation,
 } from "@/utils/validation";
-import { getMyBusinessBookingFunApi } from "store/booking/service";
+// import { getMyBusinessBookingFunApi } from "store/booking/service";
 
 export default function DashboardPage() {
   const { user, role } = useSelector((state) => state.auth);
@@ -61,6 +58,20 @@ export default function DashboardPage() {
   const { businessAll } = useSelector((state) => state.business);
   console.log("business All ", businessAll);
   console.log("only busness ", business);
+  const transactionDates = business?.data?.TransactionDate;
+
+  if (transactionDates && transactionDates.length > 0) {
+    const parsedDates = transactionDates.map(dateString => new Date(dateString));
+    console.log("parsedDates", parsedDates)
+    const currentDate = new Date();
+    const isAnyDateBeforeCurrent = parsedDates.some(parsedDate => parsedDate < currentDate);
+    console.log("isAnyDateBeforeCurrent", isAnyDateBeforeCurrent)
+    if (isAnyDateBeforeCurrent) {
+      console.log(`Show popup notification to user subscription ending soon.`);
+    }
+  } else {
+    console.log("Transaction dates are missing or empty.");
+  }
 
   const dispatch = useDispatch();
   const [slug, setSlug] = useState("");
@@ -74,7 +85,6 @@ export default function DashboardPage() {
   const [formData, setFormData] = useState({});
   const [otherBusinessData, setotherBusinessData] = useState(false);
   const [otherBusiness, setOtherBusiness] = useState(null);
-
   const [selectedBusienssId, setselectedBusienssId] = useState(null);
 
   const handleDropdownChange = (event) => {
@@ -93,7 +103,7 @@ export default function DashboardPage() {
         data: {
           businessId: selectedValue,
         },
-        onSuccess: () => {},
+        onSuccess: () => { },
       })
     );
   };
@@ -535,7 +545,7 @@ export default function DashboardPage() {
                             }
                             helperText={
                               formik.touched.bannerText &&
-                              formik.errors.bannerText
+                                formik.errors.bannerText
                                 ? formik.errors.bannerText
                                 : ""
                             }
@@ -578,10 +588,9 @@ export default function DashboardPage() {
 
                         <Grid item xs={12} md={12} lg={12}>
                           <TextField
-                            multiline // Use multiline property to make it a textarea
+                            multiline 
                             rows={3}
                             name="description"
-                            // fullWidth
                             id="description"
                             label="Enter Description"
                             {...formik.getFieldProps("description")}
@@ -591,7 +600,7 @@ export default function DashboardPage() {
                             }
                             helperText={
                               formik.touched.description &&
-                              formik.errors.description
+                                formik.errors.description
                                 ? formik.errors.description
                                 : ""
                             }
@@ -609,27 +618,6 @@ export default function DashboardPage() {
                             <Box sx={{ flex: 1 }}></Box>
                           </Box>
                         </Grid>
-
-                        {/* <Grid
-                          item
-                          xs={12}
-                          style={{ textAlign: "center", marginTop: "20px" }}
-                        >
-                          <LoadingButtonComponent
-                            onClick={handleAddRequest}
-                            type="submit"
-                            fullWidth={false}
-                            sx={{
-                              paddingX: "10px",
-                            }}
-                            value={
-                              <>
-                                <SendIcon className="mr-10px" />
-                                Send Request
-                              </>
-                            }
-                          />
-                        </Grid> */}
                       </Grid>
                       <Grid
                         container
@@ -798,7 +786,7 @@ export default function DashboardPage() {
                           variant="contained"
                           color="primary"
                         >
-                          Register Business and Select Theme
+                          Register Business 
                         </Button>
                       </Grid>
                     </Grid>
@@ -1183,9 +1171,6 @@ export default function DashboardPage() {
         </Grid>
       </Grid>
 
-      {/* Recent Orders */}
-      {/* <RecentOrders /> */}
-
       <Grid
         container
         rowSpacing={1}
@@ -1245,9 +1230,6 @@ export default function DashboardPage() {
             <UserList />
           </Grid>
         )}
-        {/* <Grid item xs={12} md={12} lg={12} xl={4}>
-          <BestSellingProducts />
-        </Grid> */}
       </Grid>
     </>
   );

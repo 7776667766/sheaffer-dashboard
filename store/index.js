@@ -11,7 +11,6 @@ import { planReducer } from "./plan/planSlice";
 import { templateReducer } from "./template/templateSlice";
 import { reviewReducer } from "./review/reviewSlice";
 
-
 const store = configureStore({
   reducer: {
     auth: authReducer,
