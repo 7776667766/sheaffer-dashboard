@@ -917,7 +917,7 @@ export default function DashboardPage() {
                       alignItems: "center",
                     }}
                   >
-                    <Box>
+                    <Box sx={{display:"flex",alignItems:"center"}}>
                       <Image
                         src={business?.data.logo}
                         width={100}
