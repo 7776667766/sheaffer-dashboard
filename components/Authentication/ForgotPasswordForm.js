@@ -25,7 +25,7 @@ const ForgotPasswordForm = () => {
       phone: "",
     },
     validationSchema: Yup.object({
-      phone: phoneValidation(),
+      phone: Yup.string().required('Field is required'),
     }),
     onSubmit: async (values) => {
       console.log("Handle Submit", values);
@@ -92,25 +92,25 @@ const ForgotPasswordForm = () => {
                           display: "block",
                         }}
                       >
-                        Phone
+                       Enter Phone or Email Address
                       </Typography>
 
                       <TextField
                         required
                         fullWidth
-                        label="Phone Number"
-                        autoComplete="phone"
+                        label="Phone or Email"
+                        autoComplete="text"
                         {...formik.getFieldProps("phone")}
                         error={
                           formik.touched.phone && formik.errors.phone
                             ? true
                             : false
                         }
-                        helperText={
-                          formik.touched.phone && formik.errors.phone
-                            ? formik.errors.phone
-                            : ""
-                        }
+                        // helperText={
+                        //   formik.touched.phone && formik.errors.phone
+                        //     ? formik.errors.phone
+                        //     : ""
+                        // }
                         InputProps={{
                           style: { borderRadius: 8 },
                         }}
