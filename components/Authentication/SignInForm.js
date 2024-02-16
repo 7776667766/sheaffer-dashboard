@@ -35,8 +35,10 @@ const SignInForm = () => {
       dispatch(
         loginFunApi({
           data: values,
+          
           onSuccess: (phone) => {
-            const myPhone = btoa(phone);
+            console.log("phone40",phone)
+            const myPhone = btoa(JSON.stringify(phone));
             router.push(`/authentication/verify-otp/?verify=${myPhone}`);
           },
         })

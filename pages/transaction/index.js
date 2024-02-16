@@ -28,16 +28,26 @@ const TransactionPage = () => {
   };
 
   useEffect(() => {
-    if (card.dataFatched !== true) {
+    // if (card.dataFatched !== true) {
       dispatch(
         getMyCardFunApi({
-          data: {
-            businessId: business?.data?.id,
-          },
+        
         })
       );
-    }
-  }, [dispatch, card.data, card.dataFatched, business?.data?.id]);
+    // }
+  }, [dispatch]);
+
+
+  
+//   useEffect(() => {     
+//     dispatch(
+//       getMyBusinessBookingFunApi({
+//         data: {
+//           businessId: business?.data?.id
+//         },
+//       })
+//     );
+// }, [dispatch, business?.data?.id]);
 
   return (
     <>

@@ -16,11 +16,16 @@ import { getMyBussinessFunApi } from "store/business/services";
 const VerifyOtpForm = () => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const [myPhone, setMyPhone] = useState("");
+  const [myPhone, setMyPhone] = useState(""); 
+
+  console.log("myPhone20",myPhone)
   const { user, role, isAuthenticated, otpVerified, isLoading } = useSelector(
     (state) => state.auth
   );
   const [startTimer, setStartTimer] = useState(false);
+
+  // const myTokenData = atob(pathname.split("/")[2]);
+  // const { phone: tokenPhone, type } = JSON.parse(myTokenData);
 
   useEffect(() => {
     if (router.query.data != undefined) {
