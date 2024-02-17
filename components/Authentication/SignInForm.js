@@ -22,13 +22,15 @@ const SignInForm = () => {
     (state) => state.auth
   );
 
+  console.log(otpVerified,user,isLoading,isAuthenticated)
+
   const formik = useFormik({
     initialValues: {
-      phone: "",
+      email: "",
       password: "",
     },
     validationSchema: Yup.object({
-      phone: requiredValidation("Email or phone"),
+      email: requiredValidation("Email or phone"),
       password: requiredValidation(),
     }),
     onSubmit: (values) => {
@@ -36,10 +38,10 @@ const SignInForm = () => {
         loginFunApi({
           data: values,
           
-          onSuccess: (phone) => {
-            console.log("phone40",phone)
-            const myPhone = btoa(JSON.stringify(phone));
-            router.push(`/authentication/verify-otp/?verify=${myPhone}`);
+          onSuccess: (email) => {
+            console.log("email",email)
+            const myEmail = btoa(JSON.stringify(email));
+            router.push(`/authentication/verify-otp/?verify=${myEmail}`);
           },
         })
       );
@@ -53,7 +55,9 @@ const SignInForm = () => {
       } else {
       }
     }
-  }, [isAuthenticated, otpVerified, router, user?.phone]);
+  }, [isAuthenticated, otpVerified, router, user?.email]);
+
+
 
   return (
     <>
@@ -146,19 +150,19 @@ const SignInForm = () => {
                       <TextField
                         required
                         fullWidth
-                        id="phone"
+                        id="email"
                         label="Email or phone"
-                        name="phone"
-                        autoComplete="phone"
-                        {...formik.getFieldProps("phone")}
+                        name="email"
+                        autoComplete="email"
+                        {...formik.getFieldProps("email")}
                         error={
-                          formik.touched.phone && formik.errors.phone
+                          formik.touched.email && formik.errors.email
                             ? true
                             : false
                         }
                         helperText={
-                          formik.touched.phone && formik.errors.phone
-                            ? formik.errors.phone
+                          formik.touched.email && formik.errors.email
+                            ? formik.errors.email
                             : ""
                         }
                         InputProps={{

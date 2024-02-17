@@ -18,14 +18,11 @@ const VerifyOtpForm = () => {
   const dispatch = useDispatch();
   const [myPhone, setMyPhone] = useState(""); 
 
-  console.log("myPhone20",myPhone)
+  console.log("myEmail21",myPhone)
   const { user, role, isAuthenticated, otpVerified, isLoading } = useSelector(
     (state) => state.auth
   );
   const [startTimer, setStartTimer] = useState(false);
-
-  // const myTokenData = atob(pathname.split("/")[2]);
-  // const { phone: tokenPhone, type } = JSON.parse(myTokenData);
 
   useEffect(() => {
     if (router.query.data != undefined) {
@@ -42,7 +39,7 @@ const VerifyOtpForm = () => {
       dispatch(
         verifyOtpFunApi({
           data: {
-            phone: myPhone,
+            email: myPhone,
             otp: value,
             forLogin: router.query.verify !== undefined,  
           },
@@ -58,23 +55,11 @@ const VerifyOtpForm = () => {
               router.push("/");
             }
           },
+          
         })
       );
     }
   };
-
-  // useEffect(() => {
-  //   if (router.pathname === "/authentication/verify-otp") {
-  //     if (isAuthenticated) {
-  //       if (otpVerified) {
-  //         router.push("/");
-  //       }
-  //     } else {
-  //       router.push("/authentication/sign-in");
-  //     }
-  //   } else {
-  //   }
-  // }, [isAuthenticated, otpVerified, router]);
 
   const resendOtp = () => {
     setStartTimer(true);

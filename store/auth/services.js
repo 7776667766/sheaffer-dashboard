@@ -25,7 +25,7 @@ export const loginFunApi = createAsyncThunk(
         const responseData = response.data.data;
         if (responseData.user.role !== "user") {
           if (onSuccess) {
-            onSuccess(responseData.user.phone);
+            onSuccess(responseData.user.email);
           }
           return;
         } else {
