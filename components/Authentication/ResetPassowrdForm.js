@@ -3,7 +3,6 @@ import Grid from "@mui/material/Grid";
 import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
 import styles from "@/components/Authentication/Authentication.module.css";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -40,7 +39,7 @@ const ResetPasswordForm = () => {
         resetPasswordFunApi({
           data: {
             ...values,
-            phone: atob(id),
+            email: atob(id),
           },
           onSuccess: () => {
             router.push("/authentication/sign-in");

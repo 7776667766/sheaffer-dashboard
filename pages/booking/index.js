@@ -13,8 +13,6 @@ import Card from "@mui/material/Card";
 import IconButton from "@mui/material/IconButton";
 import TableCell from "@mui/material/TableCell";
 import Tooltip from "@mui/material/Tooltip";
-import DeleteIcon from "@mui/icons-material/Delete";
-import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import {
@@ -40,7 +38,6 @@ import { DisabledByDefault } from "@mui/icons-material";
 const BookingPage = () => {
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [rescheduleDate, setRescheduleDate] = useState(null);
-
   const [timeSlots, setTimeSlots] = useState([]);
   const [selectedTime, setSelectedTime] = useState([]);
   const [targetBookingData, setTargetBookingData] = useState(null);
@@ -160,45 +157,6 @@ const BookingPage = () => {
       })
     );
   };
-
-  // useEffect(() => {
-  //   if (!dataFatched && business?.data?.id ) {
-  //     const selectedBusinessId = localStorage.getItem('selectedBusinessId');
-  //     console.log("selectedBusinessId167",selectedBusinessId)
-  //     dispatch(
-  //       getMyBussinessFunApi({
-  //         data: selectedBusinessId,
-  //         onSuccess: (businessId) => {
-  //           dispatch(
-  //             getMyBusinessBookingFunApi({
-  //               data: {
-  //                 businessId: businessId,
-  //               }, 
-  //             })
-  //           );
-  //         },
-  //       })
-  //     );
-  //   }
-  // }, [dispatch, dataFatched, business?.data?.id]); 
-
-  // useEffect(() => {
-  //   if (!dataFatched && business?.data?.id) {
-  //     dispatch(
-  //       getMyBussinessFunApi({
-  //         onSuccess: (businessId) => {
-  //           dispatch(
-  //             getMyBusinessBookingFunApi({
-  //               data: {
-  //                 businessId: businessId,
-  //               },
-  //             })
-  //           );
-  //         },
-  //       })
-  //     );
-  //   }
-  // }, [dispatch, dataFatched, business?.data?.id]);
 
    useEffect(() => {     
             dispatch(
