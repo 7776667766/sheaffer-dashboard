@@ -252,6 +252,10 @@ const ServicesPage = () => {
                   fontSize: "13px",
                   pt: "16px",
                   pb: "16px",
+                  overflow: "hidden",            
+                  display: "-webkit-box",
+                  WebkitBoxOrient: "vertical",   
+                  WebkitLineClamp: 2,  
                 }}
               >
                 {data.description}
