@@ -23,7 +23,7 @@ const SignUpForm = () => {
     <>
       <div className="authenticationBox">
         <Box
-          component="main"
+          component="main"      
           sx={{
             maxWidth: "510px",
             ml: "auto",

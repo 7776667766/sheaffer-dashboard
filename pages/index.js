@@ -1085,7 +1085,7 @@ export default function DashboardPage() {
                               marginBottom: "5px",
                             }}
                           >
-                            {business.data.phone}
+                            {/* {business.data.phone} */}
                           </li>
                           <li
                             style={{
@@ -1166,7 +1166,6 @@ export default function DashboardPage() {
               </Accordion>
             </Card>
           )}
-
           <Features />
         </Grid>
       </Grid>

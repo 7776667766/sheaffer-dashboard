@@ -78,7 +78,7 @@ const VerifyOtpForm = () => {
   const addLeadingZero = (number) => {
     return number < 10 ? `0${number}` : `${number}`;
   };
-
+  
   return (
     <>
       <div className="authenticationBox">

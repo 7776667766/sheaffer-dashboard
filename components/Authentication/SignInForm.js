@@ -57,8 +57,6 @@ const SignInForm = () => {
     }
   }, [isAuthenticated, otpVerified, router, user?.email]);
 
-
-
   return (
     <>
       <div className="authenticationBox">

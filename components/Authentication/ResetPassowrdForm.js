@@ -14,7 +14,6 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { resetPasswordFunApi } from "store/auth/services";
-import toast from "react-hot-toast";
 import { LoadingButtonComponent } from "../UIElements/Buttons/LoadingButton";
 
 const ResetPasswordForm = () => {

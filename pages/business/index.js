@@ -46,7 +46,6 @@ const BusinessPage = () => {
   const [isRenameFormOpen, setIsRenameFormOpen] = useState(false);
   const [selectedBusiness, setSelectedBusiness] = useState([]);
   console.log("selectedBusiness", selectedBusiness);
-  // console.log("BUSINESS ID", selectedBusiness?.id);
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
   const { role } = useSelector((state) => state.auth);
@@ -73,24 +72,11 @@ const BusinessPage = () => {
     "&:nth-of-type(odd)": {
       backgroundColor: "#EAEEFD",
     },
-    // hide last border
+  
     "&:last-child td, &:last-child th": {
       border: 0,
     },
   }));
-
-  // useEffect(() => {
-  //   console.log("85")
-  //    if (!businessAll.dataFatched ) {
-  //     dispatch(
-  //       getallBussinessesFunApi({
-  //         onSuccess: (response) => {
-  //           console.log("API Response:", response);
-  //         },
-  //       })
-  //     );
-  //   }
-  // }, [dispatch, businessAll.dataFatched, businessAll.data]);
 
   useEffect(() => {
     console.log("Effect triggered");
@@ -103,19 +89,6 @@ const BusinessPage = () => {
     );
   }, [dispatch]);
   
-  
-  // useEffect(() => {
-  //   if (businessAll.dataFatched !== true) {
-  //     dispatch(
-  //       getallBussinessesFunApi({
-  //         onSuccess: (response) => {
-  //           console.log("API Response:", response);
-  //         },
-  //       })
-  //     );
-  //   }
-  // }, [dispatch, businessAll.dataFatched, businessAll.data]);
-
   const handleClick = (id) => {
     const selectedBusiness = businessAll?.data?.find((item) => item.id === id);
     setSelectedBusiness(selectedBusiness);
@@ -252,15 +225,6 @@ const BusinessPage = () => {
                   fontSize: "13.5px",
                 }}
               >
-                Phone
-              </TableCell>
-
-              <TableCell
-                sx={{
-                  borderBottom: "1px solid #F7FAFF",
-                  fontSize: "13.5px",
-                }}
-              >
                 Status
               </TableCell>
               <TableCell
@@ -320,7 +284,7 @@ const BusinessPage = () => {
                 {data?.email}
               </TableCell>
 
-              <TableCell
+              {/* <TableCell
                 sx={{
                   borderBottom: "1px solid #F7FAFF",
                   fontSize: "13px",
@@ -329,7 +293,7 @@ const BusinessPage = () => {
                 }}
               >
                 {data?.phone}
-              </TableCell>
+              </TableCell> */}
 
               <TableCell
                 sx={{
@@ -421,18 +385,14 @@ const BusinessPage = () => {
           >
             {selectedBusiness?.bannerImg && (
               <Image
-                // key={index}
                 src={selectedBusiness?.bannerImg}
                 width={80}
                 height={80}
                 alt={`Image`}
-                //  onClick={() => handleImageClick(image)}
                 style={{ borderRadius: "50%" }}
               />
             )}
-            {/* {businessImages.map((image, index) => ( */}
 
-            {/* // ))} */}
           </Box>
           <Box
             style={{
@@ -452,7 +412,6 @@ const BusinessPage = () => {
                   <StyledTableRow>
                     <StyledTableCell
                       style={{
-                        // border: "1px solid #ddd",
                         padding: "10px",
                         border: "none",
                       }}
@@ -461,7 +420,6 @@ const BusinessPage = () => {
                     </StyledTableCell>
                     <StyledTableCell
                       style={{
-                        // border: "1px solid #ddd",
                         padding: "10px",
                         border: "none",
                         textAlign: "end",
@@ -473,7 +431,6 @@ const BusinessPage = () => {
                   <StyledTableRow>
                     <StyledTableCell
                       style={{
-                        // border: "1px solid #ddd",
                         padding: "10px",
                         border: "none",
                       }}
@@ -482,7 +439,6 @@ const BusinessPage = () => {
                     </StyledTableCell>
                     <StyledTableCell
                       style={{
-                        // border: "1px solid #ddd",
                         padding: "10px",
                         border: "none",
                         textAlign: "end",
@@ -494,7 +450,6 @@ const BusinessPage = () => {
                   <StyledTableRow>
                     <StyledTableCell
                       style={{
-                        // border: "1px solid #ddd",
                         padding: "10px",
                         border: "none",
                       }}
@@ -503,7 +458,6 @@ const BusinessPage = () => {
                     </StyledTableCell>
                     <StyledTableCell
                       style={{
-                        // border: "1px solid #ddd",
                         padding: "10px",
                         border: "none",
                         textAlign: "end",
@@ -515,7 +469,6 @@ const BusinessPage = () => {
                   <StyledTableRow>
                     <StyledTableCell
                       style={{
-                        // border: "1px solid #ddd",
                         padding: "10px",
                         border: "none",
                       }}
@@ -524,7 +477,6 @@ const BusinessPage = () => {
                     </StyledTableCell>
                     <StyledTableCell
                       style={{
-                        // border: "1px solid #ddd",
                         padding: "10px",
                         border: "none",
                         textAlign: "end",
@@ -534,30 +486,21 @@ const BusinessPage = () => {
                     </StyledTableCell>
                   </StyledTableRow>
                   <StyledTableRow>
-                    <StyledTableCell
+                    {/* <StyledTableCell
                       style={{
-                        // border: "1px solid #ddd",
-                        padding: "10px",
-                        border: "none",
-                      }}
-                    >
-                      <strong>Phone:</strong>
-                    </StyledTableCell>
-                    <StyledTableCell
-                      style={{
-                        // border: "1px solid #ddd",
                         padding: "10px",
                         border: "none",
                         textAlign: "end",
                       }}
+
+                      //phone
+                      
                     >
-                      {selectedBusiness?.phone}
-                    </StyledTableCell>
+                    </StyledTableCell> */}
                   </StyledTableRow>
                   <StyledTableRow>
                     <StyledTableCell
                       style={{
-                        // border: "1px solid #ddd",
                         padding: "10px",
                         border: "none",
                       }}
@@ -566,7 +509,6 @@ const BusinessPage = () => {
                     </StyledTableCell>
                     <StyledTableCell
                       style={{
-                        // border: "1px solid #ddd",
                         padding: "10px",
                         border: "none",
                         textAlign: "end",
@@ -578,7 +520,6 @@ const BusinessPage = () => {
                   <StyledTableRow>
                     <StyledTableCell
                       style={{
-                        // border: "1px solid #ddd",
                         padding: "10px",
                         border: "none",
                       }}
@@ -587,7 +528,6 @@ const BusinessPage = () => {
                     </StyledTableCell>
                     <StyledTableCell
                       style={{
-                        // border: "1px solid #ddd",
                         padding: "10px",
                         border: "none",
                         textAlign: "end",
@@ -596,23 +536,6 @@ const BusinessPage = () => {
                       {selectedBusiness?.bannerText}
                     </StyledTableCell>
                   </StyledTableRow>
-                  {/* <StyledTableRow>
-        <StyledTableCell style={{ border: '1px solid #ddd', padding: '10px' }}>
-          <strong>BannerImage:</strong>
-        </StyledTableCell>
-        <StyledTableCell style={{ border: '1px solid #ddd', padding: '10px' }}>
-          {selectedBusiness?.bannerImg ? (
-            <Image
-              src={selectedBusiness.bannerImg}
-              alt="Banner Image"
-              width={10}
-              height={10}
-            />
-          ) : (
-            "No Image"
-          )}
-        </StyledTableCell>
-      </StyledTableRow> */}
                 </TableBody>
               </Table>
             </TableContainer>
@@ -632,12 +555,12 @@ const BusinessPage = () => {
                   variant="contained "
                   onClick={handleClose}
                   sx={{
-                    backgroundColor: "white", // Set the background color
+                    backgroundColor: "white", 
                     color: "#707070",
                     width: "173px",
                     padding: "8px 20px",
-                    borderRadius: "8px", // Set the text color
-                    border: "2px solid #707070", // Add a red border
+                    borderRadius: "8px",
+                    border: "2px solid #707070", 
                   }}
                 >
                   Close
@@ -646,12 +569,12 @@ const BusinessPage = () => {
                   variant="contained "
                   onClick={handleReject}
                   sx={{
-                    backgroundColor: "white", // Set the background color
+                    backgroundColor: "white", 
                     color: "#F00",
                     width: "173px",
                     borderRadius: "8px",
-                    padding: "8px 20px", // Set the text color
-                    border: "2px solid #F00", // Add a red border
+                    padding: "8px 20px",
+                    border: "2px solid #F00", 
                   }}
                 >
                   Reject
@@ -707,12 +630,12 @@ const BusinessPage = () => {
                   variant="contained "
                   onClick={handleElimenate}
                   sx={{
-                    backgroundColor: "white", // Set the background color
+                    backgroundColor: "white", 
                     color: "#707070",
                     width: "173px",
                     padding: "8px 20px",
-                    borderRadius: "8px", // Set the text color
-                    border: "2px solid #707070", // Add a red border
+                    borderRadius: "8px", 
+                    border: "2px solid #707070", 
                   }}
                 >
                   Close
@@ -733,38 +656,6 @@ const BusinessPage = () => {
             </Dialog>
           )}
         </Box>
-        {/* <Box>
-                {isRejecting && (
-                  <Box>
-                    <TextField
-                      fullWidth
-                      label="Reason to Reject"
-                      variant="outlined"
-                      multiline
-                      rows={3}
-                      onChange={(e) => setRejectReason(e.target.value)}
-                    />
-
-                    <Box sx={{textAlign:"center"}}>
-                      <Button
-                        variant="contained"
-                        color="secondary"
-                        onClick={handleRejectConfirm}
-                        sx={{ marginTop: "30px",marginBottom:"10px" }}
-                      >
-                        Confirm Reject
-                      </Button>
-                    </Box>
-                  </Box>
-                )}
-              </Box> */}
-        {/* {selectedBusiness && (
-          <BusinessForm
-            open={isRenameFormOpen}
-            onClose={handleClosePopup}
-            businessData={selectedBusiness}
-          />
-        )} */}
       </Card>
     </>
   );
