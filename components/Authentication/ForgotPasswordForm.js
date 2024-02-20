@@ -92,13 +92,13 @@ const ForgotPasswordForm = () => {
                           display: "block",
                         }}
                       >
-                       Enter Phone or Email Address
+                        Email Address
                       </Typography>
 
                       <TextField
                         required
                         fullWidth
-                        label="Phone or Email"
+                        label="Email"
                         autoComplete="text"
                         {...formik.getFieldProps("phone")}
                         error={
