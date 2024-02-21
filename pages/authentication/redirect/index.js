@@ -7,6 +7,7 @@ export default function RedirectPage() {
   const router = useRouter();
 
   const { id } = router.query;
+  
   useEffect(() => {
       console.log('ID:', id);
   }, [id]);

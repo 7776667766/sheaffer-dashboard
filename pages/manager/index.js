@@ -28,9 +28,15 @@ const Manager = () => {
   const nextPage = (id, event) => {
     event.preventDefault();
 
-    router.push(`/manager/edit-manager/${id}`);
+    router.push(`/specialist/edit-manager?id=${id}`);
     console.log()
   };
+
+  
+  // const nextPage = (id) => {
+  //   console.log("id", id);
+  //   router.push(`/specialist/editform?id=${id}`);
+  // };
 
 //   dispatch(
 //     getMyBussinessFunApi({
