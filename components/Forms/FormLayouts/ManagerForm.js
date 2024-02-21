@@ -7,6 +7,9 @@ import TextField from "@mui/material/TextField";
 import SendIcon from "@mui/icons-material/Send";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import PhoneInput from 'react-phone-input-2'
+import 'react-phone-input-2/lib/style.css'
+
 import {
   confirmPasswordValidation,
   emailValidation,
@@ -23,12 +26,25 @@ const ManagerForm = ({ formData, isEditMode }) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const { business } = useSelector((state) => state.business);
-  console.log("business?.data.id",business?.data?.id)
+  console.log("business?.data.id", business?.data?.id);
+
+  // const [phoneNumber, setPhoneNumber] = useState("");
+
+  // const [validate, setValidate] = useState("");
+  // const handlleChange = (value) => {
+  //   setPhoneNumber(value);
+  //   setValidate(validatePhoneNumber(value));
+  // };
+
+  // const validatePhoneNumber = (phoneNumber) => {
+  //   const phoneNumberPattern = /^\d{10}$/;
+  //   return phoneNumberPattern.test(phoneNumber);
+  // };
 
   const initialValues = isEditMode
     ? {
         ...formData,
-        businessId: business?.data?.id,
+        businessId: business?.data?.id || "",
       }
     : {
         name: "",
@@ -38,6 +54,8 @@ const ManagerForm = ({ formData, isEditMode }) => {
         confirmPassword: "",
         businessId: business?.data?.id,
       };
+
+     
 
   const validation = {
     phone: phoneValidation(),
@@ -63,6 +81,8 @@ const ManagerForm = ({ formData, isEditMode }) => {
       // }
     ),
     onSubmit: (values) => {
+
+
       if (isEditMode) {
         dispatch(
           editManagerFunApi({
@@ -169,14 +189,15 @@ const ManagerForm = ({ formData, isEditMode }) => {
               >
                 Phone Number
               </Typography>
-              <TextField
-                autoComplete="number"
-                fullWidth
-                label="Phone Number"
-                {...formik.getFieldProps("phone")}
-                error={
-                  formik.touched.phone && formik.errors.phone ? true : false
-                }
+              <PhoneInput
+                // className="react-international-phone-input"
+                international
+                country={"pk"}
+                value={formik.values.phone}
+                onChange={(value) => formik.setFieldValue("phone", value)}
+
+                  {...formik.getFieldProps("phone")}
+                error={formik.touched.phone && formik.errors.phone ? true : false}
                 helperText={
                   formik.touched.phone && formik.errors.phone
                     ? formik.errors.phone
@@ -184,7 +205,9 @@ const ManagerForm = ({ formData, isEditMode }) => {
                 }
                 InputProps={{
                   style: { borderRadius: 8 },
+                  required:true
                 }}
+                containerClass="react-phone-input-container"
               />
             </Grid>
             {!isEditMode && (
