@@ -907,7 +907,7 @@ export default function DashboardPage() {
                   >
                     <Box sx={{display:"flex",alignItems:"center"}}>
                       <Image
-                        src={business?.data.logo}
+                        src={"https://images.pexels.com/photos/1813272/pexels-photo-1813272.jpeg?auto=compress&cs=tinysrgb&w=600"}
                         width={100}
                         height={50}
                         alt="Logo"
