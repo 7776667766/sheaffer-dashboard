@@ -50,8 +50,10 @@ const ManagerForm = ({ formData, isEditMode }) => {
     : {
         name: "",
         email: "",
+
+        countryCode: "",
         phoneNumber: "",
-        countryCode:"",
+
         password: "",
         confirmPassword: "",
         businessId: business?.data?.id,
@@ -93,16 +95,21 @@ const ManagerForm = ({ formData, isEditMode }) => {
           })
         );
       } else {
-
-        
         console.log("Handle Submit", values);
+        let myPhoneNumberArray = values.phoneNumber.split(values.countryCode);
+        const myCountryCode = myPhoneNumberArray[0] + values.countryCode;
+        myPhoneNumberArray.shift();
 
+        const myPhoneNumber = myPhoneNumberArray.join(values.countryCode);
         dispatch(
           addManagerFunApi({
-            data: {...values,phoneNumber:{
-              countryCode: countryCode,
-              phone: values.phoneNumber,
-            },},
+            data: {
+              ...values,
+              phone: {
+                code: myCountryCode,
+                number: myPhoneNumber,
+              },
+            },
             onSuccess: () => {
               console.log("Add Manager Success");
               router.push("/manager/");
@@ -197,15 +204,17 @@ const ManagerForm = ({ formData, isEditMode }) => {
               <PhoneInput
                 international
                 country={"pk"}
-                value={formik.values.phone || ""}
+                value={formik.values.phoneNumber || ""}
                 onChange={(value, country) => {
-                  console.log(value,'ssss')
+                  console.log(value, "ssss");
                   formik.setFieldValue("countryCode", country.dialCode);
-                  formik.setFieldValue("phone", value);
+                  formik.setFieldValue("phoneNumber", value);
                 }}
                 InputProps={{
-                  style: { borderRadius: 8 },
+                  style: { borderRadius: 8, width: "100%", border: "none" },
                 }}
+                
+                inputStyle={{width:"100%",height:"50px"}}
               />
             </Grid>
             {!isEditMode && (
