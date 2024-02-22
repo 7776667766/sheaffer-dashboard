@@ -7,11 +7,17 @@ import ServiceTypeForm from "@/components/Forms/FormLayouts/ServiceTypeForm";
 
 export default function EditServicePage() {
   const router = useRouter();
+  const { id } = router.query;
+
   const { serviceType } = useSelector((state) => state.service);
   console.log("serviceType Data ", serviceType);
 
   const [serviceTypeData, setServiceTypeData] = useState();
   const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    console.log("ID:", id);
+  }, [id]);
 
   useEffect(() => {
     if (router.query.id) {

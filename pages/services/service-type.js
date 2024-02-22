@@ -34,7 +34,7 @@ const ServicesType = () => {
   };
 
   const nextPage = (id) => {
-    router.push(`/services/edit-service-type/${id}`);
+    router.push(`/services/edit-service-type?id=${id}`);
   };
 
   useEffect(() => {

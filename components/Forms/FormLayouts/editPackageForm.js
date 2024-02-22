@@ -156,7 +156,7 @@ const AddPackagePage = ({ formData, isEditMode }) => {
                 <TextField
                   fullWidth
                   label="Price"
-                  type="number"
+                  type="text"
                   {...formik.getFieldProps("price")}
                   error={
                     formik.touched.price && formik.errors.price ? true : false

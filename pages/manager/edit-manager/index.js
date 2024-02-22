@@ -7,11 +7,14 @@ import ManagerForm from "@/components/Forms/FormLayouts/ManagerForm";
 
 export default function EditManagerPage() {
   const router = useRouter();
+  const { id } = router.query;
   const { managers } = useSelector((state) => state.manager);
 
   const [managerData, setManagerData] = useState();
   const [isLoading, setIsLoading] = useState(true);
-
+  useEffect(() => {
+    console.log("ID:", id);
+  }, [id]);
   useEffect(() => {
     if (router.query.id) {
       const manager = managers.find(

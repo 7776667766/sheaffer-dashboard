@@ -11,7 +11,10 @@ import Tooltip from "@mui/material/Tooltip";
 import Link from "next/link";
 import { CustomPaginationTable } from "@/components/Table/CustomPaginationTable";
 import { useDispatch, useSelector } from "react-redux";
-import { deletetemplateFunApi, getAllTemplateFunApi } from "store/template/services";
+import {
+  deletetemplateFunApi,
+  getAllTemplateFunApi,
+} from "store/template/services";
 import TransitionsDialog from "@/components/UIElements/Modal/TransitionsDialog";
 import { useRouter } from "next/router";
 
@@ -29,8 +32,8 @@ const TemplatesPage = () => {
   }, [dispatch, template.data, template.dataFatched]);
 
   const nextPage = (id) => {
-    console.log("id", id)
-    router.push(`/templates/edit-form/${id}`);
+    console.log("id", id);
+    router.push(`/templates/edit-form?id=${id}`);
   };
 
   const handleDelete = (id) => {
@@ -196,6 +199,10 @@ const TemplatesPage = () => {
                   fontSize: "13px",
                   pt: "16px",
                   pb: "16px",
+                  overflow: "hidden",
+                  display: "-webkit-box",
+                  WebkitLineClamp: 3,
+                  WebkitBoxOrient: "vertical",
                 }}
               >
                 {data.description}
