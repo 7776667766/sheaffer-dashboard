@@ -60,9 +60,11 @@ const ManagerForm = ({ formData, isEditMode }) => {
       };
 
   const validation = {
-    //  phoneNumber: phoneValidation(),
+    
     email: emailValidation(),
     name: requiredValidation(),
+ 
+    phoneNumber: Yup.string().required('Phone number is required').min(10, 'Phone number is required'),
   };
 
   if (!isEditMode) {
@@ -95,18 +97,26 @@ const ManagerForm = ({ formData, isEditMode }) => {
           })
         );
       } else {
+        
+
         console.log("Handle Submit", values);
         let myPhoneNumberArray = values.phoneNumber.split(values.countryCode);
         const myCountryCode = myPhoneNumberArray[0] + values.countryCode;
         myPhoneNumberArray.shift();
 
         const myPhoneNumber = myPhoneNumberArray.join(values.countryCode);
+
+        const { countryCode, phoneNumber, ...valuesWithoutPhone } = values;
+        const formattedCountryCode = myCountryCode.startsWith("+")
+        ? countryCode
+        : `+${countryCode}`;
+  
         dispatch(
           addManagerFunApi({
             data: {
-              ...values,
+              ...valuesWithoutPhone,
               phone: {
-                code: myCountryCode,
+                code: formattedCountryCode,
                 number: myPhoneNumber,
               },
             },
@@ -204,18 +214,34 @@ const ManagerForm = ({ formData, isEditMode }) => {
               <PhoneInput
                 international
                 country={"pk"}
+               
                 value={formik.values.phoneNumber || ""}
                 onChange={(value, country) => {
                   console.log(value, "ssss");
                   formik.setFieldValue("countryCode", country.dialCode);
                   formik.setFieldValue("phoneNumber", value);
                 }}
+                error={
+                  formik.touched.phoneNumber && formik.errors.phoneNumber // Formik error handling for phoneNumber
+                    ? true
+                    : false
+                }
+                helperText={
+                  formik.touched.phoneNumber && formik.errors.phoneNumber
+                    ? formik.errors.phoneNumber
+                    : ""
+                }
                 InputProps={{
-                  style: { borderRadius: 8, width: "100%", border: "none" },
+                  style: { borderRadius: 8, width: "100%"},
                 }}
                 
                 inputStyle={{width:"100%",height:"50px"}}
               />
+               {formik.touched.phoneNumber && formik.errors.phoneNumber && (
+          <Typography variant="caption" color="error">
+            {formik.errors.phoneNumber}
+          </Typography>
+        )}
             </Grid>
             {!isEditMode && (
               <>
