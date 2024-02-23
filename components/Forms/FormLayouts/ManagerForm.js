@@ -75,7 +75,16 @@ const ManagerForm = ({ formData, isEditMode }) => {
 
   const formik = useFormik({
     initialValues: initialValues,
-    validationSchema: Yup.object(validation),
+    validationSchema: Yup.object(
+      validation
+      //   {
+      //   phone: phoneValidation(),
+      //   email: emailValidation(),
+      //   name: requiredValidation(),
+      //   password: passwordValidation(),
+      //   confirmPassword: confirmPasswordValidation(),
+      // }
+    ),
     onSubmit: (values) => {
       console.log("Phone Input Value on Submit:", values.phone);
       if (isEditMode) {

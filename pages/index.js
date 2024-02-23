@@ -61,11 +61,15 @@ export default function DashboardPage() {
   const transactionDates = business?.data?.TransactionDate;
 
   if (transactionDates && transactionDates.length > 0) {
-    const parsedDates = transactionDates.map(dateString => new Date(dateString));
-    console.log("parsedDates", parsedDates)
+    const parsedDates = transactionDates.map(
+      (dateString) => new Date(dateString)
+    );
+    console.log("parsedDates", parsedDates);
     const currentDate = new Date();
-    const isAnyDateBeforeCurrent = parsedDates.some(parsedDate => parsedDate < currentDate);
-    console.log("isAnyDateBeforeCurrent", isAnyDateBeforeCurrent)
+    const isAnyDateBeforeCurrent = parsedDates.some(
+      (parsedDate) => parsedDate < currentDate
+    );
+    console.log("isAnyDateBeforeCurrent", isAnyDateBeforeCurrent);
     if (isAnyDateBeforeCurrent) {
       console.log(`Show popup notification to user subscription ending soon.`);
     }
@@ -89,7 +93,7 @@ export default function DashboardPage() {
 
   const handleDropdownChange = (event) => {
     const selectedValue = event.target.value;
-    setSelectedBusiness(selectedValue)
+    setSelectedBusiness(selectedValue);
     console.log("selectedValue83", selectedValue);
 
     const businessIdString = String(selectedValue);
@@ -103,7 +107,7 @@ export default function DashboardPage() {
         data: {
           businessId: selectedValue,
         },
-        onSuccess: () => { },
+        onSuccess: () => {},
       })
     );
   };
@@ -545,7 +549,7 @@ export default function DashboardPage() {
                             }
                             helperText={
                               formik.touched.bannerText &&
-                                formik.errors.bannerText
+                              formik.errors.bannerText
                                 ? formik.errors.bannerText
                                 : ""
                             }
@@ -588,7 +592,7 @@ export default function DashboardPage() {
 
                         <Grid item xs={12} md={12} lg={12}>
                           <TextField
-                            multiline 
+                            multiline
                             rows={3}
                             name="description"
                             id="description"
@@ -600,7 +604,7 @@ export default function DashboardPage() {
                             }
                             helperText={
                               formik.touched.description &&
-                                formik.errors.description
+                              formik.errors.description
                                 ? formik.errors.description
                                 : ""
                             }
@@ -786,7 +790,7 @@ export default function DashboardPage() {
                           variant="contained"
                           color="primary"
                         >
-                          Register Business 
+                          Register Business
                         </Button>
                       </Grid>
                     </Grid>
@@ -905,14 +909,17 @@ export default function DashboardPage() {
                       alignItems: "center",
                     }}
                   >
-                    <Box sx={{display:"flex",alignItems:"center"}}>
+                    <Box sx={{ display: "flex", alignItems: "center" }}>
                       <Image
-                        src={"https://images.pexels.com/photos/1813272/pexels-photo-1813272.jpeg?auto=compress&cs=tinysrgb&w=600"}
-                        width={100}
+                        src={
+                          "https://images.pexels.com/photos/1813272/pexels-photo-1813272.jpeg?auto=compress&cs=tinysrgb&w=600"
+                        }
+                        width={75}
                         height={50}
                         alt="Logo"
                         style={{
                           objectFit: "contain",
+                          borderRadius: "5px",
                         }}
                       />
                       <span
