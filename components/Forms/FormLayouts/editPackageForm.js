@@ -28,7 +28,6 @@ const plansList = [
 ];
 
 const AddPackagePage = ({ formData, isEditMode }) => {
-  console.log("formData,isEditmopda", formData, isEditMode)
   const router = useRouter();
   const dispatch = useDispatch();
   const { plan } = useSelector((state) => state.plan);
@@ -71,7 +70,6 @@ const AddPackagePage = ({ formData, isEditMode }) => {
           })
         );
       } else {
-        console.log("Handle Submit", values);
         dispatch(
           addPlanFunApi({
             data: {
