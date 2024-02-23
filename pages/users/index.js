@@ -10,7 +10,10 @@ import { CustomPaginationTable } from "@/components/Table/CustomPaginationTable"
 
 export default function UserList() {
   const { allUsers } = useSelector((state) => state.admin);
+  console.log("allUsers=>", allUsers);
+
   const dispatch = useDispatch();
+  
 
   useEffect(() => {
     if (!allUsers.dataFatched) {
@@ -177,7 +180,9 @@ export default function UserList() {
                   fontSize: "13px",
                 }}
               >
-                {data.phone}
+               {typeof data?.phone === "object"
+              ? `${data?.phone.code} ${data?.phone.number}`
+              : data?.phone}
               </TableCell>
 
               <TableCell

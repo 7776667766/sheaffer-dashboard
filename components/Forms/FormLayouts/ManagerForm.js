@@ -71,7 +71,7 @@ const ManagerForm = ({ formData, isEditMode }) => {
   }
 
   const formik = useFormik({
-    initialValues: initialValues,
+    initialValues: initialValues, 
     validationSchema: Yup.object(
       validation
       //   {
