@@ -33,7 +33,7 @@ const TemplatesPage = () => {
 
   const nextPage = (id) => {
     console.log("id", id);
-    router.push(`/templates/edit-form?id=${id}`);
+    router.push(`/templates/edit?id=${id}`);
   };
 
   const handleDelete = (id) => {

@@ -213,8 +213,7 @@ const ManagerForm = ({ formData, isEditMode }) => {
                 InputProps={{
                   style: { borderRadius: 8, width: "100%", border: "none" },
                 }}
-                
-                inputStyle={{width:"100%",height:"50px"}}
+                inputStyle={{ width: "100%", height: "50px" }}
               />
             </Grid>
             {!isEditMode && (

@@ -40,7 +40,7 @@ const TemplatesPage = () => {
   const nextPage = (id, event) => {
     // event.preventDefault();
     console.log("frnotend id of packages", id);
-    router.push(`/packages/edit-packages?id=${id}`);
+    router.push(`/packages/edit?id=${id}`);
   };
 
   const handleDelete = (id) => {
