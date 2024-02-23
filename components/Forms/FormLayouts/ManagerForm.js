@@ -9,7 +9,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-
+import startsWith from "lodash.startswith";
 import {
   confirmPasswordValidation,
   emailValidation,
@@ -27,24 +27,11 @@ const ManagerForm = ({ formData, isEditMode }) => {
   const router = useRouter();
   const { business } = useSelector((state) => state.business);
   console.log("business?.data.id", business?.data?.id);
-  // console.log('business is ',business)
-  // const [phoneNumber, setPhoneNumber] = useState("");
-
-  // const [validate, setValidate] = useState("");
-  // const handlleChange = (value) => {
-  //   setPhoneNumber(value);
-  //   setValidate(validatePhoneNumber(value));
-  // };
-
-  // const validatePhoneNumber = (phoneNumber) => {
-  //   const phoneNumberPattern = /^\d{10}$/;
-  //   return phoneNumberPattern.test(phoneNumber);
-  // };
 
   const initialValues = isEditMode
     ? {
         ...formData,
-
+        phone: {},
         businessId: business?.data?.id,
       }
     : {
@@ -86,11 +73,27 @@ const ManagerForm = ({ formData, isEditMode }) => {
       // }
     ),
     onSubmit: (values) => {
+      let myPhoneNumberArray = values.phoneNumber.split(values.countryCode);
+      const myCountryCode = myPhoneNumberArray[0] + values.countryCode;
+      myPhoneNumberArray.shift();
+
+      const myPhoneNumber = myPhoneNumberArray.join(values.countryCode);
+
       console.log("Phone Input Value on Submit:", values.phone);
+      const { countryCode, phoneNumber, ...valuesWithoutPhone } = values;
+      const formattedCountryCode = myCountryCode.startsWith("+")
+        ? countryCode
+        : `+${countryCode}`;
       if (isEditMode) {
         dispatch(
           editManagerFunApi({
-            data: values,
+            data: {
+              ...valuesWithoutPhone,
+              phone: {
+                code: formattedCountryCode,
+                number: myPhoneNumber,
+              },
+            },
             onSuccess: () => {
               router.push("/manager/");
             },
@@ -218,7 +221,7 @@ const ManagerForm = ({ formData, isEditMode }) => {
                   formik.setFieldValue("phoneNumber", value);
                 }}
                 error={
-                  formik.touched.phoneNumber && formik.errors.phoneNumber // Formik error handling for phoneNumber
+                  formik.touched.phoneNumber && formik.errors.phoneNumber
                     ? true
                     : false
                 }
@@ -227,6 +230,7 @@ const ManagerForm = ({ formData, isEditMode }) => {
                     ? formik.errors.phoneNumber
                     : ""
                 }
+                // defaultErrorMessage={'yyey'}
                 InputProps={{
                   style: { borderRadius: 8, width: "100%" },
                 }}

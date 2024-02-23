@@ -6,6 +6,9 @@ import UserList from "./users";
 import CloseIcon from "@mui/icons-material/Close";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
+import startsWith from "lodash.startswith";
 import {
   Avatar,
   Box,
@@ -137,7 +140,9 @@ export default function DashboardPage() {
     bannerText: "",
     address: "",
     description: "",
-    phone: "",
+
+    countryCode: "",
+    phoneNumber: "",
     logo: "",
     googleId: "",
     bookingService: "",
@@ -151,7 +156,7 @@ export default function DashboardPage() {
     validationSchema: Yup.object({
       name: requiredValidation("Name"),
       email: emailValidation("Email"),
-      phone: phoneValidation("Phone"),
+      phoneNumber: phoneValidation("Phone"),
       slug: slugValidation("Slug"),
       bannerText: requiredValidation("Banner Text"),
       address: requiredValidation("Address"),
@@ -238,10 +243,27 @@ export default function DashboardPage() {
   ];
 
   const handleAddRequest = () => {
+    console.log("formik.values:", formik.values);
+    const { countryCode, phoneNumber, ...allvalues } = formik.values;
+
+    let myPhoneNumberArray = formik.values.phoneNumber.split(
+      formik.values.countryCode
+    );
+    const myCountryCode = myPhoneNumberArray[0] + formik.values.countryCode;
+    myPhoneNumberArray.shift();
+
+    const myPhoneNumber = myPhoneNumberArray.join(formik.values.countryCode);
+    const formattedCountryCode = myCountryCode.startsWith("+")
+      ? countryCode
+      : `+${countryCode}`;
     dispatch(
       regsiterBusinessFunApi({
         data: {
-          ...formik.values,
+          ...allvalues,
+          phone: {
+            code: formattedCountryCode,
+            number: myPhoneNumber,
+          },
         },
         onSuccess: () => {
           handleClose();
@@ -575,19 +597,80 @@ export default function DashboardPage() {
                         </Grid>
 
                         <Grid item xs={12} md={6} lg={6}>
-                          <TextField
-                            name="phone"
-                            fullWidth
-                            id="phone"
-                            label="Enter Phone"
-                            {...formik.getFieldProps("phone")}
-                            error={formik.touched.phone && formik.errors.phone}
+                          <PhoneInput
+                            international
+                            country={"pk"}
+                            isValid={(
+                              inputNumber,
+                              selectedCountry,
+                              countries
+                            ) => {
+                              return countries.some((country) => {
+                                return (
+                                  startsWith(
+                                    inputNumber,
+                                    selectedCountry.dialCode
+                                  ) ||
+                                  startsWith(
+                                    selectedCountry.dialCode,
+                                    inputNumber
+                                  )
+                                );
+                              });
+                            }}
+                            {...formik.getFieldProps("phoneNumber")}
+                            value={formik.values.phoneNumber || ""}
+                            onChange={(value, country) => {
+                              console.log(value, "ssss");
+                              formik.setFieldValue(
+                                "countryCode",
+                                country.dialCode
+                              );
+                              formik.setFieldValue("phoneNumber", value);
+                            }}
+                            error={
+                              formik.touched.phoneNumber &&
+                              formik.errors.phoneNumber
+                                ? true
+                                : false
+                            }
                             helperText={
-                              formik.touched.phone && formik.errors.phone
-                                ? formik.errors.phone
+                              formik.touched.phoneNumber &&
+                              formik.errors.phoneNumber
+                                ? formik.errors.phoneNumber
                                 : ""
                             }
+                            // defaultErrorMessage={'yyey'}
+                            InputProps={{
+                              style: { borderRadius: 8, width: "100%" },
+                            }}
+                            buttonStyle={{
+                              border:
+                                formik.touched.phoneNumber &&
+                                formik.errors.phoneNumber
+                                  ? "1px solid red"
+                                  : "1px solid #ced4da",
+                            }}
+                            inputStyle={{
+                              width: "100%",
+                              height: "50px",
+                              border:
+                                formik.touched.phoneNumber &&
+                                formik.errors.phoneNumber
+                                  ? "1px solid red"
+                                  : "1px solid #ced4da",
+
+                              "&:focus": {
+                                borderColor: "green",
+                              },
+                            }}
                           />
+                          {formik.touched.phoneNumber &&
+                            formik.errors.phoneNumber && (
+                              <Typography variant="caption" color="error">
+                                {formik.errors.phoneNumber}
+                              </Typography>
+                            )}
                         </Grid>
 
                         <Grid item xs={12} md={12} lg={12}>
@@ -914,7 +997,7 @@ export default function DashboardPage() {
                         src={
                           "https://images.pexels.com/photos/1813272/pexels-photo-1813272.jpeg?auto=compress&cs=tinysrgb&w=600"
                         }
-                        width={75}
+                        width={100}
                         height={50}
                         alt="Logo"
                         style={{
