@@ -45,7 +45,7 @@ const Specialist = () => {
 
   const nextPage = (id) => {
     console.log("id", id);
-    router.push(`/specialist/editform?id=${id}`);
+    router.push(`/specialist/edit?id=${id}`);
   };
 
   const handleDelete = (id) => {

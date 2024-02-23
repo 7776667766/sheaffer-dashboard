@@ -28,7 +28,7 @@ const Manager = () => {
   const nextPage = (id, event) => {
     event.preventDefault();
 
-    router.push(`/manager/edit-manager?id=${id}`);
+    router.push(`/manager/edit?id=${id}`);
     console.log();
   };
 

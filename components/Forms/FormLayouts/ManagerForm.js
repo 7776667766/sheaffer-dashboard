@@ -234,8 +234,7 @@ const ManagerForm = ({ formData, isEditMode }) => {
                 InputProps={{
                   style: { borderRadius: 8, width: "100%"},
                 }}
-                
-                inputStyle={{width:"100%",height:"50px"}}
+                inputStyle={{ width: "100%", height: "50px" }}
               />
                {formik.touched.phoneNumber && formik.errors.phoneNumber && (
           <Typography variant="caption" color="error">
