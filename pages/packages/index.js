@@ -22,8 +22,6 @@ const TemplatesPage = () => {
   const { plan } = useSelector((state) => state.plan);
   console.log(plan, "plan");
 
-
-
   const formatPrice = (price) => {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
@@ -40,10 +38,9 @@ const TemplatesPage = () => {
   }, [dispatch, plan.data, plan.dataFatched]);
 
   const nextPage = (id, event) => {
-    event.preventDefault();
-
+    // event.preventDefault();
     console.log("frnotend id of packages", id);
-    router.push(`/packages/edit-packages/${id}`);
+    router.push(`/packages/edit-packages?id=${id}`);
   };
 
   const handleDelete = (id) => {
@@ -52,7 +49,7 @@ const TemplatesPage = () => {
   };
 
   const [planitem, setPlanitem] = useState({});
-console.log("planitem",planitem)
+  console.log("planitem", planitem);
   const [toggledButtons, setToggledButtons] = useState({});
   const handleToggle = (buttonId) => {
     setToggledButtons((prevToggledButtons) => {
@@ -76,13 +73,15 @@ console.log("planitem",planitem)
       });
 
       console.log("buttonId:", buttonId);
-console.log('updatedPlanData:', updatedPlanData);
+      console.log("updatedPlanData:", updatedPlanData);
       // console.log('prevToggledButtons:', prevToggledButtons);
-      
+
       // Update the state with the modified plan.data
       setPlanitem((prevPlan) => ({
         ...prevPlan,
-        data: updatedPlanData.filter((item) => item._id === buttonId) || prevPlan.data,
+        data:
+          updatedPlanData.filter((item) => item._id === buttonId) ||
+          prevPlan.data,
       }));
 
       // Call getSpecificFeaturedElement when a button is toggled

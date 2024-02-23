@@ -6,14 +6,20 @@ import { useSelector } from "react-redux";
 import ServiceForm from "@/components/Forms/FormLayouts/ServiceForm";
 import AddPackagePage from "@/components/Forms/FormLayouts/editPackageForm";
 
-export default function EditServicePage({ id }) {
+export default function EditServicePage() {
   const router = useRouter();
+  const { id } = router.query;
+
   const { plan } = useSelector((state) => state.plan);
   console.log("plan",plan)
 
   const [serviceData, setServiceData] = useState();
   const [isLoading, setIsLoading] = useState(true);
   console.log("my Getting id", id);
+
+  useEffect(() => {
+    console.log("ID:", id);
+  }, [id]);
 
   useEffect(() => {
     if (
@@ -57,11 +63,11 @@ export default function EditServicePage({ id }) {
   );
 }
 
-export async function getServerSideProps({ params }) {
-  const { id } = params;
-  return {
-    props: {
-      id,
-    },
-  };
-}
+// export async function getServerSideProps({ params }) {
+//   const { id } = params;
+//   return {
+//     props: {
+//       id,
+//     },
+//   };
+// }

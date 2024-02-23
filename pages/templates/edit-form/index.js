@@ -6,23 +6,26 @@ import { useSelector } from "react-redux";
 import ServiceForm from "@/components/Forms/FormLayouts/ServiceForm";
 import TemplateForm from "@/components/Forms/FormLayouts/TemplateForm";
 
-export default function EditServicePage({ id }) {
+export default function EditServicePage() {
   const router = useRouter();
+  const { id } = router.query;
   const { template } = useSelector((state) => state.template);
-  console.log("template",template)
+  console.log("template", template);
 
   const [serviceData, setServiceData] = useState();
   const [isLoading, setIsLoading] = useState(true);
   console.log("my Getting id", id);
 
   useEffect(() => {
+    console.log("ID:", id);
+  }, [id]);
+
+  useEffect(() => {
     if (id) {
-      const mytemplate = template?.find(
-        (item) => item.id === id
-      );
-  
+      const mytemplate = template?.find((item) => item.id === id);
+
       console.log(mytemplate, "mytemplate");
-      
+
       if (mytemplate) {
         setServiceData(mytemplate);
         setIsLoading(false);
@@ -30,9 +33,8 @@ export default function EditServicePage({ id }) {
         router.push("/templates/add-template");
       }
     }
-  }, [id, router, template]);
-  
-  
+  }, [id, router, template.data]);
+
   if (router.isFallback) {
     return <div>Loading Fallback ...</div>;
   }
@@ -56,11 +58,11 @@ export default function EditServicePage({ id }) {
   );
 }
 
-export async function getServerSideProps({ params }) {
-  const { id } = params;
-  return {
-    props: {
-      id,
-    },
-  };
-}
+// export async function getServerSideProps({ params }) {
+//   const { id } = params;
+//   return {
+//     props: {
+//       id,
+//     },
+//   };
+// }

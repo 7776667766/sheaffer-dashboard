@@ -21,31 +21,30 @@ const Manager = () => {
   const dispatch = useDispatch();
   const { managers } = useSelector((state) => state.manager);
   const { business, dataFatched } = useSelector((state) => state.business);
-  console.log("business?.data.id", business?.data?.id)
+  console.log("business?.data.id", business?.data?.id);
 
   const router = useRouter();
 
   const nextPage = (id, event) => {
     event.preventDefault();
 
-    router.push(`/specialist/edit-manager?id=${id}`);
-    console.log()
+    router.push(`/manager/edit-manager?id=${id}`);
+    console.log();
   };
 
-  
   // const nextPage = (id) => {
   //   console.log("id", id);
   //   router.push(`/specialist/editform?id=${id}`);
   // };
 
-//   dispatch(
-//     getMyBussinessFunApi({
-//         data: {
-//             businessId: selectedValue,
-//         },
-//         onSuccess: () => {},
-//     })
-// );
+  //   dispatch(
+  //     getMyBussinessFunApi({
+  //         data: {
+  //             businessId: selectedValue,
+  //         },
+  //         onSuccess: () => {},
+  //     })
+  // );
 
   // useEffect(() => {
   //   if (!dataFatched) {
@@ -53,17 +52,18 @@ const Manager = () => {
   //   }
   // }, [dispatch, dataFatched]);
   useEffect(() => {
-    const selectedBusinessId = localStorage.getItem('selectedBusinessId');
+    const selectedBusinessId = localStorage.getItem("selectedBusinessId");
 
     if (selectedBusinessId) {
-      dispatch(getMyBussinessFunApi({ data: { businessId: selectedBusinessId } }));
+      dispatch(
+        getMyBussinessFunApi({ data: { businessId: selectedBusinessId } })
+      );
     } else {
       if (!dataFatched) {
         dispatch(getMyBussinessFunApi({}));
       }
     }
   }, [dispatch, dataFatched]);
-
 
   useEffect(() => {
     if (managers.managerFetch !== true) {
