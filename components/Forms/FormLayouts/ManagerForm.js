@@ -7,6 +7,9 @@ import TextField from "@mui/material/TextField";
 import SendIcon from "@mui/icons-material/Send";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
+
 import {
   confirmPasswordValidation,
   emailValidation,
@@ -23,24 +26,41 @@ const ManagerForm = ({ formData, isEditMode }) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const { business } = useSelector((state) => state.business);
-  console.log("business?.data.id",business?.data?.id)
+  console.log("business?.data.id", business?.data?.id);
+  // console.log('business is ',business)
+  // const [phoneNumber, setPhoneNumber] = useState("");
+
+  // const [validate, setValidate] = useState("");
+  // const handlleChange = (value) => {
+  //   setPhoneNumber(value);
+  //   setValidate(validatePhoneNumber(value));
+  // };
+
+  // const validatePhoneNumber = (phoneNumber) => {
+  //   const phoneNumberPattern = /^\d{10}$/;
+  //   return phoneNumberPattern.test(phoneNumber);
+  // };
 
   const initialValues = isEditMode
     ? {
         ...formData,
+
         businessId: business?.data?.id,
       }
     : {
         name: "",
         email: "",
-        phone: "",
+
+        countryCode: "",
+        phoneNumber: "",
+
         password: "",
         confirmPassword: "",
         businessId: business?.data?.id,
       };
 
   const validation = {
-    phone: phoneValidation(),
+    //  phoneNumber: phoneValidation(),
     email: emailValidation(),
     name: requiredValidation(),
   };
@@ -63,6 +83,7 @@ const ManagerForm = ({ formData, isEditMode }) => {
       // }
     ),
     onSubmit: (values) => {
+      console.log("Phone Input Value on Submit:", values.phone);
       if (isEditMode) {
         dispatch(
           editManagerFunApi({
@@ -75,9 +96,20 @@ const ManagerForm = ({ formData, isEditMode }) => {
         );
       } else {
         console.log("Handle Submit", values);
+        let myPhoneNumberArray = values.phoneNumber.split(values.countryCode);
+        const myCountryCode = myPhoneNumberArray[0] + values.countryCode;
+        myPhoneNumberArray.shift();
+
+        const myPhoneNumber = myPhoneNumberArray.join(values.countryCode);
         dispatch(
           addManagerFunApi({
-            data: values,
+            data: {
+              ...values,
+              phone: {
+                code: myCountryCode,
+                number: myPhoneNumber,
+              },
+            },
             onSuccess: () => {
               console.log("Add Manager Success");
               router.push("/manager/");
@@ -169,22 +201,20 @@ const ManagerForm = ({ formData, isEditMode }) => {
               >
                 Phone Number
               </Typography>
-              <TextField
-                autoComplete="number"
-                fullWidth
-                label="Phone Number"
-                {...formik.getFieldProps("phone")}
-                error={
-                  formik.touched.phone && formik.errors.phone ? true : false
-                }
-                helperText={
-                  formik.touched.phone && formik.errors.phone
-                    ? formik.errors.phone
-                    : ""
-                }
-                InputProps={{
-                  style: { borderRadius: 8 },
+              <PhoneInput
+                international
+                country={"pk"}
+                value={formik.values.phoneNumber || ""}
+                onChange={(value, country) => {
+                  console.log(value, "ssss");
+                  formik.setFieldValue("countryCode", country.dialCode);
+                  formik.setFieldValue("phoneNumber", value);
                 }}
+                InputProps={{
+                  style: { borderRadius: 8, width: "100%", border: "none" },
+                }}
+                
+                inputStyle={{width:"100%",height:"50px"}}
               />
             </Grid>
             {!isEditMode && (

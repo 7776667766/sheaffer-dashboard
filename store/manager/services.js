@@ -19,6 +19,7 @@ export const addManagerFunApi = createAsyncThunk(
         toast.success(response.data.message);
         if (onSuccess) {
           onSuccess();
+          
         }
         return response.data.data;
       } else {
