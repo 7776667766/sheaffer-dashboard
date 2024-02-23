@@ -7,9 +7,8 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   customizeThemeFunApi,
-  getMyBussinessFunApi,
 } from "store/business/services";
-import * as Yup from "yup";
+import * as Yup from "yup"; 
 import SendIcon from "@mui/icons-material/Send";
 import { useRouter } from "next/router";
 import { getAllTemplateFunApi } from "store/template/services";
@@ -17,29 +16,13 @@ import { getAllTemplateFunApi } from "store/template/services";
 export const CustomizeThemeForm = ({ formData, isEditMode }) => {
   const router = useRouter();
   const [banner, setBanner] = useState(null);
-  console.log("bannerImg", banner);
-  const [selectedFontFamily, setSelectedFontFamily] = useState(null);
-  const [selectedFontSize, setSelectedFontSize] = useState("");
-  const [selectedTheme, setSelectedTheme] = useState(null);
-  console.log(selectedFontFamily, selectedTheme);
-
   const [bannerImageUrl, setBannerImageUrl] = useState(null);
-
   const { business, dataFatched } = useSelector((state) => state.business);
   console.log(business?.data, "business1234");
   const { template } = useSelector((state) => state.template);
   console.log(template, "template?.data");
 
   const dispatch = useDispatch();
-
-  // useEffect(() => {
-  //   if (!dataFatched) {
-  //     dispatch(getMyBussinessFunApi({
-
-  //     }));
-  //   }
-  // }, [dispatch, dataFatched]);
-
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (!file) {
@@ -47,7 +30,7 @@ export const CustomizeThemeForm = ({ formData, isEditMode }) => {
       if (isEditMode) {
         setBannerImageUrl(formData?.bannerImg || null);
       } else {
-        setBannerImageUrl(null);
+        setBannerImageUrl(null);               
       }
       return false;
     } else {
@@ -132,11 +115,11 @@ export const CustomizeThemeForm = ({ formData, isEditMode }) => {
               helperText={
                 formik.touched.bannerText && formik.errors.bannerText
                   ? formik.errors.bannerText
-                  : ""
-              }
-            />
-          </Grid>
-
+                  : ""      
+              }                                 
+            />            
+          </Grid>                       
+                                            
           <Grid item xs={6}>
             <Box sx={{ display: "flex", alignItems: "end", gap: 1 }}>
               <Box sx={{ flex: 1 }}>
