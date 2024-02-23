@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   customizeThemeFunApi,
 } from "store/business/services";
-import * as Yup from "yup"; 
+import * as Yup from "yup";
 import SendIcon from "@mui/icons-material/Send";
 import { useRouter } from "next/router";
 import { getAllTemplateFunApi } from "store/template/services";
@@ -17,11 +17,9 @@ export const CustomizeThemeForm = ({ formData, isEditMode }) => {
   const router = useRouter();
   const [banner, setBanner] = useState(null);
   const [bannerImageUrl, setBannerImageUrl] = useState(null);
-  const { business, dataFatched } = useSelector((state) => state.business);
-  console.log(business?.data, "business1234");
+  const { business } = useSelector((state) => state.business);
   const { template } = useSelector((state) => state.template);
-  console.log(template, "template?.data");
-
+  
   const dispatch = useDispatch();
   const handleFileChange = (event) => {
     const file = event.target.files[0];

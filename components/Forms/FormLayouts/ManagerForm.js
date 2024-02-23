@@ -23,7 +23,6 @@ const ManagerForm = ({ formData, isEditMode }) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const { business } = useSelector((state) => state.business);
-  console.log("business?.data.id",business?.data?.id)
 
   const initialValues = isEditMode
     ? {
@@ -54,13 +53,6 @@ const ManagerForm = ({ formData, isEditMode }) => {
     initialValues: initialValues,
     validationSchema: Yup.object(
       validation
-      //   {
-      //   phone: phoneValidation(),
-      //   email: emailValidation(),
-      //   name: requiredValidation(),
-      //   password: passwordValidation(),
-      //   confirmPassword: confirmPasswordValidation(),
-      // }
     ),
     onSubmit: (values) => {
       if (isEditMode) {
@@ -68,18 +60,15 @@ const ManagerForm = ({ formData, isEditMode }) => {
           editManagerFunApi({
             data: values,
             onSuccess: () => {
-              console.log("Edit Manager Success");
               router.push("/manager/");
             },
           })
         );
       } else {
-        console.log("Handle Submit", values);
         dispatch(
           addManagerFunApi({
             data: values,
             onSuccess: () => {
-              console.log("Add Manager Success");
               router.push("/manager/");
             },
           })

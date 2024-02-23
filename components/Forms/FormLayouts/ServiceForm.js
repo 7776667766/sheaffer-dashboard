@@ -38,34 +38,6 @@ const ServiceForm = ({ formData, isEditMode }) => {
   const { serviceType, service } = useSelector((state) => state.service);
   console.log("serviceType40",serviceType.data)
 
-//   useEffect(() => {
-//     dispatch(
-//       getMyBussinessFunApi({
-//         data: business.data?.id,
-//         onSuccess: () => {
-//         },
-//       })
-//     ); 
-// },[])
-
-// useEffect(() => {
-//   const selectedBusinessId = localStorage.getItem('selectedBusinessId');
-
-//   if (selectedBusinessId) {
-//     dispatch(
-//       getMyBussinessFunApi({
-//         data: selectedBusinessId,
-//         onSuccess: () => {
-//         },
-//       })
-//     );
-//   } else {
-//     console.log('Selected business ID not found in local storage');
-//   }
-// }, []); 
-
-// useEffect(()=>{},[])
-
   const handleFileChange = (event) => {
     const file = event.target.files[0];
 
