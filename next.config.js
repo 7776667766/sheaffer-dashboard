@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  // output: 'export',
   trailingSlash: true,
   eslint: {
     // Warning: This allows production builds to successfully complete even if

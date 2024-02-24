@@ -6,13 +6,12 @@ import TextField from "@mui/material/TextField";
 import SendIcon from "@mui/icons-material/Send";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import dynamic from "next/dynamic";
 import { requiredValidation, slugValidation } from "@/utils/validation";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addServicesTypeFunApi,
   editServicesTypeFunApi,
-} from "store/service/services";
+} from "store/service/services"; 
 
 import { useRouter } from "next/router";
 import { LoadingButtonComponent } from "@/components/UIElements/Buttons/LoadingButton";
@@ -64,7 +63,9 @@ const ServiceTypeForm = ({ formData, isEditMode }) => {
   }, [formData?.image, isEditMode]);
 
   const dispatch = useDispatch();
+
   const router = useRouter();
+
   const { serviceType } = useSelector((state) => state.service);
 
   const initialValues = isEditMode
@@ -77,7 +78,8 @@ const ServiceTypeForm = ({ formData, isEditMode }) => {
     : {
       name: "",
       image: "",
-      slug:"",    };
+      slug: "",
+    };
 
   const formik = useFormik({
     initialValues: initialValues,
@@ -245,12 +247,12 @@ const ServiceTypeForm = ({ formData, isEditMode }) => {
                         top: "-2px",
                       }}
                       className="mr-5px"
-                    />{" "}
+                   />{" "}
                     Add Services Type
                   </>
                 }
               />
-            </Grid>
+             </Grid>
           </Grid>
         </Box>
       </Card>
