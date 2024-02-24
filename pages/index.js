@@ -997,7 +997,7 @@ export default function DashboardPage() {
                         src={
                           "https://images.pexels.com/photos/1813272/pexels-photo-1813272.jpeg?auto=compress&cs=tinysrgb&w=600"
                         }
-                        width={100}
+                        width={75}
                         height={50}
                         alt="Logo"
                         style={{
