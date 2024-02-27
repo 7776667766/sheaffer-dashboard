@@ -48,7 +48,7 @@ function BusinessDropDown(){
       <FormControl sx={{ minWidth: 120 }} size="small">
         <InputLabel
           id="demo-select-small"
-          sx={{ fontSize: "14px" }}
+          sx={{ fontSize: "14px"}}
         >
           Business
         </InputLabel>
@@ -61,7 +61,7 @@ function BusinessDropDown(){
           sx={{
             fontSize: "14px",
             variant: "outlined",
-            width: "150px",
+            width: "200px",
             padding: "0",
           }}
           className="select"

@@ -494,7 +494,7 @@ export default function DashboardPage() {
                   PaperProps={{
                     sx: {
                       width: "800px",
-                      height: "500px",
+                     height: "500px",
                       padding: "20px",
                     },
                   }}
@@ -522,7 +522,7 @@ export default function DashboardPage() {
                       <Grid container spacing={2} md>
 
                       <Grid item xs={12} md={12} lg={12}>
-                        <Box sx={{width:"100%",height:"140px",background:"#EBF4FF",display:"flex",justifyContent:"center",alignItems:"center"}}><Image src={user.image} height={50} width={50} alt="oeoe"/></Box>
+                        <Box sx={{width:"100%",height:"110px",background:"#EBF4FF",display:"flex",justifyContent:"center",alignItems:"center"}}><Image src={user.image} height={50} width={50} alt="oeoe"/></Box>
                       
                         </Grid>
 
@@ -730,7 +730,7 @@ export default function DashboardPage() {
                         lg={12}
                         justifyContent="flex-end"
                         alignItems="flex-end"
-                        sx={{ gap: "15px", marginTop: "10px" }}
+                        // sx={{  marginTop: "0px" }}
                       >
                         <Grid
                           item
@@ -743,7 +743,7 @@ export default function DashboardPage() {
                             <Button
                               type="button"
                               color="primary"
-                              sx={{ border: "1px solid #ddd", width: "100%" }}
+                              sx={{ border: "1px solid #ddd", width: "160px",height:"40px" }}
                               onClick={handleFormClose}
                             >
                               Cancel
@@ -763,7 +763,7 @@ export default function DashboardPage() {
                               variant="contained"
                               color="primary"
                               onClick={handleAddRequest}
-                              sx={{ width: "100%" }}
+                              sx={{ width: "160px",height:"40px"}}
                             >
                               Save
                             </Button>
