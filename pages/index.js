@@ -56,7 +56,7 @@ import {
 
 export default function DashboardPage() {
   const { user, role } = useSelector((state) => state.auth);
-  console.log("user", user);
+  // console.log("user", user.image);
   const { business, dataFatched } = useSelector((state) => state.business);
   const { businessAll } = useSelector((state) => state.business);
   console.log("business All ", businessAll);
@@ -86,6 +86,8 @@ export default function DashboardPage() {
   const [openSecondDialog, setOpenSecondDialog] = useState(false);
   const [openthirdDialog, setOpenthirdDialog] = useState(false);
   const [selectedBusiness, setSelectedBusiness] = useState(null);
+  console.log("selectedBusiness89", selectedBusiness);
+
   const [avatar, setavatar] = useState(null);
   const [openForm, setOpenForm] = useState(false);
   const [openPending, setOpenPending] = useState(false);
@@ -93,7 +95,14 @@ export default function DashboardPage() {
   const [otherBusinessData, setotherBusinessData] = useState(false);
   const [otherBusiness, setOtherBusiness] = useState(null);
   const [selectedBusienssId, setselectedBusienssId] = useState(null);
-
+  // dispatch(
+  //   getMyBussinessFunApi({
+  //     data: {
+  //       businessId: business.id,
+  //     },
+  //     onSuccess: () => {},
+  //   })
+  // );
   const handleDropdownChange = (event) => {
     const selectedValue = event.target.value;
     setSelectedBusiness(selectedValue);
@@ -376,7 +385,7 @@ export default function DashboardPage() {
             {role === "owner" && (
               <>
                 <div style={{ display: "flex", gap: "15px" }}>
-                  <Box
+                  {/* <Box
                     sx={{
                       display: "flex",
                       alignItems: "center",
@@ -414,7 +423,7 @@ export default function DashboardPage() {
                         </Select>
                       </FormControl>
                     </Box>
-                  </Box>
+                  </Box> */}
                   {business.data ? (
                     ""
                   ) : (
@@ -511,6 +520,12 @@ export default function DashboardPage() {
                   <form onSubmit={formik.handleSubmit}>
                     <div sx={{ padding: "30px", margin: "16px" }}>
                       <Grid container spacing={2} md>
+
+                      <Grid item xs={12} md={12} lg={12}>
+                        <Box sx={{width:"100%",height:"140px",background:"#EBF4FF",display:"flex",justifyContent:"center",alignItems:"center"}}><Image src={user.image} height={50} width={50} alt="oeoe"/></Box>
+                      
+                        </Grid>
+
                         <Grid item xs={12} md={6} lg={6}>
                           <TextField
                             name="name"

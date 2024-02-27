@@ -6,6 +6,7 @@ import Notification from "./Notification";
 import Profile from "./Profile";
 import Tooltip from "@mui/material/Tooltip";
 import CurrentDate from "./CurrentDate";
+import BusinessDropDown from "./BusinessDropDown";
 
 const TopNavbar = ({ toogleActive }) => {
   return (
@@ -39,8 +40,9 @@ const TopNavbar = ({ toogleActive }) => {
 
             <Typography component="div" sx={{ flexGrow: 1 }}></Typography>
 
-            <Stack direction="row" spacing={2}>
+            <Stack direction="row" spacing={4}>
               {/* CurrentDate */}
+              <BusinessDropDown/>
               <CurrentDate />
 
               {/* Email */}

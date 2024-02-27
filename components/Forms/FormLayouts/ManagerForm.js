@@ -31,7 +31,8 @@ const ManagerForm = ({ formData, isEditMode }) => {
   const initialValues = isEditMode
     ? {
         ...formData,
-        phone: {},
+        countryCode:formData.phone.countryCode,
+        phoneNumber:formData.phone.phoneNumber,
         businessId: business?.data?.id,
       }
     : {
@@ -54,6 +55,7 @@ const ManagerForm = ({ formData, isEditMode }) => {
       .required("Phone number is required")
       .min(10, "Phone number is required"),
   };
+ 
 
   if (!isEditMode) {
     validation.password = passwordValidation();
@@ -72,8 +74,10 @@ const ManagerForm = ({ formData, isEditMode }) => {
       //   confirmPassword: confirmPasswordValidation(),
       // }
     ),
+    
     onSubmit: (values) => {
       let myPhoneNumberArray = values.phoneNumber.split(values.countryCode);
+     
       const myCountryCode = myPhoneNumberArray[0] + values.countryCode;
       myPhoneNumberArray.shift();
 
@@ -102,11 +106,14 @@ const ManagerForm = ({ formData, isEditMode }) => {
       } else {
         console.log("Handle Submit", values);
         let myPhoneNumberArray = values.phoneNumber.split(values.countryCode);
+        console.log('first line country code',myPhoneNumberArray)
         const myCountryCode = myPhoneNumberArray[0] + values.countryCode;
-        myPhoneNumberArray.shift();
+console.log('second line of country code',myCountryCode)
+        
+       myPhoneNumberArray.shift();
 
         const myPhoneNumber = myPhoneNumberArray.join(values.countryCode);
-
+console.log('my phone number is ',myPhoneNumber)
         const { countryCode, phoneNumber, ...valuesWithoutPhone } = values;
         const formattedCountryCode = myCountryCode.startsWith("+")
           ? countryCode
