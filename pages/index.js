@@ -59,6 +59,19 @@ export default function DashboardPage() {
   // console.log("user", user.image);
   const { business, dataFatched } = useSelector((state) => state.business);
   const { businessAll } = useSelector((state) => state.business);
+
+  // if (
+  //   businessAll.data &&
+  //   typeof businessAll.data === "object" &&
+  //   Symbol.iterator in businessAll.data
+  // ) {
+  //   const result = Object.assign({}, ...businessAll.data);
+  //   console.log("this first object", result);
+  // } else {
+  //   console.error("businessAll.data is null or not iterable");
+  // }
+
+  // console.log('this is my object',result.bannerImg);
   console.log("business All ", businessAll);
   console.log("only busness ", business);
   const transactionDates = business?.data?.TransactionDate;
@@ -494,7 +507,7 @@ export default function DashboardPage() {
                   PaperProps={{
                     sx: {
                       width: "800px",
-                     height: "500px",
+                      height: "500px",
                       padding: "20px",
                     },
                   }}
@@ -520,10 +533,42 @@ export default function DashboardPage() {
                   <form onSubmit={formik.handleSubmit}>
                     <div sx={{ padding: "30px", margin: "16px" }}>
                       <Grid container spacing={2} md>
+                        <Grid item xs={12} md={12} lg={12}>
+                          <Box
+                            sx={{
+                              width: "100%",
+                              height: "110px",
+                              background: "#EBF4FF",
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                            }}
+                          >
+                            {businessAll.data &&
+                              typeof businessAll.data === "object" &&
+                              Symbol.iterator in businessAll.data &&
+                              (() => {
+                                const result = Object.assign(
+                                  {},
+                                  ...businessAll.data
+                                );
+                                // Log the first object in businessAll.data
+                                console.log("this is first object", result);
 
-                      <Grid item xs={12} md={12} lg={12}>
-                        <Box sx={{width:"100%",height:"110px",background:"#EBF4FF",display:"flex",justifyContent:"center",alignItems:"center"}}><Image src={user.image} height={50} width={50} alt="oeoe"/></Box>
-                      
+                                return (
+                                  <Image
+                                    src={
+                                      result.bannerImg ||
+                                      "https://images.pexels.com/photos/3993467/pexels-photo-3993467.jpeg?auto=compress&cs=tinysrgb&w=600"
+                                    }
+                                    height={100}
+                                    width={50}
+                                    alt="oeoe"
+                                  style={{width:"100%"}}
+                                  />
+                                );
+                              })()}
+                          </Box>
                         </Grid>
 
                         <Grid item xs={12} md={6} lg={6}>
@@ -743,7 +788,11 @@ export default function DashboardPage() {
                             <Button
                               type="button"
                               color="primary"
-                              sx={{ border: "1px solid #ddd", width: "160px",height:"40px" }}
+                              sx={{
+                                border: "1px solid #ddd",
+                                width: "160px",
+                                height: "40px",
+                              }}
                               onClick={handleFormClose}
                             >
                               Cancel
@@ -763,7 +812,7 @@ export default function DashboardPage() {
                               variant="contained"
                               color="primary"
                               onClick={handleAddRequest}
-                              sx={{ width: "160px",height:"40px"}}
+                              sx={{ width: "160px", height: "40px" }}
                             >
                               Save
                             </Button>

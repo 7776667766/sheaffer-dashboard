@@ -1,7 +1,7 @@
 // import React, { useEffect, useState } from "react";
 // import Head from "next/head";
 // import { useRouter } from "next/router";
-// import LeftSidebar from "@/components/_App/LeftSidebar";
+// import Left from "@/components/_App/LeftSidebar";
 // import TopNavbar from "@/components/_App/TopNavbar";
 // import Footer from "@/components/_App/Footer";
 // import ScrollToTop from "./ScrollToTop";
