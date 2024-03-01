@@ -25,19 +25,16 @@ const CustomBussiness = (index) => {
     name: "",
     email: "",
     slug: "",
-    // bannerText: "",
     address: "",
     description: "",
-
+    galleryImg: "",
     countryCode: "",
     phoneNumber: "",
-    logo: "",
     googleId: "",
     bookingService: "",
     websiteService: "",
     color: "",
     theme: "",
-    file: null,
   };
   const formik = useFormik({
     initialValues: initialValue,
@@ -46,12 +43,10 @@ const CustomBussiness = (index) => {
       email: emailValidation("Email"),
       phoneNumber: phoneValidation("Phone"),
       slug: slugValidation("Slug"),
-      // bannerText: requiredValidation("Banner Text"),
       address: requiredValidation("Address"),
       description: requiredValidation("Description"),
     }),
   });
-  const { businessAll } = useSelector((state) => state.business);
 
   const dispatch = useDispatch();
   const handleAddRequest = () => {
@@ -68,16 +63,27 @@ const CustomBussiness = (index) => {
     const formattedCountryCode = myCountryCode.startsWith("+")
       ? countryCode
       : `+${countryCode}`;
+
+    const formData = new FormData();
+
+    Object.entries({
+      ...allvalues,
+      phone: {
+        code: formattedCountryCode,
+        number: myPhoneNumber,
+      },
+    }).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+
+    selectedFiles.forEach((file, index) => {
+      formData.append(`galleryImg${index}`, file);
+    });
+    console.log("selected files 87",selectedFiles)
     dispatch(
       regsiterBusinessFunApi({
-        data: {
-          ...allvalues,
-          phone: {
-            code: formattedCountryCode,
-            number: myPhoneNumber,
-          },
-        },
-        onSuccess: () => {},
+        data: formData,
+        onSuccess: () => { },
       })
     );
   };
@@ -89,7 +95,6 @@ const CustomBussiness = (index) => {
   console.log("all files is", selectedFiles);
   const handleFileChange = (event) => {
     const files = event.target.files;
-    // Update the state with the selected files
     setSelectedFiles((prevSelectedFiles) => [
       ...prevSelectedFiles,
       ...Array.from(files),
@@ -153,7 +158,7 @@ const CustomBussiness = (index) => {
                     padding: "15px",
                     // Add cursor pointer to indicate it's clickable
                   }}
-                  // onClick={handleImageClick}
+                // onClick={handleImageClick}
                 >
                   <Button
                     variant="outlined"
@@ -176,7 +181,7 @@ const CustomBussiness = (index) => {
                     </svg>
                   </Button>
                   <input
-                    id="file-upload"
+                    id="file"
                     type="file"
                     multiple
                     ref={fileInputRef}
@@ -365,8 +370,8 @@ const CustomBussiness = (index) => {
               </Grid>
               <Grid item xs={12} md={6} lg={6}>
                 <TextField
-                
-                 
+
+
                   name="facebook"
                   id="facebook"
                   label="Enter Facebook link"
@@ -407,7 +412,7 @@ const CustomBussiness = (index) => {
                   }}
                 />
               </Grid>
-             
+
               <Grid item xs={12} md={12} lg={12}>
                 <Box sx={{ display: "flex", alignItems: "end", gap: 1 }}>
                   <Box sx={{ flex: 1 }}></Box>
@@ -423,7 +428,7 @@ const CustomBussiness = (index) => {
               lg={12}
               justifyContent="flex-end"
               alignItems="flex-end"
-              // sx={{  marginTop: "0px" }}
+            // sx={{  marginTop: "0px" }}
             >
               <Grid item xs={12} md={3} lg={3} order={{ xs: 2, md: 2 }}>
                 <Box>

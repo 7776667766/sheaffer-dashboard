@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, DialogActions, Stack, Typography } from "@mui/material";
+import { Box , Typography } from "@mui/material";
 import Card from "@mui/material/Card";
 import IconButton from "@mui/material/IconButton";
 import TableCell from "@mui/material/TableCell";
@@ -36,7 +36,6 @@ const Manager = () => {
   //   console.log("id", id);
   //   router.push(`/specialist/editform?id=${id}`);
   // };
-
   //   dispatch(
   //     getMyBussinessFunApi({
   //         data: {
@@ -45,12 +44,12 @@ const Manager = () => {
   //         onSuccess: () => {},
   //     })
   // );
-
   // useEffect(() => {
   //   if (!dataFatched) {
   //     dispatch(getMyBussinessFunApi({}));
   //   }
   // }, [dispatch, dataFatched]);
+
   useEffect(() => {
     const selectedBusinessId = localStorage.getItem("selectedBusinessId");
 
@@ -78,14 +77,7 @@ const Manager = () => {
   const handleDelete = (managerId) => {
     console.log(managerId, "note");
     dispatch(deleteManagerFunApi(managerId));
-  };
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const handleClickOpen = () => {
-    setIsDialogOpen(false);
-  };
-  const handleClose = () => {
-    setIsDialogOpen(true);
-  };
+  }; 
 
   return (
     <>
