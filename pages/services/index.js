@@ -63,28 +63,15 @@ const ServicesPage = () => {
     }
   }, [dispatch, dataFatched]);
 
-
   const router = useRouter();
 
   const nextPage = (id) => {
     router.push(`/services/edit?id=${id}`);
   };
-  // router.push(`/specialist/editform?id=${id}`);
-
 
   const handleDelete = (id) => {
     dispatch(deleteServiceFunApi(id));
   };
-
-  // useEffect(() => {
-  //   if (service.dataFatched !== true && dataFatched === true) {
-  //     dispatch(
-  //       getAllServiceFunApi({
-  //         businessId: business?.data?.id,
-  //       })
-  //     );
-  //   }
-  // }, [dispatch, service.data, service.dataFatched, business?.data?.id, dataFatched]);
 
   return (
     <>

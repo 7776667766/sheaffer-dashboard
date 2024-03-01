@@ -40,21 +40,19 @@ const CustomBussiness = (index) => {
     name: "",
     email: "",
     slug: "",
-    // bannerText: "",
     address: "",
     description: "",
     facebook: "",
     instagram: "",
     twitter: "",
+    galleryImg: "",
     countryCode: "",
     phoneNumber: "",
-    logo: "",
     googleId: "",
     bookingService: "",
     websiteService: "",
     color: "",
     theme: "",
-    selectedFiles:[]
   };
   const formik = useFormik({
     initialValues: initialValue,
@@ -63,7 +61,6 @@ const CustomBussiness = (index) => {
       email: emailValidation("Email"),
       phoneNumber: phoneValidation("Phone"),
       slug: slugValidation("Slug"),
-      // bannerText: requiredValidation("Banner Text"),
       address: requiredValidation("Address"),
 
       description: requiredValidation("Description"),
@@ -72,8 +69,6 @@ const CustomBussiness = (index) => {
       twitter: Yup.string().url("Enter a valid Twitter link"),
     }),
   });
-  const { businessAll } = useSelector((state) => state.business);
-  const [selectedFiles, setSelectedFiles] = useState([]);
 
   const dispatch = useDispatch();
   const handleAddRequest = () => {
@@ -89,22 +84,30 @@ const CustomBussiness = (index) => {
     myPhoneNumberArray.shift();
     console.log("country code is ", myCountryCode);
     const myPhoneNumber = myPhoneNumberArray.join(formik.values.countryCode);
-    console.log("exact phone is ", myPhoneNumber);
-    // const formattedCountryCode = myCountryCode.startsWith("+")
-    //   ? countryCode
-    //   : `+${countryCode}`;
+    const formattedCountryCode = myCountryCode.startsWith("+")
+      ? countryCode
+      : `+${countryCode}`;
+
+    const formData = new FormData();
+
+    Object.entries({
+      ...allvalues,
+      phone: {
+        code: formattedCountryCode,
+        number: myPhoneNumber,
+      },
+    }).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+
+    selectedFiles.forEach((file, index) => {
+      formData.append(`galleryImg${index}`, file);
+    });
+    console.log("selected files 87",selectedFiles)
     dispatch(
       regsiterBusinessFunApi({
-        data: {
-          ...allvalues,
-          phone: {
-            code: myCountryCode,
-            number: myPhoneNumber,
-          },
-          galleryImages:selectedFiles,
-        
-        },
-        onSuccess: () => {},
+        data: formData,
+        onSuccess: () => { },
       })
     );
   };
@@ -116,7 +119,6 @@ const CustomBussiness = (index) => {
   console.log("all files is", selectedFiles);
   const handleFileChange = (event) => {
     const files = event.target.files;
-
     setSelectedFiles((prevSelectedFiles) => [
       ...prevSelectedFiles,
       ...Array.from(files),
@@ -180,7 +182,7 @@ const CustomBussiness = (index) => {
                     padding: "10px",
                     // Add cursor pointer to indicate it's clickable
                   }}
-                  // onClick={handleImageClick}
+                // onClick={handleImageClick}
                 >
                   <Button
                     variant="outlined"
@@ -203,8 +205,7 @@ const CustomBussiness = (index) => {
                     </svg>
                   </Button>
                   <input
-                    id="galleryImages"
-                    name="galleryImages"
+                    id="file"
                     type="file"
                     {...formik.getFieldProps("selectedFiles")}
                     multiple
@@ -394,6 +395,8 @@ const CustomBussiness = (index) => {
               </Grid>
               <Grid item xs={12} md={6} lg={6}>
                 <TextField
+
+
                   name="facebook"
                   id="facebook"
                   label="Facebook"
@@ -512,7 +515,7 @@ const CustomBussiness = (index) => {
               lg={12}
               justifyContent="flex-end"
               alignItems="flex-end"
-              // sx={{  marginTop: "0px" }}
+            // sx={{  marginTop: "0px" }}
             >
               <Grid item xs={12} md={3} lg={3} order={{ xs: 2, md: 2 }}>
                 <Box>
