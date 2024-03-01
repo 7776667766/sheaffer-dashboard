@@ -7,7 +7,14 @@ import UploadImg from "@/public/images/upload.png";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import startsWith from "lodash.startswith";
-import { Box, Card, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Card,
+  IconButton,
+  InputAdornment,
+  TextField,
+  Typography,
+} from "@mui/material";
 
 import Button from "@mui/material/Button";
 import { regsiterBusinessFunApi } from "store/business/services";
@@ -19,6 +26,14 @@ import {
   requiredValidation,
   slugValidation,
 } from "@/utils/validation";
+import { Input } from "@mui/base";
+import {
+  AccountCircle,
+  Facebook,
+  Instagram,
+  YouTube,
+} from "@mui/icons-material";
+import Twitter from "@mui/icons-material/Twitter";
 
 const CustomBussiness = (index) => {
   const initialValue = {
@@ -28,7 +43,9 @@ const CustomBussiness = (index) => {
     // bannerText: "",
     address: "",
     description: "",
-
+    facebook: "",
+    instagram: "",
+    twitter: "",
     countryCode: "",
     phoneNumber: "",
     logo: "",
@@ -37,7 +54,7 @@ const CustomBussiness = (index) => {
     websiteService: "",
     color: "",
     theme: "",
-    file: null,
+    selectedFiles:[]
   };
   const formik = useFormik({
     initialValues: initialValue,
@@ -48,10 +65,15 @@ const CustomBussiness = (index) => {
       slug: slugValidation("Slug"),
       // bannerText: requiredValidation("Banner Text"),
       address: requiredValidation("Address"),
+
       description: requiredValidation("Description"),
+      facebook: Yup.string().url("Enter a valid Facebook link"),
+      instagram: Yup.string().url("Enter a valid Instagram link"),
+      twitter: Yup.string().url("Enter a valid Twitter link"),
     }),
   });
   const { businessAll } = useSelector((state) => state.business);
+  const [selectedFiles, setSelectedFiles] = useState([]);
 
   const dispatch = useDispatch();
   const handleAddRequest = () => {
@@ -61,27 +83,32 @@ const CustomBussiness = (index) => {
     let myPhoneNumberArray = formik.values.phoneNumber.split(
       formik.values.countryCode
     );
+  
+    console.log("phone number is ", myPhoneNumberArray);
     const myCountryCode = myPhoneNumberArray[0] + formik.values.countryCode;
     myPhoneNumberArray.shift();
-
+    console.log("country code is ", myCountryCode);
     const myPhoneNumber = myPhoneNumberArray.join(formik.values.countryCode);
-    const formattedCountryCode = myCountryCode.startsWith("+")
-      ? countryCode
-      : `+${countryCode}`;
+    console.log("exact phone is ", myPhoneNumber);
+    // const formattedCountryCode = myCountryCode.startsWith("+")
+    //   ? countryCode
+    //   : `+${countryCode}`;
     dispatch(
       regsiterBusinessFunApi({
         data: {
           ...allvalues,
           phone: {
-            code: formattedCountryCode,
+            code: myCountryCode,
             number: myPhoneNumber,
           },
+          galleryImages:selectedFiles,
+        
         },
         onSuccess: () => {},
       })
     );
   };
-  const [selectedFiles, setSelectedFiles] = useState([]);
+ 
   const fileInputRef = useRef(null);
   const handleButtonClick = () => {
     fileInputRef.current.click();
@@ -89,13 +116,13 @@ const CustomBussiness = (index) => {
   console.log("all files is", selectedFiles);
   const handleFileChange = (event) => {
     const files = event.target.files;
-    // Update the state with the selected files
+
     setSelectedFiles((prevSelectedFiles) => [
       ...prevSelectedFiles,
       ...Array.from(files),
     ]);
   };
-  const handleButtonClicks = (indexToRemove) => {
+  const handleDelete = (indexToRemove) => {
     const updatedFiles = selectedFiles.filter(
       (file, index) => index !== indexToRemove
     );
@@ -146,11 +173,11 @@ const CustomBussiness = (index) => {
                     display: "flex",
                     justifyContent: "center",
                     flexWrap: "wrap",
-                    margin: "10px",
+                    // margin: "10px",
                     alignItems: "center",
 
                     gap: "10px",
-                    padding: "15px",
+                    padding: "10px",
                     // Add cursor pointer to indicate it's clickable
                   }}
                   // onClick={handleImageClick}
@@ -176,8 +203,10 @@ const CustomBussiness = (index) => {
                     </svg>
                   </Button>
                   <input
-                    id="file-upload"
+                    id="galleryImages"
+                    name="galleryImages"
                     type="file"
+                    {...formik.getFieldProps("selectedFiles")}
                     multiple
                     ref={fileInputRef}
                     style={{ display: "none" }}
@@ -196,7 +225,7 @@ const CustomBussiness = (index) => {
                           border: "none",
                           cursor: "pointer",
                         }}
-                        onClick={() => handleButtonClicks(index)}
+                        onClick={() => handleDelete(index)}
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -365,26 +394,86 @@ const CustomBussiness = (index) => {
               </Grid>
               <Grid item xs={12} md={6} lg={6}>
                 <TextField
-                
-                 
                   name="facebook"
                   id="facebook"
-                  label="Enter Facebook link"
-                  {...formik.getFieldProps("description")}
-                  error={
-                    formik.touched.description && formik.errors.description
-                  }
+                  label="Facebook"
+                  {...formik.getFieldProps("facebook")}
+                  error={formik.touched.facebook && formik.errors.facebook}
                   helperText={
-                    formik.touched.description && formik.errors.description
-                      ? formik.errors.description
+                    formik.touched.facebook && formik.errors.facebook
+                      ? formik.errors.facebook
                       : ""
                   }
                   style={{
                     width: "100%",
                     color: "blue",
                   }}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <IconButton>
+                          <Facebook style={{ color: "#757FEF" }} />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
               </Grid>
+              <Grid item xs={12} md={6} lg={6}>
+                <TextField
+                  name="instagram"
+                  id="instagram"
+                  label="Instagram"
+                  {...formik.getFieldProps("instagram")}
+                  error={formik.touched.instagram && formik.errors.instagram}
+                  helperText={
+                    formik.touched.instagram && formik.errors.instagram
+                      ? formik.errors.instagram
+                      : ""
+                  }
+                  style={{
+                    width: "100%",
+                    color: "blue",
+                  }}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <IconButton>
+                          <Instagram style={{ color: "#757FEF" }} />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12} md={6} lg={6}>
+                <TextField
+                  name="twitter"
+                  id="twitter"
+                  label="Twitter"
+                  {...formik.getFieldProps("twitter")}
+                  error={formik.touched.twitter && formik.errors.twitter}
+                  helperText={
+                    formik.touched.twitter && formik.errors.twitter
+                      ? formik.errors.twitter
+                      : ""
+                  }
+                  style={{
+                    width: "100%",
+                    color: "blue",
+                  }}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <IconButton>
+                          <Twitter style={{ color: "#757FEF" }} />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
+
               <Grid item xs={12} md={12} lg={12}>
                 <TextField
                   multiline
@@ -407,7 +496,7 @@ const CustomBussiness = (index) => {
                   }}
                 />
               </Grid>
-             
+
               <Grid item xs={12} md={12} lg={12}>
                 <Box sx={{ display: "flex", alignItems: "end", gap: 1 }}>
                   <Box sx={{ flex: 1 }}></Box>
