@@ -63,7 +63,7 @@ export const SidebarData = () => {
       // ],
     },
     (role === "manager" || role === "owner") && {
-      title: "CustomBusinesses",
+      title: "AddCustomBusinesses",
       path: "/custom-bussiness",
       icon: <LayersIcon />,
     },

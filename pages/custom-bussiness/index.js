@@ -84,16 +84,23 @@ const CustomBussiness = (index) => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const fileInputRef = useRef(null);
   const handleButtonClick = () => {
-
     fileInputRef.current.click();
   };
-  console.log("all files is",selectedFiles)
-  const handleFileChange = (e) => {
-  
-    const files = e.target.files;
-   
-    setSelectedFiles(Array.from(files));
-   
+  console.log("all files is", selectedFiles);
+  const handleFileChange = (event) => {
+    const files = event.target.files;
+    // Update the state with the selected files
+    setSelectedFiles((prevSelectedFiles) => [
+      ...prevSelectedFiles,
+      ...Array.from(files),
+    ]);
+  };
+  const handleButtonClicks = (indexToRemove) => {
+    const updatedFiles = selectedFiles.filter(
+      (file, index) => index !== indexToRemove
+    );
+
+    setSelectedFiles(updatedFiles);
   };
   return (
     <>
@@ -131,32 +138,92 @@ const CustomBussiness = (index) => {
           <div sx={{ padding: "30px", margin: "16px" }}>
             <Grid container spacing={3} md>
               <Grid item xs={12} md={12} lg={12}>
-                <Grid item xs={12} md={6} lg={6}>
                 <Box
-            sx={{
-              width: '100%',
-              height: '110px',
-              background: '#EBF4FF',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              cursor: 'pointer', // Add cursor pointer to indicate it's clickable
-            }}
-            // onClick={handleImageClick}
-          >
-            <Button variant="outlined" onClick={handleButtonClick}>
-            Upload Image 
-          </Button>
-            <input
-            id="file-upload"
-              type="file"
-              multiple
-              ref={fileInputRef}
-              style={{ display: 'none' }}
-              onChange={handleFileChange}
-            />
-          </Box>
-                </Grid>
+                  sx={{
+                    width: "100%",
+                    minHeight: "110px",
+                    background: "#EBF4FF",
+                    display: "flex",
+                    justifyContent: "center",
+                    flexWrap: "wrap",
+                    margin: "10px",
+                    alignItems: "center",
+
+                    gap: "10px",
+                    padding: "15px",
+                    // Add cursor pointer to indicate it's clickable
+                  }}
+                  // onClick={handleImageClick}
+                >
+                  <Button
+                    variant="outlined"
+                    sx={{ height: "100px", width: "100px" }}
+                    onClick={handleButtonClick}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="w-6 h-6"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M12 4.5v15m7.5-7.5h-15"
+                      />
+                    </svg>
+                  </Button>
+                  <input
+                    id="file-upload"
+                    type="file"
+                    multiple
+                    ref={fileInputRef}
+                    style={{ display: "none" }}
+                    onChange={handleFileChange}
+                  />
+                  {selectedFiles.map((file, index) => (
+                    <Box key={index} style={{ position: "relative" }}>
+                      <Box
+                        // variant="outlined"
+                        sx={{
+                          height: "20px",
+                          width: "20px",
+                          position: "absolute",
+                          top: "8px",
+                          right: "2px",
+                          border: "none",
+                          cursor: "pointer",
+                        }}
+                        onClick={() => handleButtonClicks(index)}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="2"
+                          stroke="white"
+                          class="w-10 h-10 "
+                          style={{ fontWeight: "bold" }}
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M12 4.5v15m7.5-7.5h-15"
+                          />
+                        </svg>
+                      </Box>
+                      <Image
+                        src={URL.createObjectURL(file)}
+                        alt={`Selected ${index + 1}`}
+                        width={100}
+                        height={100}
+                        style={{ borderRadius: "5px" }}
+                      />
+                    </Box>
+                  ))}
+                </Box>
               </Grid>
 
               <Grid item xs={12} md={6} lg={6}>
@@ -296,7 +363,28 @@ const CustomBussiness = (index) => {
                   </Typography>
                 )}
               </Grid>
-
+              <Grid item xs={12} md={6} lg={6}>
+                <TextField
+                
+                 
+                  name="facebook"
+                  id="facebook"
+                  label="Enter Facebook link"
+                  {...formik.getFieldProps("description")}
+                  error={
+                    formik.touched.description && formik.errors.description
+                  }
+                  helperText={
+                    formik.touched.description && formik.errors.description
+                      ? formik.errors.description
+                      : ""
+                  }
+                  style={{
+                    width: "100%",
+                    color: "blue",
+                  }}
+                />
+              </Grid>
               <Grid item xs={12} md={12} lg={12}>
                 <TextField
                   multiline
@@ -319,7 +407,7 @@ const CustomBussiness = (index) => {
                   }}
                 />
               </Grid>
-
+             
               <Grid item xs={12} md={12} lg={12}>
                 <Box sx={{ display: "flex", alignItems: "end", gap: 1 }}>
                   <Box sx={{ flex: 1 }}></Box>
