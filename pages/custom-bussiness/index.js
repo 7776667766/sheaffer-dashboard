@@ -52,6 +52,7 @@ const CustomBussiness = (index) => {
     websiteService: "",
     color: "",
     theme: "",
+    files:""
   };
   const formik = useFormik({
     initialValues: initialValue,
@@ -91,14 +92,15 @@ const CustomBussiness = (index) => {
 
     Object.entries({
       ...allvalues,
-      phone: {
-        code: formattedCountryCode,
-        number: myPhoneNumber,
-      },
+      // phone: {
+      //   code: formattedCountryCode,
+      //   number: myPhoneNumber,
+      // },
     }).forEach(([key, value]) => {
       formData.append(key, value);
     });
-
+    formData.append("phone[code]", formattedCountryCode);
+    formData.append("phone[number]", myPhoneNumber);
     selectedFiles.forEach((files, index) => {
       formData.append("files", files);
     });
@@ -119,6 +121,7 @@ const CustomBussiness = (index) => {
 
   console.log("all files is", selectedFiles);
   const handleFileChange = (event) => {
+   
     const files = event.target.files;
     setSelectedFiles((prevSelectedFiles) => [
       ...prevSelectedFiles,
@@ -207,8 +210,10 @@ const CustomBussiness = (index) => {
                   </Button>
                   <input
                     id="files"
-                    type="files"
-                    {...formik.getFieldProps("selectedFiles")}
+                    name="files"
+                    type="file"
+                    {...formik.getFieldProps("files")}
+                    
                     multiple
                     ref={fileInputRef}
                     style={{ display: "none" }}
