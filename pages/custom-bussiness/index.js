@@ -45,7 +45,6 @@ const CustomBussiness = (index) => {
     facebook: "",
     instagram: "",
     twitter: "",
-    galleryImg: "",
     countryCode: "",
     phoneNumber: "",
     googleId: "",
@@ -100,8 +99,8 @@ const CustomBussiness = (index) => {
       formData.append(key, value);
     });
 
-    selectedFiles.forEach((file, index) => {
-      formData.append(`galleryImg${index}`, file);
+    selectedFiles.forEach((files, index) => {
+      formData.append("files", files);
     });
     console.log("selected files 87",selectedFiles)
     dispatch(
@@ -116,6 +115,8 @@ const CustomBussiness = (index) => {
   const handleButtonClick = () => {
     fileInputRef.current.click();
   };
+  const [selectedFiles,setSelectedFiles]=useState([])
+
   console.log("all files is", selectedFiles);
   const handleFileChange = (event) => {
     const files = event.target.files;
@@ -205,15 +206,15 @@ const CustomBussiness = (index) => {
                     </svg>
                   </Button>
                   <input
-                    id="file"
-                    type="file"
+                    id="files"
+                    type="files"
                     {...formik.getFieldProps("selectedFiles")}
                     multiple
                     ref={fileInputRef}
                     style={{ display: "none" }}
                     onChange={handleFileChange}
                   />
-                  {selectedFiles.map((file, index) => (
+                  {selectedFiles?.map((file, index) => (
                     <Box key={index} style={{ position: "relative" }}>
                       <Box
                         // variant="outlined"
