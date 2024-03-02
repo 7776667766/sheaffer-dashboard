@@ -52,6 +52,7 @@ const CustomBussiness = (index) => {
     websiteService: "",
     color: "",
     theme: "",
+    files: "",
   };
   const formik = useFormik({
     initialValues: initialValue,
@@ -77,7 +78,7 @@ const CustomBussiness = (index) => {
     let myPhoneNumberArray = formik.values.phoneNumber.split(
       formik.values.countryCode
     );
-  
+
     console.log("phone number is ", myPhoneNumberArray);
     const myCountryCode = myPhoneNumberArray[0] + formik.values.countryCode;
     myPhoneNumberArray.shift();
@@ -91,31 +92,32 @@ const CustomBussiness = (index) => {
 
     Object.entries({
       ...allvalues,
-      phone: {
-        code: formattedCountryCode,
-        number: myPhoneNumber,
-      },
+      // phone: {
+      //   code: formattedCountryCode,
+      //   number: myPhoneNumber,
+      // },
     }).forEach(([key, value]) => {
       formData.append(key, value);
     });
-
+    formData.append("phone[code]", formattedCountryCode);
+    formData.append("phone[number]", myPhoneNumber);
     selectedFiles.forEach((files, index) => {
       formData.append("files", files);
     });
-    console.log("selected files 87",selectedFiles)
+    console.log("selected files 87", selectedFiles);
     dispatch(
       regsiterBusinessFunApi({
         data: formData,
-        onSuccess: () => { },
+        onSuccess: () => {},
       })
     );
   };
- 
+
   const fileInputRef = useRef(null);
   const handleButtonClick = () => {
     fileInputRef.current.click();
   };
-  const [selectedFiles,setSelectedFiles]=useState([])
+  const [selectedFiles, setSelectedFiles] = useState([]);
 
   console.log("all files is", selectedFiles);
   const handleFileChange = (event) => {
@@ -183,7 +185,7 @@ const CustomBussiness = (index) => {
                     padding: "10px",
                     // Add cursor pointer to indicate it's clickable
                   }}
-                // onClick={handleImageClick}
+                  // onClick={handleImageClick}
                 >
                   <Button
                     variant="outlined"
@@ -207,8 +209,9 @@ const CustomBussiness = (index) => {
                   </Button>
                   <input
                     id="files"
+                    name="files"
                     type="file"
-                    {...formik.getFieldProps("selectedFiles")}
+                    {...formik.getFieldProps("files")}
                     multiple
                     ref={fileInputRef}
                     style={{ display: "none" }}
@@ -396,8 +399,6 @@ const CustomBussiness = (index) => {
               </Grid>
               <Grid item xs={12} md={6} lg={6}>
                 <TextField
-
-
                   name="facebook"
                   id="facebook"
                   label="Facebook"
@@ -516,7 +517,7 @@ const CustomBussiness = (index) => {
               lg={12}
               justifyContent="flex-end"
               alignItems="flex-end"
-            // sx={{  marginTop: "0px" }}
+              // sx={{  marginTop: "0px" }}
             >
               <Grid item xs={12} md={3} lg={3} order={{ xs: 2, md: 2 }}>
                 <Box>
