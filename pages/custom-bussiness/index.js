@@ -207,7 +207,7 @@ const CustomBussiness = (index) => {
                   </Button>
                   <input
                     id="files"
-                    type="files"
+                    type="file"
                     {...formik.getFieldProps("selectedFiles")}
                     multiple
                     ref={fileInputRef}
