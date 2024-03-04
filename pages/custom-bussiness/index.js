@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Grid from "@mui/material/Grid";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
@@ -69,7 +69,7 @@ const CustomBussiness = (index) => {
       twitter: Yup.string().url("Enter a valid Twitter link"),
     }),
   });
-
+  const [selectedFiles, setSelectedFiles] = useState([]);
   const dispatch = useDispatch();
   const handleAddRequest = () => {
     console.log("formik.values:", formik.values);
@@ -83,7 +83,7 @@ const CustomBussiness = (index) => {
     const myCountryCode = myPhoneNumberArray[0] + formik.values.countryCode;
     myPhoneNumberArray.shift();
     console.log("country code is ", myCountryCode);
-    const myPhoneNumber = myPhoneNumberArray.join(formik.values.countryCode);
+    const myPhoneNumber = myPhoneNumberArray.join(myCountryCode );
     const formattedCountryCode = myCountryCode.startsWith("+")
       ? countryCode
       : `+${countryCode}`;
@@ -115,18 +115,19 @@ const CustomBussiness = (index) => {
 
   const fileInputRef = useRef(null);
   const handleButtonClick = () => {
+    // console.log('ref function',selectedFiles)
     fileInputRef.current.click();
   };
-  const [selectedFiles, setSelectedFiles] = useState([]);
+ 
 
   console.log("all files is", selectedFiles);
-  const handleFileChange = (event) => {
+  const handleFileChange = useCallback((event) => {
     const files = event.target.files;
     setSelectedFiles((prevSelectedFiles) => [
       ...prevSelectedFiles,
       ...Array.from(files),
     ]);
-  };
+  }, [setSelectedFiles]);
   const handleDelete = (indexToRemove) => {
     const updatedFiles = selectedFiles.filter(
       (file, index) => index !== indexToRemove
@@ -134,6 +135,7 @@ const CustomBussiness = (index) => {
 
     setSelectedFiles(updatedFiles);
   };
+  // const memoizedSelectedFiles = useMemo(() => selectedFiles, [selectedFiles]);
   return (
     <>
       <Card
@@ -162,7 +164,7 @@ const CustomBussiness = (index) => {
               fontWeight: 500,
             }}
           >
-            Add Custom Businesses
+            Custom Business
           </Typography>
         </Box>
 
@@ -216,6 +218,7 @@ const CustomBussiness = (index) => {
                     ref={fileInputRef}
                     style={{ display: "none" }}
                     onChange={handleFileChange}
+                   
                   />
                   {selectedFiles?.map((file, index) => (
                     <Box key={index} style={{ position: "relative" }}>
