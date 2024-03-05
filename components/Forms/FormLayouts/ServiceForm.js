@@ -23,7 +23,6 @@ import { getServicesTypeFunApi } from "store/service/services";
 import toast from "react-hot-toast";
 import Image from "next/image";
 import { LoadingButtonComponent } from "@/components/UIElements/Buttons/LoadingButton";
-import { getMyBussinessFunApi } from "store/business/services";
 
 const ServiceForm = ({ formData, isEditMode }) => {
   const [selectedSpecialist, setSelectedSpecialist] = useState(null);
@@ -256,7 +255,7 @@ const ServiceForm = ({ formData, isEditMode }) => {
         .required("TimeInterval is Required")
         .positive("TimeInterval must be positive")
         .integer("TimeInterval must be an integer"),
-      timeSlots: Yup.array().of(
+      timeSlots: Yup.array().of(                 
         Yup.object().shape({
           day: Yup.string().required("Day is required"),
           startTime: Yup.string().required("Start Time is required"),
@@ -281,7 +280,7 @@ const ServiceForm = ({ formData, isEditMode }) => {
         return;
       }
 
-      const hasEmptyTime = values.timeSlots.some((slot) => {
+      const hasEmptyTime = values.timeSlots.some((slot) => {          
         return (
           slot.active &&
           (slot.startTime === "" ||
@@ -474,7 +473,7 @@ const ServiceForm = ({ formData, isEditMode }) => {
                   <Typography
                     as="h5"
                     sx={{
-                      fontWeight: "500",
+                      fontWeight: "500",  
                       fontSize: "14px",
                       mb: "12px",
                     }}
