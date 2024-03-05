@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import Grid from "@mui/material/Grid";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
@@ -62,12 +68,12 @@ const CustomBussiness = (index) => {
       phoneNumber: phoneValidation("Phone"),
       slug: slugValidation("Slug"),
       address: requiredValidation("Address"),
-
       description: requiredValidation("Description"),
       facebook: Yup.string().url("Enter a valid Facebook link"),
       instagram: Yup.string().url("Enter a valid Instagram link"),
       twitter: Yup.string().url("Enter a valid Twitter link"),
     }),
+    validateOnMount: false,
   });
   const [selectedFiles, setSelectedFiles] = useState([]);
   const dispatch = useDispatch();
@@ -83,7 +89,7 @@ const CustomBussiness = (index) => {
     const myCountryCode = myPhoneNumberArray[0] + formik.values.countryCode;
     myPhoneNumberArray.shift();
     console.log("country code is ", myCountryCode);
-    const myPhoneNumber = myPhoneNumberArray.join(myCountryCode );
+    const myPhoneNumber = myPhoneNumberArray.join(myCountryCode);
     const formattedCountryCode = myCountryCode.startsWith("+")
       ? countryCode
       : `+${countryCode}`;
@@ -118,16 +124,16 @@ const CustomBussiness = (index) => {
     // console.log('ref function',selectedFiles)
     fileInputRef.current.click();
   };
- 
+  console.log("all files is", selectedFiles.length);
 
   console.log("all files is", selectedFiles);
-  const handleFileChange = useCallback((event) => {
+  const handleFileChange = (event) => {
     const files = event.target.files;
     setSelectedFiles((prevSelectedFiles) => [
       ...prevSelectedFiles,
       ...Array.from(files),
     ]);
-  }, [setSelectedFiles]);
+  };
   const handleDelete = (indexToRemove) => {
     const updatedFiles = selectedFiles.filter(
       (file, index) => index !== indexToRemove
@@ -167,102 +173,99 @@ const CustomBussiness = (index) => {
             Custom Business
           </Typography>
         </Box>
+        <Grid item xs={12} md={12} lg={12} sx={{marginBottom:"20px"}}>
+          <Box
+            sx={{
+              width: "100%",
+              minHeight: "110px",
+              background: "#EBF4FF",
+              display: "flex",
+              justifyContent: "center",
+              flexWrap: "wrap",
+              // margin: "10px",
+              alignItems: "center",
+
+              gap: "10px",
+              padding: "10px",
+              // Add cursor pointer to indicate it's clickable
+            }}
+            // onClick={handleImageClick}
+          >
+            <Button
+              variant="outlined"
+              sx={{ height: "100px", width: "100px" }}
+              onClick={handleButtonClick}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-6 h-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M12 4.5v15m7.5-7.5h-15"
+                />
+              </svg>
+            </Button>
+            <input
+              id="files"
+              name="files"
+              type="file"
+              multiple
+              ref={fileInputRef}
+              style={{ display: "none" }}
+              onChange={handleFileChange}
+            />
+            {selectedFiles?.map((file, index) => (
+              <Box key={index} style={{ position: "relative" }}>
+                <Box
+                  // variant="outlined"
+                  sx={{
+                    height: "20px",
+                    width: "20px",
+                    position: "absolute",
+                    top: "8px",
+                    right: "2px",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => handleDelete(index)}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="2"
+                    stroke="white"
+                    class="w-10 h-10 "
+                    style={{ fontWeight: "bold" }}
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M12 4.5v15m7.5-7.5h-15"
+                    />
+                  </svg>
+                </Box>
+                <Image
+                  src={URL.createObjectURL(file)}
+                  alt={`Selected ${index + 1}`}
+                  width={100}
+                  height={100}
+                  style={{ borderRadius: "5px" }}
+                />
+              </Box>
+            ))}
+          </Box>
+        </Grid>
 
         <form onSubmit={formik.handleSubmit}>
           <div sx={{ padding: "30px", margin: "16px" }}>
             <Grid container spacing={3} md>
-              <Grid item xs={12} md={12} lg={12}>
-                <Box
-                  sx={{
-                    width: "100%",
-                    minHeight: "110px",
-                    background: "#EBF4FF",
-                    display: "flex",
-                    justifyContent: "center",
-                    flexWrap: "wrap",
-                    // margin: "10px",
-                    alignItems: "center",
-
-                    gap: "10px",
-                    padding: "10px",
-                    // Add cursor pointer to indicate it's clickable
-                  }}
-                  // onClick={handleImageClick}
-                >
-                  <Button
-                    variant="outlined"
-                    sx={{ height: "100px", width: "100px" }}
-                    onClick={handleButtonClick}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="currentColor"
-                      class="w-6 h-6"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M12 4.5v15m7.5-7.5h-15"
-                      />
-                    </svg>
-                  </Button>
-                  <input
-                    id="files"
-                    name="files"
-                    type="file"
-                    {...formik.getFieldProps("files")}
-                    multiple
-                    ref={fileInputRef}
-                    style={{ display: "none" }}
-                    onChange={handleFileChange}
-                   
-                  />
-                  {selectedFiles?.map((file, index) => (
-                    <Box key={index} style={{ position: "relative" }}>
-                      <Box
-                        // variant="outlined"
-                        sx={{
-                          height: "20px",
-                          width: "20px",
-                          position: "absolute",
-                          top: "8px",
-                          right: "2px",
-                          border: "none",
-                          cursor: "pointer",
-                        }}
-                        onClick={() => handleDelete(index)}
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke-width="2"
-                          stroke="white"
-                          class="w-10 h-10 "
-                          style={{ fontWeight: "bold" }}
-                        >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M12 4.5v15m7.5-7.5h-15"
-                          />
-                        </svg>
-                      </Box>
-                      <Image
-                        src={URL.createObjectURL(file)}
-                        alt={`Selected ${index + 1}`}
-                        width={100}
-                        height={100}
-                        style={{ borderRadius: "5px" }}
-                      />
-                    </Box>
-                  ))}
-                </Box>
-              </Grid>
-
               <Grid item xs={12} md={6} lg={6}>
                 <TextField
                   name="name"
