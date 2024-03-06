@@ -7,22 +7,24 @@ import {
   CardContent,
   TextField,
 } from "@mui/material";
-
+import "react-phone-input-2/lib/style.css";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addBusinessFunApi,
   getMyBussinessFunApi,
 } from "store/business/services";
+import startsWith from "lodash.startswith";
 import { useRouter } from "next/router";
-import { requiredValidation, slugValidation } from "@/utils/validation";
+import { phoneValidation, requiredValidation, slugValidation } from "@/utils/validation";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { LoadingButtonComponent } from "@/components/UIElements/Buttons/LoadingButton";
 import SendIcon from "@mui/icons-material/Send";
 import { ColorPicker } from "@mantine/core";
+import PhoneInput from "react-phone-input-2";
 
 const BusinessForm = () => {
-  const { role } = useSelector((state) => state.auth);       
+  const { role } = useSelector((state) => state.auth);
   const { business, dataFatched, isLoading } = useSelector(
     (state) => state.business
   );
@@ -63,7 +65,8 @@ const BusinessForm = () => {
       name: "",
       slug: "dummy-business",
       email: "",
-      phone: "",
+      countryCode: "",
+      phoneNumber: "",
       description: "",
       address: "",
       logo: "",
@@ -72,14 +75,14 @@ const BusinessForm = () => {
       bannerText: "",
       bannerImg: "",
       color: "",
-      fontSize:"",
-      fontFamily:"",
+      fontSize: "",
+      fontFamily: "",
     },
     validationSchema: Yup.object({
       name: requiredValidation("name required"),
       slug: slugValidation("slug"),
       email: requiredValidation("email"),
-      phone: requiredValidation("phone"),
+      // phoneNumber: phoneValidation("Phone"),
       description: requiredValidation("description"),
       address: requiredValidation("address"),
       bannerText: requiredValidation("bannerText"),
@@ -88,13 +91,30 @@ const BusinessForm = () => {
       fontFamily: requiredValidation("fontFamily"),
     }),
     onSubmit: async (values) => {
+      let myPhoneNumberArray = formik.values.phoneNumber.split(
+        formik.values.countryCode
+      );
+  
+      console.log("phone number is ", myPhoneNumberArray);
+      const myCountryCode = myPhoneNumberArray[0] + formik.values.countryCode;
+      myPhoneNumberArray.shift();
+      console.log("country code is ", myCountryCode);
+      const myPhoneNumber = myPhoneNumberArray.join(myCountryCode);
+      const formattedCountryCode = myCountryCode.startsWith("+")
+        ? formik.values.countryCode
+        : `+${formik.values.countryCode}`;
+  
       try {
         const formData = {
           ...values,
           logo: avatar1,
           bannerImg: avatar2,
+          phone: {
+              code:formattedCountryCode ,
+              number: myPhoneNumber,
+            },
         };
-        
+
         dispatch(
           addBusinessFunApi({
             data: formData,
@@ -213,19 +233,62 @@ const BusinessForm = () => {
                 >
                   Phone
                 </Typography>
-                <TextField
-                  name="phone"
-                  fullWidth
-                  id="phone"
-                  label="Enter Phone"
-                  {...formik.getFieldProps("phone")}
-                  error={formik.touched.phone && formik.errors.phone}
+                <PhoneInput
+                  international
+                  country={"pk"}
+                  isValid={(inputNumber, selectedCountry, countries) => {
+                    return countries.some((country) => {
+                      return (
+                        startsWith(inputNumber, selectedCountry.dialCode) ||
+                        startsWith(selectedCountry.dialCode, inputNumber)
+                      );
+                    });
+                  }}
+                  {...formik.getFieldProps("phoneNumber")}
+                  value={formik.values.phoneNumber || ""}
+                  onChange={(value, country) => {
+                    console.log(value, "ssss");
+                    formik.setFieldValue("countryCode", country.dialCode);
+                    formik.setFieldValue("phoneNumber", value);
+                  }}
+                  error={
+                    formik.touched.phoneNumber && formik.errors.phoneNumber
+                      ? true
+                      : false
+                  }
                   helperText={
-                    formik.touched.phone && formik.errors.phone
-                      ? formik.errors.phone
+                    formik.touched.phoneNumber && formik.errors.phoneNumber
+                      ? formik.errors.phoneNumber
                       : ""
                   }
+                  // defaultErrorMessage={'yyey'}
+                  InputProps={{
+                    style: { borderRadius: 8, width: "100%" },
+                  }}
+                  buttonStyle={{
+                    border:
+                      formik.touched.phoneNumber && formik.errors.phoneNumber
+                        ? "1px solid red"
+                        : "1px solid #ced4da",
+                  }}
+                  inputStyle={{
+                    width: "100%",
+                    height: "50px",
+                    border:
+                      formik.touched.phoneNumber && formik.errors.phoneNumber
+                        ? "1px solid red"
+                        : "1px solid #ced4da",
+
+                    "&:focus": {
+                      borderColor: "green",
+                    },
+                  }}
                 />
+                {formik.touched.phoneNumber && formik.errors.phoneNumber && (
+                  <Typography variant="caption" color="error">
+                    {formik.errors.phoneNumber}
+                  </Typography>
+                )}
               </Grid>
 
               <Grid item xs={12} md={12} lg={6}>
@@ -359,7 +422,7 @@ const BusinessForm = () => {
                   sx={{
                     fontWeight: "500",
                     fontSize: "14px",
-                     mb: "12px",
+                    mb: "12px",
                   }}
                 >
                   bannerText
