@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box , Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
 import IconButton from "@mui/material/IconButton";
 import TableCell from "@mui/material/TableCell";
@@ -77,7 +77,7 @@ const Manager = () => {
   const handleDelete = (managerId) => {
     console.log(managerId, "note");
     dispatch(deleteManagerFunApi(managerId));
-  }; 
+  };
 
   return (
     <>
@@ -227,7 +227,7 @@ const Manager = () => {
                   pb: "16px",
                 }}
               >
-               {`${data.phone.code} ${data.phone.number}`}
+                {`${data.phone.code} ${data.phone.number}`}
               </TableCell>
 
               <TableCell

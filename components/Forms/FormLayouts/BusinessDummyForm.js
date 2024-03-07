@@ -126,12 +126,16 @@ const BusinessForm = () => {
                   width={50}
                   height={50}
                 />
-              ):(<Image
-                src={'https://media.istockphoto.com/id/692999494/photo/hairdresser-cutting-some-hair-tips.jpg?b=1&s=612x612&w=0&k=20&c=gvycPdlljfuUCqiNmOpBF_dmlb09EZkqKew8h11KumU='}
-                alt="Logo"
-                width={50}
-                height={50}
-              />)}
+              ) : (
+                <Image
+                  src={
+                    "https://media.istockphoto.com/id/692999494/photo/hairdresser-cutting-some-hair-tips.jpg?b=1&s=612x612&w=0&k=20&c=gvycPdlljfuUCqiNmOpBF_dmlb09EZkqKew8h11KumU="
+                  }
+                  alt="Logo"
+                  width={50}
+                  height={50}
+                />
+              )}
             </Box>
 
             <Typography
@@ -281,9 +285,9 @@ const BusinessForm = () => {
                     <Box
                       sx={{
                         mb: "15px",
-                        display:"flex",
-                        flexDirection:"column",
-                        gap:"10px"
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "10px",
                       }}
                     >
                       <Box sx={{ marginTop: "10px" }}>
@@ -349,7 +353,9 @@ const BusinessForm = () => {
                       />
                     ) : (
                       <Image
-                        src={'https://images.pexels.com/photos/3993324/pexels-photo-3993324.jpeg?auto=compress&cs=tinysrgb&w=600'}
+                        src={
+                          "https://images.pexels.com/photos/3993324/pexels-photo-3993324.jpeg?auto=compress&cs=tinysrgb&w=600"
+                        }
                         alt="Banner Image"
                         width={70}
                         height={70}
