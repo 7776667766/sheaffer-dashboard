@@ -25,7 +25,7 @@ import { useRouter } from "next/router";
 const BusinessForm = () => {
   const { role } = useSelector((state) => state.auth);
   const { business, dataFatched } = useSelector((state) => state.business);
-  console.log(business, "business123");
+  console.log(business.data, "business123");
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -66,6 +66,7 @@ const BusinessForm = () => {
       setIsBookingLinkCopied(false);
     }, 1000);
   };
+  console.log(business?.data?.log);
   return (
     <>
       <div>
@@ -85,8 +86,13 @@ const BusinessForm = () => {
           </li>
         </ul>
       </div>
-      <Accordion sx={{ borderRadius: "15px", marginTop: "20px", position: "unset", boxShadow: "none" }}
-
+      <Accordion
+        sx={{
+          borderRadius: "15px",
+          marginTop: "20px",
+          position: "unset",
+          boxShadow: "none",
+        }}
         defaultExpanded={true}
       >
         <AccordionSummary
@@ -95,7 +101,14 @@ const BusinessForm = () => {
           id="panel-header"
           sx={{ border: "none" }}
         >
-          <Box sx={{ display: "flex", alignItems: "center", gap: "10px", paddingLeft: "10px" }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: "10px",
+              paddingLeft: "10px",
+            }}
+          >
             <Box
               sx={{
                 width: "60px",
@@ -106,14 +119,19 @@ const BusinessForm = () => {
                 border: "1px solid gray",
               }}
             >
-              {business?.data?.logo && (
+              {business?.data?.logo ? (
                 <Image
                   src={business?.data.logo}
                   alt="Logo"
                   width={50}
                   height={50}
                 />
-              )}
+              ):(<Image
+                src={'https://media.istockphoto.com/id/692999494/photo/hairdresser-cutting-some-hair-tips.jpg?b=1&s=612x612&w=0&k=20&c=gvycPdlljfuUCqiNmOpBF_dmlb09EZkqKew8h11KumU='}
+                alt="Logo"
+                width={50}
+                height={50}
+              />)}
             </Box>
 
             <Typography
@@ -151,31 +169,35 @@ const BusinessForm = () => {
                             <Typography variant="h6">Website Url</Typography>
                           )} */}
                           {business?.data?.websiteService === true && (
+                            <Box sx={{ display: "flex", alignItems: "center" }}>
+                              {" "}
+                              <Button
+                                // variant="outlined"
+                                href={`${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}site/${business?.data.slug}`}
+                                target="_blank"
+                                sx={{
+                                  background: "rgba(117, 127, 239, 0.10)",
 
-                            <Box sx={{ display: "flex", alignItems: "center" }}>   <Button
-                              variant="outlined"
-                              href={`${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}site/${business?.data.slug}`}
-                              target="_blank"
-                              sx={{
-                                background: "rgba(117, 127, 239, 0.10)",
-
-                                border: "none",
-                                textDecoration: "underline",
-                                pt: "2px",
-                                pb: "1px",
-                              }}
-                            >Go to Website
-                            </Button>
-
-
-                              <Box >
+                                  border: "none",
+                                  textDecoration: "underline",
+                                  pt: "2px",
+                                  pb: "1px",
+                                }}
+                              >
+                                Go to Website
+                              </Button>
+                              <Box>
                                 <Image
                                   src={copyImage}
                                   width={20}
                                   height={20}
                                   alt="copy"
                                   onClick={handleSiteCopyLink}
-                                  style={{ cursor: "pointer", marginLeft: "5px", marginTop: "4px" }}
+                                  style={{
+                                    cursor: "pointer",
+                                    marginLeft: "5px",
+                                    marginTop: "4px",
+                                  }}
                                 />
                               </Box>
                               {isLinkCopied &&
@@ -189,47 +211,48 @@ const BusinessForm = () => {
                                       background: "#F1F2FD",
                                       borderRadius: "3px",
                                       color: "#000",
-                                      marginLeft: "7px"
+                                      marginLeft: "7px",
                                     }}
                                   >
                                     Copied!
                                   </div>
                                 )}
-
                             </Box>
-
                           )}
-
                         </Box>
                       </Grid>
                       <Grid item xs={12} md={6}>
                         <Box sx={{ display: "flex", gap: "10px" }}>
                           {business?.data?.bookingService === true && (
-                            <Box sx={{ display: "flex" }}> <Button
-                              variant="outlined"
-                              href={`${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}booking/${business?.data.slug}`}
-                              target="_blank"
-                              sx={{
-                                background: "rgba(117, 127, 239, 0.10)",
+                            <Box sx={{ display: "flex" }}>
+                              {" "}
+                              <Button
+                                // variant="outlined"
+                                href={`${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}booking/${business?.data.slug}`}
+                                target="_blank"
+                                sx={{
+                                  background: "rgba(117, 127, 239, 0.10)",
 
-                                border: "none",
-                                textDecoration: "underline",
-                                pt: "2px",
-                                pb: "1px",
-                              }}
-                            >
-                              Go to Booking
-                            </Button>
-
+                                  border: "none",
+                                  textDecoration: "underline",
+                                  pt: "2px",
+                                  pb: "1px",
+                                }}
+                              >
+                                Go to Booking
+                              </Button>
                               <Box sx={{ display: "flex" }}>
-
                                 <Image
                                   src={copyImage}
                                   width={20}
                                   height={20}
                                   alt="copy"
                                   onClick={handleBookingLink}
-                                  style={{ cursor: "pointer", marginLeft: "5px", marginTop: "4px" }}
+                                  style={{
+                                    cursor: "pointer",
+                                    marginLeft: "5px",
+                                    marginTop: "4px",
+                                  }}
                                 />
                               </Box>
                               {isBookingLinkCopied &&
@@ -243,7 +266,7 @@ const BusinessForm = () => {
                                       background: "#F1F2FD",
                                       borderRadius: "3px",
                                       color: "#000",
-                                      marginLeft: "7px"
+                                      marginLeft: "7px",
                                     }}
                                   >
                                     Copied!
@@ -251,7 +274,6 @@ const BusinessForm = () => {
                                 )}
                             </Box>
                           )}
-
                         </Box>
                       </Grid>
                     </Grid>
@@ -259,6 +281,9 @@ const BusinessForm = () => {
                     <Box
                       sx={{
                         mb: "15px",
+                        display:"flex",
+                        flexDirection:"column",
+                        gap:"10px"
                       }}
                     >
                       <Box sx={{ marginTop: "10px" }}>
@@ -266,16 +291,18 @@ const BusinessForm = () => {
                       </Box>
                       <Box sx={{ marginTop: "10px", display: "block" }}>
                         <Box>{business?.data?.email}</Box>
-                        <Box>{business?.data?.phone}</Box>
+                        <Box>
+                          {`${business?.data?.phone.code} ${business?.data?.phone.number}`}
+                        </Box>
                         <Box>{business?.data?.address}</Box>
                         <Box>{business?.data?.theme || "N/A"}</Box>
                         <Box>{business?.data?.bannerText}</Box>
                         <Box
                           sx={{
                             backgroundColor: business?.data?.color,
-                            width: "50px", 
+                            width: "50px",
                             height: "20px",
-                            borderRadius: "5px", 
+                            borderRadius: "5px",
                           }}
                         >
                           {" "}
@@ -305,12 +332,12 @@ const BusinessForm = () => {
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      width: "150px", 
-                      height: "100px",
-                      border: "1px solid #ccc", 
-                      borderRadius: "8px", 
+                      width: "70px",
+                      height: "70px",
+                      border: "1px solid #ccc",
+                      borderRadius: "8px",
                       overflow: "hidden",
-                      marginTop: "-70px", 
+                      marginTop: "-20px",
                     }}
                   >
                     {business?.data?.bannerImg ? (
@@ -321,15 +348,18 @@ const BusinessForm = () => {
                         height={70}
                       />
                     ) : (
-                      <IconButton color="primary">
-                        <BrokenImageIcon />
-                      </IconButton>
+                      <Image
+                        src={'https://images.pexels.com/photos/3993324/pexels-photo-3993324.jpeg?auto=compress&cs=tinysrgb&w=600'}
+                        alt="Banner Image"
+                        width={70}
+                        height={70}
+                      />
                     )}
                   </Box>
                   <Box sx={{ marginTop: "20px" }}>
                     {" "}
                     {business?.data?.socialLinks &&
-                      business.data.socialLinks.length > 0 ? (
+                    business.data.socialLinks.length > 0 ? (
                       business.data.socialLinks.map((socialLink, index) => (
                         <a
                           key={index}

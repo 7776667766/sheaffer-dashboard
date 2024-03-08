@@ -7,8 +7,11 @@ import Profile from "./Profile";
 import Tooltip from "@mui/material/Tooltip";
 import CurrentDate from "./CurrentDate";
 import BusinessDropDown from "./BusinessDropDown";
+import { useSelector } from "react-redux";
 
 const TopNavbar = ({ toogleActive }) => {
+  const { role } = useSelector((state) => state.auth);
+
   return (
     <>
       <div className="topNavbarDark">
@@ -42,7 +45,8 @@ const TopNavbar = ({ toogleActive }) => {
 
             <Stack direction="row" spacing={4}>
               {/* CurrentDate */}
-              <BusinessDropDown/>
+              {role === "owner" && <BusinessDropDown />}
+
               <CurrentDate />
 
               {/* Email */}
