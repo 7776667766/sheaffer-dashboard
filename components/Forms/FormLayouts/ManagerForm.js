@@ -254,7 +254,7 @@ const ManagerForm = ({ formData, isEditMode }) => {
                 <PhoneInput
                   international
                   country={"pk"}
-                  value={`${formik.values.countryCode} ${formik.values.phoneNumber}`}
+                  value={`${formData.phone.code} ${formData.phone.number}`}
                   onChange={(value, country) => {
                     console.log(value, "ssss");
                     formik.setFieldValue("countryCode", country.dialCode);

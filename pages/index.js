@@ -1325,7 +1325,7 @@ export default function DashboardPage() {
         </Grid>
       </Grid>
 
-      <Grid
+      {/* <Grid
         container
         rowSpacing={1}
         columnSpacing={{ xs: 1, sm: 1, md: 1, lg: 1, xl: 2 }}
@@ -1384,7 +1384,7 @@ export default function DashboardPage() {
             <UserList />
           </Grid>
         )}
-      </Grid>
+      </Grid> */}
     </>
   );
 }
