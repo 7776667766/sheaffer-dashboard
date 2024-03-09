@@ -7,7 +7,7 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-
+import * as Yup from "yup";
 import { styled } from "@mui/material/styles";
 import { tableCellClasses } from "@mui/material/TableCell";
 import {
@@ -39,6 +39,8 @@ import AlertIcon from "@/public/images/icon/alert.svg";
 import closeIcon from "@/public/images/icon/carbon_close.png";
 import { useRouter } from "next/router";
 import BusinessForm from "./businessform";
+import {useFormik} from "formik";
+import {requiredValidation} from "@/utils/validation";
 
 const BusinessPage = () => {
   const dispatch = useDispatch();
@@ -112,10 +114,19 @@ const BusinessPage = () => {
 
   ///CUSTOM REJECTED API
 
+  const formik = useFormik({
+    initialValues: {
+      reason: "",
+   
+    },  validationSchema: Yup.object({
+      reason: requiredValidation("Reason"),
+    
+    }),});
   const handleRejectConfirm = () => {
+    const {  ...allvalues } = formik.values;
     dispatch(
       addCustomBusinessFunApi({
-        data: {
+        data: {...allvalues,
           businessId: selectedBusiness.id,
           rejectreason: rejectReason,
         },
@@ -486,17 +497,23 @@ const BusinessPage = () => {
                     </StyledTableCell>
                   </StyledTableRow>
                   <StyledTableRow>
-                    {/* <StyledTableCell
+                    <StyledTableCell
+                      style={{
+                        padding: "10px",
+                        border: "none",
+                      }}
+                    >
+                      <strong>phone:</strong>
+                    </StyledTableCell>
+                    <StyledTableCell
                       style={{
                         padding: "10px",
                         border: "none",
                         textAlign: "end",
                       }}
-
-                      //phone
-                      
                     >
-                    </StyledTableCell> */}
+                      {`${selectedBusiness?.phone?.code} ${selectedBusiness?.phone?.number}`}
+                    </StyledTableCell>
                   </StyledTableRow>
                   <StyledTableRow>
                     <StyledTableCell
@@ -594,7 +611,9 @@ const BusinessPage = () => {
             </Box>
           )}
         </Dialog>
+       
         <Box>
+        <form onSubmit={formik.handleSubmit}>
           {isRejecting && (
             <Dialog
               open={open2}
@@ -608,14 +627,30 @@ const BusinessPage = () => {
                 },
               }}
             >
+             
               <TextField
+                  name="reason"
+                  fullWidth
+                  id="reason"
+                  multiline
+                  rows={3}
+                  label="Reason to Reject"
+                  {...formik.getFieldProps("reason")}
+                  error={formik.touched.reason && formik.errors.reason}
+                  helperText={
+                    formik.touched.reason && formik.errors.reason
+                      ? formik.errors.reason
+                      : ""
+                  }
+                />
+              {/* <TextField
                 fullWidth
                 label="Reason to Reject"
                 variant="outlined"
                 multiline
                 rows={3}
                 onChange={(e) => setRejectReason(e.target.value)}
-              />
+              /> */}
 
               <Box
                 sx={{
@@ -653,9 +688,12 @@ const BusinessPage = () => {
                   Confirm Reject
                 </Button>
               </Box>
+             
             </Dialog>
-          )}
+          )} 
+          </form>
         </Box>
+       
       </Card>
     </>
   );

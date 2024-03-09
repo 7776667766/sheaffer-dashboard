@@ -102,20 +102,20 @@ const ManagerForm = ({ formData, isEditMode }) => {
           })
         );
       } else {
-        console.log("Handle Submit", values);
-        let myPhoneNumberArray = values.phoneNumber.split(values.countryCode);
-        console.log("first line country code", myPhoneNumberArray);
-        const myCountryCode = myPhoneNumberArray[0] + values.countryCode;
-        console.log("second line of country code", myCountryCode);
+        // console.log("Handle Submit", values);
+        // let myPhoneNumberArray = values.phoneNumber.split(values.countryCode);
+        // console.log("first line country code", myPhoneNumberArray);
+        // const myCountryCode = myPhoneNumberArray[0] + values.countryCode;
+        // console.log("second line of country code", myCountryCode);
 
-        myPhoneNumberArray.shift();
+        // myPhoneNumberArray.shift();
 
-        const myPhoneNumber = myPhoneNumberArray.join(values.countryCode);
-        console.log("my phone number is ", myPhoneNumber);
-        const { countryCode, phoneNumber, ...valuesWithoutPhone } = values;
-        const formattedCountryCode = myCountryCode.startsWith("+")
-          ? countryCode
-          : `+${countryCode}`;
+        // const myPhoneNumber = myPhoneNumberArray.join(values.countryCode);
+        // console.log("my phone number is ", myPhoneNumber);
+        // const { countryCode, phoneNumber, ...valuesWithoutPhone } = values;
+        // const formattedCountryCode = myCountryCode.startsWith("+")
+        //   ? countryCode
+        //   : `+${countryCode}`;
 
         dispatch(
           addManagerFunApi({
