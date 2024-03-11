@@ -31,8 +31,8 @@ const ManagerForm = ({ formData, isEditMode }) => {
   const initialValues = isEditMode
     ? {
         ...formData,
-        countryCode:formData.phone.countryCode,
-        phoneNumber:formData.phone.phoneNumber,
+        countryCode: formData.phone.code,
+        phoneNumber: formData.phone.number,
         businessId: business?.data?.id,
       }
     : {
@@ -50,12 +50,10 @@ const ManagerForm = ({ formData, isEditMode }) => {
   const validation = {
     email: emailValidation(),
     name: requiredValidation(),
-
     phoneNumber: Yup.string()
       .required("Phone number is required")
       .min(10, "Phone number is required"),
   };
- 
 
   if (!isEditMode) {
     validation.password = passwordValidation();
@@ -74,10 +72,10 @@ const ManagerForm = ({ formData, isEditMode }) => {
       //   confirmPassword: confirmPasswordValidation(),
       // }
     ),
-    
+
     onSubmit: (values) => {
       let myPhoneNumberArray = values.phoneNumber.split(values.countryCode);
-     
+
       const myCountryCode = myPhoneNumberArray[0] + values.countryCode;
       myPhoneNumberArray.shift();
 
@@ -104,20 +102,20 @@ const ManagerForm = ({ formData, isEditMode }) => {
           })
         );
       } else {
-        console.log("Handle Submit", values);
-        let myPhoneNumberArray = values.phoneNumber.split(values.countryCode);
-        console.log('first line country code',myPhoneNumberArray)
-        const myCountryCode = myPhoneNumberArray[0] + values.countryCode;
-console.log('second line of country code',myCountryCode)
-        
-       myPhoneNumberArray.shift();
+        // console.log("Handle Submit", values);
+        // let myPhoneNumberArray = values.phoneNumber.split(values.countryCode);
+        // console.log("first line country code", myPhoneNumberArray);
+        // const myCountryCode = myPhoneNumberArray[0] + values.countryCode;
+        // console.log("second line of country code", myCountryCode);
 
-        const myPhoneNumber = myPhoneNumberArray.join(values.countryCode);
-console.log('my phone number is ',myPhoneNumber)
-        const { countryCode, phoneNumber, ...valuesWithoutPhone } = values;
-        const formattedCountryCode = myCountryCode.startsWith("+")
-          ? countryCode
-          : `+${countryCode}`;
+        // myPhoneNumberArray.shift();
+
+        // const myPhoneNumber = myPhoneNumberArray.join(values.countryCode);
+        // console.log("my phone number is ", myPhoneNumber);
+        // const { countryCode, phoneNumber, ...valuesWithoutPhone } = values;
+        // const formattedCountryCode = myCountryCode.startsWith("+")
+        //   ? countryCode
+        //   : `+${countryCode}`;
 
         dispatch(
           addManagerFunApi({
@@ -218,35 +216,66 @@ console.log('my phone number is ',myPhoneNumber)
               >
                 Phone Number
               </Typography>
-              <PhoneInput
-                international
-                country={"pk"}
-                value={formik.values.phoneNumber || ""}
-                onChange={(value, country) => {
-                  console.log(value, "ssss");
-                  formik.setFieldValue("countryCode", country.dialCode);
-                  formik.setFieldValue("phoneNumber", value);
-                }}
-                error={
-                  formik.touched.phoneNumber && formik.errors.phoneNumber
-                    ? true
-                    : false
-                }
-                helperText={
-                  formik.touched.phoneNumber && formik.errors.phoneNumber
-                    ? formik.errors.phoneNumber
-                    : ""
-                }
-                // defaultErrorMessage={'yyey'}
-                InputProps={{
-                  style: { borderRadius: 8, width: "100%" },
-                }}
-                inputStyle={{ width: "100%", height: "50px" }}
-              />
-              {formik.touched.phoneNumber && formik.errors.phoneNumber && (
-                <Typography variant="caption" color="error">
-                  {formik.errors.phoneNumber}
-                </Typography>
+              {!isEditMode ? (
+                <>
+                  {" "}
+                  <PhoneInput
+                    international
+                    country={"pk"}
+                    value={formik.values.phoneNumber || ""}
+                    onChange={(value, country) => {
+                      console.log(value, "ssss");
+                      formik.setFieldValue("countryCode", country.dialCode);
+                      formik.setFieldValue("phoneNumber", value);
+                    }}
+                    error={
+                      formik.touched.phoneNumber && formik.errors.phoneNumber
+                        ? true
+                        : false
+                    }
+                    helperText={
+                      formik.touched.phoneNumber && formik.errors.phoneNumber
+                        ? formik.errors.phoneNumber
+                        : ""
+                    }
+                    // defaultErrorMessage={'yyey'}
+                    InputProps={{
+                      style: { borderRadius: 8, width: "100%" },
+                    }}
+                    inputStyle={{ width: "100%", height: "50px" }}
+                  />
+                  {formik.touched.phoneNumber && formik.errors.phoneNumber && (
+                    <Typography variant="caption" color="error">
+                      {formik.errors.phoneNumber}
+                    </Typography>
+                  )}
+                </>
+              ) : (
+                <PhoneInput
+                  international
+                  country={"pk"}
+                  value={`${formData.phone.code} ${formData.phone.number}`}
+                  onChange={(value, country) => {
+                    console.log(value, "ssss");
+                    formik.setFieldValue("countryCode", country.dialCode);
+                    formik.setFieldValue("phoneNumber", value);
+                  }}
+                  error={
+                    formik.touched.phoneNumber && formik.errors.phoneNumber
+                      ? true
+                      : false
+                  }
+                  helperText={
+                    formik.touched.phoneNumber && formik.errors.phoneNumber
+                      ? formik.errors.phoneNumber
+                      : ""
+                  }
+                  // defaultErrorMessage={'yyey'}
+                  InputProps={{
+                    style: { borderRadius: 8, width: "100%" },
+                  }}
+                  inputStyle={{ width: "100%", height: "50px" }}
+                />
               )}
             </Grid>
             {!isEditMode && (
