@@ -66,7 +66,7 @@ const VerifyOtpForm = () => {
     dispatch(
       forgetPasswordFunApi({
         data: {
-          phone: myPhone,
+          email: myPhone,
         },
         onSuccess: () => {
           toast.success("Otp Sent Successfully");

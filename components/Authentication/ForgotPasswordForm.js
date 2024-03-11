@@ -22,10 +22,10 @@ const ForgotPasswordForm = () => {
 
   const formik = useFormik({
     initialValues: {
-      phone: "",
+      email: "",
     },
     validationSchema: Yup.object({
-      phone: Yup.string().required('Field is required'),
+      email: Yup.string().required('Email is required'),
     }),
     onSubmit: async (values) => {
       console.log("Handle Submit", values);
@@ -33,7 +33,8 @@ const ForgotPasswordForm = () => {
         forgetPasswordFunApi({
           data: values,
           onSuccess: () => {
-            const myPhone = btoa(values.phone);
+            const myPhone = btoa(values.email);
+            console.log("myPhone37",myPhone)
             router.push(`/authentication/verify-otp?data=${myPhone}`);
           },
         })
@@ -67,7 +68,7 @@ const ForgotPasswordForm = () => {
               </Typography>
 
               <Typography fontSize="15px" mb="30px">
-                Enter your phone number and we′ll send you instructions to reset
+                Enter your email address and we′ll send you instructions to reset
                 your password
               </Typography>
 
@@ -100,17 +101,12 @@ const ForgotPasswordForm = () => {
                         fullWidth
                         label="Email"
                         autoComplete="text"
-                        {...formik.getFieldProps("phone")}
+                        {...formik.getFieldProps("email")}
                         error={
-                          formik.touched.phone && formik.errors.phone
+                          formik.touched.phone && formik.errors.email
                             ? true
                             : false
                         }
-                        // helperText={
-                        //   formik.touched.phone && formik.errors.phone
-                        //     ? formik.errors.phone
-                        //     : ""
-                        // }
                         InputProps={{
                           style: { borderRadius: 8 },
                         }}
