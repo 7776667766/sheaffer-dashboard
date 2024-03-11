@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
 import styles from "@/styles/PageTitle.module.css";
 import Features from "@/components/Dashboard/eCommerce/Features";
-import UserList from "./users";
 import CloseIcon from "@mui/icons-material/Close";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,28 +22,22 @@ import {
   ListItemText,
   Typography,
   TextField,
-  DialogContent,
 } from "@mui/material";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import InputLabel from "@mui/material/InputLabel";
 
 import Image from "next/image";
 import Button from "@mui/material/Button";
 import {
   getMyBussinessFunApi,
   regsiterBusinessFunApi,
-} from "store/business/services";
+} from "store/business/services";  
 import { Twitter } from "@mui/icons-material";
-import Facebook from "@mui/icons-material/Facebook";
+import Facebook from  "@mui/icons-material/Facebook";
 import Instagram from "@mui/icons-material/Instagram";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import copyImage from "@/public/images/icon/solar_copy-bold.png";
-import Expired1 from "@/public/images/expired1.png";
 import { useFormik } from "formik";
 import {
   emailValidation,
@@ -52,36 +45,20 @@ import {
   requiredValidation,
   slugValidation,
 } from "@/utils/validation";
-// import { getMyBusinessBookingFunApi } from "store/booking/service";
 
 export default function DashboardPage() {
   const { user, role } = useSelector((state) => state.auth);
-  // console.log("user", user.image);
   const { business, dataFatched } = useSelector((state) => state.business);
   const { businessAll } = useSelector((state) => state.business);
-  
-
-  // if (
-  //   businessAll.data &&
-  //   typeof businessAll.data === "object" &&
-  //   Symbol.iterator in businessAll.data
-  // ) {
-  //   const result = Object.assign({}, ...businessAll.data);
-  //   console.log("this first object", result);
-  // } else {
-  //   console.error("businessAll.data is null or not iterable");
-  // }
-
-  // console.log('this is my object',result.bannerImg);
   console.log("business All ", businessAll);
   console.log("only busness ", business);
+
   const transactionDates = business?.data?.TransactionDate;
 
   if (transactionDates && transactionDates.length > 0) {
     const parsedDates = transactionDates.map(
       (dateString) => new Date(dateString)
     );
-    console.log("parsedDates", parsedDates);
     const currentDate = new Date();
     const isAnyDateBeforeCurrent = parsedDates.some(
       (parsedDate) => parsedDate < currentDate
@@ -105,65 +82,28 @@ export default function DashboardPage() {
   const [avatar, setavatar] = useState(null);
   const [openForm, setOpenForm] = useState(false);
   const [openPending, setOpenPending] = useState(false);
-  const [formData, setFormData] = useState({});
   const [otherBusinessData, setotherBusinessData] = useState(false);
   const [otherBusiness, setOtherBusiness] = useState(null);
-  const [selectedBusienssId, setselectedBusienssId] = useState(null);
-  // dispatch(
-  //   getMyBussinessFunApi({
-  //     data: {
-  //       businessId: business.id,
-  //     },
-  //     onSuccess: () => {},
-  //   })
-  // );
-  const handleDropdownChange = (event) => {
-    const selectedValue = event.target.value;
-    setSelectedBusiness(selectedValue);
-    console.log("selectedValue83", selectedValue);
 
-    const businessIdString = String(selectedValue);
-    localStorage.setItem(
-      "selectedBusinessId",
-      JSON.stringify(businessIdString)
-    );
-
-    dispatch(
-      getMyBussinessFunApi({
-        data: {
-          businessId: selectedValue,
+  useEffect(() => {
+    if (!dataFatched) {
+      const selectedBusinessId = localStorage.getItem('selectedBusinessId');
+      console.log("selectedBusinessId", selectedBusinessId)
+      dispatch(getMyBussinessFunApi({
+        data: { businessId: selectedBusinessId },
+        onSuccess: () => {
         },
-        onSuccess: () => {},
-      })
-    );
-  };
-
-  // useEffect(() => {
-  //   if (!dataFatched && business?.data?.id) {
-  //     dispatch(
-  //       getMyBussinessFunApi({
-  //         onSuccess: () => {
-  //           dispatch(
-  //             getMyBusinessBookingFunApi({
-  //               data: {
-  //                 businessId: business?.data?.id,
-  //               },
-  //             })
-  //           );
-  //         },
-  //       })
-  //     );
-  //   }
-  // }, [dispatch, dataFatched, business?.data?.id]);
+      }));
+    }
+  }, [dispatch, dataFatched]);
 
   const initialValue = {
     name: "",
     email: "",
     slug: "",
-    bannerText: "",
+    bannerText:  "",
     address: "",
     description: "",
-
     countryCode: "",
     phoneNumber: "",
     logo: "",
@@ -193,8 +133,7 @@ export default function DashboardPage() {
     setOpenthirdDialog(false);
     setOpen(false);
   };
-  const isOwner = role === "owner";
-
+//N
   useEffect(() => {
     console.log("useEffect running");
     if (business?.data) {
@@ -232,16 +171,6 @@ export default function DashboardPage() {
     setOtherBusiness(business);
     setotherBusinessData(false);
   };
-
-  // useEffect(() => {
-  //   if (role === "owner" || role === "manager") {
-  //     if (!dataFatched) {
-  //       dispatch(getMyBussinessFunApi({
-
-  //       }));
-  //     }
-  //   }
-  // }, [dispatch, dataFatched, role]);
 
   const otherbusinessList = [
     {
@@ -399,45 +328,7 @@ export default function DashboardPage() {
             {role === "owner" && (
               <>
                 <div style={{ display: "flex", gap: "15px" }}>
-                  {/* <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      paddingBottom: "0px",
-                    }}
-                  >
-                    <Box>
-                      <FormControl sx={{ minWidth: 120 }} size="small">
-                        <InputLabel
-                          id="demo-select-small"
-                          sx={{ fontSize: "14px" }}
-                        >
-                          Business
-                        </InputLabel>
-                        <Select
-                          labelId="demo-select-small"
-                          id="demo-select-small"
-                          value={selectedBusiness}
-                          label="Select"
-                          onChange={handleDropdownChange}
-                          sx={{
-                            fontSize: "14px",
-                            variant: "outlined",
-                            width: "150px",
-                            padding: "0",
-                          }}
-                          className="select"
-                        >
-                          {businessAll?.data?.map((business) => (
-                            <MenuItem key={business.id} value={business.id}>
-                              {business.name}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-                    </Box>
-                  </Box> */}
+                
                   {business.data ? (
                     ""
                   ) : (
@@ -517,19 +408,10 @@ export default function DashboardPage() {
                     style={{
                       display: "flex",
                       marginLeft: "-20px",
-                      // alignItems: "",
-                      // justifyContent: "start",
                     }}
                   >
                     Add New Business Detail manually
-                    {/* <IconButton
-                      edge="end"
-                      color="inherit"
-                      onClick={handleFormClose}
-                      aria-label="close"
-                    >
-                      {/* <CloseIcon /> */}
-                    {/* </IconButton> */}
+               
                   </DialogTitle>
                   <form onSubmit={formik.handleSubmit}>
                     <div sx={{ padding: "30px", margin: "16px" }}>
@@ -553,7 +435,6 @@ export default function DashboardPage() {
                                   {},
                                   ...businessAll.data
                                 );
-                                // Log the first object in businessAll.data
                                 console.log("this is first object", result);
 
                                 return (
@@ -701,7 +582,6 @@ export default function DashboardPage() {
                                 ? formik.errors.phoneNumber
                                 : ""
                             }
-                            // defaultErrorMessage={'yyey'}
                             InputProps={{
                               style: { borderRadius: 8, width: "100%" },
                             }}
@@ -776,7 +656,6 @@ export default function DashboardPage() {
                         lg={12}
                         justifyContent="flex-end"
                         alignItems="flex-end"
-                        // sx={{  marginTop: "0px" }}
                       >
                         <Grid
                           item
@@ -823,7 +702,6 @@ export default function DashboardPage() {
                     </div>
                   </form>
                 </Dialog>
-                {/* other business form */}
 
                 <Dialog
                   open={otherBusinessData}
@@ -1230,7 +1108,7 @@ export default function DashboardPage() {
                               marginBottom: "5px",
                             }}
                           >
-                            {business.data.email}
+                            {business?.data.email}
                           </li>
                           <li
                             style={{
@@ -1240,7 +1118,7 @@ export default function DashboardPage() {
                               marginBottom: "5px",
                             }}
                           >
-                            {/* {business.data.phone} */}
+                           {`${business?.data?.phone.code} ${business?.data?.phone.number}`}
                           </li>
                           <li
                             style={{
@@ -1325,66 +1203,6 @@ export default function DashboardPage() {
         </Grid>
       </Grid>
 
-      {/* <Grid
-        container
-        rowSpacing={1}
-        columnSpacing={{ xs: 1, sm: 1, md: 1, lg: 1, xl: 2 }}
-      >
-        {isOwner && (
-          <Dialog
-            open={openPending}
-            disableEscapeKeyDown={true}
-            disableBackdropClick={true}
-          >
-            <DialogContent>
-              {business?.data?.requestStatus === "pending" ? (
-                <Box>
-                  <Box sx={{ display: "flex", justifyContent: "center" }}>
-                    {" "}
-                    <Image
-                      src={Expired1}
-                      alt="dkkd"
-                      width={170}
-                      height={170}
-                      sx={{ textAlign: "center" }}
-                    />
-                  </Box>
-
-                  <Typography
-                    variant="h6"
-                    gutterBottom
-                    sx={{ marginTop: "10px" }}
-                  >
-                    Your request is pending. Please wait for approval.
-                  </Typography>
-                </Box>
-              ) : business?.data?.requestStatus === "rejected" ? (
-                <>
-                  <Typography variant="h6" gutterBottom>
-                    Your request has been rejected.
-                  </Typography>
-                  {business?.data?.rejectReason && (
-                    <Typography variant="body2" color="error">
-                      Reason for rejection: {business?.data?.rejectreason}
-                    </Typography>
-                  )}
-                </>
-              ) : (
-                <Typography variant="h6" gutterBottom>
-                  Some default message if requestStatus is neither pending nor
-                  rejected
-                </Typography>
-              )}
-            </DialogContent>
-          </Dialog>
-        )}
-
-        {role === "admin" && (
-          <Grid item xs={12} md={12} lg={12} xl={8}>
-            <UserList />
-          </Grid>
-        )}
-      </Grid> */}
     </>
   );
 }

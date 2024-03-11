@@ -1,18 +1,15 @@
 import React, {
-  useCallback,
-  useEffect,
-  useMemo,
   useRef,
   useState,
 } from "react";
 import Grid from "@mui/material/Grid";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import * as Yup from "yup";
 import Image from "next/image";
-import UploadImg from "@/public/images/upload.png";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import startsWith from "lodash.startswith";
+
 import {
   Box,
   Card,
@@ -24,7 +21,6 @@ import {
 
 import Button from "@mui/material/Button";
 import { regsiterBusinessFunApi } from "store/business/services";
-
 import { useFormik } from "formik";
 import {
   emailValidation,
@@ -32,12 +28,10 @@ import {
   requiredValidation,
   slugValidation,
 } from "@/utils/validation";
-import { Input } from "@mui/base";
+
 import {
-  AccountCircle,
   Facebook,
   Instagram,
-  YouTube,
 } from "@mui/icons-material";
 import Twitter from "@mui/icons-material/Twitter";
 
@@ -75,7 +69,7 @@ const CustomBussiness = (index) => {
     }),
     validateOnMount: false,
   });
-  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [selectedFiles,setSelectedFiles] = useState([]);
   const dispatch = useDispatch();
   const handleAddRequest = () => {
     console.log("formik.values:", formik.values);
@@ -85,7 +79,6 @@ const CustomBussiness = (index) => {
       formik.values.countryCode
     );
 
-    console.log("phone number is ", myPhoneNumberArray);
     const myCountryCode = myPhoneNumberArray[0] + formik.values.countryCode;
     myPhoneNumberArray.shift();
     console.log("country code is ", myCountryCode);
@@ -98,19 +91,14 @@ const CustomBussiness = (index) => {
 
     Object.entries({
       ...allvalues,
-      // phone: {
-      //   code: formattedCountryCode,
-      //   number: myPhoneNumber,
-      // },
     }).forEach(([key, value]) => {
       formData.append(key, value);
     });
     formData.append("phone[code]", formattedCountryCode);
     formData.append("phone[number]", myPhoneNumber);
-    selectedFiles.forEach((files, index) => {
+    selectedFiles.forEach((files) => {
       formData.append("files", files);
     });
-    console.log("selected files 87", selectedFiles);
     dispatch(
       regsiterBusinessFunApi({
         data: formData,
@@ -121,12 +109,12 @@ const CustomBussiness = (index) => {
 
   const fileInputRef = useRef(null);
   const handleButtonClick = () => {
-    // console.log('ref function',selectedFiles)
     fileInputRef.current.click();
   };
-  console.log("all files is", selectedFiles.length);
 
+  console.log("all files is", selectedFiles.length);
   console.log("all files is", selectedFiles);
+
   const handleFileChange = (event) => {
     const files = event.target.files;
     setSelectedFiles((prevSelectedFiles) => [
@@ -134,14 +122,14 @@ const CustomBussiness = (index) => {
       ...Array.from(files),
     ]);
   };
+
   const handleDelete = (indexToRemove) => {
     const updatedFiles = selectedFiles.filter(
-      (file, index) => index !== indexToRemove
+      (index) => index !== indexToRemove
     );
-
     setSelectedFiles(updatedFiles);
   };
-  // const memoizedSelectedFiles = useMemo(() => selectedFiles, [selectedFiles]);
+
   return (
     <>
       <Card
@@ -313,21 +301,6 @@ const CustomBussiness = (index) => {
                   }
                 />
               </Grid>
-              {/* <Grid item xs={12} md={6} lg={6}>
-                <TextField
-                  name="bannerText"
-                  fullWidth
-                  id="bannerText"
-                  label="Enter BannerText"
-                  {...formik.getFieldProps("bannerText")}
-                  error={formik.touched.bannerText && formik.errors.bannerText}
-                  helperText={
-                    formik.touched.bannerText && formik.errors.bannerText
-                      ? formik.errors.bannerText
-                      : ""
-                  }
-                />
-              </Grid> */}
 
               <Grid item xs={12} md={6} lg={6}>
                 <TextField
@@ -523,22 +496,9 @@ const CustomBussiness = (index) => {
               lg={12}
               justifyContent="flex-end"
               alignItems="flex-end"
-              // sx={{  marginTop: "0px" }}
             >
               <Grid item xs={12} md={3} lg={3} order={{ xs: 2, md: 2 }}>
                 <Box>
-                  {/* <Button
-                              type="button"
-                              color="primary"
-                              sx={{
-                                border: "1px solid #ddd",
-                                width: "160px",
-                                height: "40px",
-                              }}
-                              onClick={handleFormClose}
-                            >
-                              Cancel
-                            </Button> */}
                 </Box>
               </Grid>
               <Grid item xs={12} md={3} lg={3} order={{ xs: 1, md: 2 }}>

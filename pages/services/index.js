@@ -29,23 +29,6 @@ const ServicesPage = () => {
   console.log("business29",business)
   const { role } = useSelector((state) => state.auth);
 
-  // useEffect(() => {
-  //   if (dataFatched !== true) {
-  //     dispatch(
-  //       getMyBussinessFunApi({
-
-  //         onSuccess: (businessId) => {
-  //           dispatch(
-  //             getAllServiceFunApi({
-  //               businessId: businessId,
-  //             })
-  //           );
-  //         },
-  //       })
-  //     );
-  //   }
-  // }, [dispatch, dataFatched]);
-
   useEffect(() => {
     if (!dataFatched) {
       const selectedBusinessId = localStorage.getItem('selectedBusinessId');

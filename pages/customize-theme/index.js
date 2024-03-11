@@ -9,6 +9,7 @@ const CustomizePage = () => {
   console.log(business?.data, "business1234");
   const [dataInitalized, setDataInitalized] = useState(false);
   const dispatch = useDispatch();
+  
   const [initialData, setInitialData] = useState({
     bannerText: "",
     bannerImg: "",
@@ -17,18 +18,6 @@ const CustomizePage = () => {
     theme: "",
     businessId: "",
   });
-
-  // useEffect(() => {
-  //   const selectedBusinessId = localStorage.getItem('selectedBusinessId');
-
-  //   if (selectedBusinessId) {
-  //     dispatch(getMyBussinessFunApi({ data: { businessId: selectedBusinessId } }));
-  //   } else {
-  //     if (!dataFatched) {
-  //       dispatch(getMyBussinessFunApi({}));
-  //     }
-  //   }
-  // }, [dispatch, dataFatched]);
                                                                                                                                                     
   useEffect(() => {
     if (!dataFatched) {
@@ -40,19 +29,6 @@ const CustomizePage = () => {
       }));
     }
   }, [dispatch, dataFatched]);
-
-  // useEffect(() => {
-  //   const selectedBusinessId = localStorage.getItem('selectedBusinessId');
-  //   console.log("selectedBusinessId",selectedBusinessId)
-
-  //   if (selectedBusinessId) {
-  //     dispatch(getMyBussinessFunApi({ data: { businessId: selectedBusinessId } }));
-  //   } else {
-  //     if (!dataFatched) {
-  //       dispatch(getMyBussinessFunApi({}));
-  //     }
-  //   }
-  // }, [dispatch, dataFatched]);
 
   useEffect(() => {
     if (business?.data && !dataInitalized) {
