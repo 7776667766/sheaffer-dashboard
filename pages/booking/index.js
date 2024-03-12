@@ -327,7 +327,7 @@ const BookingPage = () => {
                   pb: "16px",
                 }}
               >
-                {data.phone}
+                {`${data.phone.code} ${data.phone.number}`}
               </TableCell>
               <TableCell
                 sx={{

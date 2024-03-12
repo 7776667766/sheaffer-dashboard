@@ -125,7 +125,7 @@ const CustomBussiness = (index) => {
 
   const handleDelete = (indexToRemove) => {
     const updatedFiles = selectedFiles.filter(
-      (index) => index !== indexToRemove
+      (file,index) => index !== indexToRemove
     );
     setSelectedFiles(updatedFiles);
   };
