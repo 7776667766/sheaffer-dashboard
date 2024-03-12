@@ -210,7 +210,7 @@ const TemplatesPage = () => {
               >
                 Featured
               </TableCell>
-              <TableCell
+             {/* <TableCell
                 sx={{
                   borderBottom: "1px solid #F7FAFF",
                   fontSize: "13.5px",
@@ -218,8 +218,9 @@ const TemplatesPage = () => {
                 }}
               >
                 Toggle
-              </TableCell>
-              <TableCell
+              </TableCell> */}
+               {/* <Typography>{`Switch is ${detail? 'On' : 'Off'}`}</Typography> */}
+      {/*     <TableCell
                 sx={{
                   borderBottom: "1px solid #F7FAFF",
                   fontSize: "13.5px",
@@ -227,7 +228,7 @@ const TemplatesPage = () => {
                 }}
               >
                 Status
-              </TableCell>
+              </TableCell> */}
               <TableCell
                 sx={{
                   borderBottom: "1px solid #F7FAFF",
@@ -327,13 +328,13 @@ const TemplatesPage = () => {
                   inputProps={{ "aria-label": "switch" }}
                   // value={data.isFeatured}
                 /> */}
-                <Switch
+             { /*  <Switch
                   key={data.id}
                   checked={toggledButtons.isFeatured}
                   onChange={() => handleToggle(data.isFeatured)}
                   inputProps={{ "aria-label": "toggle isFeatured" }}
                   // style={{ background:data.isFeatured? 'green' : 'red' }}
-                />
+                /> */}
                 {/* <Typography>{`Switch is ${detail? 'On' : 'Off'}`}</Typography> */}
               </TableCell>
               <TableCell

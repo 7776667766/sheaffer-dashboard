@@ -241,7 +241,7 @@ const ServicesPage = () => {
                 <Avatar
                   alt="User"
                   src={data.image}
-                  sx={{ width: 35, height: 35 }}
+                  sx={{ width: 35, height: 35 }} 
                 />
               </TableCell>
 
