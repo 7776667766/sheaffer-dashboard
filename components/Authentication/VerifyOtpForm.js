@@ -117,6 +117,7 @@ const VerifyOtpForm = () => {
                     mb: "20px",
                   }}
                   className="bg-black"
+                
                 >
                   <Grid container alignItems="center" spacing={2}>
                     <Grid item xs={12}>
@@ -129,11 +130,15 @@ const VerifyOtpForm = () => {
                         type="numeric"
                         inputMode="number"
                         style={{
-                          padding: "10px",
+                         
+                          // padding: "10px",
                           display: "flex",
+                         
                           justifyContent: "space-between",
+                       
+                          
                         }}
-                        inputStyle={{ borderColor: "#5B5B98" }}
+                        inputStyle={{ borderColor: "#5B5B98",width:"40px",height:"40px" }}
                         inputFocusStyle={{ borderColor: "blue" }}
                         onComplete={(value, index) => handleSubmit(value)}
                         autoSelect={true}
