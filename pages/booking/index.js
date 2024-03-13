@@ -560,7 +560,7 @@ const BookingPage = () => {
                               }}
                             >
                               <div> Contact No.</div>
-                              <div>{data.phone}</div>
+                              <div>{`${data.phone.code} ${data.phone.number}`}</div>
                             </Box>
                           </Box>
                         </Typography>
@@ -810,7 +810,7 @@ const BookingPage = () => {
                 }}
               >
                 <div> Contact No.</div>
-                <div>{targetBookingData?.phone}</div>
+                <div>{`${targetBookingData?.phone.code} ${targetBookingData?.phone.number}`}</div>
               </Box>
             </Box>
           </Typography>
