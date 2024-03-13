@@ -4,11 +4,9 @@ import Grid from "@mui/material/Grid";
 import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
 import styles from "@/components/Authentication/Authentication.module.css";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { phoneValidation } from "@/utils/validation";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
@@ -26,7 +24,7 @@ const ForgotPasswordForm = () => {
     },
     validationSchema: Yup.object({
       email: Yup.string().required('Email is required'),
-    }),
+    }), 
     onSubmit: async (values) => {
       console.log("Handle Submit", values);
       dispatch(
@@ -34,7 +32,7 @@ const ForgotPasswordForm = () => {
           data: values,
           onSuccess: () => {
             const myPhone = btoa(values.email);
-            console.log("myPhone37",myPhone)
+            console.log("myPhone37",myPhone) 
             router.push(`/authentication/verify-otp?data=${myPhone}`);
           },
         })
