@@ -229,6 +229,15 @@ const TemplatesPage = () => {
               >
                 Status
               </TableCell> */}
+             <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13.5px",
+                  textAlign: "end",
+                }}
+              >
+              Status
+              </TableCell>
               <TableCell
                 sx={{
                   borderBottom: "1px solid #F7FAFF",
@@ -315,28 +324,28 @@ const TemplatesPage = () => {
               >
                 {data.isFeatured ? "True" : "False"}
               </TableCell>
-              <TableCell
+              {/* <TableCell
                 sx={{
                   borderBottom: "1px solid #F7FAFF",
                   pt: "16px",
                   pb: "16px",
                 }}
               >
-                {/* <Switch
+                <Switch
                   checked={isPrivate}
                   onChange={handleStatus}
                   inputProps={{ "aria-label": "switch" }}
                   // value={data.isFeatured}
-                /> */}
-             { /*  <Switch
+                /> 
+           <Switch
                   key={data.id}
                   checked={toggledButtons.isFeatured}
                   onChange={() => handleToggle(data.isFeatured)}
                   inputProps={{ "aria-label": "toggle isFeatured" }}
                   // style={{ background:data.isFeatured? 'green' : 'red' }}
-                /> */}
-                {/* <Typography>{`Switch is ${detail? 'On' : 'Off'}`}</Typography> */}
-              </TableCell>
+                /> 
+                {/* /* <Typography>{`Switch is ${detail? 'On' : 'Off'}`}</Typography> */}
+              {/* </TableCell> */} 
               <TableCell
                 align="right"
                 style={{

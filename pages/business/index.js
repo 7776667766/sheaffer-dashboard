@@ -18,6 +18,7 @@ import {
   TableRow,
   Paper,
 } from "@mui/material";
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import InfoIcon from "@mui/icons-material/Info";
 import Card from "@mui/material/Card";
 import IconButton from "@mui/material/IconButton";
@@ -335,7 +336,7 @@ const BusinessPage = () => {
                   pb: "16px",
                 }}
               >
-                <Tooltip title="Rename" placement="top">
+                
                   <IconButton
                     aria-label="edit"
                     size="small"
@@ -344,14 +345,14 @@ const BusinessPage = () => {
                     onClick={(event) => handleClick(data?.id, event)}
                   >
                     {data?.requestStatus === "Approved" ? (
-                      <InfoIcon />
+                      <VisibilityIcon /> 
                     ) : data?.requestStatus === "Rejected" ? (
-                      <InfoIcon />
+                      <VisibilityIcon /> 
                     ) : (
                       <DriveFileRenameOutlineIcon fontSize="inherit" />
                     )}
                   </IconButton>
-                </Tooltip>
+               
               </TableCell>
             </>
           )}
