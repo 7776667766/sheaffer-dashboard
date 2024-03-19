@@ -141,8 +141,8 @@ const businessSlice = createSlice({
         state.businessAll.dataFatched = true;
       });
 
-      //cutom theme api
-      builder
+    //cutom theme api
+    builder
       .addCase(customizeThemeFunApi.pending, (state, action) => {
         state.businessAll.isLoading = true;
         state.businessAll.error = null;
@@ -163,7 +163,7 @@ const businessSlice = createSlice({
         state.businessAll.dataFatched = true;
       });
 
-      builder
+    builder
       .addCase(getMultipleBussinessesFunApi.pending, (state, action) => {
         state.businessAll.isLoading = true;
         state.businessAll.error = null;
@@ -183,8 +183,6 @@ const businessSlice = createSlice({
         state.businessAll.error = action.payload;
         state.businessAll.dataFatched = true;
       });
-
-
   },
 });
 
