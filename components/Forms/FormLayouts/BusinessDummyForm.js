@@ -111,7 +111,7 @@ const BusinessForm = () => {
           >
             <Box
               sx={{
-                width: "60px",
+                // width: "60px",
                 height: "50px",
                 borderRadius: "10px",
 
@@ -125,6 +125,7 @@ const BusinessForm = () => {
                   alt="Logo"
                   width={50}
                   height={50}
+                  sx={{width:"100%"}}
                 />
               ) : (
                 <Image
@@ -326,7 +327,7 @@ const BusinessForm = () => {
                 xl={4}
                 sx={{
                   display: "flex",
-                  alignItems: "center",
+                  alignItems: "start",
                   justifyContent: "end",
                 }}
               >
@@ -335,21 +336,21 @@ const BusinessForm = () => {
                     sx={{
                       display: "flex",
                       alignItems: "center",
-                      justifyContent: "center",
-                      width: "70px",
-                      height: "70px",
+                      justifyContent: "start",
+                      width: "150px",
+                      height: "100px",
                       border: "1px solid #ccc",
                       borderRadius: "8px",
                       overflow: "hidden",
-                      marginTop: "-20px",
+                      marginTop: "0px",
                     }}
                   >
                     {business?.data?.bannerImg ? (
                       <Image
                         src={business.data.bannerImg}
                         alt="Banner Image"
-                        width={70}
-                        height={70}
+                        width={150}
+                        height={100}
                       />
                     ) : (
                       <Image

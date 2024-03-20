@@ -99,7 +99,7 @@ const Profile = () => {
                 textTransform: "capitalize",
               }}
             >
-              {role}
+              {/* {role} */}
             </Typography>
             <Typography
               sx={{
@@ -116,7 +116,7 @@ const Profile = () => {
 
         <Divider />
 
-        <MenuItem onClick={() => router.push("/pages/profile/")}>
+        <MenuItem onClick={() => router.push("/settings/account/")}>
           <ListItemIcon sx={{ mr: "-8px", mt: "-3px" }}>
             <PersonIcon fontSize="small" />
           </ListItemIcon>

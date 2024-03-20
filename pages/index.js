@@ -86,6 +86,8 @@ export default function DashboardPage() {
   const [otherBusiness, setOtherBusiness] = useState(null);
 
   useEffect(() => {
+    console.log("useEffect running 1 at 89");
+
     if (!dataFatched) {
       const selectedBusinessId = localStorage.getItem('selectedBusinessId');
       console.log("selectedBusinessId", selectedBusinessId)
@@ -135,7 +137,7 @@ export default function DashboardPage() {
   };
 //N
   useEffect(() => {
-    console.log("useEffect running");
+    console.log("useEffect running 2 at 138");
     if (business?.data) {
       console.log("requestStatus:", business.data.requestStatus);
       if (

@@ -228,14 +228,14 @@ const BookingPage = () => {
               >
                 Name
               </TableCell>
-              <TableCell
+              {/* <TableCell
                 sx={{
                   borderBottom: "1px solid #F7FAFF",
                   fontSize: "13.5px",
                 }}
               >
                 Phone
-              </TableCell>
+              </TableCell> */}
               <TableCell
                 sx={{
                   borderBottom: "1px solid #F7FAFF",
@@ -320,7 +320,7 @@ const BookingPage = () => {
               >
                 {data.name}
               </TableCell>
-              <TableCell
+              {/* <TableCell
                 sx={{
                   borderBottom: "1px solid #F7FAFF",
                   pt: "16px",
@@ -328,7 +328,7 @@ const BookingPage = () => {
                 }}
               >
                 {`${data.phone.code} ${data.phone.number}`}
-              </TableCell>
+              </TableCell> */}
               <TableCell
                 sx={{
                   borderBottom: "1px solid #F7FAFF",

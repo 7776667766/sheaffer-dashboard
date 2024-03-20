@@ -173,8 +173,8 @@ const BusinessForm = () => {
                   name="slug"
                   fullWidth
                   id="slug"
-                  label="dummy-business"
-
+                  disabled="true"
+                  label="Enter Slug"
                   {...formik.getFieldProps("slug")}
                   error={formik.touched.slug && formik.errors.slug}
                   helperText={
