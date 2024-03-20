@@ -116,7 +116,7 @@ const Profile = () => {
 
         <Divider />
 
-        <MenuItem onClick={() => router.push("/settings/account/")}>
+        <MenuItem onClick={() => router.push("/pages/profile/")}>
           <ListItemIcon sx={{ mr: "-8px", mt: "-3px" }}>
             <PersonIcon fontSize="small" />
           </ListItemIcon>
