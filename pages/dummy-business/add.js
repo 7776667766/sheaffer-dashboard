@@ -15,7 +15,7 @@ import {
 } from "store/business/services";
 import startsWith from "lodash.startswith";
 import { useRouter } from "next/router";
-import { phoneValidation, requiredValidation, slugValidation } from "@/utils/validation";
+import { requiredValidation, slugValidation } from "@/utils/validation";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { LoadingButtonComponent } from "@/components/UIElements/Buttons/LoadingButton";
@@ -24,16 +24,13 @@ import { ColorPicker } from "@mantine/core";
 import PhoneInput from "react-phone-input-2";
 
 const BusinessForm = () => {
-  const { role } = useSelector((state) => state.auth);
-  const { business, dataFatched, isLoading } = useSelector(
+  const {  dataFatched, isLoading } = useSelector(
     (state) => state.business
   );
-  console.log(isLoading, "business123");
 
   const router = useRouter();
   const dispatch = useDispatch();
   const [avatar1, setavatar1] = useState(null);
-  console.log(avatar1);
   const [avatar2, setavatar2] = useState(null);
   console.log(avatar2, "avatar2");
 
@@ -47,7 +44,7 @@ const BusinessForm = () => {
       dispatch(
         getMyBussinessFunApi({
           onSuccess: (businessId) => {
-            console.log(businessId, "businessIdd");
+            console.log(businessId, "businessId");
           },
         })
       );
@@ -82,7 +79,6 @@ const BusinessForm = () => {
       name: requiredValidation("name required"),
       slug: slugValidation("slug"),
       email: requiredValidation("email"),
-      // phoneNumber: phoneValidation("Phone"),
       description: requiredValidation("description"),
       address: requiredValidation("address"),
       bannerText: requiredValidation("bannerText"),
@@ -95,10 +91,8 @@ const BusinessForm = () => {
         formik.values.countryCode
       );
   
-      console.log("phone number is ", myPhoneNumberArray);
       const myCountryCode = myPhoneNumberArray[0] + formik.values.countryCode;
       myPhoneNumberArray.shift();
-      console.log("country code is ", myCountryCode);
       const myPhoneNumber = myPhoneNumberArray.join(myCountryCode);
       const formattedCountryCode = myCountryCode.startsWith("+")
         ? formik.values.countryCode
@@ -129,12 +123,6 @@ const BusinessForm = () => {
     },
   });
 
-  const handleInputChange = (field, value) => {
-    setBusinessData((prevData) => ({
-      ...prevData,
-      [field]: value,
-    }));
-  };
   return (
     <>
       <h1>Add Dummy Business</h1>
@@ -262,7 +250,6 @@ const BusinessForm = () => {
                       ? formik.errors.phoneNumber
                       : ""
                   }
-                  // defaultErrorMessage={'yyey'}
                   InputProps={{
                     style: { borderRadius: 8, width: "100%" },
                   }}

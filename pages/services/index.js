@@ -7,7 +7,7 @@ import Tooltip from "@mui/material/Tooltip";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 import Button from "@mui/material/Button";
-import AddIcon from "@mui/icons-material/Add";
+import AddIcon from "@mui/ticons-material/Add";
 import Avatar from "@mui/material/Avatar";
 import Image from "next/image";
 import Link from "next/link";
@@ -57,7 +57,7 @@ const ServicesPage = () => {
   };
 
   return (
-    <>
+    <> 
       <Card
         sx={{
           boxShadow: "none",
@@ -379,3 +379,4 @@ const ServicesPage = () => {
 };
 
 export default ServicesPage;
+
