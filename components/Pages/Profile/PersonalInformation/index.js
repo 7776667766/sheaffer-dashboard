@@ -11,10 +11,10 @@ const PersonalInformation = () => {
       title: "Name",
       text: user?.name,
     },
-    {
-      title: "Phone",
-      text: user?.phone,
-    },
+    // {
+    //   title: "Phone",
+    //   text: user?.phone,
+    // },
     {
       title: "Email",
       text: user?.email,

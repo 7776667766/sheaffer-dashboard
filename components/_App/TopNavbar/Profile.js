@@ -116,11 +116,13 @@ const Profile = () => {
 
         <Divider />
 
-        <MenuItem onClick={() => router.push("/pages/profile/")}>
+        <MenuItem
+          onClick={() => router.push("/settings/account/")}
+        >
           <ListItemIcon sx={{ mr: "-8px", mt: "-3px" }}>
             <PersonIcon fontSize="small" />
           </ListItemIcon>
-          {/* <Link
+          {/*<Link
             href="/pages/profile/"
             fontSize="13px"
             color="inherit"

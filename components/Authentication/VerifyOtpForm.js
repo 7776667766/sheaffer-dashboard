@@ -23,6 +23,35 @@ const VerifyOtpForm = () => {
     (state) => state.auth
   );
   const [startTimer, setStartTimer] = useState(false);
+  const [inputStyle, setInputStyle] = useState({
+    borderColor: "#5B5B98",
+    width: "50px",  // Default width
+    height: "50px", // Default height
+});
+useEffect(() => {
+  const handleResize = () => {
+      if (window.innerWidth < 768) { 
+          setInputStyle({
+              ...inputStyle,
+              width: "40px",
+              height: "40px",
+          });
+      } else {
+          setInputStyle({
+              ...inputStyle,
+              width: "50px",
+              height: "50px",
+          });
+      }
+  };
+
+
+  handleResize();
+  window.addEventListener("resize", handleResize);
+
+
+  return () => window.removeEventListener("resize", handleResize);
+}, []); 
 
   useEffect(() => {
     if (router.query.data != undefined) {
@@ -94,7 +123,7 @@ const VerifyOtpForm = () => {
           <Grid item xs={12} md={12} lg={12} xl={12}>
             <Box>
               <Typography as="h1" fontSize="28px" fontWeight="700" mb="5px">
-                Verify OTP{" "}
+                Verify OTP
                 <Image
                   width={30}
                   height={30}
@@ -133,12 +162,11 @@ const VerifyOtpForm = () => {
                          
                           // padding: "10px",
                           display: "flex",
-                         
                           justifyContent: "space-between",
-                       
-                          
+                    
                         }}
-                        inputStyle={{ borderColor: "#5B5B98",width:"40px",height:"40px" }}
+                        inputStyle={inputStyle}
+                        // inputStyle={{ borderColor: "#5B5B98",width:"50px",height:"50px" }}
                         inputFocusStyle={{ borderColor: "blue" }}
                         onComplete={(value, index) => handleSubmit(value)}
                         autoSelect={true}

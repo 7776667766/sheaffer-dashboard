@@ -200,7 +200,7 @@ const TemplatesPage = () => {
                   pt: "16px",
                   pb: "16px",
                   overflow: "hidden",
-                  display: "-webkit-box",
+                  // display: "-webkit-box",
                   WebkitLineClamp: 3,
                   WebkitBoxOrient: "vertical",
                 }}
