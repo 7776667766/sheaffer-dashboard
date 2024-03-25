@@ -45,6 +45,8 @@ import {
   requiredValidation,
   slugValidation,
 } from "@/utils/validation";
+import {Link} from "react-router-dom";
+import {useRouter} from "next/router";
 
 export default function DashboardPage() {
   const { user, role } = useSelector((state) => state.auth);
@@ -52,6 +54,8 @@ export default function DashboardPage() {
   const { businessAll } = useSelector((state) => state.business);
   console.log("business All ", businessAll);
   console.log("only busness ", business);
+
+  const router=useRouter();
 
   const transactionDates = business?.data?.TransactionDate;
 
@@ -320,6 +324,9 @@ export default function DashboardPage() {
     }, 1000);
   };
 
+  const handleclick=()=>{
+    router.push('/custom-bussiness')
+  }
   return (
     <>
       {/* Page title */}
@@ -343,14 +350,16 @@ export default function DashboardPage() {
                     </Button>
                   )}
                   {!business.data && (
-                    <Button
+
+                  <Button
                       variant="contained"
                       disabled={business?.data ? true : false}
-                      onClick={handleOpenRequest}
+                      onClick={handleclick}
                     >
                       Send Custom Booking Request
-                    </Button>
-                  )}
+                    </Button> 
+                   
+                  )} 
                   {business.data ? (
                     <Button
                       variant="contained"

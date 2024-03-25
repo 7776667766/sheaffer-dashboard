@@ -4,6 +4,7 @@ import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import PasswordChecklist from "react-password-checklist";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { confirmPasswordValidation, passwordValidation } from "@/utils/validation";
@@ -12,7 +13,7 @@ import { useDispatch } from "react-redux";
 import { changePasswordFunApi } from "store/auth/services";
 
 export default function ChangePassword() {
-
+  const [isPasswordEntered, setIsPasswordEntered] = React.useState(false);
   const dispatch=useDispatch();
 
   const formik = useFormik({
@@ -117,7 +118,29 @@ export default function ChangePassword() {
                     ? formik.errors.newPassword
                     : ""
                 }
+                onChange={(event) => {
+                  formik.handleChange(event);
+                  setIsPasswordEntered(true);
+                }}
               />
+
+              <Box sx={{marginTop:"10px"}}> {isPasswordEntered && (
+                <PasswordChecklist
+                  rules={["minLength", "specialChar", "number", "capital","lowercase"]}
+                  minLength={8}
+                  value={formik.values.newPassword}
+                  valueAgain={formik.values.confirmPassword}
+                  messages={{
+                    minLength: "Password has more than 8 characters.",
+                    specialChar: "Password has special characters.",
+                    number: "Password has a number.",
+                    capital: "Password has an uppercase letter.",
+                    lowercase:"Password has an lowercase letter."
+                  }}
+                />
+              )}
+</Box>
+            
             </Grid>
 
             <Grid item xs={12} sm={6}>

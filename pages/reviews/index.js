@@ -12,7 +12,7 @@ const Review = () => {
   const { review } = useSelector((state) => state.review);
   console.log(review.data, "review");
   const { business } = useSelector((state) => state.business);
-
+console.log('review business id is',business)
   useEffect(() => {
     if (review.dataFatched !== true) {
       dispatch(
@@ -54,121 +54,123 @@ const Review = () => {
             My Reviews
           </Typography>
         </Box>
+{business?.data?.id && (
+ <CustomPaginationTable
+ isLoading={review.isLoading}
+ tableData={review.data}
+ tableHeaderData={
+   <>
+     <TableCell
+       sx={{
+         borderBottom: "1px solid #F7FAFF",
+         fontSize: "13.5px",
+       }}
+     >
+       Sr.
+     </TableCell>
+     <TableCell
+       sx={{
+         borderBottom: "1px solid #F7FAFF",
+         fontSize: "13.5px",
+       }}
+     >
+       Name
+     </TableCell>
 
-        <CustomPaginationTable
-          isLoading={review.isLoading}
-          tableData={review.data}
-          tableHeaderData={
-            <>
-              <TableCell
-                sx={{
-                  borderBottom: "1px solid #F7FAFF",
-                  fontSize: "13.5px",
-                }}
-              >
-                Sr.
-              </TableCell>
-              <TableCell
-                sx={{
-                  borderBottom: "1px solid #F7FAFF",
-                  fontSize: "13.5px",
-                }}
-              >
-                Name
-              </TableCell>
+     <TableCell
+       sx={{
+         borderBottom: "1px solid #F7FAFF",
+         fontSize: "13.5px",
+       }}
+     >
+       Image
+     </TableCell>
 
-              <TableCell
-                sx={{
-                  borderBottom: "1px solid #F7FAFF",
-                  fontSize: "13.5px",
-                }}
-              >
-                Image
-              </TableCell>
+     <TableCell
+       sx={{
+         borderBottom: "1px solid #F7FAFF",
+         fontSize: "13.5px",
+       }}
+     >
+       Message
+     </TableCell>
 
-              <TableCell
-                sx={{
-                  borderBottom: "1px solid #F7FAFF",
-                  fontSize: "13.5px",
-                }}
-              >
-                Message
-              </TableCell>
+     <TableCell
+       align="right"
+       sx={{
+         borderBottom: "1px solid #F7FAFF",
+         fontSize: "13.5px",
+       }}
+     >
+       Rating
+     </TableCell>
+   </>
+ }
+ tableBodyData={(data, index) => (
+   <>
+     <TableCell
+       sx={{
+         fontWeight: "500",
+         fontSize: "13px",
+         borderBottom: "1px solid #F7FAFF",
+         color: "#260944",
+         pt: "16px",
+         pb: "16px",
+       }}
+     >
+       {index}
+     </TableCell>
+     <TableCell
+       sx={{
+         fontWeight: "500",
+         fontSize: "13px",
+         borderBottom: "1px solid #F7FAFF",
+         color: "#260944",
+         pt: "16px",
+         pb: "16px",
+       }}
+     >
+       {data.name}
+     </TableCell>
 
-              <TableCell
-                align="right"
-                sx={{
-                  borderBottom: "1px solid #F7FAFF",
-                  fontSize: "13.5px",
-                }}
-              >
-                Rating
-              </TableCell>
-            </>
-          }
-          tableBodyData={(data, index) => (
-            <>
-              <TableCell
-                sx={{
-                  fontWeight: "500",
-                  fontSize: "13px",
-                  borderBottom: "1px solid #F7FAFF",
-                  color: "#260944",
-                  pt: "16px",
-                  pb: "16px",
-                }}
-              >
-                {index}
-              </TableCell>
-              <TableCell
-                sx={{
-                  fontWeight: "500",
-                  fontSize: "13px",
-                  borderBottom: "1px solid #F7FAFF",
-                  color: "#260944",
-                  pt: "16px",
-                  pb: "16px",
-                }}
-              >
-                {data.name}
-              </TableCell>
+     <TableCell
+       sx={{
+         borderBottom: "1px solid #F7FAFF",
+         fontSize: "13px",
+         pt: "16px",
+         pb: "16px",
+       }}
+     >
+       <Image
+         src={data.image}
+         alt={data.title}
+         width={50}
+         height={50}
+       />
+     </TableCell>
 
-              <TableCell
-                sx={{
-                  borderBottom: "1px solid #F7FAFF",
-                  fontSize: "13px",
-                  pt: "16px",
-                  pb: "16px",
-                }}
-              >
-                <Image
-                  src={data.image}
-                  alt={data.title}
-                  width={50}
-                  height={50}
-                />
-              </TableCell>
+     <TableCell
+       sx={{
+         borderBottom: "1px solid #F7FAFF",
+         fontSize: "13px",
+         pt: "16px",
+         pb: "16px",
+       }}
+     >
+       {data.message}
+     </TableCell>
 
-              <TableCell
-                sx={{
-                  borderBottom: "1px solid #F7FAFF",
-                  fontSize: "13px",
-                  pt: "16px",
-                  pb: "16px",
-                }}
-              >
-                {data.message}
-              </TableCell>
-
-              <TableCell
-                align="right"
-                sx={{ borderBottom: "1px solid #F7FAFF" }}
-              >
-                {data.rating}
-              </TableCell>
-            </>
-          )}
-        />
+     <TableCell
+       align="right"
+       sx={{ borderBottom: "1px solid #F7FAFF" }}
+     >
+       {data.rating}
+     </TableCell>
+   </>
+ )}
+/>
+)}
+       
       </Card>
     </>
   );

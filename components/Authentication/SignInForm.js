@@ -7,7 +7,7 @@ import TextField from "@mui/material/TextField";
 import styles from "@/components/Authentication/Authentication.module.css";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { requiredValidation } from "@/utils/validation";
+import { passwordValidation, requiredValidation } from "@/utils/validation";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
@@ -31,7 +31,7 @@ const SignInForm = () => {
     },
     validationSchema: Yup.object({
       email: requiredValidation("Email or phone"),
-      password: requiredValidation(),
+      password: passwordValidation(),
     }),
     onSubmit: (values) => {
       dispatch(

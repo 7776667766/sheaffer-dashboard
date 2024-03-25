@@ -6,6 +6,7 @@ import {
   Card,
   CardContent,
   TextField,
+  MenuItem,
 } from "@mui/material";
 import "react-phone-input-2/lib/style.css";
 import { useDispatch, useSelector } from "react-redux";
@@ -173,7 +174,7 @@ const BusinessForm = () => {
                   name="slug"
                   fullWidth
                   id="slug"
-                  disabled="true"
+                  // disabled="true"
                   label="Enter Slug"
                   {...formik.getFieldProps("slug")}
                   error={formik.touched.slug && formik.errors.slug}
@@ -446,18 +447,28 @@ const BusinessForm = () => {
                   font Size
                 </Typography>
                 <TextField
-                  name="Font Size"
-                  fullWidth
-                  id="fontSize"
-                  label="Enter font Size"
-                  {...formik.getFieldProps("fontSize")}
-                  error={formik.touched.fontSize && formik.errors.fontSize}
-                  helperText={
-                    formik.touched.fontSize && formik.errors.fontSize
-                      ? formik.errors.fontSize
-                      : ""
-                  }
-                />
+              fullWidth
+              select
+              value={formik.values.fontSize}
+              label="Font Size"
+              // onChange={(e) => setSelectedFontSize(e.target.value)}
+              {...formik.getFieldProps("fontSize")}
+              error={formik.touched.fontSize && formik.errors.fontSize}
+              helperText={
+                formik.touched.fontSize && formik.errors.fontSize
+                  ? formik.errors.fontSize
+                  : ""
+              }
+            >
+            <MenuItem value="16">16px</MenuItem>
+            <MenuItem value="24">24px</MenuItem>
+            <MenuItem value="36">36px</MenuItem>
+            <MenuItem value="48">48px</MenuItem>
+            <MenuItem value="60">60px</MenuItem>
+            <MenuItem value="72">72px</MenuItem>
+            <MenuItem value="84">84px</MenuItem>
+            <MenuItem value="96">96px</MenuItem>
+            </TextField>
               </Grid>
 
               <Grid item xs={12} md={12} lg={6}>
@@ -472,18 +483,27 @@ const BusinessForm = () => {
                   font Family
                 </Typography>
                 <TextField
-                  name="Font Size"
-                  fullWidth
-                  id="fontSize"
-                  label="Enter font Family"
-                  {...formik.getFieldProps("fontFamily")}
-                  error={formik.touched.fontFamily && formik.errors.fontFamily}
-                  helperText={
-                    formik.touched.fontFamily && formik.errors.fontFamily
-                      ? formik.errors.fontFamily
-                      : ""
-                  }
-                />
+              select
+              label="Font Family"
+              fullWidth
+              className="w-full"
+              value={formik.values.fontFamily}
+              // onChange={(e) => setSelectedFontFamily(e.target.value)}
+              {...formik.getFieldProps("fontFamily")}
+              error={formik.touched.fontFamily && formik.errors.fontFamily}
+              helperText={
+                formik.touched.fontFamily && formik.errors.fontFamily
+                  ? formik.errors.fontFamily
+                  : ""
+              }
+            >
+              <MenuItem value="Poppins">Poppins</MenuItem>
+              <MenuItem value="Montserrat">Montserrat</MenuItem>
+              <MenuItem value="GreatVibes">Great Vibes</MenuItem>
+              <MenuItem value="playFair">Playfair Display</MenuItem>
+              <MenuItem value="Mulish">Mulish</MenuItem>
+              <MenuItem value="Quicksand">Quicksand</MenuItem>
+            </TextField>
               </Grid>
 
               <Grid item xs={12} textAlign="left">

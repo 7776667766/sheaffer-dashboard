@@ -13,6 +13,7 @@ import * as Yup from "yup";
 import { requiredValidation } from "@/utils/validation";
 import { useRouter } from "next/router";
 import { LoadingButtonComponent } from "@/components/UIElements/Buttons/LoadingButton";
+import {Link} from "react-router-dom";
 
 const plansList = [
   {
@@ -70,6 +71,7 @@ const AddPackagePage = ({ formData, isEditMode }) => {
           })
         );
       } else {
+
         dispatch(
           addPlanFunApi({
             data: {
@@ -84,7 +86,7 @@ const AddPackagePage = ({ formData, isEditMode }) => {
       }
     },
   });
-
+ 
   return (
     <>
       <Card
@@ -103,7 +105,7 @@ const AddPackagePage = ({ formData, isEditMode }) => {
             mb: "10px",
           }}
         >
-          Add Business package
+      {isEditMode? "Edit Business package":  "Add Business package"} 
         </Typography>
 
         <Box component="form" onSubmit={formik.handleSubmit}>
@@ -204,7 +206,7 @@ const AddPackagePage = ({ formData, isEditMode }) => {
             </Box>
           </Grid>
           <Grid item xs={6} textAlign="left">
-            <LoadingButtonComponent
+             <LoadingButtonComponent
               type="submit"
               value="Add Business Package"
               isLoading={plan.isLoading}
@@ -213,7 +215,9 @@ const AddPackagePage = ({ formData, isEditMode }) => {
               sx={{
                 padding: "10px 36px",
               }}
+             
             />
+           
           </Grid>
         </Box>
       </Card>

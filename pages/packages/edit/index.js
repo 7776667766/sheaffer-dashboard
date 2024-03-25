@@ -46,7 +46,7 @@ export default function EditServicePage() {
   return (
     <>
       <div className={styles.pageTitle}>
-        <h1>Edit Plan</h1>
+        <h1>Edit Package</h1>
         <ul>
           <li>
             <Link href="/">Dashboard</Link>

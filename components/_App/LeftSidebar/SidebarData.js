@@ -62,11 +62,11 @@ export const SidebarData = () => {
       //   },
       // ],
     },
-    (role === "manager" || role === "owner") && {
-      title: "Add-Custom-Business",
-      path: "/custom-bussiness",
-      icon: <LayersIcon />,
-    },
+    // (role === "manager" || role === "owner") && {
+    //   title: "Add-Custom-Business",
+    //   path: "/custom-bussiness",
+    //   icon: <LayersIcon />,
+    // },
     role === "owner" && {
       title: "Manager",
       path: "/manager/",
@@ -100,12 +100,12 @@ export const SidebarData = () => {
       icon: <LayersIcon />,
     },
 
-    role === "admin" && {
-      title: "Contact Us",
-      path: "/contact-us/",
-      role: "owner",
-      icon: <LayersIcon />,
-    },
+    // role === "admin" && {
+    //   title: "Contact Us",
+    //   path: "/contact-us/",
+    //   role: "owner",
+    //   icon: <LayersIcon />,
+    // },
 
     role === "owner" && {
       title: "Specialist",
@@ -661,6 +661,12 @@ export const SidebarData = () => {
       path: "/users/",
       role: "admin",
       icon: <AccountCircle />,
+    },
+    role === "admin" && {
+      title: "Contact Us",
+      path: "/contact-us/",
+      role: "owner",
+      icon: <LayersIcon />,
     },
     {
       title: "Settings",

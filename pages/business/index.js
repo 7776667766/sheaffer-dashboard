@@ -122,7 +122,10 @@ const BusinessPage = () => {
     },  validationSchema: Yup.object({
       reason: requiredValidation("Reason"),
     
-    }),});
+    }),
+   
+  });
+  
   const handleRejectConfirm = () => {
     const {  ...allvalues } = formik.values;
     dispatch(
@@ -336,22 +339,24 @@ const BusinessPage = () => {
                   pb: "16px",
                 }}
               >
-                
-                  <IconButton
-                    aria-label="edit"
-                    size="small"
-                    color="primary"
-                    className="primary"
-                    onClick={(event) => handleClick(data?.id, event)}
-                  >
-                    {data?.requestStatus === "Approved" ? (
-                      <VisibilityIcon /> 
-                    ) : data?.requestStatus === "Rejected" ? (
-                      <VisibilityIcon /> 
-                    ) : (
-                      <DriveFileRenameOutlineIcon fontSize="inherit" />
-                    )}
-                  </IconButton>
+                <Tooltip title="Edit" placement="top"> <IconButton
+                  
+                  aria-label="edit"
+                  size="small"
+                  color="primary"
+                  className="primary"
+                 
+                  onClick={(event) => handleClick(data?.id, event)}
+                >
+                  {data?.requestStatus === "Approved" ? (
+                    <VisibilityIcon /> 
+                  ) : data?.requestStatus === "Rejected" ? (
+                    <VisibilityIcon /> 
+                  ) : (
+                    <DriveFileRenameOutlineIcon fontSize="inherit" />
+                  )}
+                </IconButton></Tooltip>
+                 
                
               </TableCell>
             </>
@@ -614,7 +619,7 @@ const BusinessPage = () => {
         </Dialog>
        
         <Box>
-        <form onSubmit={formik.handleSubmit}>
+        <Box component="form" noValidate onSubmit={formik.handleSubmit}>
           {isRejecting && (
             <Dialog
               open={open2}
@@ -677,6 +682,7 @@ const BusinessPage = () => {
                   Close
                 </Button>
                 <Button
+                
                   variant="contained"
                   color="secondary"
                   onClick={handleRejectConfirm}
@@ -692,7 +698,7 @@ const BusinessPage = () => {
              
             </Dialog>
           )} 
-          </form>
+          </Box>
         </Box>
        
       </Card>

@@ -1,4 +1,4 @@
-import { Card, Typography } from "@mui/material";
+import { Box, Card, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getMyBussinessFunApi } from "store/business/services";
@@ -65,9 +65,11 @@ const CustomizePage = () => {
         >
           Customize Theme
         </Typography>
-        {dataInitalized && (
-          <CustomizeThemeForm formData={initialData} isEditMode={true} />
-        )}
+        {dataInitalized ? (
+  <CustomizeThemeForm formData={initialData} isEditMode={true} />
+) : (
+  <Box sx={{display:"flex",justifyContent:"center"}}>No data available.</Box>
+)}
       </Card>
     </>
   );

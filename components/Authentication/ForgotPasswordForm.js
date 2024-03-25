@@ -101,9 +101,14 @@ const ForgotPasswordForm = () => {
                         autoComplete="text"
                         {...formik.getFieldProps("email")}
                         error={
-                          formik.touched.phone && formik.errors.email
+                          formik.touched.email && formik.errors.email
                             ? true
                             : false
+                        }
+                        helperText={
+                          formik.touched.email && formik.errors.email
+                            ? formik.errors.email
+                            : ""
                         }
                         InputProps={{
                           style: { borderRadius: 8 },

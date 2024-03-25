@@ -11,7 +11,7 @@ export default function AddService() {
     <>
       {/* Page title */}
       <div className={styles.pageTitle}>
-        <h1>Add Plan</h1>
+        <h1>Add Package</h1>
         <ul>
           <li>
             <Link href="/">Dashboard</Link>

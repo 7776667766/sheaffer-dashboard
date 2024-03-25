@@ -201,7 +201,7 @@ const ServicesType = () => {
                   height={50}
                   alt="image"
                   style={{
-                    objectFit: "contain",
+                    objectFit: "fill",
                   }}
                 />
               </TableCell>
