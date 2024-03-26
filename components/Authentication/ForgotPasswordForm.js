@@ -98,7 +98,7 @@ const ForgotPasswordForm = () => {
                         required
                         fullWidth
                         label="Email"
-                        autoComplete="text"
+                        autoComplete="email"
                         {...formik.getFieldProps("email")}
                         error={
                           formik.touched.email && formik.errors.email

@@ -4,7 +4,7 @@ import { Stack, Box, Typography, Link } from "@mui/material";
 const Footer = () => {
   return (
     <>
-      <Stack
+      {/* <Stack
         sx={{
           backgroundColor: "#fff",
           p: "25px",
@@ -26,9 +26,9 @@ const Footer = () => {
             >
               EnvyTheme
             </Link> */}
-          </Typography>
+          {/* </Typography>
         </Box>
-      </Stack>
+      </Stack> */} 
     </>
   );
 };

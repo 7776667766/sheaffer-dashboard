@@ -13,7 +13,7 @@ import * as Yup from "yup";
 import { requiredValidation } from "@/utils/validation";
 import { useRouter } from "next/router";
 import { LoadingButtonComponent } from "@/components/UIElements/Buttons/LoadingButton";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const plansList = [
   {
@@ -29,24 +29,33 @@ const plansList = [
 ];
 
 const AddPackagePage = ({ formData, isEditMode }) => {
+  const [values, setValues] = React.useState({});
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setValues((prevValues) => ({
+      ...prevValues,
+      [name]: value,
+    }));
+    formik.handleChange(event); // Let Formik handle the change
+  };
+
   const router = useRouter();
   const dispatch = useDispatch();
   const { plan } = useSelector((state) => state.plan);
 
   const initialValues = isEditMode
     ? {
-      id: formData._id,
-      ...formData,
+        id: formData._id,
 
-    }
+        ...formData,
+      }
     : {
-      name: "",
-      duration: "",
-      price: "",
-      features: "",
-      isFeatured: false,
-
-    };
+        name: "",
+        duration: "",
+        price: "",
+        features: "",
+        isFeatured: false,
+      };
 
   const validation = {
     name: requiredValidation(),
@@ -57,9 +66,7 @@ const AddPackagePage = ({ formData, isEditMode }) => {
 
   const formik = useFormik({
     initialValues: initialValues,
-    validationSchema: Yup.object(
-      validation
-    ),
+    validationSchema: Yup.object(validation),
     onSubmit: (values) => {
       if (isEditMode) {
         dispatch(
@@ -71,7 +78,6 @@ const AddPackagePage = ({ formData, isEditMode }) => {
           })
         );
       } else {
-
         dispatch(
           addPlanFunApi({
             data: {
@@ -86,7 +92,7 @@ const AddPackagePage = ({ formData, isEditMode }) => {
       }
     },
   });
- 
+
   return (
     <>
       <Card
@@ -97,7 +103,7 @@ const AddPackagePage = ({ formData, isEditMode }) => {
           mb: "15px",
         }}
       >
-        <Typography
+        {/* <Typography
           as="h3"
           sx={{
             fontSize: 18,
@@ -106,7 +112,7 @@ const AddPackagePage = ({ formData, isEditMode }) => {
           }}
         >
       {isEditMode? "Edit Business package":  "Add Business package"} 
-        </Typography>
+        </Typography> */}
 
         <Box component="form" onSubmit={formik.handleSubmit}>
           <Box sx={{ mb: "10px" }}>
@@ -170,23 +176,46 @@ const AddPackagePage = ({ formData, isEditMode }) => {
               </Grid>
 
               <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Features"
-                  minRows={3}
-                  multiline
-                  {...formik.getFieldProps("features")}
-                  error={
-                    formik.touched.features && formik.errors.features
-                      ? true
-                      : false
-                  }
-                  helperText={
-                    formik.touched.features && formik.errors.features
-                      ? formik.errors.features
-                      : ""
-                  }
-                />
+                {isEditMode ? (
+                  <TextField
+                    fullWidth
+                    label="Features"
+                    minRows={3}
+                    multiline
+                    {...formik.getFieldProps("features")}
+                    value={formik.values.features[0].split(",").join("\n")}
+                    onChange={(e) => {
+                      handleChange(e); 
+                      const newFeatures = e.target.value
+                        .split("\n")
+                        .map((item) => item.trim());
+                        formik.setFieldValue(newFeatures);
+                    }}
+                    helperText={
+                      formik.touched.features && formik.errors.features
+                        ? formik.errors.features
+                        : ""
+                    }
+                  />
+                ) : (
+                  <TextField
+                    fullWidth
+                    label="Features"
+                    minRows={3}
+                    multiline
+                    {...formik.getFieldProps("features")}
+                    error={
+                      formik.touched.features && formik.errors.features
+                        ? true
+                        : false
+                    }
+                    helperText={
+                      formik.touched.features && formik.errors.features
+                        ? formik.errors.features
+                        : ""
+                    }
+                  />
+                )}
               </Grid>
             </Grid>
           </Box>
@@ -206,7 +235,7 @@ const AddPackagePage = ({ formData, isEditMode }) => {
             </Box>
           </Grid>
           <Grid item xs={6} textAlign="left">
-             <LoadingButtonComponent
+            <LoadingButtonComponent
               type="submit"
               value="Add Business Package"
               isLoading={plan.isLoading}
@@ -215,9 +244,7 @@ const AddPackagePage = ({ formData, isEditMode }) => {
               sx={{
                 padding: "10px 36px",
               }}
-             
             />
-           
           </Grid>
         </Box>
       </Card>

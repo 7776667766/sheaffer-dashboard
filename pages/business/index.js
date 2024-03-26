@@ -339,7 +339,7 @@ const BusinessPage = () => {
                   pb: "16px",
                 }}
               >
-                <Tooltip title="Edit" placement="top"> <IconButton
+                <Tooltip title="Detail" placement="top"> <IconButton
                   
                   aria-label="edit"
                   size="small"
