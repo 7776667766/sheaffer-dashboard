@@ -36,7 +36,7 @@ const AddPackagePage = ({ formData, isEditMode }) => {
       ...prevValues,
       [name]: value,
     }));
-    formik.handleChange(event); // Let Formik handle the change
+    formik.handleChange(event); 
   };
 
   const router = useRouter();
@@ -92,7 +92,7 @@ const AddPackagePage = ({ formData, isEditMode }) => {
       }
     },
   });
-
+  // console.log("features are ", formData?.features[0].split(",").join("\n"));
   return (
     <>
       <Card
@@ -185,11 +185,10 @@ const AddPackagePage = ({ formData, isEditMode }) => {
                     {...formik.getFieldProps("features")}
                     value={formik.values.features[0].split(",").join("\n")}
                     onChange={(e) => {
-                      handleChange(e); 
-                      const newFeatures = e.target.value
-                        .split("\n")
-                        .map((item) => item.trim());
-                        formik.setFieldValue(newFeatures);
+                      const newFeatures = e.target.value.split(",").join("\n");
+                      formik.setFieldValue("features", [newFeatures]);
+                  
+                      console.log("new feature values", newFeatures);
                     }}
                     helperText={
                       formik.touched.features && formik.errors.features

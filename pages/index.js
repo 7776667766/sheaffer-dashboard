@@ -29,9 +29,9 @@ import Button from "@mui/material/Button";
 import {
   getMyBussinessFunApi,
   regsiterBusinessFunApi,
-} from "store/business/services";  
+} from "store/business/services";
 import { Twitter } from "@mui/icons-material";
-import Facebook from  "@mui/icons-material/Facebook";
+import Facebook from "@mui/icons-material/Facebook";
 import Instagram from "@mui/icons-material/Instagram";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -45,8 +45,8 @@ import {
   requiredValidation,
   slugValidation,
 } from "@/utils/validation";
-import {Link} from "react-router-dom";
-import {useRouter} from "next/router";
+import { Link } from "react-router-dom";
+import { useRouter } from "next/router";
 
 export default function DashboardPage() {
   const { user, role } = useSelector((state) => state.auth);
@@ -55,7 +55,7 @@ export default function DashboardPage() {
   console.log("business All ", businessAll);
   console.log("only busness ", business);
 
-  const router=useRouter();
+  const router = useRouter();
 
   const transactionDates = business?.data?.TransactionDate;
 
@@ -78,11 +78,12 @@ export default function DashboardPage() {
   const dispatch = useDispatch();
   const [slug, setSlug] = useState("");
   const [open, setOpen] = useState(false);
+  const [first, setFirst] = useState(true);
   const [openSecondDialog, setOpenSecondDialog] = useState(false);
   const [openthirdDialog, setOpenthirdDialog] = useState(false);
   const [selectedBusiness, setSelectedBusiness] = useState(null);
   console.log("selectedBusiness89", selectedBusiness);
-
+  console.log("specific business is ", business?.data?.id);
   const [avatar, setavatar] = useState(null);
   const [openForm, setOpenForm] = useState(false);
   const [openPending, setOpenPending] = useState(false);
@@ -93,13 +94,14 @@ export default function DashboardPage() {
     console.log("useEffect running 1 at 89");
 
     if (!dataFatched) {
-      const selectedBusinessId = localStorage.getItem('selectedBusinessId');
-      console.log("selectedBusinessId", selectedBusinessId)
-      dispatch(getMyBussinessFunApi({
-        data: { businessId: selectedBusinessId },
-        onSuccess: () => {
-        },
-      }));
+      const selectedBusinessId = localStorage.getItem("selectedBusinessId");
+      console.log("selectedBusinessId", selectedBusinessId);
+      dispatch(
+        getMyBussinessFunApi({
+          data: { businessId: selectedBusinessId },
+          onSuccess: () => {},
+        })
+      );
     }
   }, [dispatch, dataFatched]);
 
@@ -107,7 +109,7 @@ export default function DashboardPage() {
     name: "",
     email: "",
     slug: "",
-    bannerText:  "",
+    bannerText: "",
     address: "",
     description: "",
     countryCode: "",
@@ -139,7 +141,7 @@ export default function DashboardPage() {
     setOpenthirdDialog(false);
     setOpen(false);
   };
-//N
+  //N
   useEffect(() => {
     console.log("useEffect running 2 at 138");
     if (business?.data) {
@@ -324,9 +326,16 @@ export default function DashboardPage() {
     }, 1000);
   };
 
-  const handleclick=()=>{
-    router.push('/custom-bussiness')
-  }
+  const handleclick = () => {
+    router.push("/custom-bussiness");
+  };
+
+  const handleFinish = () => {
+    setFirst(false);
+  };
+  const handleDialogClick = (event) => {
+    event.stopPropagation();
+  };
   return (
     <>
       {/* Page title */}
@@ -336,8 +345,75 @@ export default function DashboardPage() {
           <li>
             {role === "owner" && (
               <>
+                {!business.data && (
+                  <Dialog
+                    open={first}
+                    onClose={handleFinish}
+                    onClick={handleDialogClick}
+                  >
+                    <DialogTitle >
+                      <Box sx={{display:"flex",justifyContent:"space-between",alignItems:"center"}}> 
+                        Welcome
+                        <IconButton
+                         
+                         edge="end"
+                         color="inherit"
+                         onClick={handleFinish}
+                         aria-label="close"
+                       >
+                         <CloseIcon />
+                       </IconButton>
+                        </Box>
+                     
+                     
+                    </DialogTitle>
+                    <Box></Box>
+                    <Grid container spacing={3} paddingX={3} paddingBottom={3}>
+                      <Grid item xs={12}>
+                        <Typography
+                          as="h5"
+                          sx={{
+                            fontWeight: "500",
+                            fontSize: "14px",
+                            mb: "12px",
+                          }}
+                        >
+                          Business
+                        </Typography>
+                        <Typography
+                          as="h5"
+                          sx={{
+                            fontWeight: "500",
+                            fontSize: "14px",
+                            mb: "12px",
+                          }}
+                        >
+                          Busines2
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={12}></Grid>
+
+                      <Grid
+                        item
+                        xs={12}
+                        style={{
+                          marginRight: "12px",
+                          textTransform: "capitalize",
+                        }}
+                      >
+                        <Box>Plesse sync a bussines</Box>
+                        {/* <Button
+                        onClick={handleRegisterBusiness}
+                        variant="contained"
+                        color="primary"
+                      >
+                        Register Business
+                      </Button> */}
+                      </Grid>
+                    </Grid>
+                  </Dialog>
+                )}
                 <div style={{ display: "flex", gap: "15px" }}>
-                
                   {business.data ? (
                     ""
                   ) : (
@@ -350,16 +426,14 @@ export default function DashboardPage() {
                     </Button>
                   )}
                   {!business.data && (
-
-                  <Button
+                    <Button
                       variant="contained"
                       disabled={business?.data ? true : false}
                       onClick={handleclick}
                     >
                       Send Custom Booking Request
-                    </Button> 
-                   
-                  )} 
+                    </Button>
+                  )}
                   {business.data ? (
                     <Button
                       variant="contained"
@@ -422,7 +496,6 @@ export default function DashboardPage() {
                     }}
                   >
                     Add New Business Detail manually
-               
                   </DialogTitle>
                   <form onSubmit={formik.handleSubmit}>
                     <div sx={{ padding: "30px", margin: "16px" }}>
@@ -457,7 +530,7 @@ export default function DashboardPage() {
                                     height={100}
                                     width={50}
                                     alt="oeoe"
-                                  style={{width:"100%"}}
+                                    style={{ width: "100%" }}
                                   />
                                 );
                               })()}
@@ -1129,7 +1202,7 @@ export default function DashboardPage() {
                               marginBottom: "5px",
                             }}
                           >
-                           {`${business?.data?.phone.code} ${business?.data?.phone.number}`}
+                            {`${business?.data?.phone.code} ${business?.data?.phone.number}`}
                           </li>
                           <li
                             style={{
@@ -1213,7 +1286,6 @@ export default function DashboardPage() {
           <Features />
         </Grid>
       </Grid>
-
     </>
   );
 }
