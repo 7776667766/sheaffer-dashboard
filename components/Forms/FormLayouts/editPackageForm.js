@@ -36,7 +36,7 @@ const AddPackagePage = ({ formData, isEditMode }) => {
       ...prevValues,
       [name]: value,
     }));
-    formik.handleChange(event); 
+    formik.handleChange(event);
   };
 
   const router = useRouter();
@@ -68,10 +68,14 @@ const AddPackagePage = ({ formData, isEditMode }) => {
     initialValues: initialValues,
     validationSchema: Yup.object(validation),
     onSubmit: (values) => {
+    
       if (isEditMode) {
+        console.log("edit section", values.features);
         dispatch(
           editPackagesFunApi({
             data: values,
+             
+
             onSuccess: () => {
               router.push("/packages/");
             },
@@ -92,6 +96,7 @@ const AddPackagePage = ({ formData, isEditMode }) => {
       }
     },
   });
+  console.log('form data is ',formData.features)
   // console.log("features are ", formData?.features[0].split(",").join("\n"));
   return (
     <>
@@ -185,9 +190,11 @@ const AddPackagePage = ({ formData, isEditMode }) => {
                     {...formik.getFieldProps("features")}
                     value={formik.values.features[0].split(",").join("\n")}
                     onChange={(e) => {
-                      const newFeatures = e.target.value.split(",").join("\n");
+                      console.log("onChange event triggered");
+                      const newFeatures = e.target.value.split("\n").join(",");
+                      console.log("newFeatures value:", newFeatures);
                       formik.setFieldValue("features", [newFeatures]);
-                  
+
                       console.log("new feature values", newFeatures);
                     }}
                     helperText={
