@@ -7,14 +7,17 @@ import Typography from "@mui/material/Typography";
 import PasswordChecklist from "react-password-checklist";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { confirmPasswordValidation, passwordValidation } from "@/utils/validation";
+import {
+  confirmPasswordValidation,
+  passwordValidation,
+} from "@/utils/validation";
 import { LoadingButtonComponent } from "@/components/UIElements/Buttons/LoadingButton";
 import { useDispatch } from "react-redux";
 import { changePasswordFunApi } from "store/auth/services";
 
 export default function ChangePassword() {
   const [isPasswordEntered, setIsPasswordEntered] = React.useState(false);
-  const dispatch=useDispatch();
+  const dispatch = useDispatch();
 
   const formik = useFormik({
     initialValues: {
@@ -29,7 +32,7 @@ export default function ChangePassword() {
     }),
     onSubmit: (values) => {
       console.log("Handle Submit", values);
-      dispatch(changePasswordFunApi(values))
+      dispatch(changePasswordFunApi(values));
     },
   });
 
@@ -124,23 +127,30 @@ export default function ChangePassword() {
                 }}
               />
 
-              <Box sx={{marginTop:"10px"}}> {isPasswordEntered && (
-                <PasswordChecklist
-                  rules={["minLength", "specialChar", "number", "capital","lowercase"]}
-                  minLength={8}
-                  value={formik.values.newPassword}
-                  valueAgain={formik.values.confirmPassword}
-                  messages={{
-                    minLength: "Password has more than 8 characters.",
-                    specialChar: "Password has special characters.",
-                    number: "Password has a number.",
-                    capital: "Password has an uppercase letter.",
-                    lowercase:"Password has an lowercase letter."
-                  }}
-                />
-              )}
-</Box>
-            
+              <Box sx={{ marginTop: "10px" }}>
+                {" "}
+                {isPasswordEntered && (
+                  <PasswordChecklist
+                    rules={[
+                      "minLength",
+                      "specialChar",
+                      "number",
+                      "capital",
+                      "lowercase",
+                    ]}
+                    minLength={8}
+                    value={formik.values.newPassword}
+                    valueAgain={formik.values.confirmPassword}
+                    messages={{
+                      minLength: "Password has more than 8 characters.",
+                      specialChar: "Password has special characters.",
+                      number: "Password has a number.",
+                      capital: "Password has an uppercase letter.",
+                      lowercase: "Password has an lowercase letter.",
+                    }}
+                  />
+                )}
+              </Box>
             </Grid>
 
             <Grid item xs={12} sm={6}>
@@ -178,22 +188,19 @@ export default function ChangePassword() {
             </Grid>
           </Grid>
 
-        
-
           <LoadingButtonComponent
-          fullWidth={false}
+            fullWidth={false}
             type="submit"
             value="Change Password"
             sx={{
               mt: 2,
-            
+
               fontSize: "14px",
               padding: "12px 30px",
             }}
             isLoading={false}
             disabled={false}
           />
-
         </Box>
       </Box>
     </>
