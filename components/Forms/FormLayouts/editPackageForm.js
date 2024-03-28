@@ -68,13 +68,11 @@ const AddPackagePage = ({ formData, isEditMode }) => {
     initialValues: initialValues,
     validationSchema: Yup.object(validation),
     onSubmit: (values) => {
-    
       if (isEditMode) {
         console.log("edit section", values.features);
         dispatch(
           editPackagesFunApi({
             data: values,
-             
 
             onSuccess: () => {
               router.push("/packages/");
@@ -96,7 +94,7 @@ const AddPackagePage = ({ formData, isEditMode }) => {
       }
     },
   });
-  console.log('form data is ',formData.features)
+  console.log("form data is ", formData.features);
   // console.log("features are ", formData?.features[0].split(",").join("\n"));
   return (
     <>

@@ -4,7 +4,8 @@ import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import PasswordChecklist from "react-password-checklist";
+// import { isStrongPassword } from 'genie-password-validator';
+import validator from "validator";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import {
@@ -27,7 +28,7 @@ export default function ChangePassword() {
     },
     validationSchema: Yup.object({
       oldPassword: passwordValidation(),
-      newPassword: passwordValidation(),
+      // newPassword: passwordValidation(),
       confirmPassword: confirmPasswordValidation("newPassword"),
     }),
     onSubmit: (values) => {
@@ -35,6 +36,55 @@ export default function ChangePassword() {
       dispatch(changePasswordFunApi(values));
     },
   });
+  //   const handlePasswordChange = (event) => {
+  //     const password = event.target.value;
+  //     const options = {
+  //         minUppercase: 1,
+  //         minLowercase: 1,
+  //         minDigits: 1,
+  //         minSpecialChars: 1,
+  //         minLength: 8,
+  //     };
+
+  //     const validationResult = isStrongPassword(password, options);
+
+  //     formik.setFieldTouched('newPassword', true);
+
+  //     if (!validationResult.isValid) {
+  //         formik.setFieldError('newPassword', validationResult.messages.join(', '));
+  //     } else {
+  //         formik.setFieldError('newPassword', ''); r
+  //     }
+
+  //     formik.handleChange(event);
+  // };
+  const [errorMessage, setErrorMessage] = React.useState("");
+
+  const validate = (value) => {
+    let error = "";
+
+    if (!validator.isStrongPassword(value, { minLength: 8 })) {
+      error += "Password should be at least 8 characters long.\n";
+    }
+  
+    if (!validator.isStrongPassword(value, { minLowercase: 1 })) {
+      error += "Password should contain at least 1 lowercase character.\n";
+    }
+  
+    if (!validator.isStrongPassword(value, { minUppercase: 1 })) {
+      error += "Password should contain at least 1 uppercase character.\n";
+    }
+  
+    if (!validator.isStrongPassword(value, { minNumbers: 1 })) {
+      error += "Password should contain at least 1 number.\n";
+    }
+  
+    if (!validator.isStrongPassword(value, { minSymbols: 1 })) {
+      error += "Password should contain at least 1 symbol.\n";
+    }
+  
+    setErrorMessage(error.trim());
+  };
 
   return (
     <>
@@ -111,46 +161,39 @@ export default function ChangePassword() {
                 id="newPassword"
                 type="password"
                 {...formik.getFieldProps("newPassword")}
-                error={
-                  formik.touched.newPassword && formik.errors.newPassword
-                    ? true
-                    : false
-                }
-                helperText={
-                  formik.touched.newPassword && formik.errors.newPassword
-                    ? formik.errors.newPassword
-                    : ""
-                }
-                onChange={(event) => {
-                  formik.handleChange(event);
-                  setIsPasswordEntered(true);
+                // onChange={handlePasswordChange}
+                onChange={(e) => {
+                  formik.handleChange(e);
+                  validate(e.target.value);
                 }}
+                // error={
+                //   formik.touched.newPassword && formik.errors.newPassword
+                //     ? true
+                //     : false
+                // }
+                // helperText={
+                //   formik.touched.newPassword && formik.errors.newPassword
+                //     ? formik.errors.newPassword
+                //     : ""
+                // }
+                // onChange={(event) => {
+                //   formik.handleChange(event);
+                //   setIsPasswordEntered(true);
+                // }}
               />
-
-              <Box sx={{ marginTop: "10px" }}>
-                {" "}
-                {isPasswordEntered && (
-                  <PasswordChecklist
-                    rules={[
-                      "minLength",
-                      "specialChar",
-                      "number",
-                      "capital",
-                      "lowercase",
-                    ]}
-                    minLength={8}
-                    value={formik.values.newPassword}
-                    valueAgain={formik.values.confirmPassword}
-                    messages={{
-                      minLength: "Password has more than 8 characters.",
-                      specialChar: "Password has special characters.",
-                      number: "Password has a number.",
-                      capital: "Password has an uppercase letter.",
-                      lowercase: "Password has an lowercase letter.",
-                    }}
-                  />
-                )}
-              </Box>
+              <Box sx={{marginTop:"10px"}}> {errorMessage === "" ? null : (
+                <span
+                  style={{
+                    fontWeight: "bold",
+                    color: "red",
+                    
+                  }}
+                >
+                  {errorMessage}
+                </span>
+              )}</Box>
+             
+             
             </Grid>
 
             <Grid item xs={12} sm={6}>
