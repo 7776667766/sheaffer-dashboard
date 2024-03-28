@@ -94,8 +94,7 @@ const AddPackagePage = ({ formData, isEditMode }) => {
       }
     },
   });
-  console.log("form data is ", formData.features);
-  // console.log("features are ", formData?.features[0].split(",").join("\n"));
+  
   return (
     <>
       <Card
@@ -195,6 +194,11 @@ const AddPackagePage = ({ formData, isEditMode }) => {
 
                       console.log("new feature values", newFeatures);
                     }}
+                    error={
+                      formik.touched.features && formik.errors.features
+                        ? true
+                        : false
+                    }
                     helperText={
                       formik.touched.features && formik.errors.features
                         ? formik.errors.features

@@ -76,7 +76,7 @@ const BusinessForm = () => {
               <>
                 <Button
                   variant="contained"
-                  disabled={business.data ? true : false}
+                  // disabled={business.data ? true : false}
                   onClick={handleClickOpen}
                 >
                   Add Dummy Business

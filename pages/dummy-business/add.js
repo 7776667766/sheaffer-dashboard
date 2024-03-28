@@ -7,6 +7,7 @@ import {
   CardContent,
   TextField,
   MenuItem,
+  Input,
 } from "@mui/material";
 import "react-phone-input-2/lib/style.css";
 import { useDispatch, useSelector } from "react-redux";
@@ -25,9 +26,7 @@ import { ColorPicker } from "@mantine/core";
 import PhoneInput from "react-phone-input-2";
 
 const BusinessForm = () => {
-  const {  dataFatched, isLoading } = useSelector(
-    (state) => state.business
-  );
+  const { dataFatched, isLoading } = useSelector((state) => state.business);
 
   const router = useRouter();
   const dispatch = useDispatch();
@@ -91,23 +90,23 @@ const BusinessForm = () => {
       let myPhoneNumberArray = formik.values.phoneNumber.split(
         formik.values.countryCode
       );
-  
+
       const myCountryCode = myPhoneNumberArray[0] + formik.values.countryCode;
       myPhoneNumberArray.shift();
       const myPhoneNumber = myPhoneNumberArray.join(myCountryCode);
       const formattedCountryCode = myCountryCode.startsWith("+")
         ? formik.values.countryCode
         : `+${formik.values.countryCode}`;
-  
+
       try {
         const formData = {
           ...values,
           logo: avatar1,
           bannerImg: avatar2,
           phone: {
-              code:formattedCountryCode ,
-              number: myPhoneNumber,
-            },
+            code: formattedCountryCode,
+            number: myPhoneNumber,
+          },
         };
 
         dispatch(
@@ -392,7 +391,33 @@ const BusinessForm = () => {
                 >
                   Theme Color
                 </Typography>
-                <ColorPicker
+                <Box sx={{ height: "100%", padding: "0px" }}>
+                  <TextField
+                    type="color"
+                    name="color"
+                    defaultValue="#4F46E5"
+                    // value={formik.values.color}
+                    {...formik.getFieldProps("color")}
+                    
+                    error={
+                      formik.touched.color && formik.errors.color ? true : false
+                    }
+                    helperText={
+                      formik.touched.color && formik.errors.color
+                        ? formik.errors.color
+                        : ""
+                    }
+                    style={{ width: "100%", height: "50%", padding: "0",border:"none" }}
+                  />
+                </Box>
+
+                {/* {formik.touched.color && formik.errors.color && (
+                  <Typography color="error" variant="caption">
+                    {formik.errors.color}
+                  </Typography>
+                )} */}
+                {/* <ColorPicker
+            
                   name="color"
                   defaultValue="#4F46E5"
                   value={formik.values.color}
@@ -402,7 +427,7 @@ const BusinessForm = () => {
                   <Typography color="error" variant="caption">
                     {formik.errors.color}
                   </Typography>
-                )}
+                )} */}
               </Grid>
 
               <Grid item xs={12} md={12} lg={6}>
@@ -414,7 +439,7 @@ const BusinessForm = () => {
                     mb: "12px",
                   }}
                 >
-                  bannerText
+                  BannerText
                 </Typography>
                 <TextField
                   name="bannerText"
@@ -444,31 +469,31 @@ const BusinessForm = () => {
                     mb: "12px",
                   }}
                 >
-                  font Size
+                  Font Size
                 </Typography>
                 <TextField
-              fullWidth
-              select
-              value={formik.values.fontSize}
-              label="Font Size"
-              // onChange={(e) => setSelectedFontSize(e.target.value)}
-              {...formik.getFieldProps("fontSize")}
-              error={formik.touched.fontSize && formik.errors.fontSize}
-              helperText={
-                formik.touched.fontSize && formik.errors.fontSize
-                  ? formik.errors.fontSize
-                  : ""
-              }
-            >
-            <MenuItem value="16">16px</MenuItem>
-            <MenuItem value="24">24px</MenuItem>
-            <MenuItem value="36">36px</MenuItem>
-            <MenuItem value="48">48px</MenuItem>
-            <MenuItem value="60">60px</MenuItem>
-            <MenuItem value="72">72px</MenuItem>
-            <MenuItem value="84">84px</MenuItem>
-            <MenuItem value="96">96px</MenuItem>
-            </TextField>
+                  fullWidth
+                  select
+                  value={formik.values.fontSize}
+                  label="Font Size"
+                  // onChange={(e) => setSelectedFontSize(e.target.value)}
+                  {...formik.getFieldProps("fontSize")}
+                  error={formik.touched.fontSize && formik.errors.fontSize}
+                  helperText={
+                    formik.touched.fontSize && formik.errors.fontSize
+                      ? formik.errors.fontSize
+                      : ""
+                  }
+                >
+                  <MenuItem value="16">16px</MenuItem>
+                  <MenuItem value="24">24px</MenuItem>
+                  <MenuItem value="36">36px</MenuItem>
+                  <MenuItem value="48">48px</MenuItem>
+                  <MenuItem value="60">60px</MenuItem>
+                  <MenuItem value="72">72px</MenuItem>
+                  <MenuItem value="84">84px</MenuItem>
+                  <MenuItem value="96">96px</MenuItem>
+                </TextField>
               </Grid>
 
               <Grid item xs={12} md={12} lg={6}>
@@ -480,30 +505,30 @@ const BusinessForm = () => {
                     mb: "12px",
                   }}
                 >
-                  font Family
+                  Font Family
                 </Typography>
                 <TextField
-              select
-              label="Font Family"
-              fullWidth
-              className="w-full"
-              value={formik.values.fontFamily}
-              // onChange={(e) => setSelectedFontFamily(e.target.value)}
-              {...formik.getFieldProps("fontFamily")}
-              error={formik.touched.fontFamily && formik.errors.fontFamily}
-              helperText={
-                formik.touched.fontFamily && formik.errors.fontFamily
-                  ? formik.errors.fontFamily
-                  : ""
-              }
-            >
-              <MenuItem value="Poppins">Poppins</MenuItem>
-              <MenuItem value="Montserrat">Montserrat</MenuItem>
-              <MenuItem value="GreatVibes">Great Vibes</MenuItem>
-              <MenuItem value="playFair">Playfair Display</MenuItem>
-              <MenuItem value="Mulish">Mulish</MenuItem>
-              <MenuItem value="Quicksand">Quicksand</MenuItem>
-            </TextField>
+                  select
+                  label="Font Family"
+                  fullWidth
+                  className="w-full"
+                  value={formik.values.fontFamily}
+                  // onChange={(e) => setSelectedFontFamily(e.target.value)}
+                  {...formik.getFieldProps("fontFamily")}
+                  error={formik.touched.fontFamily && formik.errors.fontFamily}
+                  helperText={
+                    formik.touched.fontFamily && formik.errors.fontFamily
+                      ? formik.errors.fontFamily
+                      : ""
+                  }
+                >
+                  <MenuItem value="Poppins">Poppins</MenuItem>
+                  <MenuItem value="Montserrat">Montserrat</MenuItem>
+                  <MenuItem value="GreatVibes">Great Vibes</MenuItem>
+                  <MenuItem value="playFair">Playfair Display</MenuItem>
+                  <MenuItem value="Mulish">Mulish</MenuItem>
+                  <MenuItem value="Quicksand">Quicksand</MenuItem>
+                </TextField>
               </Grid>
 
               <Grid item xs={12} textAlign="left">
