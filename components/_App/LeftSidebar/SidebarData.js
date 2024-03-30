@@ -16,7 +16,7 @@ import { AccountCircle } from "@mui/icons-material";
 import { useSelector } from "react-redux";
 
 export const SidebarData = () => {
-  const { role } = useSelector((state) => state.auth);
+  // const { role } = useSelector((state) => state.auth);
   const [localServer, setLocalServer] = useState(false);
   useEffect(() => {
     if (window.location.hostname === "localhost") {
@@ -67,38 +67,38 @@ export const SidebarData = () => {
     //   path: "/custom-bussiness",
     //   icon: <LayersIcon />,
     // },
-    role === "owner" && {
-      title: "Manager",
-      path: "/manager/",
-      role: "owner",
-      icon: <LayersIcon />,
-      iconClosed: <KeyboardArrowRightIcon />,
-      iconOpened: <KeyboardArrowDownIcon />,
-      subNav: [
-        {
-          title: "Managers",
-          path: "/manager/",
-        },
-        {
-          title: "Add Manager",
-          path: "/manager/add-manager/",
-        },
-      ],
-    },
+// {
+//       title: "Manager",
+//       path: "/manager/",
+//       role: "owner",
+//       icon: <LayersIcon />,
+//       iconClosed: <KeyboardArrowRightIcon />,
+//       iconOpened: <KeyboardArrowDownIcon />,
+//       subNav: [
+//         {
+//           title: "Managers",
+//           path: "/manager/",
+//         },
+//         {
+//           title: "Add Manager",
+//           path: "/manager/add-manager/",
+//         },
+//       ],
+//     },
 
-    role === "owner" && {
-      title: "Customize-Theme",
-      path: "/customize-theme/",
-      role: "owner",
-      icon: <LayersIcon />,
-    },
+    // {
+    //   title: "Customize-Theme",
+    //   path: "/customize-theme/",
+    //   role: "owner",
+    //   icon: <LayersIcon />,
+    // },
    
-    role === "admin" && {
-      title: "Business",
-      path: "/business/",
-      role: "owner",
-      icon: <LayersIcon />,
-    },
+  //  {
+  //     title: "Business",
+  //     path: "/business/",
+  //     role: "owner",
+  //     icon: <LayersIcon />,
+  //   },
 
     // role === "admin" && {
     //   title: "Contact Us",
@@ -107,42 +107,43 @@ export const SidebarData = () => {
     //   icon: <LayersIcon />,
     // },
 
-    role === "owner" && {
-      title: "Specialist",
-      path: "/specialist/",
+ 
+    // {
+    //   title: "Specialist",
+    //   path: "/specialist/",
 
-      icon: <LayersIcon />,
-      iconClosed: <KeyboardArrowRightIcon />,
-      iconOpened: <KeyboardArrowDownIcon />,
-      subNav: [
-        {
-          title: "Specialist",
-          path: "/specialist/",
-        },
-        {
-          title: "Add Specialist",
-          path: "/specialist/addSpecialist/",
-        },
-      ],
-    },
-    role === "admin" && {
-      title: "Services",
-      path: "/services/service-type",
-      icon: <LayersIcon />,
-      iconClosed: <KeyboardArrowRightIcon />,
-      iconOpened: <KeyboardArrowDownIcon />,
-      subNav: [
-        {
-          title: "Service Types",
-          path: "/services/service-type",
-        },
-        {
-          title: "Add Service Type",
-          path: "/services/add-service-type/",
-        },
-      ],
-    },
-    (role === "owner" || role === "manager") && {
+    //   icon: <LayersIcon />,
+    //   iconClosed: <KeyboardArrowRightIcon />,
+    //   iconOpened: <KeyboardArrowDownIcon />,
+    //   subNav: [
+    //     {
+    //       title: "Specialist",
+    //       path: "/specialist/",
+    //     },
+    //     {
+    //       title: "Add Specialist",
+    //       path: "/specialist/addSpecialist/",
+    //     },
+    //   ],
+    // },
+//  {
+//       title: "Services",
+//       path: "/services/service-type",
+//       icon: <LayersIcon />,
+//       iconClosed: <KeyboardArrowRightIcon />,
+//       iconOpened: <KeyboardArrowDownIcon />,
+//       subNav: [
+//         {
+//           title: "Service Types",
+//           path: "/services/service-type",
+//         },
+//         {
+//           title: "Add Service Type",
+//           path: "/services/add-service-type/",
+//         },
+//       ],
+//     },
+{
       title: "Services",
       path: "/services/",
       icon: <LayersIcon />,
@@ -160,77 +161,78 @@ export const SidebarData = () => {
       ],
     },
 
-    role === "admin" && {
-      title: "Dummy Data",
-      path: "/services/add-dummy-service",
-      icon: <LayersIcon />,
-      iconClosed: <KeyboardArrowRightIcon />,
-      iconOpened: <KeyboardArrowDownIcon />,
-      subNav: [
-        {
-          title: "Add Dummy Services",
-          path: "/services/add-dummy-service/",
-        },
-        {
-          title: "Add Dummy Business",
-          path: "/services/add-dummy-business/",
-        },
-      ],
-    },
+// {
+//       title: "Dummy Data",
+//       path: "/services/add-dummy-service",
+//       icon: <LayersIcon />,
+//       iconClosed: <KeyboardArrowRightIcon />,
+//       iconOpened: <KeyboardArrowDownIcon />,
+//       subNav: [
+//         {
+//           title: "Add Dummy Services",
+//           path: "/services/add-dummy-service/",
+//         },
+//         {
+//           title: "Add Dummy Business",
+//           path: "/services/add-dummy-business/",
+//         },
+//       ],
+//     },
 
-    (role === "manager" || role === "owner") && {
-      title: "Booking",
-      path: "/booking/",
-      icon: <LayersIcon />,
-    },
+//  {
+//       title: "Booking",
+//       path: "/booking/",
+//       icon: <LayersIcon />,
+//     },
 
-    (role === "manager" || role === "owner") && {
-      title: "Reviews",
-      path: "/reviews/",
-      icon: <LayersIcon />,
-    },
+  //  {
+  //     title: "Reviews",
+  //     path: "/reviews/",
+  //     icon: <LayersIcon />,
+  //   },
  
 
-    (role === "owner" || role === "admin") && {
-      title: "Transaction",
-      path: "/transaction/",
-      icon: <LayersIcon />,
-    },
-    role === "admin" && {
-      title: "Templates",
-      path: "/templates",
-      icon: <LayersIcon />,
-      iconClosed: <KeyboardArrowRightIcon />,
-      iconOpened: <KeyboardArrowDownIcon />,
-      subNav: [
-        {
-          title: "Templates",
-          path: "/templates/",
-        },
-        {
-          title: "Add Template",
-          path: "/templates/add-template/",
-        },
-      ],
-    },
-    role === "admin" && {
-      title: "Packages",
-      path: "/packages/",
+    // (role === "owner" || role === "admin") && {
+    // {
+    //   title: "Transaction",
+    //   path: "/transaction/",
+    //   icon: <LayersIcon />,
+    // },
+    // role === "admin" && {
+    //   title: "Templates",
+    //   path: "/templates",
+    //   icon: <LayersIcon />,
+    //   iconClosed: <KeyboardArrowRightIcon />,
+    //   iconOpened: <KeyboardArrowDownIcon />,
+    //   subNav: [
+    //     {
+    //       title: "Templates",
+    //       path: "/templates/",
+    //     },
+    //     {
+    //       title: "Add Template",
+    //       path: "/templates/add-template/",
+    //     },
+    //   ],
+    // },
+    // role === "admin" && {
+    //   title: "Packages",
+    //   path: "/packages/",
 
-      icon: <LayersIcon />,
-      iconClosed: <KeyboardArrowRightIcon />,
-      iconOpened: <KeyboardArrowDownIcon />,
-      subNav: [
-        {
-          title: "Packages",
-          path: "/packages/",
-        },
-        {
-          title: "Add Package",
-          path: "/packages/add-package/",
-        },
-      ],
-    },
+    //   icon: <LayersIcon />,
+    //   iconClosed: <KeyboardArrowRightIcon />,
+    //   iconOpened: <KeyboardArrowDownIcon />,
+    //   subNav: [
+    //     {
+    //       title: "Packages",
+    //       path: "/packages/",
+    //     },
+    //     {
+    //       title: "Add Package",
+    //       path: "/packages/add-package/",
+    //     },
+    //   ],
+    // },
     // localServer && {
     //   title: "Apps",
     //   path: "/apps/file-manager/",
@@ -656,18 +658,18 @@ export const SidebarData = () => {
     //     },
     //   ],
     // },
-    role === "admin" && {
-      title: "Users",
-      path: "/users/",
-      role: "admin",
-      icon: <AccountCircle />,
-    },
-    role === "admin" && {
-      title: "Contact Us",
-      path: "/contact-us/",
-      role: "owner",
-      icon: <LayersIcon />,
-    },
+    // role === "admin" && {
+    //   title: "Users",
+    //   path: "/users/",
+    //   role: "admin",
+    //   icon: <AccountCircle />,
+    // // },
+    // role === "admin" && {
+    //   title: "Contact Us",
+    //   path: "/contact-us/",
+    //   role: "owner",
+    //   icon: <LayersIcon />,
+    // },
     {
       title: "Settings",
       path: "/settings/account/",

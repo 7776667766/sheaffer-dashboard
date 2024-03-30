@@ -37,11 +37,10 @@ const SignInForm = () => {
       dispatch(
         loginFunApi({
           data: values,
-          
           onSuccess: (email) => {
             console.log("email",email)
             const myEmail = btoa(JSON.stringify(email));
-            router.push(`/authentication/verify-otp/?verify=${myEmail}`);
+            router.push(`/`);
           },
         })
       );
@@ -84,37 +83,8 @@ const SignInForm = () => {
 
               <Typography fontSize="15px" mb="30px">
                 Enter your email and password to sign in
-                {/* Already have an account?{" "} */}
-                {/* <Link
-                  href="/authentication/sign-up"
-                  className="primaryColor text-decoration-none"
-                >
-                  Sign up
-                </Link> */}
+             
               </Typography>
-
-              {/* <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  mb: "30px",
-                }}
-              >
-                <Link href="#" className={styles.googleBtn}>
-                  <img src="/images/google-icon.png" />
-                  Sign in with Google
-                </Link>
-
-                <Link href="#" className={styles.fbBtn}>
-                  <img src="/images/fb-icon.png" />
-                  Sign in with Facebook
-                </Link>
-              </Box>
-
-              <div className={styles.or}>
-                <span>or</span>
-              </div> */}
 
               <Box
                 component="form"
@@ -210,14 +180,7 @@ const SignInForm = () => {
                 </Box>
 
                 <Grid container alignItems="center" spacing={2}>
-                  {/* <Grid item xs={6} sm={6}>
-                    <FormControlLabel
-                      control={
-                        <Checkbox value="allowExtraEmails" color="primary" />
-                      }
-                      label="Remember me."
-                    />
-                  </Grid> */}
+                
 
                   <Grid
                     item
