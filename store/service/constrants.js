@@ -1,4 +1,4 @@
-export const addservicesApi = "services/add";
+export const addservicesApi = "/product/add";
 export const addserviceTypeApi = "services/types/add";
 export const getsevicetypeApi = "services/types"
 

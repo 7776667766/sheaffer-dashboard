@@ -17,7 +17,7 @@ import toast from "react-hot-toast";
 import axiosImage from "helper/api-image";
 
 export const addservicesFunApi = createAsyncThunk(
-  "Services/addservices",
+  "/api/product/add",
   async ({ data, onSuccess }) => {
     console.log("Add Services value", data);
     try {
