@@ -24,12 +24,14 @@ import { getServicesTypeFunApi } from "store/service/services";
 import toast from "react-hot-toast";
 import Image from "next/image";
 import { LoadingButtonComponent } from "@/components/UIElements/Buttons/LoadingButton";
+import axiosImage from "helper/api-image";
 
 const ServiceForm = ({ formData, isEditMode }) => {
   const [imgUrlCount, setImgUrlCount] = useState(1);
   const [selectedSpecialist, setSelectedSpecialist] = useState(null);
   const [selectedSpecialist1, setSelectedSpecialist1] = useState(null);
   const [selectedSpecialist3, setSelectedSpecialist3] = useState(null);
+  console.log(selectedSpecialist3, "selectedSpecialist3")
   const dispatch = useDispatch();
 
   const router = useRouter();
@@ -42,8 +44,9 @@ const ServiceForm = ({ formData, isEditMode }) => {
     { id: "CATAGORY2", name: "Dummy CATAGORY 2" },
   ];
   const specialistArray3 = [
-    { id: "CATAGORY3", name: "in-stock" },
-    { id: "CATAGORY3", name: "out-stock" },
+    { id: "in-stock", name: "in-stock" },
+    { id: "out-of-stock ", name: "out-of-stock" },
+    { id: "discontinued", name: "discontinued" },
   ];
 
   const [avatar, setavatar] = useState([]);
@@ -90,9 +93,9 @@ const ServiceForm = ({ formData, isEditMode }) => {
   const formik = useFormik({
     initialValues: {
       sku: formData?.sku || "NTB7SDVX44",
-      img: formData?.img || avatar,
       title: formData?.title || "",
       slug: formData?.slug || "",
+      img: formData?.img || avatar,
       unit: formData?.unit || "",
       imgUrls: [
         {
@@ -110,14 +113,15 @@ const ServiceForm = ({ formData, isEditMode }) => {
       quantity: formData?.quantity || 0,
       brand: formData?.brand?.name || "",
       categoryName: formData?.category?.name || "",
-      status: formData?.status || "",
+      status: formData?.status || "in-stock",
       reviews: formData?.reviews || [],
       productType: formData?.productType || "",
       description: formData?.description || "",
       additionalInformation: formData?.additionalInformation || [],
       featured: formData?.featured || false,
       sellCount: formData?.sellCount || 0,
-      tags: formData?.tags || ["product","feature"],
+      tags: formData?.tags || ["product", "feature"],
+      brands: formData?.brands || ""
     },
     validationSchema: Yup.object().shape({
       // sku: Yup.string().required('SKU is required'),
@@ -134,28 +138,30 @@ const ServiceForm = ({ formData, isEditMode }) => {
       productType: Yup.string().required('Product Type is required'),
       description: Yup.string().required('Description is required'),
       additionalInformation: Yup.string().required(
-      'required'
+        'required'
       ),
       featured: Yup.boolean().required('Featured is required'),
       sellCount: Yup.number().min(0, 'Sell Count must be non-negative'),
     }),
-
     onSubmit: async (values) => {
-      console.log("values of form 83", values)
-      dispatch(
-        addservicesFunApi({
-          data: values,
-          onSuccess: () => {
-            router.push("/services/");
-          },
-        })
-      );
+      console.log("Form values:", values);
       try {
+        const response = await axiosImage.post('/product/add', values);
+
+        console.log("Response from API:", response.data);
+
+        if (response.status === 200) {
+          toast.success("Form submitted successfully!");
+        } else {
+          toast.error(`Error: ${response.data.message}`);
+        }
       } catch (error) {
         console.error("Error submitting form:", error);
+        toast.error("An error occurred while submitting the form. Please try again later.");
       }
-    },
+    }
   });
+
 
   return (
     <>
@@ -312,14 +318,13 @@ const ServiceForm = ({ formData, isEditMode }) => {
                           </Typography>
                           <input
                             type="file"
-                            accept="image/*"
+                            accept="image/*" 
                             onChange={handleFileChange}
-                            style={{
-                              display: "none", marginRight: "30px"
-                            }}
+                            style={{ display: "none", marginRight: "30px" }}
                             id={`fileInput-${index}`}
-                            multiple
+                            name="img" 
                           />
+
                           <label htmlFor={`fileInput-${index}`}>
                             <Button component="span" variant="contained" color="primary">
                               Choose Files
@@ -436,7 +441,7 @@ const ServiceForm = ({ formData, isEditMode }) => {
                 />
               </FormControl>
             </Grid>
-        
+
             <Grid item xs={12} md={12} lg={12}>
               <Typography as="h5" sx={{ fontWeight: "500", fontSize: "14px", mb: "12px" }}>
                 Additional Information
@@ -514,9 +519,9 @@ const ServiceForm = ({ formData, isEditMode }) => {
                 fullWidth
                 id="tags"
                 label="Tags"
-                // {...formik.getFieldProps("tags")}
-                // error={formik.touched.tags && formik.errors.tags ? true : false}
-                // helperText={formik.touched.tags && formik.errors.tags ? formik.errors.tags : ""}
+              // {...formik.getFieldProps("tags")}
+              // error={formik.touched.tags && formik.errors.tags ? true : false}
+              // helperText={formik.touched.tags && formik.errors.tags ? formik.errors.tags : ""}
               />
             </Grid>
 
