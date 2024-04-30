@@ -49,43 +49,79 @@ const ServiceForm = ({ formData, isEditMode }) => {
     { id: "discontinued", name: "discontinued" },
   ];
 
-  const [avatar, setavatar] = useState([]);
+  const [avatar, setavatar] = useState(null);
+  const [avatar2, setavatar2] = useState(null);
+  console.log("avatar2", avatar2)
+
   console.log("avatar", avatar)
-  const [profileImageUrl, setProfileImageUrl] = useState([]);
-  const handleFileChange = (event) => {
-    const files = event.target.files;
-    let filesArray = [];
-    let imageUrls = [];
+  const [profileImageUrl, setProfileImageUrl] = useState(null);
 
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
+  const [profileImageUrl2, setProfileImageUrl2] = useState(null);
+  const handleFileChange2 = (event) => {
+    const file = event.target.files[0];
+    if (!file) {
+      setavatar2(null);
+      if (isEditMode) {
+        setProfileImageUrl2(formData?.image || null);
+      } else {
+        setProfileImageUrl2(null);
+      }
+      return false;
+    } else {
       const type = file.type.split("/")[0];
-
       if (type !== "image") {
         toast.error("Please select an image");
-        continue;
-      }
-
-      filesArray.push(file);
-      setavatar(filesArray);
-
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-
-      reader.onload = (e) => {
-        imageUrls.push(e.target.result);
-
-        if (imageUrls.length === filesArray.length) {
-          setProfileImageUrl(imageUrls);
+        setavatar2(null);
+        event.target.value = null;
+        if (isEditMode) {
+          setProfileImageUrl2(formData?.image || null);
+        } else {
+          setProfileImageUrl2(null);
         }
-      };
-
-      reader.onerror = () => {
-        toast.error("Error occurred while reading the file.");
-      };
+        return false;
+      } else {
+        setavatar2(file);
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (e) => {
+          setProfileImageUrl2(e.target.result);
+        };
+      }
     }
-    formik.setFieldValue('files', filesArray);
   };
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (!file) {
+      setavatar(null);
+      if (isEditMode) {
+        setProfileImageUrl(formData?.image || null);
+      } else {
+        setProfileImageUrl(null);
+      }
+      return false;
+    } else {
+      const type = file.type.split("/")[0];
+      if (type !== "image") {
+        toast.error("Please select an image");
+        setavatar(null);
+        event.target.value = null;
+        if (isEditMode) {
+          setProfileImageUrl(formData?.image || null);
+        } else {
+          setProfileImageUrl(null);
+        }
+        return false;
+      } else {
+        setavatar(file);
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (e) => {
+          setProfileImageUrl(e.target.result);
+        };
+      }
+    }
+  };
+
   const handleAddField = () => {
     setImgUrlCount(prevCount => prevCount + 1);
   };
@@ -95,7 +131,6 @@ const ServiceForm = ({ formData, isEditMode }) => {
       sku: formData?.sku || "NTB7SDVX44",
       title: formData?.title || "",
       slug: formData?.slug || "",
-      img: formData?.img || avatar,
       unit: formData?.unit || "",
       imgUrls: [
         {
@@ -103,7 +138,7 @@ const ServiceForm = ({ formData, isEditMode }) => {
             name: "",
             clrCode: ""
           },
-          img: avatar
+          img: ""
         }
       ],
       parent: formData?.parent || "",
@@ -111,10 +146,8 @@ const ServiceForm = ({ formData, isEditMode }) => {
       price: formData?.price || 0,
       discount: formData?.discount || 0,
       quantity: formData?.quantity || 0,
-      brand: formData?.brand?.name || "",
       categoryName: formData?.category?.name || "",
       status: formData?.status || "in-stock",
-      reviews: formData?.reviews || [],
       productType: formData?.productType || "",
       description: formData?.description || "",
       additionalInformation: formData?.additionalInformation || [],
@@ -124,8 +157,6 @@ const ServiceForm = ({ formData, isEditMode }) => {
       brands: formData?.brands || ""
     },
     validationSchema: Yup.object().shape({
-      // sku: Yup.string().required('SKU is required'),
-      // img: Yup.string().required('Image URL is required'),
       title: Yup.string().required('Title is required'),
       slug: Yup.string().required('Slug is required'),
       unit: Yup.string().required('Unit is required'),
@@ -134,7 +165,6 @@ const ServiceForm = ({ formData, isEditMode }) => {
       price: Yup.number().required('Price is required').positive('Price must be a positive number'),
       discount: Yup.number().min(0, 'Discount must be non-negative'),
       quantity: Yup.number().min(0, 'Quantity must be non-negative'),
-      // status: Yup.string().required('Status is required'),
       productType: Yup.string().required('Product Type is required'),
       description: Yup.string().required('Description is required'),
       additionalInformation: Yup.string().required(
@@ -145,8 +175,54 @@ const ServiceForm = ({ formData, isEditMode }) => {
     }),
     onSubmit: async (values) => {
       console.log("Form values:", values);
+      const {
+        sku,
+        title,
+        slug,
+        unit,
+        imgUrls,
+        parent,
+        children,
+        price,
+        discount,
+        quantity,
+        categoryName,
+        status,
+        productType,
+        description,
+        additionalInformation,
+        featured,
+        sellCount,
+        tags,
+        brands
+      } = values;
       try {
-        const response = await axiosImage.post('/product/add', values);
+
+        const myServiceData = {
+          sku,
+          title,
+          slug,
+          unit,
+          imgUrls,
+          shade:avatar2 ,
+          parent,
+          children,
+          price,
+          discount,
+          quantity,
+          categoryName,
+          status,
+          productType,
+          description,
+          additionalInformation,
+          featured,
+          sellCount,
+          tags,
+          brands,
+          img: avatar
+        };
+
+        const response = await axiosImage.post('/product/add', myServiceData);
 
         console.log("Response from API:", response.data);
 
@@ -195,6 +271,42 @@ const ServiceForm = ({ formData, isEditMode }) => {
                 error={formik.touched.slug && formik.errors.slug ? true : false}
                 helperText={formik.touched.slug && formik.errors.slug ? formik.errors.slug : ""}
               />
+            </Grid>
+            <Grid item xs={12} md={12} lg={6}>
+              <Box sx={{ display: "flex", alignItems: "end", gap: 1 }}>
+                <Box sx={{ flex: 1 }}>
+                  <Typography
+                    as="h5"
+                    sx={{
+                      fontWeight: "500",
+                      fontSize: "14px",
+                      mb: "12px",
+                    }}
+                  >
+                    Upload Image
+                  </Typography>
+
+                  <TextField
+                    fullWidth
+                    name="img"
+                    type="file"
+                    id="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                  />
+                </Box>
+                {profileImageUrl && (
+                  <Image
+                    src={profileImageUrl}
+                    alt="profile"
+                    style={{
+                      border: "1px solid #e0e0e0",
+                    }}
+                    width={50}
+                    height={50}
+                  />
+                )}
+              </Box>
             </Grid>
 
             <Grid item xs={12} md={12} lg={6}>
@@ -304,41 +416,40 @@ const ServiceForm = ({ formData, isEditMode }) => {
                           onChange={formik.handleChange}
                         />
                       </Box>
-                      <Grid item xs={12} style={{ textAlign: 'center' }}>
+                        <Box sx={{ display: "flex", alignItems: "end", gap: 1 }}>
+                          <Box sx={{ flex: 1 }}>
+                            <Typography
+                              as="h5"
+                              sx={{
+                                fontWeight: "500",
+                                fontSize: "14px",
+                                mb: "12px",
+                              }}
+                            >
+                              shade Image
+                            </Typography>
 
-                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                          <Typography
-                            as="h5"
-                            sx={{
-                              fontWeight: "500",
-                              fontSize: "10px",
-                            }}
-                          >
-                            Upload Images
-                          </Typography>
-                          <input
-                            type="file"
-                            accept="image/*" 
-                            onChange={handleFileChange}
-                            style={{ display: "none", marginRight: "30px" }}
-                            id={`fileInput-${index}`}
-                            name="img" 
-                          />
-
-                          <label htmlFor={`fileInput-${index}`}>
-                            <Button component="span" variant="contained" color="primary">
-                              Choose Files
-                            </Button>
-                          </label>
-                          {profileImageUrl && (
-                            <div>
-                              {profileImageUrl.map((url, index) => (
-                                <img key={index} src={url} alt={`image-${index}`} style={{ width: "30px", height: "30px", margin: "5px" }} />
-                              ))}
-                            </div>
+                            <TextField
+                              fullWidth
+                              name="shade"
+                              type="file"
+                              id="file"
+                              accept="image/*"
+                              onChange={handleFileChange2}
+                            />
+                          </Box>
+                          {profileImageUrl2 && (
+                            <Image
+                              src={profileImageUrl2}
+                              alt="profile"
+                              style={{
+                                border: "1px solid #e0e0e0",
+                              }}
+                              width={50}
+                              height={50}
+                            />
                           )}
                         </Box>
-                      </Grid>
                     </ListItem>
                   ))}
                 </List>
