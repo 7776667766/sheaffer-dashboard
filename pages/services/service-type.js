@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
 import IconButton from "@mui/material/IconButton";
@@ -20,10 +20,15 @@ import {
 } from "store/service/services";
 import { CustomPaginationTable } from "@/components/Table/CustomPaginationTable";
 import { useRouter } from "next/router";
+import toast from "react-hot-toast";
+import axios from "helper/api";
+
 
 const ServicesType = () => {
   const { serviceType } = useSelector((state) => state.service);
   const { role } = useSelector((state) => state.auth);
+  const [orders,setallorders]=useState([])
+
 
   console.log("servicetype data", serviceType);
   const dispatch = useDispatch();
@@ -37,11 +42,27 @@ const ServicesType = () => {
     router.push(`/services/edits?id=${id}`);
   };
 
-  useEffect(() => {
-    if (serviceType.dataFatched !== true) {
-      dispatch(getServicesTypeFunApi());
+  const userdata = async () => {
+    try {
+      const response = await axios.get('/order/orders');
+
+      console.log("Response from API:", response.data.data);
+      setallorders(response.data.data)
+      if (response.status === 200) {
+        toast.success("Data fetched !");
+      } else {
+        toast.error(`Error: ${response.data.message}`);
+      }
+    } catch (error) {
+      console.error("Error in data fetch:", error);
+      toast.error("An error occurred while submitting the form. Please try again later.");
     }
-  }, [dispatch, serviceType.dataFatched, serviceType.serviceFetch]);
+  }
+
+  useEffect(() => {
+    userdata()
+  }, []);
+
 
   return (
     <>
@@ -71,7 +92,7 @@ const ServicesType = () => {
               fontWeight: 500,
             }}
           >
-            Services Types
+          Orders
           </Typography>
 
           <Link href="/services/add-service-type">
@@ -96,8 +117,7 @@ const ServicesType = () => {
         </Box>
 
         <CustomPaginationTable
-          isLoading={serviceType.isLoading}
-          tableData={serviceType.data}
+          tableData={orders}
           tableHeaderData={
             <>
               <TableCell
@@ -121,7 +141,7 @@ const ServicesType = () => {
                   pb: "16px",
                 }}
               >
-                Name
+         Customer Name
               </TableCell>
 
               <TableCell
@@ -132,7 +152,35 @@ const ServicesType = () => {
                   pb: "16px",
                 }}
               >
-                Slug
+                Phone
+              </TableCell>
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13px",
+                  pt: "16px",
+                  pb: "16px",
+                }}
+              >
+                Email
+              </TableCell>
+
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13.5px",
+                }}
+              >
+                Address 
+              </TableCell>
+
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13.5px",
+                }}
+              >
+                City
               </TableCell>
               <TableCell
                 sx={{
@@ -140,14 +188,53 @@ const ServicesType = () => {
                   fontSize: "13.5px",
                 }}
               >
-                Image
+                Country
               </TableCell>
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13.5px",
+                }}
+              >
+                Products
+              </TableCell>
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13.5px",
+                }}
+              >
+                Total Amount
+              </TableCell>
+
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13px",
+                  pt: "16px",
+                  pb: "16px",
+                }}
+              >
+                Payment Method
+              </TableCell>
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13px",
+                  pt: "16px",
+                  pb: "16px",
+                }}
+              >
+                Status
+              </TableCell>
+
 
               <TableCell
                 align="right"
                 sx={{ borderBottom: "1px solid #F7FAFF" }}
               >
-                Action
+                
+                Actions
               </TableCell>
             </>
           }
@@ -185,7 +272,7 @@ const ServicesType = () => {
                   pb: "16px",
                 }}
               >
-                {data.slug}
+                {data.contact}
               </TableCell>
               <TableCell
                 sx={{
@@ -195,8 +282,96 @@ const ServicesType = () => {
                   pb: "16px",
                 }}
               >
+                {data.email}
+              </TableCell>
+
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13px",
+                  pt: "16px",
+                  pb: "16px",
+                }}
+              >
+                {data.address}
+              </TableCell>
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13px",
+                  pt: "16px",
+                  pb: "16px",
+                }}
+              >
+                {data.city}
+              </TableCell>
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13px",
+                  pt: "16px",
+                  pb: "16px",
+                }}
+              >
+                {data.country}
+              </TableCell>
+
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13px",
+                  pt: "16px",
+                  pb: "16px",
+                }}
+              >
+                {/* {data.cart} */}
+              </TableCell>
+
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13px",
+                  pt: "16px",
+                  pb: "16px",
+                }}
+              >
+                {data.totalAmount}
+              </TableCell>
+
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13px",
+                  pt: "16px",
+                  pb: "16px",
+                }}
+              >
+                {data.paymentMethod}
+              </TableCell>
+
+
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13px",
+                  pt: "16px",
+                  pb: "16px",
+                }}
+              >
+                {data.status}
+              </TableCell>
+
+
+              {/* <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13px",
+                  pt: "16px",
+                  pb: "16px",
+                }}
+              >
                 <Image
-                  src={data.image}
+                  src={data.email}
                   width={100}
                   height={50}
                   alt="image"
@@ -204,7 +379,7 @@ const ServicesType = () => {
                     objectFit: "fill",
                   }}
                 />
-              </TableCell>
+              </TableCell> */}
 
               <TableCell
                 align="right"

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
@@ -15,137 +15,81 @@ import { getAllUsersFunApi } from "store/admin/services";
 import { getMyCardFunApi } from "store/card/card";
 import {CustomPaginationTable} from "@/components/Table/CustomPaginationTable";
 import {TableCell} from "@mui/material";
+import toast from "react-hot-toast";
+import axios from "helper/api-image";
 
 const Features = () => {
-  const { business } = useSelector((state) => state.business);
-  const { businessAll, dataFatched } = useSelector((state) => state.business);
-  const businessDataArray = businessAll?.data;
-  const totalBusinesses = businessDataArray?.length;
-  const { allUsers } = useSelector((state) => state.admin);
-  const userDataArray = allUsers?.data;
-  const totalUsers = userDataArray?.length;
-  const { service } = useSelector((state) => state.service);
-  const servicesDataArray = service.data;
-  const totalServices = servicesDataArray?.length;
-  const { booking } = useSelector((state) => state.booking);
-  const bookingDataArray = booking.data;
-  const totalBookings = bookingDataArray.length;
-  const { role } = useSelector((state) => state.auth);
-  const { serviceType } = useSelector((state) => state.service);
-  const serviceDataArray = serviceType.data;
-  const totalServiceTypes = serviceDataArray.length;
-  const { card } = useSelector((state) => state.card);
-   const cardDataArray = card.data;
-  const totalCardTypes = cardDataArray.length;
   
-  const dispatch = useDispatch()
+  const [totalproducts,setallproducts]=useState([])
+  console.log("products",totalproducts)
+  const [totalorders,setallorders]=useState([])
+  console.log("totalorders",totalorders)
+
+  const userdata = async () => {
+    try {
+      const response = await axios.get('/product/all');
+
+      console.log("Response from API:", response.data);
+      setallproducts(response.data.data)
+      if (response.status === 200) {
+        toast.success("Data fetched !");
+      } else {
+        toast.error(`Error: ${response.data.message}`);
+      }
+    } catch (error) {
+      console.error("Error in data fetch:", error);
+      toast.error("An error occurred while submitting the form. Please try again later.");
+    }
+  }
+
+  const orderdata = async () => {
+    try {
+      const response = await axios.get('/order/orders');
+
+      console.log("Response from API:", response.data);
+      setallorders(response.data.data)
+      if (response.status === 200) {
+        toast.success("Data fetched !");
+      } else {
+        toast.error(`Error: ${response.data.message}`);
+      }
+    } catch (error) {
+      console.error("Error in data fetch:", error);
+      toast.error("An error occurred while submitting the form. Please try again later.");
+    }
+  }
+
 
   useEffect(() => {
-    if (!allUsers.dataFatched) {
-      dispatch(getAllUsersFunApi());
-    }
-  }, [allUsers.dataFatched, dispatch]);
+    orderdata()
+    userdata()
+  }, []);
 
-  useEffect(() => {
-    if (serviceType.dataFatched !== true) {
-      dispatch(getServicesTypeFunApi());
-    }
-  }, [dispatch, serviceType.dataFatched, serviceType.serviceFetch]);
-
-  // useEffect(() => {
-  //   if (!dataFatched) {
-  //     const selectedBusinessId = localStorage.getItem('selectedBusinessId');
-  //     console.log("selectedBusinessId", selectedBusinessId)
-  //     dispatch(getMyBussinessFunApi({
-  //       data: { businessId: selectedBusinessId },
-  //       onSuccess: () => {
-  //         dispatch(
-  //           getAllServiceFunApi({
-  //             businessId: business?.data?.id,
-  //           })
-  //         );
-  //       },
-  //     }));
-  //   }
-  // }, [dispatch, dataFatched]);
-
-  useEffect(() => {     
-    dispatch(
-      getAllServiceFunApi({
-          businessId: business?.data?.id
-      })
-    );
-}, [dispatch, business?.data?.id]);
-
-  useEffect(() => {
-    if (!dataFatched) {
-      dispatch(
-        getMultipleBussinessesFunApi({
-          onSuccess: () => {
-          },
-        })
-      );
-    }
-  }, [dispatch, dataFatched]);
-
-  useEffect(() => {     
-    dispatch(
-      getMyBusinessBookingFunApi({
-        data: {
-          businessId: business?.data?.id
-        },
-      })
-    );
-}, [dispatch, business?.data?.id]);
-
-  useEffect(() => {
-    if (!dataFatched && business?.data?.id) {
-      // dispatch(
-      //   getMyBussinessFunApi({
-      //     onSuccess: () => {
-      //       dispatch(
-      //         getMyBusinessBookingFunApi({
-      //           data: {
-      //             businessId: business?.data?.id,
-      //           },
-      //         })
-      //       );
-      //     },
-      //   })
-      // );
-    }
-  }, [dispatch, dataFatched, business?.data?.id]);
-
-  useEffect(() => {
-    if (card.dataFatched !== true) {
-      dispatch(
-        getMyCardFunApi({
-          data: {
-            businessId: business?.data?.id,
-          },
-        })
-      );
-    }
-  }, [dispatch, card.data, card.dataFatched, business?.id]);
 
   const FeaturesData = [
     {
       id: "1",
-      title: role === "admin" ? `${totalUsers}` : `${totalBusinesses}`,
-      subTitle: role === "admin" ? "Total Users" : "Total Businesses",
+      // title:{PendingOrders},
+      subTitle: "Pending Orders",
       image: "/images/graph-icon.png",
       color: "successColor",
     },
     {
+      id: "3",
+      // title:{totalOrders},
+      subTitle: "Completed Orders",
+      image: "/images/users-icon.png",
+    },
+    {
       id: "2",
-      title: role === "admin" ? `${totalServiceTypes}` : `${totalServices}`,
-      subTitle: role === "admin" ? "Total Service Types" : "Business Services",
+      title: totalproducts.length,
+      subTitle: "Total Products",
       image: "/images/work-icon.png",
     },
     {
       id: "3",
-      title: role === "admin" ? `${totalCardTypes}` :`${totalBookings}`,
-      subTitle: role === "admin" ? "All Transactions" : "Business Bookings",
+      title:totalorders.length,
+      subTitle: "Total Orders",
       image: "/images/users-icon.png",
     },
   ];
@@ -223,10 +167,10 @@ const Features = () => {
         ))}
       </Grid>
 
-      <Grid>
+      {/* <Grid>
       <CustomPaginationTable
           isLoading={allUsers.isLoading}
-          tableData={allUsers.data}
+          tableData={}
           tableHeaderData={
             <>
               <TableCell
@@ -398,7 +342,7 @@ const Features = () => {
             </>
           )}
         />
-      </Grid>
+      </Grid> */}
     </>
   );
 };

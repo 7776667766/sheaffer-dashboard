@@ -90,20 +90,20 @@ export default function DashboardPage() {
   const [otherBusinessData, setotherBusinessData] = useState(false);
   const [otherBusiness, setOtherBusiness] = useState(null);
 
-  useEffect(() => {
-    console.log("useEffect running 1 at 89");
+  // useEffect(() => {
+  //   console.log("useEffect running 1 at 89");
 
-    if (!dataFatched) {
-      const selectedBusinessId = localStorage.getItem("selectedBusinessId");
-      console.log("selectedBusinessId", selectedBusinessId);
-      dispatch(
-        getMyBussinessFunApi({
-          data: { businessId: selectedBusinessId },
-          onSuccess: () => {},
-        })
-      );
-    }
-  }, [dispatch, dataFatched]);
+  //   if (!dataFatched) {
+  //     const selectedBusinessId = localStorage.getItem("selectedBusinessId");
+  //     console.log("selectedBusinessId", selectedBusinessId);
+  //     dispatch(
+  //       getMyBussinessFunApi({
+  //         data: { businessId: selectedBusinessId },
+  //         onSuccess: () => {},
+  //       })
+  //     );
+  //   }
+  // }, [dispatch, dataFatched]);
 
   const initialValue = {
     name: "",
@@ -142,18 +142,18 @@ export default function DashboardPage() {
     setOpen(false);
   };
   //N
-  useEffect(() => {
-    console.log("useEffect running 2 at 138");
-    if (business?.data) {
-      console.log("requestStatus:", business.data.requestStatus);
-      if (
-        business.data.requestStatus === "pending" ||
-        business.data.requestStatus === "rejected"
-      ) {
-        setOpenPending(true);
-      }
-    }
-  }, [business?.data]);
+  // useEffect(() => {
+  //   console.log("useEffect running 2 at 138");
+  //   if (business?.data) {
+  //     console.log("requestStatus:", business.data.requestStatus);
+  //     if (
+  //       business.data.requestStatus === "pending" ||
+  //       business.data.requestStatus === "rejected"
+  //     ) {
+  //       setOpenPending(true);
+  //     }
+  //   }
+  // }, [business?.data]);
 
   const handleOpenRequest = () => {
     setOpenForm(true);
@@ -216,88 +216,88 @@ export default function DashboardPage() {
     const formattedCountryCode = myCountryCode.startsWith("+")
       ? countryCode
       : `+${countryCode}`;
-    dispatch(
-      regsiterBusinessFunApi({
-        data: {
-          ...allvalues,
-          phone: {
-            code: formattedCountryCode,
-            number: myPhoneNumber,
-          },
-        },
-        onSuccess: () => {
-          handleClose();
-        },
-      })
-    );
+    // dispatch(
+    //   regsiterBusinessFunApi({
+    //     data: {
+    //       ...allvalues,
+    //       phone: {
+    //         code: formattedCountryCode,
+    //         number: myPhoneNumber,
+    //       },
+    //     },
+    //     onSuccess: () => {
+    //       handleClose();
+    //     },
+    //   })
+    // );
   };
 
   const handleRegisterBusinessandTheme = () => {
-    dispatch(
-      regsiterBusinessFunApi({
-        data: {
-          name: `${user.name} Business`,
-          email: user.email,
-          phone: user.phone,
-          slug: slug,
-          logo: avatar,
-          description: "My business description goes here ...",
-          address: "Address goes here ...",
-          googleId: "1234567890",
-          socialLinks: [
-            {
-              name: "facebook",
-              link: "https://www.facebook.com/",
-            },
-            {
-              name: "instagram",
-              link: "https://www.instagram.com/",
-            },
-          ],
-          images: [
-            "https://resortcabanas.com/wp-content/uploads/Learn-to-Differentiate-Your-Spa-Business_Outdoor-Cabanas_39138676_m.jpg",
-          ],
-        },
+    // dispatch(
+    //   regsiterBusinessFunApi({
+    //     data: {
+    //       name: `${user.name} Business`,
+    //       email: user.email,
+    //       phone: user.phone,
+    //       slug: slug,
+    //       logo: avatar,
+    //       description: "My business description goes here ...",
+    //       address: "Address goes here ...",
+    //       googleId: "1234567890",
+    //       socialLinks: [
+    //         {
+    //           name: "facebook",
+    //           link: "https://www.facebook.com/",
+    //         },
+    //         {
+    //           name: "instagram",
+    //           link: "https://www.instagram.com/",
+    //         },
+    //       ],
+    //       images: [
+    //         "https://resortcabanas.com/wp-content/uploads/Learn-to-Differentiate-Your-Spa-Business_Outdoor-Cabanas_39138676_m.jpg",
+    //       ],
+    //     },
 
-        onSuccess: () => {
-          window.location.href = `${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}templates`;
-        },
-      })
-    );
+    //     onSuccess: () => {
+    //       window.location.href = `${process.env.NEXT_PUBLIC_FRONTEND_WEB_URL}templates`;
+    //     },
+    //   })
+    // );
   };
 
   const handleRegisterBusiness = () => {
-    dispatch(
-      regsiterBusinessFunApi({
-        data: {
-          name: `${user.name} Business`,
-          email: user.email,
-          phone: user.phone,
-          slug: slug,
-          logo: avatar,
-          description: "My business description goes here ...",
-          address: "Address goes here ...",
-          googleId: "1234567890",
-          socialLinks: [
-            {
-              name: "facebook",
-              link: "https://www.facebook.com/",
-            },
-            {
-              name: "instagram",
-              link: "https://www.instagram.com/",
-            },
-          ],
-          images: [
-            "https://resortcabanas.com/wp-content/uploads/Learn-to-Differentiate-Your-Spa-Business_Outdoor-Cabanas_39138676_m.jpg",
-          ],
-        },
+    // dispatch(
+    //   regsiterBusinessFunApi({
+    //     data: {
+    //       name: `${user.name} Business`,
+    //       email: user.email,
+    //       phone: user.phone,
+    //       slug: slug,
+    //       logo: avatar,
+    //       description: "My business description goes here ...",
+    //       address: "Address goes here ...",
+    //       googleId: "1234567890",
+    //       socialLinks: [
+    //         {
+    //           name: "facebook",
+    //           link: "https://www.facebook.com/",
+    //         },
+    //         {
+    //           name: "instagram",
+    //           link: "https://www.instagram.com/",
+    //         },
+    //       ],
+    //       images: [
+    //         "https://resortcabanas.com/wp-content/uploads/Learn-to-Differentiate-Your-Spa-Business_Outdoor-Cabanas_39138676_m.jpg",
+    //       ],
+    //     },
 
-        onSuccess: () => {
-          handleClose();
-        },
-      })
-    );
+    //     onSuccess: () => {
+    //       handleClose();
+    //     },
+    //   })
+    // );
   };
   const handleFileChange = (event) => {
     const file = event.target.files[0];

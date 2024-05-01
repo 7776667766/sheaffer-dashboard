@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
 import IconButton from "@mui/material/IconButton";
@@ -20,31 +20,56 @@ import {
 import TransitionsDialog from "@/components/UIElements/Modal/TransitionsDialog";
 import { getMyBussinessFunApi } from "store/business/services";
 import { useRouter } from "next/router";
+import axios from "helper/api";
+import toast from "react-hot-toast";
+
 
 const ServicesPage = () => {
   const dispatch = useDispatch();
-  const { service } = useSelector((state) => state.service);
-  console.log("service27",service)
-  const { business, dataFatched } = useSelector((state) => state.business);
-  console.log("business29",business)
-  const { role } = useSelector((state) => state.auth);
+  const [products,setallproducts]=useState([])
+  console.log("products",products)
+
+
+
+  const userdata = async () => {
+    try {
+      const response = await axios.get('/product/all');
+
+      console.log("Response from API:", response.data.data);
+      setallproducts(response.data.data)
+      if (response.status === 200) {
+        toast.success("Data fetched !");
+      } else {
+        toast.error(`Error: ${response.data.message}`);
+      }
+    } catch (error) {
+      console.error("Error in data fetch:", error);
+      toast.error("An error occurred while submitting the form. Please try again later.");
+    }
+  }
 
   useEffect(() => {
-    if (!dataFatched) {
-      const selectedBusinessId = localStorage.getItem('selectedBusinessId');
-      console.log("selectedBusinessId", selectedBusinessId)
-      dispatch(getMyBussinessFunApi({
-        data: { businessId: selectedBusinessId },
-        onSuccess: () => {
-          dispatch(
-            getAllServiceFunApi({
-              businessId: business?.data?.id,
-            })
-          );
-        },
-      }));
-    }
-  }, [dispatch, dataFatched]);
+    userdata()
+  }, []);
+
+
+
+  // useEffect(() => {
+  //   if (!dataFatched) {
+  //     const selectedBusinessId = localStorage.getItem('selectedBusinessId');
+  //     console.log("selectedBusinessId", selectedBusinessId)
+  //     dispatch(getMyBussinessFunApi({
+  //       data: { businessId: selectedBusinessId },
+  //       onSuccess: () => {
+  //         dispatch(
+  //           getAllServiceFunApi({
+  //             businessId: business?.data?.id,
+  //           })
+  //         );
+  //       },
+  //     }));
+  //   }
+  // }, [dispatch, dataFatched]);
 
   const router = useRouter();
 
@@ -57,7 +82,7 @@ const ServicesPage = () => {
   };
 
   return (
-    <> 
+    <>
       <Card
         sx={{
           boxShadow: "none",
@@ -84,35 +109,35 @@ const ServicesPage = () => {
               fontWeight: 500,
             }}
           >
-            My Services
+            All Products
           </Typography>
 
-          {(role === "owner" || role === "manager") && (
-            <Link href="/services/add-service">
-              <Button
-                variant="contained"
-                sx={{
-                  textTransform: "capitalize",
-                  borderRadius: "8px",
-                  fontWeight: "500",
-                  fontSize: "13px",
-                  padding: "12px 20px",
-                  color: "#fff !important",
-                }}
-              >
-                <AddIcon
-                  sx={{ position: "relative", top: "-1px" }}
-                  className="mr-5px"
-                />
-                Add Service
-              </Button>
-            </Link>
-          )}
+          {/* {(role === "owner" || role === "manager") && ( */}
+          <Link href="/services/add-service">
+            <Button
+              variant="contained"
+              sx={{
+                textTransform: "capitalize",
+                borderRadius: "8px",
+                fontWeight: "500",
+                fontSize: "13px",
+                padding: "12px 20px",
+                color: "#fff !important",
+              }}
+            >
+              <AddIcon
+                sx={{ position: "relative", top: "-1px" }}
+                className="mr-5px"
+              />
+              Add Product
+            </Button>
+          </Link>
+          {/* )} */}
         </Box>
 
         <CustomPaginationTable
-          tableData={service.data}
-          isLoading={service.isLoading}
+          tableData={products}
+          // isLoading={service.isLoading}
           tableHeaderData={
             <>
               <TableCell
@@ -158,7 +183,7 @@ const ServicesPage = () => {
                   fontSize: "13.5px",
                 }}
               >
-                Duration
+                Shade
               </TableCell>
               <TableCell
                 align="center"
@@ -177,7 +202,7 @@ const ServicesPage = () => {
                   fontSize: "13.5px",
                 }}
               >
-                Type
+                Quantity
               </TableCell>
 
               <TableCell
@@ -187,7 +212,7 @@ const ServicesPage = () => {
                   fontSize: "13.5px",
                 }}
               >
-                Specialist
+                Product type
               </TableCell>
 
               <TableCell
@@ -213,7 +238,7 @@ const ServicesPage = () => {
                   pb: "16px",
                 }}
               >
-                {data.name}
+                {data.title }
               </TableCell>
 
               <TableCell
@@ -222,10 +247,10 @@ const ServicesPage = () => {
                   fontSize: "13px",
                   pt: "16px",
                   pb: "16px",
-                  overflow: "hidden",            
+                  overflow: "hidden",
                   display: "-webkit-box",
-                  WebkitBoxOrient: "vertical",   
-                  WebkitLineClamp: 2,  
+                  WebkitBoxOrient: "vertical",
+                  WebkitLineClamp: 2,
                 }}
               >
                 {data.description}
@@ -241,7 +266,7 @@ const ServicesPage = () => {
                 <Avatar
                   alt="User"
                   src={data.image}
-                  sx={{ width: 35, height: 35 }} 
+                  sx={{ width: 35, height: 35 }}
                 />
               </TableCell>
 
@@ -266,7 +291,7 @@ const ServicesPage = () => {
                   pb: "16px",
                 }}
               >
-                {data?.timeInterval} Min
+                {data?.shade} Min
               </TableCell>
 
 
@@ -290,7 +315,7 @@ const ServicesPage = () => {
                 }}
                 align="center"
               >
-                {data?.type?.name}
+                {data?.quantity}
               </TableCell>
 
               <TableCell
@@ -302,11 +327,11 @@ const ServicesPage = () => {
                 }}
                 align="center"
               >
-                {role === 'admin' ? (
+                {/* {role === 'admin' ? (
                   data?.specialistName
-                ) : (
-                  data?.specialist?.name
-                )}
+                ) : ( */}
+                {  data?.productype}
+                {/* )} */}
               </TableCell>
 
               <TableCell
@@ -354,7 +379,7 @@ const ServicesPage = () => {
                     </TransitionsDialog>
                   </Tooltip>
 
-                  {role !== 'admin' ? (
+                  {/* {role !== 'admin' ? ( */}
                     <Tooltip title="Edit" placement="top">
                       <IconButton
                         aria-label="edit"
@@ -366,7 +391,7 @@ const ServicesPage = () => {
                         <DriveFileRenameOutlineIcon fontSize="inherit" />
                       </IconButton>
                     </Tooltip>
-                  ) : null}
+                  {/* ) : null} */}
 
                 </Box>
               </TableCell>

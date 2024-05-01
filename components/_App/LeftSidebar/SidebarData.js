@@ -126,36 +126,36 @@ export const SidebarData = () => {
     //     },
     //   ],
     // },
-//  {
-//       title: "Services",
-//       path: "/services/service-type",
-//       icon: <LayersIcon />,
-//       iconClosed: <KeyboardArrowRightIcon />,
-//       iconOpened: <KeyboardArrowDownIcon />,
-//       subNav: [
-//         {
-//           title: "Service Types",
-//           path: "/services/service-type",
-//         },
-//         {
-//           title: "Add Service Type",
-//           path: "/services/add-service-type/",
-//         },
-//       ],
-//     },
+ {
+      title: "Orders",
+      path: "/services/service-type",
+      icon: <LayersIcon />,
+      iconClosed: <KeyboardArrowRightIcon />,
+      iconOpened: <KeyboardArrowDownIcon />,
+      subNav: [
+        {
+          title: "all-Orders",
+          path: "/services/service-type",
+        },
+        // {
+        //   title: "Add Service Type",
+        //   path: "/services/add-service-type/",
+        // },
+      ],
+    },
 {
-      title: "Services",
+      title: "Products",
       path: "/services/",
       icon: <LayersIcon />,
       iconClosed: <KeyboardArrowRightIcon />,
       iconOpened: <KeyboardArrowDownIcon />,
       subNav: [
         {
-          title: "Services",
+          title: "All-Products",
           path: "/services/",
         },
         {
-          title: "Add Service",
+          title: "Add New Products",
           path: "/services/add-service/",
         },
       ],
