@@ -50,45 +50,45 @@ const ServiceForm = ({ formData, isEditMode }) => {
   ];
 
   const [avatar, setavatar] = useState(null);
-  const [avatar2, setavatar2] = useState(null);
+  const [avatar2, setavatar2] = useState([]);
   console.log("avatar2", avatar2)
 
   console.log("avatar", avatar)
   const [profileImageUrl, setProfileImageUrl] = useState(null);
+  const [profileImageUrls, setProfileImageUrls] = useState([]);
+  console.log("4y4iu4o", profileImageUrls)
 
-  const [profileImageUrl2, setProfileImageUrl2] = useState(null);
-  const handleFileChange2 = (event) => {
-    const file = event.target.files[0];
-    if (!file) {
-      setavatar2(null);
-      if (isEditMode) {
-        setProfileImageUrl2(formData?.image || null);
-      } else {
-        setProfileImageUrl2(null);
-      }
-      return false;
-    } else {
-      const type = file.type.split("/")[0];
-      if (type !== "image") {
-        toast.error("Please select an image");
-        setavatar2(null);
-        event.target.value = null;
-        if (isEditMode) {
-          setProfileImageUrl2(formData?.image || null);
-        } else {
-          setProfileImageUrl2(null);
-        }
-        return false;
-      } else {
-        setavatar2(file);
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = (e) => {
-          setProfileImageUrl2(e.target.result);
-        };
-      }
+  const handleFileChange2 = (event, index) => {
+    const files = event.target.files;
+    console.log("files", files)
+    
+    if (!files || files.length === 0) {
+      return;
     }
+
+    const updatedProfileImageUrls = [...profileImageUrls];
+    console.log("8000000", updatedProfileImageUrls)
+    const file = files[0];
+    const type = file.type.split("/")[0];
+
+    if (type !== "image") {
+      toast.error("Please select an image");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (e) => {
+      updatedProfileImageUrls[index] = e.target.result;
+      setProfileImageUrls(updatedProfileImageUrls);
+    };
   };
+
+  const addNewImage = () => {
+    setProfileImageUrls([...profileImageUrls, null]);
+  };
+
+
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (!file) {
@@ -175,53 +175,14 @@ const ServiceForm = ({ formData, isEditMode }) => {
     }),
     onSubmit: async (values) => {
       console.log("Form values:", values);
-      const {
-        sku,
-        title,
-        slug,
-        unit,
-        imgUrls,
-        parent,
-        children,
-        price,
-        discount,
-        quantity,
-        categoryName,
-        status,
-        productType,
-        description,
-        additionalInformation,
-        featured,
-        sellCount,
-        tags,
-        brands
-      } = values;
       try {
-
         const myServiceData = {
-          sku,
-          title,
-          slug,
-          unit,
-          imgUrls,
-          shade:avatar2 ,
-          parent,
-          children,
-          price,
-          discount,
-          quantity,
-          categoryName,
-          status,
-          productType,
-          description,
-          additionalInformation,
-          featured,
-          sellCount,
-          tags,
-          brands,
-          img: avatar
-        };
-
+          ...values,
+          img: avatar,
+          shade: profileImageUrls,
+          
+        }
+        console.log("myservicedata ", myServiceData)
         const response = await axiosImage.post('/product/add', myServiceData);
 
         console.log("Response from API:", response.data);
@@ -398,7 +359,7 @@ const ServiceForm = ({ formData, isEditMode }) => {
                   >
                     Shades
                   </Typography>
-                  {[...Array(imgUrlCount)].map((_, index) => (
+                  {[...Array(profileImageUrls.length)].map((_, index) => (
                     <ListItem key={index}>
                       <Box sx={{ display: 'flex', gap: '16px' }}>
                         <TextField
@@ -416,48 +377,47 @@ const ServiceForm = ({ formData, isEditMode }) => {
                           onChange={formik.handleChange}
                         />
                       </Box>
-                        <Box sx={{ display: "flex", alignItems: "end", gap: 1 }}>
-                          <Box sx={{ flex: 1 }}>
-                            <Typography
-                              as="h5"
-                              sx={{
-                                fontWeight: "500",
-                                fontSize: "14px",
-                                mb: "12px",
-                              }}
-                            >
-                              shade Image
-                            </Typography>
+                      <Box sx={{ display: "flex", alignItems: "end", gap: 1 }}>
+                        <Box sx={{ flex: 1 }}>
+                          <Typography
+                            as="h5"
+                            sx={{
+                              fontWeight: "500",
+                              fontSize: "14px",
+                              mb: "12px",
+                            }}
+                          >
+                            Shade Image
+                          </Typography>
 
-                            <TextField
-                              fullWidth
-                              name="shade"
-                              type="file"
-                              id="file"
-                              accept="image/*"
-                              onChange={handleFileChange2}
-                            />
-                          </Box>
-                          {profileImageUrl2 && (
-                            <Image
-                              src={profileImageUrl2}
-                              alt="profile"
-                              style={{
-                                border: "1px solid #e0e0e0",
-                              }}
-                              width={50}
-                              height={50}
-                            />
-                          )}
+                          <TextField
+                            fullWidth
+                            name={`shade-${index}`}
+                            type="file"
+                            id={`file-${index}`}
+                            accept="image/*"
+                            onChange={(event) => handleFileChange2(event, index)}
+                          />
                         </Box>
+                        {profileImageUrls[index] && (
+                          <Image
+                            src={profileImageUrls[index]}
+                            alt={`profile-${index}`}
+                            style={{
+                              border: "1px solid #e0e0e0",
+                            }}
+                            width={50}
+                            height={50}
+                          />
+                        )}
+                      </Box>
                     </ListItem>
                   ))}
                 </List>
-              </Grid>
-              <Grid item xs={12} style={{ textAlign: 'center' }}>
-                <Button variant="outlined" onClick={handleAddField}>+</Button>
+                <Button onClick={addNewImage}>Add Image</Button>
               </Grid>
             </Grid>
+
 
             <Grid item xs={12} md={12} lg={6}>
               <FormControl fullWidth>
