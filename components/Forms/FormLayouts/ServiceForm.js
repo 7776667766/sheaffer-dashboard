@@ -61,7 +61,7 @@ const ServiceForm = ({ formData, isEditMode }) => {
   const handleFileChange2 = (event, index) => {
     const files = event.target.files;
     console.log("files", files)
-    
+
     if (!files || files.length === 0) {
       return;
     }
@@ -180,7 +180,7 @@ const ServiceForm = ({ formData, isEditMode }) => {
           ...values,
           img: avatar,
           shade: profileImageUrls,
-          
+
         }
         console.log("myservicedata ", myServiceData)
         const response = await axiosImage.post('/product/add', myServiceData);
@@ -244,7 +244,7 @@ const ServiceForm = ({ formData, isEditMode }) => {
                       mb: "12px",
                     }}
                   >
-                    Upload Image
+                    Upload Product Image
                   </Typography>
 
                   <TextField
@@ -377,18 +377,11 @@ const ServiceForm = ({ formData, isEditMode }) => {
                           onChange={formik.handleChange}
                         />
                       </Box>
+
+
                       <Box sx={{ display: "flex", alignItems: "end", gap: 1 }}>
-                        <Box sx={{ flex: 1 }}>
-                          <Typography
-                            as="h5"
-                            sx={{
-                              fontWeight: "500",
-                              fontSize: "14px",
-                              mb: "12px",
-                            }}
-                          >
-                            Shade Image
-                          </Typography>
+                        <Box sx={{ flex: 1,  marginLeft:"20px"}}>
+
 
                           <TextField
                             fullWidth
@@ -414,7 +407,7 @@ const ServiceForm = ({ formData, isEditMode }) => {
                     </ListItem>
                   ))}
                 </List>
-                <Button onClick={addNewImage}>Add Image</Button>
+                <Button onClick={addNewImage}>Add Shades</Button>
               </Grid>
             </Grid>
 
@@ -637,7 +630,7 @@ const ServiceForm = ({ formData, isEditMode }) => {
                 value={
                   <>
                     <SendIcon sx={{ position: "relative", top: "-2px" }} className="mr-5px" />
-                    {isEditMode ? "Edit" : "Add"} Services
+                    {isEditMode ? "Edit" : "Add"} Product
                   </>
                 }
               />

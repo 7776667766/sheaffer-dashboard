@@ -1,5 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Box, Typography } from "@mui/material";
+import { Paper, Table, TableBody, TableContainer, Typography, TableRow } from "@mui/material";
+import {
+  Box,
+  Dialog,
+  TextField,
+  useMediaQuery,
+} from "@mui/material";
+import { tableCellClasses } from "@mui/material/TableCell";
+
+import { styled } from "@mui/material/styles";
+
 import Card from "@mui/material/Card";
 import IconButton from "@mui/material/IconButton";
 import TableCell from "@mui/material/TableCell";
@@ -25,9 +35,51 @@ import toast from "react-hot-toast";
 
 
 const ServicesPage = () => {
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    "&:nth-of-type(odd)": {
+      backgroundColor: "#EAEEFD",
+    },
+
+    "&:last-child td, &:last-child th": {
+      border: 0,
+    },
+  }));
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+  }));
+
+
+
   const dispatch = useDispatch();
-  const [products,setallproducts]=useState([])
-  console.log("products",products)
+  const [open, setOpen] = useState(false);
+  const [products, setallproducts] = useState([])
+  console.log("products", products)
+  const [selectedBusiness, setSelectedBusiness] = useState([]);
+  console.log("selected business", selectedBusiness)
+
+
+  const handleClick = (id) => {
+    console.log("id 65", id)
+    const selectedBusiness = products?.find((item) => item._id === id);
+    setSelectedBusiness(selectedBusiness);
+    setOpen(true);
+  };
+  const handleReject = () => {
+    setOpen(false);
+
+    // setOpen2(true);
+    // setIsRejecting(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
 
 
@@ -51,25 +103,6 @@ const ServicesPage = () => {
   useEffect(() => {
     userdata()
   }, []);
-
-
-
-  // useEffect(() => {
-  //   if (!dataFatched) {
-  //     const selectedBusinessId = localStorage.getItem('selectedBusinessId');
-  //     console.log("selectedBusinessId", selectedBusinessId)
-  //     dispatch(getMyBussinessFunApi({
-  //       data: { businessId: selectedBusinessId },
-  //       onSuccess: () => {
-  //         dispatch(
-  //           getAllServiceFunApi({
-  //             businessId: business?.data?.id,
-  //           })
-  //         );
-  //       },
-  //     }));
-  //   }
-  // }, [dispatch, dataFatched]);
 
   const router = useRouter();
 
@@ -238,7 +271,7 @@ const ServicesPage = () => {
                   pb: "16px",
                 }}
               >
-                {data.title }
+                {data.title}
               </TableCell>
 
               <TableCell
@@ -265,7 +298,7 @@ const ServicesPage = () => {
               >
                 <Avatar
                   alt="User"
-                  src={data.image}
+                  src={data.img}
                   sx={{ width: 35, height: 35 }}
                 />
               </TableCell>
@@ -280,7 +313,7 @@ const ServicesPage = () => {
               >
                 {data.price}
               </TableCell>
-
+              {/* 
               <TableCell
                 align="center"
                 sx={{
@@ -291,7 +324,35 @@ const ServicesPage = () => {
                   pb: "16px",
                 }}
               >
-                {data?.shade} Min
+                {data?.shade} 
+              </TableCell> */}
+              <TableCell
+                sx={{
+                  borderBottom: "1px solid #F7FAFF",
+                  fontSize: "13px",
+                  pt: "16px",
+                  pb: "16px",
+                }}
+              >
+                <Tooltip title="Shade" placement="top"> <IconButton
+
+                  aria-label="edit"
+                  size="small"
+                  color="primary"
+                  className="primary"
+
+                  onClick={(event) => handleClick(data?._id, event)}
+                >
+                  {data?.requestStatus === "Approved" ? (
+                    <VisibilityIcon />
+                  ) : data?.requestStatus === "Rejected" ? (
+                    <VisibilityIcon />
+                  ) : (
+                    <DriveFileRenameOutlineIcon fontSize="inherit" />
+                  )}
+                </IconButton></Tooltip>
+
+
               </TableCell>
 
 
@@ -327,11 +388,9 @@ const ServicesPage = () => {
                 }}
                 align="center"
               >
-                {/* {role === 'admin' ? (
-                  data?.specialistName
-                ) : ( */}
-                {  data?.productype}
-                {/* )} */}
+
+                {data?.productType}
+
               </TableCell>
 
               <TableCell
@@ -380,24 +439,145 @@ const ServicesPage = () => {
                   </Tooltip>
 
                   {/* {role !== 'admin' ? ( */}
-                    <Tooltip title="Edit" placement="top">
-                      <IconButton
-                        aria-label="edit"
-                        size="small"
-                        color="primary"
-                        className="primary"
-                        onClick={() => nextPage(data.id)}
-                      >
-                        <DriveFileRenameOutlineIcon fontSize="inherit" />
-                      </IconButton>
-                    </Tooltip>
+                  <Tooltip title="Edit" placement="top">
+                    <IconButton
+                      aria-label="edit"
+                      size="small"
+                      color="primary"
+                      className="primary"
+                      onClick={() => nextPage(data.id)}
+                    >
+                      <DriveFileRenameOutlineIcon fontSize="inherit" />
+                    </IconButton>
+                  </Tooltip>
                   {/* ) : null} */}
 
                 </Box>
               </TableCell>
             </>
           )}
+
+
         />
+
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          maxWidth="sm"
+          PaperProps={{
+            sx: {
+              width: "800px",
+              borderRadius: "25px",
+              padding: "15px",
+            },
+          }}
+        >
+
+          <Box sx={{ display: "flex", justifyContent: "end" }}>
+            <Button onClick={handleClose}>
+            </Button>
+          </Box>
+
+
+          <Typography
+            variant="h6"
+            sx={{ textAlign: "start", marginLeft: "10px" }}
+          >
+            Shade Details
+          </Typography>
+
+          <Box
+            sx={{
+              marginLeft: "10px",
+              display: "flex",
+              justifyContent: "end",
+              paddingRight: "10px",
+            }}
+          >
+
+          </Box>
+          <Box
+            style={{
+              padding: "10px",
+              textAlign: "left",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <TableContainer
+              component={Paper}
+              style={{ width: "100%", boxShadow: "none" }}
+            >
+              <Table>
+                <TableBody>
+
+                  <div>
+                    {selectedBusiness.imageURLs?.map((item, index) => (
+                      <StyledTableRow key={index}>
+                        <StyledTableCell
+                          style={{
+                            padding: "10px",
+                            border: "none",
+                          }}
+                        >
+                          <strong>{item.color.name ? item.color.name : 'No color name found'}</strong>
+                          <br />
+                          <br />
+                          <strong>{item.color.clrCode ? item.color.clrCode : 'No color code found'}</strong>
+                          <br />
+                          <br />
+                          {item.shade.map((shadeUrl, shadeIndex) => (
+                            <img key={shadeIndex} src={shadeUrl} alt={`Shade ${shadeIndex}`} style={{ maxWidth: '100px', maxHeight: '100px', margin: '5px' }} />
+                          ))}
+                        </StyledTableCell>
+                        <StyledTableCell
+                          style={{
+                            padding: "10px",
+                            border: "none",
+                            textAlign: "end",
+                          }}
+                        >
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    ))}
+                  </div>
+
+
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Box>
+
+          <Box>
+            <Box
+              sx={{
+                display: "flex",
+                gap: "15px",
+                justifyContent: "center",
+                marginY: 2,
+              }}
+            >
+              <Button
+                variant="contained "
+                onClick={handleClose}
+                sx={{
+                  backgroundColor: "white",
+                  color: "#707070",
+                  width: "173px",
+                  padding: "8px 20px",
+                  borderRadius: "8px",
+                  border: "2px solid #707070",
+                }}
+              >
+                Close
+              </Button>
+            </Box>
+          </Box>
+
+        </Dialog>
+
+
       </Card>
     </>
   );
