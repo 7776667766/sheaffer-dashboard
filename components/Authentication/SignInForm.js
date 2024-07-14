@@ -1,13 +1,12 @@
 import React, { useEffect } from "react";
 import Link from "next/link";
 import Grid from "@mui/material/Grid";
-import { Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import TextField from "@mui/material/TextField";
 import styles from "@/components/Authentication/Authentication.module.css";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { passwordValidation, requiredValidation } from "@/utils/validation";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,23 +21,26 @@ const SignInForm = () => {
     (state) => state.auth
   );
 
-  console.log(otpVerified,user,isLoading,isAuthenticated)
+  const handleRegisterClick = () => {
+    router.push("/authentication/sign-up");
+  };
+
+  
+
+  console.log(otpVerified, user, isLoading, isAuthenticated)
 
   const formik = useFormik({
     initialValues: {
       email: "",
       password: "",
     },
-    validationSchema: Yup.object({
-      email: requiredValidation("Email or phone"),
-      password: passwordValidation(),
-    }),
+
     onSubmit: (values) => {
       dispatch(
         loginFunApi({
           data: values,
           onSuccess: (email) => {
-            console.log("email",email)
+            console.log("email", email)
             const myEmail = btoa(JSON.stringify(email));
             router.push(`/`);
           },
@@ -71,19 +73,14 @@ const SignInForm = () => {
           <Grid item xs={12} md={12} lg={12} xl={12}>
             <Box>
               <Typography as="h1" fontSize="28px" fontWeight="700" mb="5px">
-                Sign In{" "}
+                Sign In to TODO APP{" "}
                 <Image
                   width={30}
                   height={30}
-                  src="/images/favicon.png"
+                  src="/images/todo.jpeg"
                   alt="favicon"
                   className={styles.favicon}
                 />
-              </Typography>
-
-              <Typography fontSize="15px" mb="30px">
-                Enter your email and password to sign in
-             
               </Typography>
 
               <Box
@@ -180,7 +177,6 @@ const SignInForm = () => {
                 </Box>
 
                 <Grid container alignItems="center" spacing={2}>
-                
 
                   <Grid
                     item
@@ -188,21 +184,24 @@ const SignInForm = () => {
                     // xs={6} sm={6}
                     textAlign="end"
                   >
-                    <Link
-                      href="/authentication/forgot-password"
+                    <Button
                       className="primaryColor text-decoration-none"
+                      onClick={handleRegisterClick}
                     >
-                      Forgot your password?
-                    </Link>
-                  </Grid>
-                </Grid>
+                      Register New User
+                    </Button>
 
-                <LoadingButtonComponent
+                    <LoadingButtonComponent
                   type="submit"
                   value="Sign In"
                   isLoading={isLoading}
                   disabled={isLoading}
                 />
+
+                  </Grid>
+
+                
+                </Grid>
               </Box>
             </Box>
           </Grid>

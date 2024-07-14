@@ -8,8 +8,9 @@ import Footer from "@/components/_App/Footer";
 import ScrollToTop from "./ScrollToTop";
 import { useDispatch, useSelector } from "react-redux";
 import { Box } from "@mui/material";
-// import { getMyBussinessFunApi } from "store/business/services";
-// import { checkTokenIsValidFunApi } from "store/auth/services";
+import { TodoProvider } from "../../context/todoContext"; // Correct path to context file
+import { checkTokenIsValidFunApi } from "store/auth/services";
+
 
 const Layout = ({ children }) => {
   const router = useRouter();
@@ -25,72 +26,65 @@ const Layout = ({ children }) => {
   );
   // const { business } = useSelector((state) => state.business);
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       if (validToken.dataFetched) {
-  //         if (validToken.validToken) {
-  //           const myOtpVerified = localStorage.getItem("otpVerified");
-  //           if (myOtpVerified && role === "owner" && business === null) {
-  //             await dispatch(getMyBussinessFunApi());
-  //           }
-  //           if (router.pathname.includes("/authentication")) {
-  //             router.push("/");
-  //           }
-  //         } else {
-  //           if (!router.pathname.includes("/authentication")) {
-  //             if (!isAuthenticated) {
-  //               router.push("/authentication/sign-in");
-  //             }
-  //           }
-  //         }
-  //         setTimeout(() => {
-  //           setLoading(false);
-  //         }, 1000);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     }
-  //   };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (validToken.dataFetched) {
+          if (validToken.validToken) {
+            if (router.pathname.includes("/authentication")) {
+              router.push("/");
+            }
+          } 
+          else {
+            if (!router.pathname.includes("/authentication")) {
+              if (!isAuthenticated) {
+                router.push("/authentication/sign-in");
+              }
+            }
 
-  //   fetchData();
-  // }, [
-  //   business,
-  //   dispatch,
-  //   isAuthenticated,
-  //   otpVerified,
-  //   role,
-  //   router,
-  //   validToken.dataFetched,
-  //   validToken.validToken,
-  // ]);
+          }
+          setTimeout(() => {
+            setLoading(false);
+          }, 1000);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
-  // useEffect(() => {
-  //   if (!validToken.dataFetched) {
-  //     dispatch(checkTokenIsValidFunApi());
-  //   }
-  // }, [dispatch, validToken.dataFetched]);
+    fetchData();
+  }, [
+    dispatch,
+    isAuthenticated,
+    otpVerified,
+    role,
+    router,
+    validToken.dataFetched,
+    validToken.validToken,
+  ]);
 
-  // if (validToken.isLoading || loading)
-  //   return (
-  //     <Box
-  //       display="flex"
-  //       justifyContent="center"
-  //       alignItems="center"
-  //       sx={{ height: "100vh" }}
-  //     >    
-  //       Loading...
-  //     </Box>
-  //   );
+  useEffect(() => {
+    if (!validToken.dataFetched) {
+      dispatch(checkTokenIsValidFunApi());
+    }
+  }, [dispatch, validToken.dataFetched]);
+
+  if (validToken.isLoading || loading)
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        sx={{ height: "100vh" }}
+      >    
+        Loading...
+      </Box>
+    );
 
   return (
     <>
-      <Head>
-        <title>
-          MakelyPro - Material Design React Next Admin Dashboard Template
-        </title>
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-      </Head>
+     <TodoProvider>
+     
 
       <div className={`main-wrapper-content ${active && "active"}`}>
         {!router.pathname.includes("/authentication/") && (
@@ -102,13 +96,14 @@ const Layout = ({ children }) => {
 
         <div className="main-content">
           {children}
-          {/* {!router.pathname.includes("/authentication/") && <Footer />} */}
+          {!router.pathname.includes("/authentication/") && <Footer />}
           <Footer />
         </div>
       </div>
 
       {/* ScrollToTop */}
       <ScrollToTop />
+      </TodoProvider>
     </>
   );
 };

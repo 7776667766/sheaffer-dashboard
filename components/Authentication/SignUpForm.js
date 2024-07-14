@@ -8,15 +8,29 @@ import Button from "@mui/material/Button";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import styles from "@/components/Authentication/Authentication.module.css";
+import { useDispatch, useSelector } from "react-redux";
+import { loginFunApi, registerFunApi } from "store/auth/services";
+import { useRouter } from "next/router";
+
 
 const SignUpForm = () => {
+  const dispatch = useDispatch();
+  const router = useRouter();
+
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+
+    dispatch(
+      registerFunApi({
+        data: data,
+        onSuccess: () => {
+          router.push(`/authentication/sign-in`);
+        },
+      })
+    );
+ 
   };
 
   return (
@@ -36,10 +50,9 @@ const SignUpForm = () => {
               <Typography as="h1" fontSize="28px" fontWeight="700" mb="5px">
                 Get’s started.{" "}
                 <img
-                  src="/images/favicon.png"
-                  alt="favicon"
-                  className={styles.favicon}
+                  src="/images/todo.jpeg"
                 />
+                
               </Typography>
 
               <Typography fontSize="15px" mb="30px">
@@ -180,7 +193,7 @@ const SignUpForm = () => {
                         required
                         fullWidth
                         name="password"
-                        label="Password"
+                        label="Pas•••••••••sword"
                         type="password"
                         id="password"
                         autoComplete="new-password"

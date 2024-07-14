@@ -7,11 +7,6 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import {
-  emailValidation,
-  phoneValidation,
-  requiredValidation,
-} from "@/utils/validation";
 import { useDispatch, useSelector } from "react-redux";
 import { updateProfileFunApi } from "store/auth/services";
 import toast from "react-hot-toast";
@@ -47,9 +42,7 @@ export default function Profile() {
       name: user?.name || "",
       image: "",
     },
-    validationSchema: Yup.object({
-      name: requiredValidation(),
-    }),
+  
     onSubmit: async (values) => {
       if (avatar === null) {
         toast.error("Please select an image");

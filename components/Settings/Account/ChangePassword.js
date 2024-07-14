@@ -8,10 +8,6 @@ import Typography from "@mui/material/Typography";
 import validator from "validator";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import {
-  confirmPasswordValidation,
-  passwordValidation,
-} from "@/utils/validation";
 import { LoadingButtonComponent } from "@/components/UIElements/Buttons/LoadingButton";
 import { useDispatch } from "react-redux";
 import { changePasswordFunApi } from "store/auth/services";
@@ -26,11 +22,7 @@ export default function ChangePassword() {
       newPassword: "",
       confirmPassword: "",
     },
-    validationSchema: Yup.object({
-      oldPassword: passwordValidation(),
-      // newPassword: passwordValidation(),
-      confirmPassword: confirmPasswordValidation("newPassword"),
-    }),
+
     onSubmit: (values) => {
       console.log("Handle Submit", values);
       dispatch(changePasswordFunApi(values));

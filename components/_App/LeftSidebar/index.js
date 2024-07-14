@@ -43,13 +43,19 @@ const Sidebar = ({ toogleActive }) => {
               }}
             >
               <Link href="/">
-                <img src="/images/logo.png" alt="Logo" className="black-logo" />
+                <img
+                  src="/images/todo.jpeg"
+                  alt="Logo"
+                  className="black-logo"
+                  style={{ width: "100px", height: "70px" }}
+                />
 
                 {/* For Dark Variation */}
                 <img
                   src="/images/logo-white.png"
                   alt="Logo"
                   className="white-logo"
+                  style={{ width: "200px", height: "auto" }}
                 />
               </Link>
 
